@@ -19,13 +19,13 @@
           v-model="formData.date"
           type="date"
           class="form-control"
-        >
+        ><br><br><br>
         <v-slider
-          v-model="importance"
-          label="Max error count"
+          v-model="formData.importance"
+          label="Importance of the task"
           min="0"
-          max="10"
-        />
+          max="100"
+        /> {{ formData.importance }}
       </div>
 
       <button
@@ -59,8 +59,7 @@ export default class TodoForm extends Vue {
     this.$emit('onCreate', this.formData);
     this.formData = {
       task: '',
-      deadline: new Date(),
-      importance: 0
+      deadline: new Date()
     };
   }
 }

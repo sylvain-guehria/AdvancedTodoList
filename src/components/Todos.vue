@@ -10,6 +10,9 @@
             <div class="col">
               <strong>deadline</strong>
             </div>
+            <div class="col">
+              <strong>importance (/100)</strong>
+            </div>
           </div>
         </div>
       </li>
@@ -65,13 +68,18 @@ export default class Todos extends Vue {
   beforeMount (): void {
     this.todolist = [
       { task: 'do laundery',
-        deadline: new Date() },
+        deadline: new Date(),
+        importance: 42
+      },
       {
         task: 'do cooking',
-        deadline: new Date(2018, 8, 13)
+        deadline: new Date(2018, 8, 13),
+        importance: 68
       },
       { task: 'do nothing',
-        deadline: new Date(2020, 9, 22) }
+        deadline: new Date(2020, 9, 22),
+        importance: 11
+      }
     ];
   }
 

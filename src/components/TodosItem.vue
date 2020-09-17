@@ -7,6 +7,9 @@
       <div class="col">
         {{ formatDate(todo.deadline) }}
       </div>
+      <div class="col">
+        {{ todo.importance }}
+      </div>
     </div>
     <div
       class="btn-supr btn btn-outline-danger"
@@ -24,7 +27,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class Todos extends Vue {
   todolist: {task: string; deadline: Date}[] = [];
 
-  @Prop() private todo?: {task: string; deadline: Date};
+  @Prop() private todo?: {task: string; deadline: Date; importance: number};
 
   @Prop() private index?: number;
 
