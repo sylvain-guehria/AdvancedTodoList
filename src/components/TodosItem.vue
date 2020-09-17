@@ -1,8 +1,15 @@
 <template>
   <div class="card my-2 item-todo">
-    <p>{{ todo.task }} before {{ formatDate(todo.before) }}</p>
+    <div class="row">
+      <div class="col ">
+        <p>{{ todo.task }} </p>
+      </div>
+      <div class="col">
+        {{ formatDate(todo.deadline) }}
+      </div>
+    </div>
     <div
-      class="btn-supr btn btn-danger"
+      class="btn-supr btn btn-outline-danger"
       @click="supressTodo"
     >
       X
@@ -15,12 +22,14 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Todos extends Vue {
-  todolist: {task: string; before: Date}[] = [];
+  todolist: {task: string; deadline: Date}[] = [];
 
-  @Prop() private todo?: {task: string; before: Date};
+  @Prop() private todo?: {task: string; deadline: Date};
+
+  @Prop() private index?: number;
 
   supressTodo (){
-    this.$emit('onSuppress');
+    this.$emit('onSuppress', this.index);
   }
 
   formatDate (date: Date): string {

@@ -1,22 +1,31 @@
 <template>
   <div class="container mt-5">
-    <h3>Add task : </h3>
+    <h4>Add task : </h4>
     <form>
-      <div class="form-group ">
-        <label for="action">task</label>
+      <div class="form-group row ">
+        <label for="task">task</label>
         <input
           id="action"
           v-model="formData.task"
           type="text"
           class="form-control"
-        >
-        <label for="action">Date</label>
+        ><br><br>
+        <label
+          for="date"
+          class=""
+        >Date</label>
         <input
           id="action"
           v-model="formData.date"
           type="date"
           class="form-control"
         >
+        <v-slider
+          v-model="importance"
+          label="Max error count"
+          min="0"
+          max="10"
+        />
       </div>
 
       <button
@@ -34,18 +43,25 @@ import { Component, Vue } from 'vue-property-decorator';
 
 interface Todo {
   task: string;
-  before?: Date;
+  deadline?: Date;
+  importance?: number;
 }
 
 @Component
 export default class TodoForm extends Vue {
   formData: Todo = {
     task: '',
-    before: new Date()
+    deadline: new Date(),
+    importance: 0
   };
 
   createTodo (){
     this.$emit('onCreate', this.formData);
+    this.formData = {
+      task: '',
+      deadline: new Date(),
+      importance: 0
+    };
   }
 }
 </script>

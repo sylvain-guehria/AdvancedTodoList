@@ -1,8 +1,8 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import HomeView from './views/HomeView.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import HomeView from './views/HomeView.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 const routes = [
   {
@@ -29,10 +29,10 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ './views/TodosView.vue')
   }
 
-]
+];
 
 export default new Router({
   mode: 'history',
   base: process.env.VUE_APP_BASE_URL,
   routes: routes
-})
+});
