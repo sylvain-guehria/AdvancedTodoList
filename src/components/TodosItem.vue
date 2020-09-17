@@ -8,6 +8,9 @@
         {{ formatDate(todo.deadline) }}
       </div>
       <div class="col">
+        {{ getdaysleft(todo.deadline) }}
+      </div>
+      <div class="col">
         {{ todo.importance }}
       </div>
     </div>
@@ -33,6 +36,11 @@ export default class Todos extends Vue {
 
   supressTodo (){
     this.$emit('onSuppress', this.index);
+  }
+
+  getdaysleft (deadline: Date): number{
+    const DiffTime: number = deadline.getTime() - new Date().getTime();
+    return DiffTime / (1000 * 3600 * 24);
   }
 
   formatDate (date: Date): string {

@@ -10,9 +10,25 @@ Vue.use(Vuex);
 
 Vue.config.productionTip = false;
 
+interface Todo {
+  task: string;
+  deadline?: Date;
+  importance?: number;
+}
+
+var todolist: Todo[] = [];
+
 const store = new Vuex.Store({
   modules: {
 
+  },
+  state: {
+    todolist: todolist
+  },
+  mutations: {
+    setTodoList (state, newList: Todo[]) {
+      state.todolist = newList;
+    }
   }
 });
 
