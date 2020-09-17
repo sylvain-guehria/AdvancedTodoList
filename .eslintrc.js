@@ -28,9 +28,14 @@ module.exports = {
     "@typescript-eslint/indent": [2, 2],
     "max-len": [2, 120, 4, { "ignoreUrls": true }],
     "@typescript-eslint/explicit-function-return-type": [1, {"allowExpressions": true}],
+        // we only want single quotes
     "space-before-blocks": "off",
-    "quotes": "off",
-    "no-extra-semi": "off",
-    "semi":"off"
+    'quotes': ['error', 'single'],
+    // we want to force semicolons
+    'semi': ['error', 'always'],
+    // we use 2 spaces to indent our code
+    'indent': ['error', 2],
+    // we want to avoid useless spaces
+    'no-multi-spaces': ['error']
   }
 }
