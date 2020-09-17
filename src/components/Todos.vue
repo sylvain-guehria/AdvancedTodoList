@@ -1,27 +1,53 @@
 <template>
-  <div class="hello">
+  <div>
     <ul>
-      <li>{{ title }}</li><li /><li
+      <li
         v-for="(todo, index) in todolist"
         :key="index"
       >
-        {{ todo.task }} before {{ todo.before }}
+        <todositem
+          :todo="todo"
+          @onSuppress="supressTodo"
+        />
       </li>
     </ul>
+    <todoform @onCreate="createTodo" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import TodosItem from './TodosItem.vue';
+import TodoForm from '../components/TodoForm.vue';
 
-@Component
+interface Todo {
+  task: string;
+  before: Date;
+}
+
+@Component({
+  components: {
+    todositem: TodosItem,
+    todoform: TodoForm
+  }
+})
+
 export default class Todos extends Vue {
-  todolist: {task: string; before: Date}[] = [];
+  todolist: Todo[] = [];
 
   @Prop() private title?: string;
 
+  createTodo (todo: Todo): void{
+    this.todolist.push(todo);
+    console.log(todo);
+  }
+
+  supressTodo (index: number): void{
+    this.todolist.splice(index, index);
+    console.log(index);
+  }
+
   created (): void {
-    // Le composant a été instancié : il est possible par exemple de faire un appel d'API pour récupérer les données du véhicule
     this.todolist = [
       { task: 'do laundery',
         before: new Date() },
@@ -33,12 +59,15 @@ export default class Todos extends Vue {
         before: new Date(2020, 9, 22) }
     ];
   }
-
-  getTodos (): {task: string; before: Date}[] {
-    return this.todolist;
-  }
 }
 </script>
 
-<style >
+<style scoped>
+.item-todo p {
+  margin-bottom: 0!important;
+}
+ul{
+  list-style-type: none ;
+  padding: 0;
+}
 </style>
