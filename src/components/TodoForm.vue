@@ -1,9 +1,9 @@
 <template>
-  <div class="container mt-5">
-    <h4>Add task : </h4>
+  <div class="container mt-5 border">
+    <p>Add task : </p>
     <form>
       <div class="form-group row ">
-        <label for="task">task</label>
+        <label for="task">task name</label>
         <input
           id="action"
           v-model="formData.task"
@@ -14,12 +14,12 @@
           for="date"
           class=""
         >Date</label>
-        <input
-          id="action"
-          v-model="formData.date"
-          type="date"
-          class="form-control"
-        ><br><br><br>
+        <v-date-picker
+          v-model="dateHelper"
+          full-width
+          :landscape="$vuetify.breakpoint.smAndUp"
+          class="mb-6"
+        />
         <v-slider
           v-model="formData.importance"
           label="Importance of the task"
@@ -55,6 +55,12 @@ export default class TodoForm extends Vue {
     importance: 0
   };
 
+  dateHelper: string = '';
+
+  updated (){
+    this.formData.deadline = new Date(this.dateHelper);
+  }
+
   createTodo (){
     this.$emit('onCreate', this.formData);
     this.formData = {
@@ -65,5 +71,8 @@ export default class TodoForm extends Vue {
 }
 </script>
 
-<style >
+<style scoped>
+.border{
+  padding : 50px 50px 50px 50px
+}
 </style>

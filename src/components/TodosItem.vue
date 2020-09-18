@@ -1,5 +1,5 @@
 <template>
-  <div class="card my-2 item-todo">
+  <div class="item-todo">
     <div class="row">
       <div class="col ">
         <p>{{ todo.task }} </p>
@@ -18,7 +18,7 @@
       class="btn-supr btn btn-outline-danger"
       @click="supressTodo"
     >
-      X
+      delete
     </div>
   </div>
 </template>
@@ -40,7 +40,9 @@ export default class Todos extends Vue {
 
   getdaysleft (deadline: Date): number{
     const DiffTime: number = deadline.getTime() - new Date().getTime();
-    return DiffTime / (1000 * 3600 * 24);
+
+    const diffTimeString: string = (DiffTime / (1000 * 3600 * 24)).toFixed(1);
+    return parseFloat(diffTimeString);
   }
 
   formatDate (date: Date): string {
@@ -61,10 +63,7 @@ export default class Todos extends Vue {
 }
 .btn-supr{
   position:absolute;
-  top: 10px;
+  top: 27px;
   right: 10px;
-}
-.item-todo p {
-  margin-bottom: 0!important;
 }
 </style>

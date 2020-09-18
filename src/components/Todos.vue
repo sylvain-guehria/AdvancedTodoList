@@ -1,6 +1,7 @@
 <template>
   <div>
-    <ul>
+    <ul class="border">
+      <li>Your tasks</li>
       <li>
         <div class="card my-2 header-todo">
           <div class="row">
@@ -30,7 +31,7 @@
         />
       </li>
     </ul>
-    <div class="container">
+    <div>
       <todoform @onCreate="createTodo" />
     </div>
   </div>
@@ -89,5 +90,8 @@ ul{
 .header-todo{
   position: relative;
   font-size: 20px;
+}
+.border{
+  padding : 20px 50px 50px 50px
 }
 </style>
