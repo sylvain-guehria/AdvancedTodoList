@@ -1,17 +1,10 @@
 <template>
   <div class="container mt-5 border">
     <p class="mt-2">
-      Add task :
+      Add a task :
     </p>
     <form>
       <div class="form-group ">
-        <!-- <label for="task">task name</label>
-        <input
-          id="action"
-          v-model="formData.task"
-          type="text"
-          class="form-control"
-        ><br><br> -->
         <v-text-field
           v-model="formData.task"
           label="Task name"
@@ -34,6 +27,8 @@
         <br>
         <div class="alignleft ml-1">
           <span>Deadline</span>
+        </div>
+        <div class="ml-1">
           <v-date-picker
             v-model="dateHelper"
             full-width
@@ -42,9 +37,9 @@
           />
         </div>
       </div>
-
+      <hr>
       <button
-        class="btn btn-primary"
+        class="btn btn-primary mt-4"
         @click.prevent="createTodo"
       >
         Create task
@@ -67,6 +62,10 @@ export default class TodoForm extends Vue {
   };
 
   dateHelper: string = '';
+
+  created (){
+    this.dateHelper = new Date().toISOString().substr(0, 10);
+  }
 
   updated (){
     this.formData.deadline = new Date(this.dateHelper);

@@ -5,8 +5,10 @@ import router from './router';
 import vuetify from './plugins/vuetify';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import VModal from 'vue-js-modal';
 
 Vue.use(Vuex);
+Vue.use(VModal);
 
 Vue.config.productionTip = false;
 

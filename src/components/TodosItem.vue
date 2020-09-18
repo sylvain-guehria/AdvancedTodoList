@@ -1,6 +1,9 @@
 <template>
   <div class="item-todo">
-    <div class="row">
+    <div
+      class="row mr-5"
+      @click="showTask"
+    >
       <div class="col ">
         <p>{{ todo.task }} </p>
       </div>
@@ -20,6 +23,17 @@
     >
       delete
     </div>
+    <div class="btn-edit">
+      <v-btn
+        color="primary"
+        fab
+        small
+        dark
+        @click="showEditModal"
+      >
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -37,6 +51,14 @@ export default class Todos extends Vue {
 
   supressTodo (){
     this.$emit('onSuppress', this.index);
+  }
+
+  showTask (){
+    this.$emit('onClickModal', this.index);
+  }
+
+  showEditModal (){
+    this.$emit('onClickEditModal', this.index);
   }
 
   getdaysleft (deadline: Date): number{
@@ -65,6 +87,11 @@ export default class Todos extends Vue {
 .btn-supr{
   position:absolute;
   top: 27px;
+  right: 70px;
+}
+.btn-edit{
+  position:absolute;
+  top: 25px;
   right: 10px;
 }
 </style>
