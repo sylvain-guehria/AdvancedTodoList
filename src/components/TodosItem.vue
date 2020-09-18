@@ -25,12 +25,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Todo } from '../models/types';
 
 @Component
 export default class Todos extends Vue {
-  todolist: {task: string; deadline: Date}[] = [];
+  todolist: Todo[] = [];
 
-  @Prop() private todo?: {task: string; deadline: Date; importance: number};
+  @Prop() private todo?: Todo;
 
   @Prop() private index?: number;
 

@@ -28,7 +28,7 @@
           :todo="todo"
           :index="index"
           @onSuppress="supressTodo"
-        />
+        /><hr>
       </li>
     </ul>
     <div>
@@ -41,12 +41,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import TodosItem from './TodosItem.vue';
 import TodoForm from '../components/TodoForm.vue';
-
-interface Todo {
-  task: string;
-  deadline: Date;
-  importance?: number;
-}
+import { Todo } from '../models/types';
 
 @Component({
   components: {
