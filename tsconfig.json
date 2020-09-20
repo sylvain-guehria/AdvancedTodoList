@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "target": "esnext",
     "module": "esnext",
     "strict": true,
@@ -10,7 +11,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "allowJs": true,
     "baseUrl": ".",
     "types": [
       "webpack-env",
@@ -38,5 +38,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  
 }
