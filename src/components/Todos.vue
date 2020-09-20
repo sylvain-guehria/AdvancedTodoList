@@ -10,16 +10,40 @@
             class="row"
           >
             <div class="col ">
-              <strong> task</strong>
+              <strong> task</strong><v-btn
+                icon
+                color="green"
+                @click="sortBy('task')"
+              >
+                <v-icon>mdi-cached</v-icon>
+              </v-btn>
             </div>
             <div class="col">
-              <strong>deadline</strong>
+              <strong>deadline</strong><v-btn
+                icon
+                color="green"
+                @click="sortBy('deadline')"
+              >
+                <v-icon>mdi-cached</v-icon>
+              </v-btn>
             </div>
             <div class="col">
-              <strong>Number days left</strong>
+              <strong>Number days left</strong><v-btn
+                icon
+                color="green"
+                @click="sortByTimeLeft"
+              >
+                <v-icon>mdi-cached</v-icon>
+              </v-btn>
             </div>
             <div class="col">
-              <strong>importance (/100)</strong>
+              <strong>importance (/100)</strong><v-btn
+                icon
+                color="green"
+                @click="sortBy('importance')"
+              >
+                <v-icon>mdi-cached</v-icon>
+              </v-btn>
             </div>
           </div>
         </div>
@@ -96,6 +120,8 @@ export default class Todos extends Vue {
 
   currentIndex: number = 0;
 
+  currentSortingMode: string='';
+
   currentTodo: Todo ={
     task: '',
     deadline: new Date(),
@@ -142,6 +168,38 @@ export default class Todos extends Vue {
     this.currentIndex = index;
     this.currentTodo = this.todolist[index];
     this.$modal.show('editmodal');
+  }
+
+  sortBy (attribut: string): void {
+    if (this.currentSortingMode === 'desc'){
+      this.currentSortingMode = 'asc';
+      this.todolist = this.lodash.orderBy(this.todolist, [attribut], ['asc']);
+    } else {
+      this.currentSortingMode = 'desc';
+      this.todolist = this.lodash.orderBy(this.todolist, [attribut], ['desc']);
+    }
+  }
+
+  sortByTimeLeft (): void {
+    if (this.currentSortingMode === 'desc'){
+      this.currentSortingMode = 'asc';
+      this.todolist = this.lodash.orderBy(this.todolist,
+        [function (resultItem) {
+          if (resultItem) {
+            return resultItem.deadline.getTime() - new Date().getTime();
+          } else { return null; }
+        }],
+        ['asc']);
+    } else {
+      this.currentSortingMode = 'desc';
+      this.todolist = this.lodash.orderBy(this.todolist,
+        [function (resultItem) {
+          if (resultItem) {
+            return resultItem.deadline.getTime() - new Date().getTime();
+          } else { return null; }
+        }],
+        ['desc']);
+    }
   }
 }
 </script>
