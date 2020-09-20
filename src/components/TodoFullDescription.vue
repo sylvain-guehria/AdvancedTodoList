@@ -1,41 +1,60 @@
 <template>
-  <div class="container mt-5">
-    <div class="flex">
-      <h3>{{ currentTodo.task }} </h3>  {{ currentTodo.importance }}/100
-    </div>
-    <hr>
-    <div class="form-group ">
-      <br>
-      <div class="sameline">
-        <div class="alignleft ml-1">
-          <span>Deadline</span>
-          <div>
-            {{ formatDate(currentTodo.deadline) }}
-          </div>
-        </div>
-        <div class="alignright ml-1">
-          <span>number of days left</span>
-          <div>
-            {{ getdaysleft(currentTodo.deadline) }}
-          </div>
-        </div>
-      </div>
-      <div class="mt-9 container">
-        <v-text-field
-          v-model="currentTodo.description"
-          label="Task description"
-          readonly
-        />
-      </div>
-    </div>
+  <v-card
+    :loading="loading"
+    class="mx-auto my-12"
+    max-width="374"
+  >
+    <v-img
+      height="250"
+      src="https://wpformation.com/wp-content/uploads/2014/03/todo1.jpg"
+    />
 
-    <button
-      class="btn btn-primary mb-4"
-      @click.prevent="closeTask"
-    >
-      Close
-    </button>
-  </div>
+    <v-card-title>{{ currentTodo.task }}</v-card-title>
+
+    <v-card-text>
+      <v-row
+        align="center"
+        class="mx-0"
+      >
+        <v-rating
+          :value="currentTodo.importance / 20"
+          color="amber"
+          dense
+          half-increments
+          readonly
+          size="14"
+        />
+
+        <div class="grey--text ml-4">
+          {{ currentTodo.importance }}/100
+        </div>
+      </v-row>
+
+      <div class="my-4 subtitle-1">
+        Deadline : {{ formatDate(currentTodo.deadline) }}
+      </div>
+
+      <div>{{ getdaysleft(currentTodo.deadline) }} days left.</div>
+    </v-card-text>
+
+    <v-divider class="mx-4" />
+
+    <v-card-title> Description :</v-card-title>
+
+    <v-card-text>
+      {{ currentTodo.description }}
+    </v-card-text>
+
+    <v-card-actions>
+      <v-btn
+        color="deep-purple lighten-2"
+        text
+        @click="closeTask"
+      >
+        Close task
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script lang="ts">

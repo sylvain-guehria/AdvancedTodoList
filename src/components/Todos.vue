@@ -2,7 +2,10 @@
   <div>
     <ul class="border">
       <li class="container">
-        Your TODO List
+        <v-img
+          height="150"
+          src="https://todolist.london/wp-content/uploads/2020/01/To-Do-List-Logo-for-Facebook.jpg"
+        />
       </li>
       <li>
         <div class="card my-2 mr-7 header-todo">

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div> FIRST MATRICE</div>
+    <div> Matrice de eisenhower</div>
     <div>{{ todolist }}</div>
   </div>
 </template>
