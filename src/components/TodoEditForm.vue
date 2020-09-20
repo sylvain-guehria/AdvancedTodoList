@@ -30,7 +30,7 @@
         </div>
         <div class="ml-1">
           <v-date-picker
-            v-model="currentTodo.deadline"
+            v-model="dateHelper"
             full-width
             :landscape="$vuetify.breakpoint.smAndUp"
             class="mb-6"
@@ -56,32 +56,19 @@ import { Todo } from '../models/types';
 export default class TodoEditForm extends Vue {
  @Prop() private currentTodo?: Todo;
 
- //  currentTodo: Todo = {
- //    task: '',
- //    deadline: new Date(),
- //    importance: 0,
- //    description: ''
- //  };
-
  dateHelper: string = '';
 
  created (){
    if (this.currentTodo){
      this.dateHelper =
-      this.currentTodo.deadline ? this.currentTodo.deadline.toString()
+      this.currentTodo.deadline ? this.currentTodo.deadline.toISOString().substr(0, 10)
         : new Date().toISOString().substr(0, 10);
    }
-   console.log('the current TODO', this.currentTodo);
+   console.log('the current date', this.dateHelper);
  }
 
  editTodo (){
-   this.$emit('onEdit', this.currentTodo);
-   this.currentTodo = {
-     task: '',
-     deadline: new Date(),
-     description: '',
-     importance: 0
-   };
+   this.$emit('onEdit', this.currentTodo, this.dateHelper);
  }
 }
 </script>

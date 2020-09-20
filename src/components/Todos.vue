@@ -61,6 +61,7 @@
         <todoeditform
           title="Edit task"
           :current-todo="currentTodo"
+          @onEdit="editTodo"
         />
         <button
           class="btn btn-primary mb-2 mt-2"
@@ -106,10 +107,12 @@ export default class Todos extends Vue {
 
   createTodo (todo: Todo): void{
     this.todolist.push(todo);
+    console.log('jai push un todo');
   }
 
-  editTodo (todo: Todo): void{
-    // edit todo
+  editTodo (todo: Todo, date: string): void{
+    console.log('j\'édit un todo, date :', date);
+    todo.deadline = new Date(date);
   }
 
   supressTodo (index: number): void{

@@ -19,11 +19,6 @@ const routes = [
     path: '/todos',
     name: 'todos',
     component: () => import(/* webpackChunkName: "about" */ './views/TodosView.vue')
-  },
-  {
-    path: '/todos',
-    name: 'todos',
-    component: () => import(/* webpackChunkName: "about" */ './views/TodosView.vue')
   }
 
 ];
