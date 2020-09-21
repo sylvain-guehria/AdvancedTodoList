@@ -64,12 +64,28 @@
         /><hr>
       </li>
     </ul>
-    <div>
-      <todoform
-        title="Add task"
-        @onCreate="createTodo"
-      />
+    <div class="my-2">
+      <v-btn
+        color="primary"
+        fab
+        small
+        dark
+        @click="showFormModal"
+      >
+        <v-icon>mdi-plus-circle-outline</v-icon>
+      </v-btn>
     </div>
+    <modal
+      name="formmodal"
+      height="auto"
+    >
+      <div>
+        <todoform
+          title="Add task"
+          @onCreate="createTodo"
+        />
+      </div>
+    </modal>
     <modal
       name="viewmodal"
       height="auto"
@@ -136,12 +152,12 @@ export default class Todos extends Vue {
 
   createTodo (todo: Todo): void{
     this.todolist.push(todo);
-    console.log('jai push un todo');
+    this.hide();
   }
 
   editTodo (todo: Todo, date: string): void{
-    console.log('j\'édit un todo, date :', date);
     todo.deadline = new Date(date);
+    this.hide();
   }
 
   supressTodo (index: number): void{
@@ -165,12 +181,17 @@ export default class Todos extends Vue {
   hide () {
     this.$modal.hide('editmodal');
     this.$modal.hide('viewmodal');
+    this.$modal.hide('formmodal');
   }
 
   showEditModal (index: number): void {
     this.currentIndex = index;
     this.currentTodo = this.todolist[index];
     this.$modal.show('editmodal');
+  }
+
+  showFormModal (): void {
+    this.$modal.show('formmodal');
   }
 
   sortBy (attribut: string): void {
