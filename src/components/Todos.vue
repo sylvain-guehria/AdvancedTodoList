@@ -105,13 +105,8 @@
           title="Edit task"
           :current-todo="currentTodo"
           @onEdit="editTodo"
+          @onClose="hide"
         />
-        <button
-          class="btn btn-primary mb-2 mt-2"
-          @click.prevent="hide"
-        >
-          Close
-        </button>
       </div>
     </modal>
   </div>

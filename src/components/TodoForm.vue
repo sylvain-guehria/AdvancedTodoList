@@ -1,8 +1,22 @@
 <template>
-  <div class="container mt-5 border">
-    <p class="mt-2">
-      Add a task :
-    </p>
+  <div class="container border">
+    <div>
+      <v-btn
+        color="primary lighten-2"
+        text
+      >
+        Creating task
+      </v-btn>
+      <v-btn
+        color="primary"
+        fab
+        x-small
+        dark
+        loading
+      >
+        <v-icon>mdi-plus-circle-outline</v-icon>
+      </v-btn>
+    </div>
     <form>
       <div class="form-group ">
         <v-text-field
@@ -37,13 +51,14 @@
           />
         </div>
       </div>
-      <hr>
-      <button
-        class="btn btn-primary mt-4"
+      <br>
+      <v-btn
+        color="primary lighten-2"
+        rounded
         @click.prevent="createTodo"
       >
         Create task
-      </button>
+      </v-btn>
     </form>
   </div>
 </template>

@@ -1,8 +1,22 @@
 <template>
-  <div class="container mt-5 border">
-    <p class="mt-2">
-      Edit task
-    </p>
+  <div class="container border">
+    <div>
+      <v-btn
+        color="primary lighten-2"
+        text
+      >
+        Editing task
+      </v-btn>
+      <v-btn
+        color="primary"
+        fab
+        x-small
+        dark
+        loading
+      >
+        <v-icon>mdi-plus-circle-outline</v-icon>
+      </v-btn>
+    </div>
     <form>
       <div class="form-group ">
         <v-text-field
@@ -36,14 +50,14 @@
             class="mb-6"
           />
         </div>
-      </div>
-
-      <button
-        class="btn btn-primary"
+      </div><br>
+      <v-btn
+        color="primary lighten-2"
+        rounded
         @click.prevent="editTodo"
       >
         Edit task
-      </button>
+      </v-btn>
     </form>
   </div>
 </template>

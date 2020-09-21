@@ -46,7 +46,7 @@
 
     <v-card-actions>
       <v-btn
-        color="deep-purple lighten-2"
+        color="primary lighten-2"
         text
         @click="closeTask"
       >
