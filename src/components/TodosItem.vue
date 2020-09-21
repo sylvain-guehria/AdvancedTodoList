@@ -18,10 +18,17 @@
       </div>
     </div>
     <div
-      class="btn-supr btn btn-outline-danger"
-      @click="supressTodo"
+      class="btn-supr"
     >
-      delete
+      <v-btn
+        color="error"
+        fab
+        small
+        dark
+        @click="supressTodo"
+      >
+        <v-icon>mdi-trash-can-outline</v-icon>
+      </v-btn>
     </div>
     <div class="btn-edit">
       <v-btn
@@ -86,7 +93,7 @@ export default class Todos extends Vue {
 }
 .btn-supr{
   position:absolute;
-  top: 27px;
+  top: 25px;
   right: 70px;
 }
 .btn-edit{

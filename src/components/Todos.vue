@@ -64,12 +64,27 @@
         /><hr>
       </li>
     </ul>
-    <div>
-      <todoform
-        title="Add task"
-        @onCreate="createTodo"
-      />
+    <div class="my-2">
+      <v-btn
+        color="primary"
+        fab
+        dark
+        @click="showFormModal"
+      >
+        <v-icon>mdi-plus-circle-outline</v-icon>
+      </v-btn>
     </div>
+    <modal
+      name="formmodal"
+      height="auto"
+    >
+      <div>
+        <todoform
+          title="Add task"
+          @onCreate="createTodo"
+        />
+      </div>
+    </modal>
     <modal
       name="viewmodal"
       height="auto"
@@ -89,13 +104,8 @@
           title="Edit task"
           :current-todo="currentTodo"
           @onEdit="editTodo"
+          @onClose="hide"
         />
-        <button
-          class="btn btn-primary mb-2 mt-2"
-          @click.prevent="hide"
-        >
-          Close
-        </button>
       </div>
     </modal>
   </div>
@@ -136,12 +146,12 @@ export default class Todos extends Vue {
 
   createTodo (todo: Todo): void{
     this.todolist.push(todo);
-    console.log('jai push un todo');
+    this.hide();
   }
 
   editTodo (todo: Todo, date: string): void{
-    console.log('j\'édit un todo, date :', date);
     todo.deadline = new Date(date);
+    this.hide();
   }
 
   supressTodo (index: number): void{
@@ -165,12 +175,17 @@ export default class Todos extends Vue {
   hide () {
     this.$modal.hide('editmodal');
     this.$modal.hide('viewmodal');
+    this.$modal.hide('formmodal');
   }
 
   showEditModal (index: number): void {
     this.currentIndex = index;
     this.currentTodo = this.todolist[index];
     this.$modal.show('editmodal');
+  }
+
+  showFormModal (): void {
+    this.$modal.show('formmodal');
   }
 
   sortBy (attribut: string): void {
@@ -187,8 +202,8 @@ export default class Todos extends Vue {
     if (this.currentSortingMode === 'desc'){
       this.currentSortingMode = 'asc';
       this.todolist = this.lodash.orderBy(this.todolist,
-        [function (resultItem) {
-          if (resultItem) {
+        [function (resultItem: Todo) {
+          if (resultItem && resultItem.deadline !== undefined) {
             return resultItem.deadline.getTime() - new Date().getTime();
           } else { return null; }
         }],
@@ -196,8 +211,8 @@ export default class Todos extends Vue {
     } else {
       this.currentSortingMode = 'desc';
       this.todolist = this.lodash.orderBy(this.todolist,
-        [function (resultItem) {
-          if (resultItem) {
+        [function (resultItem: Todo) {
+          if (resultItem && resultItem.deadline !== undefined) {
             return resultItem.deadline.getTime() - new Date().getTime();
           } else { return null; }
         }],

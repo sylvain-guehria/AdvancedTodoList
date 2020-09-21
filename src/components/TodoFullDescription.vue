@@ -1,6 +1,5 @@
 <template>
   <v-card
-    :loading="loading"
     class="mx-auto my-12"
     max-width="374"
   >
@@ -47,7 +46,7 @@
 
     <v-card-actions>
       <v-btn
-        color="deep-purple lighten-2"
+        color="primary lighten-2"
         text
         @click="closeTask"
       >
