@@ -187,8 +187,8 @@ export default class Todos extends Vue {
     if (this.currentSortingMode === 'desc'){
       this.currentSortingMode = 'asc';
       this.todolist = this.lodash.orderBy(this.todolist,
-        [function (resultItem) {
-          if (resultItem) {
+        [function (resultItem: Todo) {
+          if (resultItem && resultItem.deadline !== undefined) {
             return resultItem.deadline.getTime() - new Date().getTime();
           } else { return null; }
         }],
@@ -196,8 +196,8 @@ export default class Todos extends Vue {
     } else {
       this.currentSortingMode = 'desc';
       this.todolist = this.lodash.orderBy(this.todolist,
-        [function (resultItem) {
-          if (resultItem) {
+        [function (resultItem: Todo) {
+          if (resultItem && resultItem.deadline !== undefined) {
             return resultItem.deadline.getTime() - new Date().getTime();
           } else { return null; }
         }],
