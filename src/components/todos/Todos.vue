@@ -114,9 +114,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import TodosItem from './TodosItem.vue';
-import TodoForm from '../components/TodoForm.vue';
-import TodoEditForm from '../components/TodoEditForm.vue';
-import { Todo } from '../models/types';
+import TodoForm from './TodoForm.vue';
+import TodoEditForm from './TodoEditForm.vue';
+import { Todo } from '../../models/types';
 import TodoFullDescription from './TodoFullDescription.vue';
 
 @Component({

@@ -59,7 +59,7 @@
 <script lang="ts">
 
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Todo } from '../models/types';
+import { Todo } from '../../models/types';
 
 @Component
 export default class TodoFullDescription extends Vue{

@@ -5,7 +5,7 @@
         color="primary lighten-2"
         text
       >
-        Editing task
+        Creating task
       </v-btn>
       <v-btn
         color="primary"
@@ -20,11 +20,11 @@
     <form>
       <div class="form-group ">
         <v-text-field
-          v-model="currentTodo.task"
+          v-model="formData.task"
           label="Task name"
         /><br>
         <v-textarea
-          v-model="currentTodo.description"
+          v-model="formData.description"
           auto-grow
           clearable
           placeholder="Task Description"
@@ -32,11 +32,11 @@
         <br>
         <div class="row ml-1">
           <v-slider
-            v-model="currentTodo.importance"
+            v-model="formData.importance"
             label="Importance of the task"
             min="0"
             max="100"
-          /> {{ currentTodo.importance }}
+          /> {{ formData.importance }}
         </div>
         <br>
         <div class="alignleft ml-1">
@@ -50,40 +50,50 @@
             class="mb-6"
           />
         </div>
-      </div><br>
+      </div>
+      <br>
       <v-btn
         color="primary lighten-2"
         rounded
-        @click.prevent="editTodo"
+        @click.prevent="createTodo"
       >
-        Edit task
+        Create task
       </v-btn>
     </form>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Todo } from '../models/types';
+import { Component, Vue } from 'vue-property-decorator';
+import { Todo } from '../../models/types';
 
 @Component
-export default class TodoEditForm extends Vue {
- @Prop() private currentTodo?: Todo;
+export default class TodoForm extends Vue {
+  formData: Todo = {
+    task: '',
+    deadline: new Date(),
+    importance: 0,
+    description: ''
+  };
 
- dateHelper: string = '';
+  dateHelper: string = '';
 
- created (){
-   if (this.currentTodo){
-     this.dateHelper =
-      this.currentTodo.deadline ? this.currentTodo.deadline.toISOString().substr(0, 10)
-        : new Date().toISOString().substr(0, 10);
-   }
-   console.log('the current date', this.dateHelper);
- }
+  created (){
+    this.dateHelper = new Date().toISOString().substr(0, 10);
+  }
 
- editTodo (){
-   this.$emit('onEdit', this.currentTodo, this.dateHelper);
- }
+  updated (){
+    this.formData.deadline = new Date(this.dateHelper);
+  }
+
+  createTodo (){
+    this.$emit('onCreate', this.formData);
+    this.formData = {
+      task: '',
+      deadline: new Date(),
+      description: ''
+    };
+  }
 }
 </script>
 
