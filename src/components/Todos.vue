@@ -68,7 +68,6 @@
       <v-btn
         color="primary"
         fab
-        small
         dark
         @click="showFormModal"
       >
