@@ -2,10 +2,10 @@
   <div>
     <ul class="border">
       <li class="container">
-        <v-img
-          height="150"
-          src="https://todolist.london/wp-content/uploads/2020/01/To-Do-List-Logo-for-Facebook.jpg"
-        />
+        <img
+          width="70%"
+          :src="imageLink"
+        >
       </li>
       <li>
         <div class="card my-2 mr-7 header-todo">
@@ -143,6 +143,8 @@ export default class Todos extends Vue {
   };
 
   @Prop() private title?: string;
+
+  imageLink = require('../../assets/images/To-Do-List.jpg');
 
   createTodo (todo: Todo): void{
     this.todolist.push(todo);

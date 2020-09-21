@@ -3,10 +3,12 @@
     class="mx-auto my-12"
     max-width="374"
   >
-    <v-img
-      height="250"
-      src="https://wpformation.com/wp-content/uploads/2014/03/todo1.jpg"
-    />
+    <div>
+      <img
+        width="100%"
+        :src="imageLink"
+      >
+    </div>
 
     <v-card-title>{{ currentTodo.task }}</v-card-title>
 
@@ -64,6 +66,8 @@ import { Todo } from '../../models/types';
 @Component
 export default class TodoFullDescription extends Vue{
  @Prop() private currentTodo?: Todo;
+
+ imageLink = require('../../assets/images/todo1.jpg');
 
  getdaysleft (deadline: Date): number{
    const DiffTime: number = deadline.getTime() - new Date().getTime();

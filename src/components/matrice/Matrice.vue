@@ -2,6 +2,7 @@
   <div>
     <div> Matrice de eisenhower</div>
     <div>{{ todolist }}</div>
+    <img :src="imageLink">
   </div>
 </template>
 
@@ -17,6 +18,8 @@ interface Todo {
 @Component
 export default class Matrice extends Vue{
   todolist: Todo[] = [];
+
+  imageLink = require('../../assets/images/4color.png');
 
   beforeMount (): void {
     this.todolist = this.$store.state.todolist;
