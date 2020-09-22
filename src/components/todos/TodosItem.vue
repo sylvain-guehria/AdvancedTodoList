@@ -69,7 +69,7 @@ export default class Todos extends Vue {
     this.$emit('onClickEditModal', this.index);
   }
 
-  formatDate = myFunctions.getdaysleft;
+  formatDate = myFunctions.formatDate;
 
   getdaysleft = myFunctions.getdaysleft;
 }

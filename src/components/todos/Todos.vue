@@ -8,54 +8,18 @@
         >
       </li>
       <li>
-        <div class="card my-2 mr-7 header-todo">
-          <div
-            class="row"
-          >
-            <div class="col ">
-              <strong> task</strong><v-btn
-                icon
-                color="green"
-                @click="sortBy('task')"
-              >
-                <v-icon>mdi-cached</v-icon>
-              </v-btn>
-            </div>
-            <div class="col">
-              <strong>deadline</strong><v-btn
-                icon
-                color="green"
-                @click="sortBy('deadline')"
-              >
-                <v-icon>mdi-cached</v-icon>
-              </v-btn>
-            </div>
-            <div class="col">
-              <strong>Number days left</strong><v-btn
-                icon
-                color="green"
-                @click="sortByTimeLeft"
-              >
-                <v-icon>mdi-cached</v-icon>
-              </v-btn>
-            </div>
-            <div class="col">
-              <strong>importance (/100)</strong><v-btn
-                icon
-                color="green"
-                @click="sortBy('importance')"
-              >
-                <v-icon>mdi-cached</v-icon>
-              </v-btn>
-            </div>
-          </div>
-        </div>
+        <headerlist
+          :todolist="todolist"
+          whatlist="normal"
+          @onForceRerender="forceRerender"
+        />
       </li>
       <li
         v-for="(todo, index) in todolist"
         :key="index"
       >
         <todositem
+          :key="componentKey"
           :todo="todo"
           :index="index"
           @onSuppress="supressTodo"
@@ -118,13 +82,15 @@ import TodoForm from './TodoForm.vue';
 import TodoEditForm from './TodoEditForm.vue';
 import { Todo } from '../../models/types';
 import TodoFullDescription from './TodoFullDescription.vue';
+import HeaderList from './HeaderList.vue';
 
 @Component({
   components: {
     todositem: TodosItem,
     todoform: TodoForm,
     todofulldescp: TodoFullDescription,
-    todoeditform: TodoEditForm
+    todoeditform: TodoEditForm,
+    headerlist: HeaderList
   }
 })
 
@@ -134,6 +100,8 @@ export default class Todos extends Vue {
   currentIndex: number = 0;
 
   currentSortingMode: string='';
+
+  componentKey: number = 0 ;
 
   currentTodo: Todo ={
     task: '',
@@ -151,6 +119,10 @@ export default class Todos extends Vue {
     this.hide();
   }
 
+  forceRerender () {
+    this.componentKey += 1;
+  }
+
   editTodo (todo: Todo, date: string): void{
     todo.deadline = new Date(date);
     this.hide();
@@ -165,7 +137,8 @@ export default class Todos extends Vue {
   }
 
   updated (){
-    this.$store.commit('setTodoList', this.todolist);
+    // this.$store.commit('setTodoList', this.todolist);
+    this.todolist = this.$store.state.todolist;
   }
 
   show (index: number): void {
@@ -188,38 +161,6 @@ export default class Todos extends Vue {
 
   showFormModal (): void {
     this.$modal.show('formmodal');
-  }
-
-  sortBy (attribut: string): void {
-    if (this.currentSortingMode === 'desc'){
-      this.currentSortingMode = 'asc';
-      this.todolist = this.lodash.orderBy(this.todolist, [attribut], ['asc']);
-    } else {
-      this.currentSortingMode = 'desc';
-      this.todolist = this.lodash.orderBy(this.todolist, [attribut], ['desc']);
-    }
-  }
-
-  sortByTimeLeft (): void {
-    if (this.currentSortingMode === 'desc'){
-      this.currentSortingMode = 'asc';
-      this.todolist = this.lodash.orderBy(this.todolist,
-        [function (resultItem: Todo) {
-          if (resultItem && resultItem.deadline !== undefined) {
-            return resultItem.deadline.getTime() - new Date().getTime();
-          } else { return null; }
-        }],
-        ['asc']);
-    } else {
-      this.currentSortingMode = 'desc';
-      this.todolist = this.lodash.orderBy(this.todolist,
-        [function (resultItem: Todo) {
-          if (resultItem && resultItem.deadline !== undefined) {
-            return resultItem.deadline.getTime() - new Date().getTime();
-          } else { return null; }
-        }],
-        ['desc']);
-    }
   }
 }
 </script>

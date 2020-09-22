@@ -1,28 +1,38 @@
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable indent */
 <template>
   <div class="container">
     <img
       :src="imageLink"
     >
-    <button
+    <v-btn
       class="btn1 btn"
+      @click="showListModal('yellow')"
     >
-      {{ yellowTasks.length }} Task
-    </button>
-    <button
+      {{ yellowTasks.length }} {{ yellowTasks.length >1? 'Tasks' : 'Task' }}
+      <v-icon>mdi-playlist-check</v-icon>
+    </v-btn>
+    <v-btn
       class="btn2 btn"
+      @click="showListModal('red')"
     >
-      {{ redTasks.length }} Task
-    </button>
-    <button
+      {{ redTasks.length }} {{ redTasks.length >1? 'Tasks' : 'Task' }}
+      <v-icon>mdi-playlist-check</v-icon>
+    </v-btn>
+    <v-btn
       class="btn3 btn"
+      @click="showListModal('blue')"
     >
-      {{ blueTasks.length }} Task
-    </button>
-    <button
+      {{ blueTasks.length }} {{ blueTasks.length >1? 'Tasks' : 'Task' }}
+      <v-icon>mdi-playlist-check</v-icon>
+    </v-btn>
+    <v-btn
       class="btn4 btn"
+      @click="showListModal('green')"
     >
-      {{ greenTasks.length }} Task
-    </button>
+      {{ greenTasks.length }} {{ greenTasks.length >1? 'Tasks' : 'Task' }}
+      <v-icon>mdi-playlist-check</v-icon>
+    </v-btn>
     <div class="title1 title">
       <h3> Give these tasks up </h3>
     </div>
@@ -35,6 +45,14 @@
     <div class="title4 title">
       <h3>  Do it when you can</h3>
     </div>
+    <modal
+      name="listmodal"
+      height="auto"
+    >
+      <div>
+        <coloredlisttodos />
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -42,10 +60,17 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Todo } from '../../models/types';
 import { myFunctions } from '../helpers/helperfunction';
+import ColoredListTodos from '../todos/ColoredListTodos.vue';
 
-@Component
+@Component({
+  components: {
+    coloredlisttodos: ColoredListTodos
+  }
+})
 export default class Chart extends Vue{
   @Prop() todolist?: Todo[];
+
+  currentColoredTodoList: Todo[] = [];
 
   redTasks: Todo[] = [];
 
@@ -58,6 +83,32 @@ export default class Chart extends Vue{
   noCategorieTasks: Todo[] = [];
 
   imageLink = require('../../assets/images/4color.png');
+
+  hideListModal (): void {
+    this.$modal.hide('listmodal');
+  }
+
+  showListModal (color: string): void {
+    console.log('showing modal', color);
+
+    // eslint-disable-next-line
+    switch (color){
+    case 'blue':
+      this.currentColoredTodoList = this.blueTasks;
+      break;
+    case 'yellow':
+      this.currentColoredTodoList = this.yellowTasks;
+      break;
+    case 'green':
+      this.currentColoredTodoList = this.greenTasks;
+      break;
+    case 'red':
+      this.currentColoredTodoList = this.redTasks;
+      break;
+    }
+    this.$store.commit('setColoredTodoList', this.currentColoredTodoList);
+    this.$modal.show('listmodal');
+  }
 
   mounted (): void {
     if (this.todolist){

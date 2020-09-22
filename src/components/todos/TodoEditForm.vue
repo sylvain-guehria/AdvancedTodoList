@@ -78,7 +78,6 @@ export default class TodoEditForm extends Vue {
       this.currentTodo.deadline ? this.currentTodo.deadline.toISOString().substr(0, 10)
         : new Date().toISOString().substr(0, 10);
    }
-   console.log('the current date', this.dateHelper);
  }
 
  editTodo (){
