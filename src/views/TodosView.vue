@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Todos from '../components/Todos.vue';
+import Todos from '../components/todos/Todos.vue';
 
 @Component({
   components: {

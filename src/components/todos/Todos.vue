@@ -2,60 +2,24 @@
   <div>
     <ul class="border">
       <li class="container">
-        <v-img
-          height="150"
-          src="https://todolist.london/wp-content/uploads/2020/01/To-Do-List-Logo-for-Facebook.jpg"
-        />
+        <img
+          width="70%"
+          :src="imageLink"
+        >
       </li>
       <li>
-        <div class="card my-2 mr-7 header-todo">
-          <div
-            class="row"
-          >
-            <div class="col ">
-              <strong> task</strong><v-btn
-                icon
-                color="green"
-                @click="sortBy('task')"
-              >
-                <v-icon>mdi-cached</v-icon>
-              </v-btn>
-            </div>
-            <div class="col">
-              <strong>deadline</strong><v-btn
-                icon
-                color="green"
-                @click="sortBy('deadline')"
-              >
-                <v-icon>mdi-cached</v-icon>
-              </v-btn>
-            </div>
-            <div class="col">
-              <strong>Number days left</strong><v-btn
-                icon
-                color="green"
-                @click="sortByTimeLeft"
-              >
-                <v-icon>mdi-cached</v-icon>
-              </v-btn>
-            </div>
-            <div class="col">
-              <strong>importance (/100)</strong><v-btn
-                icon
-                color="green"
-                @click="sortBy('importance')"
-              >
-                <v-icon>mdi-cached</v-icon>
-              </v-btn>
-            </div>
-          </div>
-        </div>
+        <headerlist
+          :todolist="todolist"
+          whatlist="normal"
+          @onForceRerender="forceRerender"
+        />
       </li>
       <li
         v-for="(todo, index) in todolist"
         :key="index"
       >
         <todositem
+          :key="componentKey"
           :todo="todo"
           :index="index"
           @onSuppress="supressTodo"
@@ -114,17 +78,19 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import TodosItem from './TodosItem.vue';
-import TodoForm from '../components/TodoForm.vue';
-import TodoEditForm from '../components/TodoEditForm.vue';
-import { Todo } from '../models/types';
+import TodoForm from './TodoForm.vue';
+import TodoEditForm from './TodoEditForm.vue';
+import { Todo } from '../../models/types';
 import TodoFullDescription from './TodoFullDescription.vue';
+import HeaderList from './HeaderList.vue';
 
 @Component({
   components: {
     todositem: TodosItem,
     todoform: TodoForm,
     todofulldescp: TodoFullDescription,
-    todoeditform: TodoEditForm
+    todoeditform: TodoEditForm,
+    headerlist: HeaderList
   }
 })
 
@@ -135,6 +101,8 @@ export default class Todos extends Vue {
 
   currentSortingMode: string='';
 
+  componentKey: number = 0 ;
+
   currentTodo: Todo ={
     task: '',
     deadline: new Date(),
@@ -144,9 +112,15 @@ export default class Todos extends Vue {
 
   @Prop() private title?: string;
 
+  imageLink = require('../../assets/images/To-Do-List.jpg');
+
   createTodo (todo: Todo): void{
     this.todolist.push(todo);
     this.hide();
+  }
+
+  forceRerender () {
+    this.componentKey += 1;
   }
 
   editTodo (todo: Todo, date: string): void{
@@ -163,7 +137,8 @@ export default class Todos extends Vue {
   }
 
   updated (){
-    this.$store.commit('setTodoList', this.todolist);
+    // this.$store.commit('setTodoList', this.todolist);
+    this.todolist = this.$store.state.todolist;
   }
 
   show (index: number): void {
@@ -186,38 +161,6 @@ export default class Todos extends Vue {
 
   showFormModal (): void {
     this.$modal.show('formmodal');
-  }
-
-  sortBy (attribut: string): void {
-    if (this.currentSortingMode === 'desc'){
-      this.currentSortingMode = 'asc';
-      this.todolist = this.lodash.orderBy(this.todolist, [attribut], ['asc']);
-    } else {
-      this.currentSortingMode = 'desc';
-      this.todolist = this.lodash.orderBy(this.todolist, [attribut], ['desc']);
-    }
-  }
-
-  sortByTimeLeft (): void {
-    if (this.currentSortingMode === 'desc'){
-      this.currentSortingMode = 'asc';
-      this.todolist = this.lodash.orderBy(this.todolist,
-        [function (resultItem: Todo) {
-          if (resultItem && resultItem.deadline !== undefined) {
-            return resultItem.deadline.getTime() - new Date().getTime();
-          } else { return null; }
-        }],
-        ['asc']);
-    } else {
-      this.currentSortingMode = 'desc';
-      this.todolist = this.lodash.orderBy(this.todolist,
-        [function (resultItem: Todo) {
-          if (resultItem && resultItem.deadline !== undefined) {
-            return resultItem.deadline.getTime() - new Date().getTime();
-          } else { return null; }
-        }],
-        ['desc']);
-    }
   }
 }
 </script>

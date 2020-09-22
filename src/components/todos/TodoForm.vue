@@ -34,7 +34,7 @@
           <v-slider
             v-model="formData.importance"
             label="Importance of the task"
-            min="0"
+            min="1"
             max="100"
           /> {{ formData.importance }}
         </div>
@@ -65,7 +65,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Todo } from '../models/types';
+import { Todo } from '../../models/types';
 
 @Component
 export default class TodoForm extends Vue {

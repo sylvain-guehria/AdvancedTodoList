@@ -3,10 +3,12 @@
     class="mx-auto my-12"
     max-width="374"
   >
-    <v-img
-      height="250"
-      src="https://wpformation.com/wp-content/uploads/2014/03/todo1.jpg"
-    />
+    <div>
+      <img
+        width="100%"
+        :src="imageLink"
+      >
+    </div>
 
     <v-card-title>{{ currentTodo.task }}</v-card-title>
 
@@ -59,25 +61,18 @@
 <script lang="ts">
 
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Todo } from '../models/types';
+import { Todo } from '../../models/types';
+import { myFunctions } from '../helpers/helperfunction';
 
 @Component
 export default class TodoFullDescription extends Vue{
  @Prop() private currentTodo?: Todo;
 
- getdaysleft (deadline: Date): number{
-   const DiffTime: number = deadline.getTime() - new Date().getTime();
+ imageLink = require('../../assets/images/todo1.jpg');
 
-   const diffTimeString: string = (DiffTime / (1000 * 3600 * 24)).toFixed(1);
-   return parseFloat(diffTimeString);
- }
+ formatDate = myFunctions.getdaysleft;
 
- formatDate (date: Date): string {
-   const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
-   const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(date);
-   const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
-   return (`${da}-${mo}-${ye}`);
- }
+ getdaysleft = myFunctions.getdaysleft;
 
  closeTask (){
    this.$emit('onClickCloseModal');

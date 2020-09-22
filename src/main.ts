@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import VModal from 'vue-js-modal';
 import VueLodash from 'vue-lodash';
 import lodash from 'lodash';
+import { Todo } from './models/types';
 
 Vue.use(Vuex);
 Vue.use(VModal);
@@ -15,24 +16,23 @@ Vue.use(VueLodash, { lodash: lodash });
 
 Vue.config.productionTip = false;
 
-interface Todo {
-  task: string;
-  deadline?: Date;
-  importance?: number;
-}
-
 var todolist: Todo[] = [];
+var coloredtodolist: Todo[] = [];
 
 const store = new Vuex.Store({
   modules: {
 
   },
   state: {
-    todolist: todolist
+    todolist: todolist,
+    coloredtodolist: coloredtodolist
   },
   mutations: {
     setTodoList (state, newList: Todo[]) {
       state.todolist = newList;
+    },
+    setColoredTodoList (state, newList: Todo[]) {
+      state.coloredtodolist = newList;
     }
   }
 });

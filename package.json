@@ -23,6 +23,7 @@
     "popper.js": "^1.16.1",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
+    "vue-devtools": "^5.1.4",
     "vue-grid-responsive": "^0.2.0",
     "vue-js-modal": "^2.0.0-rc.6",
     "vue-lodash": "^2.1.2",

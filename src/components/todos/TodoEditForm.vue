@@ -34,7 +34,7 @@
           <v-slider
             v-model="currentTodo.importance"
             label="Importance of the task"
-            min="0"
+            min="1"
             max="100"
           /> {{ currentTodo.importance }}
         </div>
@@ -64,7 +64,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Todo } from '../models/types';
+import { Todo } from '../../models/types';
 
 @Component
 export default class TodoEditForm extends Vue {
@@ -78,7 +78,6 @@ export default class TodoEditForm extends Vue {
       this.currentTodo.deadline ? this.currentTodo.deadline.toISOString().substr(0, 10)
         : new Date().toISOString().substr(0, 10);
    }
-   console.log('the current date', this.dateHelper);
  }
 
  editTodo (){
