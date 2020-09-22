@@ -34,7 +34,7 @@
           <v-slider
             v-model="formData.importance"
             label="Importance of the task"
-            min="0"
+            min="1"
             max="100"
           /> {{ formData.importance }}
         </div>

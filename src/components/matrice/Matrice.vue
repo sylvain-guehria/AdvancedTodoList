@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <h1>Eisenhower Matrix</h1>
+      <h1>Eisenhower Matrix</h1> <h3> {{ numberOfTasks }} Tasks </h3>
     </div>
     <chartei :todolist="todolist" />
   </div>
@@ -20,8 +20,11 @@ import Chart from './Chart.vue';
 export default class Matrice extends Vue{
   todolist: Todo[] = [];
 
+  numberOfTasks: number = 0 ;
+
   beforeMount (): void {
     this.todolist = this.$store.state.todolist;
+    this.numberOfTasks = this.todolist ? this.todolist.length : 0;
   }
 }
 
@@ -30,9 +33,13 @@ export default class Matrice extends Vue{
 <style scoped>
 h1 {
   color: #7c795d;
-  font-family: 'Trocchi', serif;
+  font-family: 'Trocchi', 'serif';
   font-size: 45px;
   font-weight: normal;
   line-height: 48px;
-  margin: 0; }
+   }
+  h3 {
+  color: #7c795d;
+  font-family: 'Trocchi', 'serif';
+  }
 </style>

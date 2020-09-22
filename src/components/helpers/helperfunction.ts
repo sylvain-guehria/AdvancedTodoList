@@ -1,4 +1,5 @@
-const myFunctions = {
+
+export const myFunctions = {
 
   getdaysleft (deadline: Date): number{
     const DiffTime: number = deadline.getTime() - new Date().getTime();
@@ -14,5 +15,3 @@ const myFunctions = {
     return (`${da}-${mo}-${ye}`);
   }
 };
-
-export default myFunctions;

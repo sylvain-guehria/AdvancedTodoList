@@ -34,7 +34,7 @@
           <v-slider
             v-model="currentTodo.importance"
             label="Importance of the task"
-            min="0"
+            min="1"
             max="100"
           /> {{ currentTodo.importance }}
         </div>

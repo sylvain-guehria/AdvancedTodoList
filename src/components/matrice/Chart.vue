@@ -6,22 +6,22 @@
     <button
       class="btn1 btn"
     >
-      4 Task
+      {{ yellowTasks.length }} Task
     </button>
     <button
       class="btn2 btn"
     >
-      4 Task
+      {{ redTasks.length }} Task
     </button>
     <button
       class="btn3 btn"
     >
-      1 Task
+      {{ blueTasks.length }} Task
     </button>
     <button
       class="btn4 btn"
     >
-      0 Task
+      {{ greenTasks.length }} Task
     </button>
     <div class="title1 title">
       <h3> Give these tasks up </h3>
@@ -41,12 +41,72 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Todo } from '../../models/types';
+import { myFunctions } from '../helpers/helperfunction';
 
 @Component
 export default class Chart extends Vue{
   @Prop() todolist?: Todo[];
 
+  redTasks: Todo[] = [];
+
+  greenTasks: Todo[] = [];
+
+  blueTasks: Todo[] = [];
+
+  yellowTasks: Todo[] = [];
+
+  noCategorieTasks: Todo[] = [];
+
   imageLink = require('../../assets/images/4color.png');
+
+  mounted (): void {
+    if (this.todolist){
+      for (const task of this.todolist){
+        // red Task : important and urgent
+        if (
+          task &&
+          task.importance &&
+          task.deadline &&
+          myFunctions.getdaysleft(task.deadline) < 2 &&
+          task.importance >= 50) {
+          this.redTasks.push(task);
+          continue;
+        }
+        // green tasks : important, not urgent
+        if (
+          task &&
+          task.importance &&
+          task.deadline &&
+          myFunctions.getdaysleft(task.deadline) >= 2 &&
+          task.importance >= 50) {
+          this.greenTasks.push(task);
+          continue;
+        }
+        // blue task : urgent but not important
+        if (
+          task &&
+          task.importance &&
+          task.deadline &&
+          myFunctions.getdaysleft(task.deadline) < 2 &&
+          task.importance < 50) {
+          this.blueTasks.push(task);
+          continue;
+        }
+        // yellow  task : not urgent and not important
+        if (
+          task &&
+          task.importance &&
+          task.deadline &&
+          myFunctions.getdaysleft(task.deadline) >= 2 &&
+          task.importance < 50) {
+          this.yellowTasks.push(task);
+          continue;
+        }
+        if (task){ this.noCategorieTasks.push(task); }
+      }
+    }
+    console.log(this.noCategorieTasks.length);
+  }
 }
 
 </script>
