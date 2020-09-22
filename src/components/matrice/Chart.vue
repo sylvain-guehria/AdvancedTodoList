@@ -105,7 +105,6 @@ export default class Chart extends Vue{
         if (task){ this.noCategorieTasks.push(task); }
       }
     }
-    console.log(this.noCategorieTasks.length);
   }
 }
 

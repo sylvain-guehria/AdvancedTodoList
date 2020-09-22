@@ -62,6 +62,7 @@
 
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Todo } from '../../models/types';
+import { myFunctions } from '../helpers/helperfunction';
 
 @Component
 export default class TodoFullDescription extends Vue{
@@ -69,19 +70,9 @@ export default class TodoFullDescription extends Vue{
 
  imageLink = require('../../assets/images/todo1.jpg');
 
- getdaysleft (deadline: Date): number{
-   const DiffTime: number = deadline.getTime() - new Date().getTime();
+ formatDate = myFunctions.getdaysleft;
 
-   const diffTimeString: string = (DiffTime / (1000 * 3600 * 24)).toFixed(1);
-   return parseFloat(diffTimeString);
- }
-
- formatDate (date: Date): string {
-   const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
-   const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(date);
-   const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
-   return (`${da}-${mo}-${ye}`);
- }
+ getdaysleft = myFunctions.getdaysleft;
 
  closeTask (){
    this.$emit('onClickCloseModal');
