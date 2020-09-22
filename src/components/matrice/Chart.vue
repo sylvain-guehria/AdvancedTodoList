@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
-/* eslint-disable indent */
 <template>
   <div class="container">
     <img
@@ -93,18 +91,18 @@ export default class Chart extends Vue{
 
     // eslint-disable-next-line
     switch (color){
-    case 'blue':
-      this.currentColoredTodoList = this.blueTasks;
-      break;
-    case 'yellow':
-      this.currentColoredTodoList = this.yellowTasks;
-      break;
-    case 'green':
-      this.currentColoredTodoList = this.greenTasks;
-      break;
-    case 'red':
-      this.currentColoredTodoList = this.redTasks;
-      break;
+      case 'blue':
+        this.currentColoredTodoList = this.blueTasks;
+        break;
+      case 'yellow':
+        this.currentColoredTodoList = this.yellowTasks;
+        break;
+      case 'green':
+        this.currentColoredTodoList = this.greenTasks;
+        break;
+      case 'red':
+        this.currentColoredTodoList = this.redTasks;
+        break;
     }
     this.$store.commit('setColoredTodoList', this.currentColoredTodoList);
     this.$modal.show('listmodal');

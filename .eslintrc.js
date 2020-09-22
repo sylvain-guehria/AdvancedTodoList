@@ -25,6 +25,7 @@ module.exports = {
     "@typescript-eslint"
   ],
   "rules": {
+    "@typescript-eslint/indent": [2, 2],
     "max-len": [2, 120, 4, { "ignoreUrls": true }],
     "@typescript-eslint/explicit-function-return-type": [1, {"allowExpressions": true}],
         // we only want single quotes

@@ -22,6 +22,9 @@
           :key="componentKey"
           :todo="todo"
           :index="index"
+          @onSuppress="supressTodo"
+          @onClickModal="show"
+          @onClickEditModal="showEditModal"
         /><hr>
       </li>
     </ul>
@@ -34,6 +37,20 @@
         @onClickCloseModal="hide"
       />
     </modal>
+    <modal
+      name="editmodal"
+      height="auto"
+      @onClickCloseModal="hide"
+    >
+      <div>
+        <todoeditform
+          title="Edit task"
+          :current-todo="currentTodo"
+          @onEdit="editTodo"
+          @onClose="hide"
+        />
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -43,30 +60,32 @@ import TodosItem from './TodosItem.vue';
 import { Todo } from '../../models/types';
 import TodoFullDescription from './TodoFullDescription.vue';
 import HeaderList from '../todos/HeaderList.vue';
+import TodoEditForm from './TodoEditForm.vue';
 
 @Component({
   components: {
     todositem: TodosItem,
     todofulldescp: TodoFullDescription,
-    headerlist: HeaderList
+    headerlist: HeaderList,
+    todoeditform: TodoEditForm
   }
 })
 
 export default class ColoredListTodos extends Vue {
-    coloredtodolist: Todo[] = [];
+  coloredtodolist: Todo[] = [];
 
-    currentIndex: number = 0;
+  currentIndex: number = 0;
 
-    currentSortingMode: string='';
+  currentSortingMode: string='';
 
-    componentKey: number = 0 ;
+  componentKey: number = 0 ;
 
-    currentTodo: Todo ={
-      task: '',
-      deadline: new Date(),
-      importance: 0,
-      description: ''
-    };
+  currentTodo: Todo ={
+    task: '',
+    deadline: new Date(),
+    importance: 0,
+    description: ''
+  };
 
   @Prop() private title?: string;
 
@@ -94,6 +113,17 @@ export default class ColoredListTodos extends Vue {
   forceRerender () {
     console.log('calling rerender colored');
     this.componentKey += 1;
+  }
+
+  // FIXME : dois également supprimer le doublon dans la list de todo normal
+  supressTodo (index: number): void{
+    this.coloredtodolist.splice(index, 1);
+  }
+
+  showEditModal (index: number): void {
+    this.currentIndex = index;
+    this.currentTodo = this.coloredtodolist[index];
+    this.$modal.show('editmodal');
   }
 }
 </script>
