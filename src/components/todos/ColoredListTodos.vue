@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <ul class="border">
-      <li class="container">
-        <!-- <img
-          width="70%"
+  <v-card class="mx-auto ml-7 mr-7 mt-7 mb-7">
+    <br>
+    <ul class="ml-7 mr-7">
+      <li class="container mb-5">
+        <img
+          width="30%"
           :src="imageLink"
-        > -->
+        >
       </li>
       <li>
         <headerlist
@@ -25,10 +26,13 @@
           @onSuppress="supressTodo"
           @onClickModal="show"
           @onClickEditModal="showEditModal"
-        /><hr>
+        />
       </li>
+      <br>
     </ul>
     <modal
+      draggable
+      scrollable
       name="viewmodal"
       height="auto"
     >
@@ -38,6 +42,8 @@
       />
     </modal>
     <modal
+      scrollable
+      draggable
       name="editmodal"
       height="auto"
       @onClickCloseModal="hide"
@@ -46,12 +52,11 @@
         <todoeditform
           title="Edit task"
           :current-todo="currentTodo"
-          @onEdit="editTodo"
           @onClose="hide"
         />
       </div>
     </modal>
-  </div>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -73,6 +78,8 @@ import TodoEditForm from './TodoEditForm.vue';
 
 export default class ColoredListTodos extends Vue {
   coloredtodolist: Todo[] = [];
+
+  todolist: Todo[] = [];
 
   currentIndex: number = 0;
 
@@ -108,6 +115,7 @@ export default class ColoredListTodos extends Vue {
 
   hide () {
     this.$modal.hide('viewmodal');
+    this.$modal.hide('editmodal');
   }
 
   forceRerender () {
@@ -115,9 +123,18 @@ export default class ColoredListTodos extends Vue {
     this.componentKey += 1;
   }
 
-  // FIXME : dois également supprimer le doublon dans la list de todo normal
-  supressTodo (index: number): void{
-    this.coloredtodolist.splice(index, 1);
+  supressTodo (indexColoredList: number): void{
+    this.todolist = this.$store.state.todolist;
+    if (this.coloredtodolist) this.currentTodo = this.coloredtodolist[indexColoredList];
+
+    this.currentIndex = this.todolist.findIndex((todo: Todo) => {
+      return this.lodash.isEqual(todo, this.currentTodo);
+    });
+
+    // surpess from todolist + coloredtodolist
+    this.todolist.splice(this.currentIndex, 1);
+    this.$store.commit('setTodoList', this.todolist);
+    this.coloredtodolist.splice(indexColoredList, 1);
   }
 
   showEditModal (index: number): void {

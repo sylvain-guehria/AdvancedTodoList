@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <ul class="border">
+  <v-card
+    class="mx-auto"
+  >
+    <ul class="ml-7 mr-7 mt-7 mb-7">
       <li class="container">
         <img
-          width="70%"
+          width="40%"
           :src="imageLink"
         >
       </li>
@@ -25,10 +27,10 @@
           @onSuppress="supressTodo"
           @onClickModal="show"
           @onClickEditModal="showEditModal"
-        /><hr>
+        />
       </li>
     </ul>
-    <div class="my-2">
+    <div class="my-2 container">
       <v-btn
         color="primary"
         fab
@@ -39,6 +41,8 @@
       </v-btn>
     </div>
     <modal
+      scrollable
+      draggable
       name="formmodal"
       height="auto"
     >
@@ -50,6 +54,8 @@
       </div>
     </modal>
     <modal
+      draggable
+      scrollable
       name="viewmodal"
       height="auto"
     >
@@ -59,6 +65,8 @@
       />
     </modal>
     <modal
+      draggable
+      scrollable
       name="editmodal"
       height="auto"
       @onClickCloseModal="hide"
@@ -72,7 +80,10 @@
         />
       </div>
     </modal>
-  </div>
+    <v-card
+      class="mx-auto"
+    />
+  </v-card>
 </template>
 
 <script lang="ts">

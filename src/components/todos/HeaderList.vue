@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <div class="card my-2 mr-7 header-todo">
+  <v-card
+    class="mx-auto"
+  >
+    <div class="my-2 mr-7 header-todo">
       <div
         class="row"
       >
@@ -42,7 +44,11 @@
         </div>
       </div>
     </div>
-  </div>
+    <v-card
+      class="mx-auto"
+      max-width="500"
+    />
+  </v-card>
 </template>
 
 <script lang="ts">

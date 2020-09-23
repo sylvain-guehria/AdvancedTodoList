@@ -1,5 +1,5 @@
 <template>
-  <div class="container border">
+  <v-card class="ml-7 mr-7 mt-7 mb-7 border">
     <div>
       <v-btn
         color="primary lighten-2"
@@ -59,7 +59,7 @@
         Edit task
       </v-btn>
     </form>
-  </div>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -82,6 +82,7 @@ export default class TodoEditForm extends Vue {
 
  editTodo (){
    this.$emit('onEdit', this.currentTodo, this.dateHelper);
+   this.$emit('onClose');
  }
 }
 </script>
