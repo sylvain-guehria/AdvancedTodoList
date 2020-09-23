@@ -46,7 +46,6 @@
         <todoeditform
           title="Edit task"
           :current-todo="currentTodo"
-          @onEdit="editTodo"
           @onClose="hide"
         />
       </div>
@@ -73,6 +72,8 @@ import TodoEditForm from './TodoEditForm.vue';
 
 export default class ColoredListTodos extends Vue {
   coloredtodolist: Todo[] = [];
+
+  todolist: Todo[] = [];
 
   currentIndex: number = 0;
 
@@ -108,6 +109,7 @@ export default class ColoredListTodos extends Vue {
 
   hide () {
     this.$modal.hide('viewmodal');
+    this.$modal.hide('editmodal');
   }
 
   forceRerender () {
@@ -115,9 +117,18 @@ export default class ColoredListTodos extends Vue {
     this.componentKey += 1;
   }
 
-  // FIXME : dois également supprimer le doublon dans la list de todo normal
-  supressTodo (index: number): void{
-    this.coloredtodolist.splice(index, 1);
+  supressTodo (indexColoredList: number): void{
+    this.todolist = this.$store.state.todolist;
+    if (this.coloredtodolist) this.currentTodo = this.coloredtodolist[indexColoredList];
+
+    this.currentIndex = this.todolist.findIndex((todo: Todo) => {
+      return this.lodash.isEqual(todo, this.currentTodo);
+    });
+
+    // surpess from todolist + coloredtodolist
+    this.todolist.splice(this.currentIndex, 1);
+    this.$store.commit('setTodoList', this.todolist);
+    this.coloredtodolist.splice(indexColoredList, 1);
   }
 
   showEditModal (index: number): void {

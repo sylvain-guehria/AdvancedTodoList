@@ -82,6 +82,7 @@ export default class TodoEditForm extends Vue {
 
  editTodo (){
    this.$emit('onEdit', this.currentTodo, this.dateHelper);
+   this.$emit('onClose');
  }
 }
 </script>
