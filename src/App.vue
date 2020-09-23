@@ -17,20 +17,10 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-    <v-app-bar
-      app
-      dense
-      dark
-      clipped-left
-      color="primary"
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
-      <v-spacer />
-      <v-toolbar-title>{{ routerTitle }}</v-toolbar-title>
-      <v-spacer />
-    </v-app-bar>
+    <appbar
+      :router-title="routerTitle"
+      @onClickDrawer="onClickDrawer"
+    />
     <v-content>
       <v-container fluid>
         <router-view />
@@ -43,14 +33,17 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import Router from '@/router';
+import AppBar from './layout/AppBar.vue';
 
-@Component({})
+@Component({
+  components: {
+    appbar: AppBar
+  }
+})
 export default class App extends Vue {
-  private title: string = 'My TODO list';
-
   private routerTitle: string = '';
 
-  private drawer = null;
+  private drawer: boolean = true;
 
   private items = [
     { title: 'Home', route: '/' },
@@ -63,6 +56,10 @@ export default class App extends Vue {
     Router.afterEach(to => {
       this.routerTitle = to.meta.title || '';
     });
+  }
+
+  onClickDrawer (){
+    this.drawer = !this.drawer;
   }
 }
 </script>

@@ -70,7 +70,7 @@ export default class TodoFullDescription extends Vue{
 
  imageLink = require('../../assets/images/todo1.jpg');
 
- formatDate = myFunctions.getdaysleft;
+ formatDate = myFunctions.formatDate;
 
  getdaysleft = myFunctions.getdaysleft;
 
