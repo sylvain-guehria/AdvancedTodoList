@@ -3,7 +3,7 @@
     class="item-todo"
   >
     <div
-      class="row mr-5"
+      class="row mr-5 clickme"
       @click="showTask"
     >
       <div class="col ">
@@ -97,4 +97,8 @@ export default class Todos extends Vue {
   top: 25px;
   right: 10px;
 }
+  .clickme{
+cursor: pointer;
+  }
+
 </style>

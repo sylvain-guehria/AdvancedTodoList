@@ -119,7 +119,6 @@ export default class ColoredListTodos extends Vue {
   }
 
   forceRerender () {
-    console.log('calling rerender colored');
     this.componentKey += 1;
   }
 
