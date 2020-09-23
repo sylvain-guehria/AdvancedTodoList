@@ -10,6 +10,8 @@ import VueLodash from 'vue-lodash';
 import lodash from 'lodash';
 import { Todo } from './models/types';
 
+import './assets/css/modalstyle.css';
+
 Vue.use(Vuex);
 Vue.use(VModal);
 Vue.use(VueLodash, { lodash: lodash });

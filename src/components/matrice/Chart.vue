@@ -44,8 +44,11 @@
       <h3>  Do it when you can</h3>
     </div>
     <modal
+      scrollable
+      draggable
       name="listmodal"
       height="auto"
+      width="80%"
     >
       <div>
         <coloredlisttodos />

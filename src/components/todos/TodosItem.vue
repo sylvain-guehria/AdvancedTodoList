@@ -1,5 +1,7 @@
 <template>
-  <div class="item-todo">
+  <v-card
+    class="item-todo"
+  >
     <div
       class="row mr-5"
       @click="showTask"
@@ -41,7 +43,7 @@
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -81,6 +83,9 @@ export default class Todos extends Vue {
   padding: 20px 60px 20px 30px;
   font-size: 20px;
   height: 88px;
+  margin-top : 10px;
+  margin-bottom : 10px;
+
 }
 .btn-supr{
   position:absolute;

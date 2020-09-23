@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <ul class="border">
-      <li class="container">
-        <!-- <img
-          width="70%"
+  <v-card class="mx-auto ml-7 mr-7 mt-7 mb-7">
+    <br>
+    <ul class="ml-7 mr-7">
+      <li class="container mb-5">
+        <img
+          width="30%"
           :src="imageLink"
-        > -->
+        >
       </li>
       <li>
         <headerlist
@@ -25,10 +26,13 @@
           @onSuppress="supressTodo"
           @onClickModal="show"
           @onClickEditModal="showEditModal"
-        /><hr>
+        />
       </li>
+      <br>
     </ul>
     <modal
+      draggable
+      scrollable
       name="viewmodal"
       height="auto"
     >
@@ -38,6 +42,8 @@
       />
     </modal>
     <modal
+      scrollable
+      draggable
       name="editmodal"
       height="auto"
       @onClickCloseModal="hide"
@@ -50,7 +56,7 @@
         />
       </div>
     </modal>
-  </div>
+  </v-card>
 </template>
 
 <script lang="ts">
