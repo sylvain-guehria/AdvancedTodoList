@@ -35,6 +35,7 @@
     "vuex-class": "^0.3.2"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
     "@mdi/font": "^3.7.95",
     "@types/jest": "^23.1.4",
     "@typescript-eslint/eslint-plugin": "^1.11.0",

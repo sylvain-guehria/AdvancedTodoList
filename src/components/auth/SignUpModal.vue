@@ -35,11 +35,13 @@
           Sign Up
         </button>
 
-        <p class="forgot-password text-right">
+        <p class="forgot-password text-right mt-3">
           Already registered
-          <router-link :to="{name: 'login'}">
+          <button
+            @click.prevent="showSignInModal"
+          >
             sign in?
-          </router-link>
+          </button>
         </p>
       </form>
     </div>
@@ -51,7 +53,10 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 export default class SignUpModal extends Vue {
-
+  showSignInModal (): void {
+    this.$modal.hide('signupmodal');
+    this.$emit('onClickShowSignInModal');
+  }
 }
 </script>
 

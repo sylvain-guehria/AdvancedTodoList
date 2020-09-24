@@ -45,7 +45,6 @@
     </div>
     <modal
       scrollable
-      draggable
       name="listmodal"
       height="auto"
       width="80%"

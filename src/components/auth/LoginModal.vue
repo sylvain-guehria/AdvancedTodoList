@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto container ">
+  <v-card class="mx-auto container">
     <div class="vue-tempalte">
       <form>
         <h3>Sign In</h3>
@@ -28,18 +28,18 @@
         </button>
 
         <button
-          class="forgot-password text-right mt-2 mb-4"
+          class="forgot-password mt-2 mb-4"
           @click.prevent="showForgotModal"
         >
           Forgot password ?
         </button>
 
         <div class="social-icons">
-          <ul>
-            <li><a href="#"><i class="fa fa-google" /></a></li>
-            <li><a href="#"><i class="fa fa-facebook" /></a></li>
-            <li><a href="#"><i class="fa fa-twitter" /></a></li>
-          </ul>
+          <img
+            class="ma-2"
+            :src="imageLink"
+            @click="showGoogleConnex"
+          >
         </div>
       </form>
     </div>
@@ -48,12 +48,19 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import '../../assets/css/loginstyle.css';
 
 @Component
 export default class LoginModal extends Vue {
+  imageLink = require('../../assets/images/btn_google.png');
+
   showForgotModal (): void {
     this.$modal.hide('loginmodal');
     this.$emit('onClickShowForgotModal');
+  }
+
+  showGoogleConnex (){
+    console.log('google connex)');
   }
 }
 </script>

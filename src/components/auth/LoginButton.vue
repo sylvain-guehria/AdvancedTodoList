@@ -1,19 +1,41 @@
 <template>
   <div>
-    <v-btn
-      icon
-      @click="showLogin"
+    <v-menu
+      left
     >
-      <v-icon>mdi-dots-vertical</v-icon>
-    </v-btn>
-    <v-btn
-      icon
-      @click="showSignUp"
-    >
-      <v-icon>mdi-dots-vertical</v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          icon
+          color="white"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </template>
+
+      <v-list>
+        <v-list-item>
+          <v-btn
+            color="primary lighten-2"
+            text
+            @click="showLogin"
+          >
+            Sign-In
+          </v-btn>
+        </v-list-item>
+        <v-list-item>
+          <v-btn
+            color="primary lighten-2"
+            text
+            @click="showSignUp"
+          >
+            Sign-Up
+          </v-btn>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     <modal
-      draggable
       scrollable
       name="loginmodal"
       height="auto"
@@ -23,15 +45,15 @@
       />
     </modal>
     <modal
-      draggable
       scrollable
       name="signupmodal"
       height="auto"
     >
-      <signupmodal />
+      <signupmodal
+        @onClickShowSignInModal="showLogin"
+      />
     </modal>
     <modal
-      draggable
       scrollable
       name="forgotpassmodal"
       height="auto"

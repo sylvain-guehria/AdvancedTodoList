@@ -42,7 +42,6 @@
     </div>
     <modal
       scrollable
-      draggable
       name="formmodal"
       height="auto"
     >
@@ -54,7 +53,6 @@
       </div>
     </modal>
     <modal
-      draggable
       scrollable
       name="viewmodal"
       height="auto"
@@ -65,7 +63,6 @@
       />
     </modal>
     <modal
-      draggable
       scrollable
       name="editmodal"
       height="auto"
