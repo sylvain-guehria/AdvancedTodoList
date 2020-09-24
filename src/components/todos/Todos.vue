@@ -30,9 +30,9 @@
         />
       </li>
     </ul>
-    <div class="my-2 container">
+    <div class="my-2 container btn-plus">
       <v-btn
-        color="primary"
+        color="#7c795d"
         fab
         dark
         @click="showFormModal"

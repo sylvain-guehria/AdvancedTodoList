@@ -38,7 +38,7 @@
           <img
             class="ma-2"
             :src="imageLink"
-            @click="showGoogleConnex"
+            @click="logginFirebase"
           >
         </div>
       </form>
@@ -61,6 +61,10 @@ export default class LoginModal extends Vue {
 
   showGoogleConnex (){
     console.log('google connex)');
+  }
+
+  logginFirebase (){
+    this.$emit('onClickLogin');
   }
 }
 </script>

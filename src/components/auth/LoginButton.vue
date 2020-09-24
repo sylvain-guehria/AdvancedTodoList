@@ -2,6 +2,7 @@
   <div>
     <v-menu
       left
+      bottom
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -10,12 +11,13 @@
           v-bind="attrs"
           v-on="on"
         >
+          {{ firstName() }}
           <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
       </template>
 
       <v-list>
-        <v-list-item>
+        <v-list-item v-if="!authenticated()">
           <v-btn
             color="primary lighten-2"
             text
@@ -24,13 +26,22 @@
             Sign-In
           </v-btn>
         </v-list-item>
-        <v-list-item>
+        <v-list-item v-if="!authenticated()">
           <v-btn
             color="primary lighten-2"
             text
             @click="showSignUp"
           >
             Sign-Up
+          </v-btn>
+        </v-list-item>
+        <v-list-item v-if="authenticated()">
+          <v-btn
+            color="primary lighten-2"
+            text
+            @click="logout"
+          >
+            Sign-Out
           </v-btn>
         </v-list-item>
       </v-list>
@@ -42,6 +53,7 @@
     >
       <loginmodal
         @onClickShowForgotModal="showForgotPass"
+        @onClickLogin="login"
       />
     </modal>
     <modal
@@ -68,6 +80,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import LoginModal from './LoginModal.vue';
 import SignUpModal from './SignUpModal.vue';
 import ForgotPassModal from './ForgotPassModal.vue';
+import { User } from '../../models/types';
+import Firebase from '../../firebase/firebase';
 
 @Component({
   components: {
@@ -77,6 +91,24 @@ import ForgotPassModal from './ForgotPassModal.vue';
   }
 })
 export default class LoginButton extends Vue {
+  user: User = {
+    loggedIn: false,
+    data: {}
+  } ;
+
+  mounted () {
+    Firebase.auth.onAuthStateChanged(user => {
+      if (user) {
+        this.user.loggedIn = true;
+        this.user.data = user;
+      } else {
+        this.user.loggedIn = false;
+        this.user.data = {};
+      }
+      this.$store.commit('setUser', this.user);
+    });
+  }
+
   showLogin (): void {
     this.$modal.show('loginmodal');
   }
@@ -91,6 +123,27 @@ export default class LoginButton extends Vue {
 
   hide () {
     this.$modal.hide('loginmodal');
+  }
+
+  authenticated (){
+    return this.$store.getters.getUser.loggedIn;
+  }
+
+  firstName (){
+    this.user = this.$store.getters.getUser;
+    console.log('username', this.user.data.displayName);
+    if (this.user.data.displayName) {
+      return this.user.data.displayName.split(' ')[0];
+    }
+    return null;
+  }
+
+  login () {
+    Firebase.login();
+  }
+
+  logout () {
+    Firebase.logout();
   }
 }
 </script>

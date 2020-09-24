@@ -136,6 +136,8 @@ export default class HeaderList extends Vue {
 <style scoped>
 .item-todo p {
   margin-bottom: 0!important;
+  color: #7c795d;
+  font-family: 'Trocchi', 'serif';
 }
 ul{
   list-style-type: none ;
@@ -144,6 +146,8 @@ ul{
 .header-todo{
   position: relative;
   font-size: 20px;
+  color: #7c795d;
+  font-family: 'Trocchi', 'serif';
 }
 .border{
   padding : 20px 50px 50px 50px

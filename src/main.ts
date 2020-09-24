@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import VModal from 'vue-js-modal';
 import VueLodash from 'vue-lodash';
 import lodash from 'lodash';
-import { Todo } from './models/types';
+import { Todo, User } from './models/types';
 
 import './assets/css/modalstyle.css';
 
@@ -20,14 +20,27 @@ Vue.config.productionTip = false;
 
 var todolist: Todo[] = [];
 var coloredtodolist: Todo[] = [];
+var user: User = {
+  loggedIn: false,
+  data: {}
+};
 
 const store = new Vuex.Store({
-  modules: {
-
-  },
   state: {
     todolist: todolist,
-    coloredtodolist: coloredtodolist
+    coloredtodolist: coloredtodolist,
+    user: user
+  },
+  getters: {
+    getUser: (state) => {
+      return state.user;
+    },
+    getTodoList: (state) => {
+      return state.todolist;
+    },
+    getColoredtodolist: (state) => {
+      return state.coloredtodolist;
+    }
   },
   mutations: {
     setTodoList (state, newList: Todo[]) {
@@ -35,7 +48,13 @@ const store = new Vuex.Store({
     },
     setColoredTodoList (state, newList: Todo[]) {
       state.coloredtodolist = newList;
+    },
+    setUser (state, user: User) {
+      state.user = user;
     }
+  },
+  actions: {
+
   }
 });
 

@@ -4,3 +4,8 @@ export interface Todo {
   importance?: number;
   description?: string;
 }
+
+export interface User {
+  loggedIn: boolean;
+  data: Record<string, any>;
+}
