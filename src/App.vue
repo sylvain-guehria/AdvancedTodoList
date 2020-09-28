@@ -24,6 +24,7 @@
     <v-content>
       <v-container fluid>
         <router-view />
+        <notifications />
       </v-container>
     </v-content>
   </v-app>

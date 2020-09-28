@@ -94,6 +94,19 @@ export default class LoginModal extends Vue {
     Firebase.loginEmail(this.user.data.email, this.user.data.password)
       .then(() => {
         this.$modal.hide('loginmodal');
+        console.log('here the notif');
+        this.$notify({
+          title: 'You logged in',
+          text: 'Hello user! =)',
+          type: 'success'
+
+        });
+      }).catch((error: Error) => {
+        this.$notify({
+          title: 'Cannot logge you in',
+          text: error.message,
+          type: 'error'
+        });
       });
   }
 }

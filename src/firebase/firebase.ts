@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import Vue from 'vue';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -36,7 +37,13 @@ export default {
   },
   logout () {
     firebase.auth().signOut()
-      .then(function () {})
+      .then(function () {
+        Vue.notify({
+          title: 'You logged out',
+          text: 'Goodbye dear friend ! =)',
+          type: 'warning'
+        });
+      })
       .catch(function (error) {
         console.log(error);
       });
@@ -56,7 +63,7 @@ export default {
         });
     });
   },
-  loginEmail (email: string, password: string) {
+  loginEmail (email: string, password: string): Promise<any> {
     return new Promise((resolve, reject) => {
       firebase
         .auth()
@@ -67,6 +74,18 @@ export default {
         })
         .catch(error => {
           console.log('error signup email', error);
+          reject(error);
+        });
+    });
+  },
+  sendResetPassEmail (emailAddress: string): Promise<any>{
+    return new Promise((resolve, reject) => {
+      firebase.auth().sendPasswordResetEmail(emailAddress).then((data) => {
+        console.log('sending email reste password', data);
+        resolve({ success: true });
+      })
+        .catch(error => {
+          console.log('error reste password', error);
           reject(error);
         });
     });

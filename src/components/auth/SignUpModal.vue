@@ -80,6 +80,17 @@ export default class SignUpModal extends Vue {
     event.preventDefault();
     Firebase.signUpEmail(this.user.data.email, this.user.data.password).then(() => {
       this.$modal.hide('signupmodal');
+      this.$notify({
+        title: 'You signed up',
+        text: 'Welcome ! =)',
+        type: 'success'
+      });
+    }).catch((error: Error) => {
+      this.$notify({
+        title: 'Cannot register you',
+        text: error.message,
+        type: 'error'
+      });
     });
   }
 }
