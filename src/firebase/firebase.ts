@@ -24,15 +24,19 @@ export default {
   loginGoogle () {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider)
-      .then(function (result) {
-        console.log(result);
+      .then(function () {
+        Vue.notify({
+          title: 'logged in',
+          text: 'Hello =)',
+          type: 'success'
+        });
       })
       .catch(function (error){
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.email;
-        const credential = error.credential;
-        console.log(errorCode, errorMessage, email, credential);
+        Vue.notify({
+          title: 'error loggin google',
+          text: error.mesage,
+          type: 'error'
+        });
       });
   },
   logout () {
@@ -45,47 +49,45 @@ export default {
         });
       })
       .catch(function (error) {
-        console.log(error);
+        Vue.notify({
+          title: 'Cannot log out',
+          text: error.message,
+          type: 'error'
+        });
       });
   },
-  signUpEmail (email: string, password: string): Promise<any> {
+  signUpEmail (email: string, password: string): Promise<{}> {
     return new Promise((resolve, reject) => {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
-          console.log('signup email ok');
           resolve({ success: true });
         })
         .catch(error => {
-          console.log('error signup email', error);
           reject(error);
         });
     });
   },
-  loginEmail (email: string, password: string): Promise<any> {
+  loginEmail (email: string, password: string): Promise<{}> {
     return new Promise((resolve, reject) => {
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then((data) => {
-          console.log('ok log email', data);
+        .then(() => {
           resolve({ success: true });
         })
         .catch(error => {
-          console.log('error signup email', error);
           reject(error);
         });
     });
   },
-  sendResetPassEmail (emailAddress: string): Promise<any>{
+  sendResetPassEmail (emailAddress: string): Promise<{}>{
     return new Promise((resolve, reject) => {
-      firebase.auth().sendPasswordResetEmail(emailAddress).then((data) => {
-        console.log('sending email reste password', data);
+      firebase.auth().sendPasswordResetEmail(emailAddress).then(() => {
         resolve({ success: true });
       })
         .catch(error => {
-          console.log('error reste password', error);
           reject(error);
         });
     });

@@ -33,7 +33,6 @@ export default class ForgotPassModal extends Vue {
   email: string = '';
 
   resetPassword (){
-    console.log('first step reset password');
     Firebase.sendResetPassEmail(this.email).then(() => {
       this.$modal.hide('forgotpassmodal');
       this.$notify({

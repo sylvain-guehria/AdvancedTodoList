@@ -89,12 +89,10 @@ export default class LoginModal extends Vue {
   }
 
   onFormSubmitLoginEmail (event: Event) {
-    console.log('submit form');
     event.preventDefault();
     Firebase.loginEmail(this.user.data.email, this.user.data.password)
       .then(() => {
         this.$modal.hide('loginmodal');
-        console.log('here the notif');
         this.$notify({
           title: 'You logged in',
           text: 'Hello user! =)',

@@ -76,7 +76,6 @@ export default class SignUpModal extends Vue {
   }
 
   onFormSubmit (event: Event) {
-    console.log('submit form');
     event.preventDefault();
     Firebase.signUpEmail(this.user.data.email, this.user.data.password).then(() => {
       this.$modal.hide('signupmodal');

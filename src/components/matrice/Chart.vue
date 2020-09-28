@@ -89,8 +89,6 @@ export default class Chart extends Vue{
   }
 
   showListModal (color: string): void {
-    console.log('showing modal', color);
-
     // eslint-disable-next-line
     switch (color){
       case 'blue':
