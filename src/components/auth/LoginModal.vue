@@ -1,12 +1,13 @@
 <template>
   <v-card class="mx-auto container">
     <div class="vue-tempalte">
-      <form>
+      <form @submit.prevent="onFormSubmitLoginEmail">
         <h3>Sign In</h3>
 
         <div class="form-group">
           <label>Email address</label>
           <input
+            v-model="user.data.email"
             type="email"
             class="form-control form-control-lg"
           >
@@ -15,6 +16,7 @@
         <div class="form-group">
           <label>Password</label>
           <input
+            v-model="user.data.password"
             type="password"
             class="form-control form-control-lg"
           >
@@ -33,6 +35,14 @@
         >
           Forgot password ?
         </button>
+        <p class="forgot-password">
+          Not registered ?
+          <button
+            @click.prevent="showSignUpModal"
+          >
+            sign up
+          </button>
+        </p>
 
         <div class="social-icons">
           <img
@@ -49,22 +59,39 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import '../../assets/css/loginstyle.css';
+import Firebase from '../../firebase/firebase';
+import { User } from '../../models/types';
 
 @Component
 export default class LoginModal extends Vue {
   imageLink = require('../../assets/images/btn_google.png');
+
+  user: User = {
+    loggedIn: false,
+    data: {
+      email: '',
+      password: ''
+    }
+  } ;
 
   showForgotModal (): void {
     this.$modal.hide('loginmodal');
     this.$emit('onClickShowForgotModal');
   }
 
-  showGoogleConnex (){
-    console.log('google connex)');
-  }
-
   logginFirebase (){
     this.$emit('onClickLogin');
+  }
+
+  showSignUpModal (): void {
+    this.$modal.hide('loginmodal');
+    this.$emit('onClickShowSignUpModal');
+  }
+
+  onFormSubmitLoginEmail (event: Event) {
+    console.log('submit form');
+    event.preventDefault();
+    Firebase.loginEmail(this.user.data.email, this.user.data.password);
   }
 }
 </script>

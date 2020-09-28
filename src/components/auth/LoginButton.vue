@@ -53,6 +53,7 @@
     >
       <loginmodal
         @onClickShowForgotModal="showForgotPass"
+        @onClickShowSignUpModal="showSignUp"
         @onClickLogin="login"
       />
     </modal>
@@ -121,17 +122,12 @@ export default class LoginButton extends Vue {
     this.$modal.show('forgotpassmodal');
   }
 
-  hide () {
-    this.$modal.hide('loginmodal');
-  }
-
   authenticated (){
     return this.$store.getters.getUser.loggedIn;
   }
 
   firstName (){
     this.user = this.$store.getters.getUser;
-    console.log('username', this.user.data.displayName);
     if (this.user.data.displayName) {
       return this.user.data.displayName.split(' ')[0];
     }
@@ -139,7 +135,8 @@ export default class LoginButton extends Vue {
   }
 
   login () {
-    Firebase.login();
+    this.$modal.hide('loginmodal');
+    Firebase.loginGoogle();
   }
 
   logout () {
