@@ -41,30 +41,34 @@ export default {
         console.log(error);
       });
   },
-  signUpEmail (email, password) {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('signup email ok');
-        return Promise.resolve;
-      })
-      .catch(error => {
-        console.log('error signup email', error);
-        this.error = error;
-        return Promise.reject;
-      });
+  signUpEmail (email: string, password: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          console.log('signup email ok');
+          resolve({ success: true });
+        })
+        .catch(error => {
+          console.log('error signup email', error);
+          reject(error);
+        });
+    });
   },
-  loginEmail (email, password) {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((data) => {
-        console.log('ok log email', data);
-      })
-      .catch(error => {
-        console.log('error login email', error);
-        this.error = error;
-      });
+  loginEmail (email: string, password: string) {
+    return new Promise((resolve, reject) => {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((data) => {
+          console.log('ok log email', data);
+          resolve({ success: true });
+        })
+        .catch(error => {
+          console.log('error signup email', error);
+          reject(error);
+        });
+    });
   }
 };
