@@ -1,12 +1,13 @@
 <template>
-  <v-card class="mx-auto container ">
+  <v-card class="mx-auto container">
     <div class="vue-tempalte">
-      <form>
+      <form @submit.prevent="onFormSubmitLoginEmail">
         <h3>Sign In</h3>
 
         <div class="form-group">
           <label>Email address</label>
           <input
+            v-model="user.data.email"
             type="email"
             class="form-control form-control-lg"
           >
@@ -15,6 +16,7 @@
         <div class="form-group">
           <label>Password</label>
           <input
+            v-model="user.data.password"
             type="password"
             class="form-control form-control-lg"
           >
@@ -28,18 +30,26 @@
         </button>
 
         <button
-          class="forgot-password text-right mt-2 mb-4"
+          class="forgot-password mt-2 mb-4"
           @click.prevent="showForgotModal"
         >
           Forgot password ?
         </button>
+        <p class="forgot-password">
+          Not registered ?
+          <button
+            @click.prevent="showSignUpModal"
+          >
+            sign up
+          </button>
+        </p>
 
         <div class="social-icons">
-          <ul>
-            <li><a href="#"><i class="fa fa-google" /></a></li>
-            <li><a href="#"><i class="fa fa-facebook" /></a></li>
-            <li><a href="#"><i class="fa fa-twitter" /></a></li>
-          </ul>
+          <img
+            class="ma-2"
+            :src="imageLink"
+            @click="logginFirebase"
+          >
         </div>
       </form>
     </div>
@@ -48,12 +58,54 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import '../../assets/css/loginstyle.css';
+import Firebase from '../../firebase/firebase';
+import { User } from '../../models/types';
 
 @Component
 export default class LoginModal extends Vue {
+  imageLink = require('../../assets/images/btn_google.png');
+
+  user: User = {
+    loggedIn: false,
+    data: {
+      email: '',
+      password: ''
+    }
+  } ;
+
   showForgotModal (): void {
     this.$modal.hide('loginmodal');
     this.$emit('onClickShowForgotModal');
+  }
+
+  logginFirebase (){
+    this.$emit('onClickLogin');
+  }
+
+  showSignUpModal (): void {
+    this.$modal.hide('loginmodal');
+    this.$emit('onClickShowSignUpModal');
+  }
+
+  onFormSubmitLoginEmail (event: Event) {
+    event.preventDefault();
+    Firebase.loginEmail(this.user.data.email, this.user.data.password)
+      .then(() => {
+        this.$modal.hide('loginmodal');
+        this.$notify({
+          title: 'You logged in',
+          text: 'Hello user! =)',
+          type: 'success'
+
+        });
+      }).catch((error: Error) => {
+        this.$notify({
+          title: 'Cannot logge you in',
+          text: error.message,
+          type: 'error'
+        });
+      });
   }
 }
 </script>

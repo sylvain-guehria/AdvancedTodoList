@@ -3,20 +3,20 @@
     <v-app-bar
       app
       dense
-      dark
       clipped-left
       :src="imageLink"
     >
-      <v-app-bar-nav-icon @click.stop="changDrawer" />
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-app-bar-nav-icon
+        dark
+        @click.stop="changDrawer"
+      />
+      <div class="title-white">
+        <v-toolbar-title>
+          {{ title }}
+        </v-toolbar-title>
+      </div>
       <v-spacer />
       <v-spacer />
-      <!-- <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn> -->
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
       <loginbutton />
     </v-app-bar>
   </v-card>
@@ -45,4 +45,8 @@ export default class AppBar extends Vue {
 </script>
 
   <style scoped>
+  v-toolbar-title,
+  .title-white {
+    color: white;
+  }
   </style>

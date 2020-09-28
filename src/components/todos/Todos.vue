@@ -30,9 +30,9 @@
         />
       </li>
     </ul>
-    <div class="my-2 container">
+    <div class="my-2 container btn-plus">
       <v-btn
-        color="primary"
+        color="#7c795d"
         fab
         dark
         @click="showFormModal"
@@ -42,7 +42,6 @@
     </div>
     <modal
       scrollable
-      draggable
       name="formmodal"
       height="auto"
     >
@@ -54,7 +53,6 @@
       </div>
     </modal>
     <modal
-      draggable
       scrollable
       name="viewmodal"
       height="auto"
@@ -65,7 +63,6 @@
       />
     </modal>
     <modal
-      draggable
       scrollable
       name="editmodal"
       height="auto"

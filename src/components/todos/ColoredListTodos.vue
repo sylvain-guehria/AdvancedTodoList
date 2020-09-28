@@ -31,7 +31,6 @@
       <br>
     </ul>
     <modal
-      draggable
       scrollable
       name="viewmodal"
       height="auto"
@@ -43,7 +42,6 @@
     </modal>
     <modal
       scrollable
-      draggable
       name="editmodal"
       height="auto"
       @onClickCloseModal="hide"

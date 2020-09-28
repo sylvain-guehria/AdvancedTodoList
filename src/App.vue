@@ -12,7 +12,7 @@
           :to="item.route"
         >
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title><h4>{{ item.title }}</h4></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -24,6 +24,7 @@
     <v-content>
       <v-container fluid>
         <router-view />
+        <notifications />
       </v-container>
     </v-content>
   </v-app>
@@ -81,5 +82,9 @@ export default class App extends Vue {
 }
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+h4{
+  color: #7c795d;
+  font-family: 'Trocchi', 'serif';
 }
 </style>
