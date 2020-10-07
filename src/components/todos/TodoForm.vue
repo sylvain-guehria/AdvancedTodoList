@@ -65,7 +65,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import * as firebase from 'firebase/app';
 import { Todo } from '../../models/types';
+import { database } from '../../firebase/firebase';
 
 @Component
 export default class TodoForm extends Vue {
@@ -78,8 +80,19 @@ export default class TodoForm extends Vue {
 
   dateHelper: string = '';
 
+  dateToday: string = '';
+
+  useruid: string = '';
+
   created (){
     this.dateHelper = new Date().toISOString().substr(0, 10);
+    this.dateToday = new Date().toISOString().substr(0, 10);
+
+    var user = firebase.auth().currentUser;
+
+    if (user != null) {
+      this.useruid = user.uid;
+    }
   }
 
   updated (){
@@ -88,11 +101,24 @@ export default class TodoForm extends Vue {
 
   createTodo (){
     this.$emit('onCreate', this.formData);
+    this.writeUserData(this.formData);
     this.formData = {
       task: '',
       deadline: new Date(),
       description: ''
     };
+  }
+
+  //FIXME : right now this function erase all the todos foir the user and doesnt provide a key to the todo
+  writeUserData (todo: Todo) {
+    const { task, deadline, importance, description } = todo;
+    database.ref('todos/' + this.useruid).set({
+      task: task,
+      deadline: deadline,
+      importance: importance,
+      description: description,
+      creationDate: this.dateToday
+    });
   }
 }
 </script>

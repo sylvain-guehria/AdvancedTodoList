@@ -1,0 +1,44 @@
+{
+    "users": {
+        "VmNZkobYaFfsmEqTVF87XGlcwag1": {
+            "fullname": "Sylvain Guehria",
+            "signUpDate": "06/10/2020"
+        },
+        "IkbS45r70ucQvsTtDWttnjuuAFh1": {
+            "fullname": "Benjamin Guehria",
+            "signUpDate": "01/09/2020"
+        },
+        "RS9qwNfcz9N0JgipTNTO5oXFXOu1": {
+            "fullname": "Pierro Lalune",
+            "signUpDate": "04/12/2019"
+        }
+    },
+    //todos are organized by user ID
+    "todos": {
+        "VmNZkobYaFfsmEqTVF87XGlcwag1": {
+            "todo1": {
+                "task": "aaaaaaaaaaaaaa",
+                "description": "aaaaaaaaaaaaaaaa",
+                "importance": 52,
+                "creationDate": "05/01/2019",
+                "deadline": "09/02/2019"
+            },
+            "todo2": {
+                "task": "bbbbbbbbbbb",
+                "description": "bbbbbbbbbbb",
+                "importance": 87,
+                "creationDate": "05/05/2020",
+                "deadline": "09/06/2020"
+            }
+        },
+        "IkbS45r70ucQvsTtDWttnjuuAFh1": {
+            "todo1": {
+                "task": "ccccccccccccc",
+                "description": "ccccccccccc",
+                "importance": 41,
+                "creationDate": "09/11/2019",
+                "deadline": "18/03/2020"
+            }
+        }
+    }
+}
