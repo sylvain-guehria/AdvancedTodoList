@@ -91,6 +91,7 @@ import TodoEditForm from './TodoEditForm.vue';
 import { Todo } from '../../models/types';
 import TodoFullDescription from './TodoFullDescription.vue';
 import HeaderList from './HeaderList.vue';
+import { database } from '../../firebase/firebase';
 
 @Component({
   components: {
@@ -112,16 +113,19 @@ export default class Todos extends Vue {
   componentKey: number = 0 ;
 
   currentTodo: Todo ={
+    key: '',
     task: '',
     deadline: new Date(),
     importance: 0,
-    description: ''
+    description: '',
+    creationDate: new Date()
   };
 
   @Prop() private title?: string;
 
   imageLink = require('../../assets/images/To-Do-List.jpg');
 
+  // FIXME : now must push into firebase
   createTodo (todo: Todo): void{
     this.todolist.push(todo);
     this.hide();
@@ -131,17 +135,37 @@ export default class Todos extends Vue {
     this.componentKey += 1;
   }
 
+  // FIXME : now must edit into firebase
   editTodo (todo: Todo, date: string): void{
     todo.deadline = new Date(date);
     this.hide();
   }
 
+  // FIXME : now must delete into firebase
   supressTodo (index: number): void{
     this.todolist.splice(index, 1);
   }
 
+  // FIXME : change VmNZkobYaFfsmEqTVF87XGlcwag1 by the UID of the curent user. fix the dates, they are undefined right now.
   beforeMount (): void {
-    this.todolist = this.$store.state.todolist;
+    const listoftodos: Todo[] = [];
+    database.ref('todos/VmNZkobYaFfsmEqTVF87XGlcwag1').once('value', (snapshot) => {
+      snapshot.forEach(function (childSnapshot) {
+        const currentTodo: Todo = {
+          key: childSnapshot.key || '',
+          task: childSnapshot.val().task,
+          deadline: childSnapshot.val().deadline,
+          importance: childSnapshot.val().importance,
+          description: childSnapshot.val().description,
+          creationDate: childSnapshot.val().dateToday
+        };
+        listoftodos.push(currentTodo);
+      });
+      console.log('list of todos', listoftodos);
+      this.todolist = listoftodos;
+      console.log('todolist', this.todolist);
+    });
+    this.$store.commit('setTodoList', this.todolist);
   }
 
   updated (){
