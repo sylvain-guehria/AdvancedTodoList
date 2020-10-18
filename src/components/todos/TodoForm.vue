@@ -65,21 +65,36 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import * as firebase from 'firebase/app';
 import { Todo } from '../../models/types';
+import { database } from '../../firebase/firebase';
 
 @Component
 export default class TodoForm extends Vue {
   formData: Todo = {
+    key: '',
     task: '',
     deadline: new Date(),
     importance: 0,
-    description: ''
+    description: '',
+    creationDate: new Date()
   };
 
   dateHelper: string = '';
 
+  dateToday: string = '';
+
+  useruid: string = '';
+
   created (){
     this.dateHelper = new Date().toISOString().substr(0, 10);
+    this.dateToday = new Date().toISOString().substr(0, 10);
+
+    var user = firebase.auth().currentUser;
+
+    if (user != null) {
+      this.useruid = user.uid;
+    }
   }
 
   updated (){
@@ -88,11 +103,26 @@ export default class TodoForm extends Vue {
 
   createTodo (){
     this.$emit('onCreate', this.formData);
+    this.writeUserData(this.formData);
     this.formData = {
+      key: '',
       task: '',
       deadline: new Date(),
-      description: ''
+      importance: 0,
+      description: '',
+      creationDate: new Date()
     };
+  }
+
+  writeUserData (todo: Todo) {
+    const { task, deadline, importance, description } = todo;
+    database.ref('todos/' + this.useruid).push({
+      task: task,
+      deadline: deadline,
+      importance: importance,
+      description: description,
+      creationDate: this.dateToday
+    });
   }
 }
 </script>

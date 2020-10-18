@@ -86,10 +86,12 @@ export default class ColoredListTodos extends Vue {
   componentKey: number = 0 ;
 
   currentTodo: Todo ={
+    key: '',
     task: '',
     deadline: new Date(),
     importance: 0,
-    description: ''
+    description: '',
+    creationDate: new Date()
   };
 
   @Prop() private title?: string;
