@@ -131,6 +131,9 @@ export default class LoginButton extends Vue {
     if (this.user.data.displayName) {
       return this.user.data.displayName.split(' ')[0];
     }
+    if (this.user.data.email) {
+      return this.user.data.email.split('@')[0];
+    }
     return null;
   }
 
