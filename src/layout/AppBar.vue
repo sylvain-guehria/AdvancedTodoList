@@ -17,7 +17,10 @@
       </div>
       <v-spacer />
       <v-spacer />
-      <loginbutton />
+      <loginbutton
+        :key="componentKey"
+        @onForceRerender="forceRerender"
+      />
     </v-app-bar>
   </v-card>
 </template>
@@ -33,6 +36,12 @@ import LoginButton from '../components/auth/LoginButton.vue';
 })
 export default class AppBar extends Vue {
   @Prop() routerTitle?: string;
+
+  componentKey: number = 0
+
+  forceRerender () {
+    this.componentKey += 1;
+  }
 
   imageLink: string = 'https://free4kwallpapers.com/uploads/originals/2020/01/05/illustration-wallpaper.jpg'
 
