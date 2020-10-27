@@ -11,13 +11,13 @@
       </li>
       <li>
         <headerlist
-          :todolist="todolist"
+          :todolist="this.$store.getters.getTodoList"
           whatlist="normal"
           @onForceRerender="forceRerender"
         />
       </li>
       <li
-        v-for="(todo, index) in todolist"
+        v-for="(todo, index) in this.$store.getters.getTodoList"
         :key="index"
       >
         <todositem
@@ -124,7 +124,11 @@ export default class Todos extends Vue {
 
   imageLink = require('../../assets/images/To-Do-List.jpg');
 
-  // FIXME : now must push into firebase
+  created () {
+    this.todolist = this.$store.getters.getTodoList;
+  }
+
+  // FIXME : now must push into vuex then firebase update
   createTodo (todo: Todo): void{
     this.todolist.push(todo);
     this.hide();
@@ -134,24 +138,15 @@ export default class Todos extends Vue {
     this.componentKey += 1;
   }
 
-  // FIXME : now must edit into firebase
+  // FIXME : now must edit into vuex then firebase update
   editTodo (todo: Todo, date: string): void{
     todo.deadline = new Date(date);
     this.hide();
   }
 
-  // FIXME : now must delete into firebase
+  // FIXME : now must delete into vuex then firebase update
   supressTodo (index: number): void{
     this.todolist.splice(index, 1);
-  }
-
-  beforeMount (): void {
-    this.todolist = this.$store.state.todolist;
-  }
-
-  updated (){
-    // this.$store.commit('setTodoList', this.todolist);
-    this.todolist = this.$store.state.todolist;
   }
 
   show (index: number): void {
