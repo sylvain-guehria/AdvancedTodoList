@@ -68,22 +68,28 @@ import { Todo } from '../../models/types';
 
 @Component
 export default class TodoEditForm extends Vue {
- @Prop() private currentTodo?: Todo;
+  dateHelper: string = '';
 
- dateHelper: string = '';
+  currentTodo: Todo = {
+    key: '',
+    task: '',
+    creationDate: new Date()
+  };
 
- created (){
-   if (this.currentTodo){
-     this.dateHelper =
+  created () {
+    this.currentTodo = this.$store.getters.getCurrentTodo;
+
+    if (this.currentTodo){
+      this.dateHelper =
       this.currentTodo.deadline ? this.currentTodo.deadline.toISOString().substr(0, 10)
         : new Date().toISOString().substr(0, 10);
-   }
- }
+    }
+  }
 
- editTodo (){
-   this.$emit('onEdit', this.currentTodo, this.dateHelper);
-   this.$emit('onClose');
- }
+  editTodo (){
+    this.$emit('onEdit', this.currentTodo, this.dateHelper);
+    this.$emit('onClose');
+  }
 }
 </script>
 

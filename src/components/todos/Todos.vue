@@ -58,7 +58,6 @@
       height="auto"
     >
       <todofulldescp
-        :current-todo="currentTodo"
         @onClickCloseModal="hide"
       />
     </modal>
@@ -71,7 +70,6 @@
       <div>
         <todoeditform
           title="Edit task"
-          :current-todo="currentTodo"
           @onEdit="editTodo"
           @onClose="hide"
         />
@@ -128,10 +126,14 @@ export default class Todos extends Vue {
     this.todolist = this.$store.getters.getTodoList;
   }
 
-  // FIXME : now must push into vuex then firebase update
   createTodo (todo: Todo): void{
-    this.todolist.push(todo);
+    this.$store.dispatch('createTodo', todo);
+    this.forceRerenderFromParent();
     this.hide();
+  }
+
+  forceRerenderFromParent () {
+    this.$emit('onForceRerender');
   }
 
   forceRerender () {
@@ -139,8 +141,10 @@ export default class Todos extends Vue {
   }
 
   // FIXME : now must edit into vuex then firebase update
-  editTodo (todo: Todo, date: string): void{
-    todo.deadline = new Date(date);
+  editTodo (todo: Todo): void{
+    console.log('pret a dispatcher todo, ', todo);
+    this.$store.dispatch('createTodo', todo);
+    this.forceRerenderFromParent();
     this.hide();
   }
 

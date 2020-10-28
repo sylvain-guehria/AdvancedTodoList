@@ -1,4 +1,5 @@
 import { Todo, User, State } from '../../models/types';
+import { database } from '../../firebase/firebase';
 
 var todolist: Todo[] = [];
 var coloredtodolist: Todo[] = [];
@@ -28,6 +29,9 @@ const getters = {
   },
   getColoredtodolist: (state: State) => {
     return state.coloredtodolist;
+  },
+  getCurrentTodo: (state: State) => {
+    return state.currentTodo;
   }
 };
 
@@ -41,6 +45,9 @@ const mutations = {
   setUser (state: State, user: User) {
     state.user = user;
   },
+  setCurrentTodo (state: State, index: number) {
+    state.currentTodo = state.todolist[index];
+  },
   addNewTodo: (state: State, todo: Todo) => state.todolist.unshift(todo),
   removeTodo: (state: State, index: number) => (
     state.todolist.splice(index, 1)
@@ -49,7 +56,35 @@ const mutations = {
 
 // for API, often async
 const actions = {
+  createTodo (payload: Todo) {
+    console.log('le payload', payload);
+    const { uid } = state.user.data;
 
+    database.ref('todo/' + uid).set({
+      creationDate: payload.creationDate,
+      description: payload.description,
+      importance: payload.description,
+      task: payload.task
+    });
+  },
+  fetchTodos ({ commit }: {commit: Function}, payload: string) {
+    const uid: string = payload;
+    var listoftodos: Todo[] = [];
+    database.ref(`todos/${uid}`).once('value', (snapshot) => {
+      snapshot.forEach(function (childSnapshot) {
+        const currentTodo: Todo = {
+          key: childSnapshot.key || '',
+          task: childSnapshot.val().task,
+          deadline: childSnapshot.val().deadline,
+          importance: childSnapshot.val().importance,
+          description: childSnapshot.val().description,
+          creationDate: childSnapshot.val().dateToday
+        };
+        listoftodos.push(currentTodo);
+      });
+    });
+    commit('setTodoList', listoftodos);
+  }
 };
 
 export default {
