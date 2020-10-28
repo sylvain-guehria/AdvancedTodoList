@@ -64,10 +64,12 @@ export default class Todos extends Vue {
   }
 
   showTask (){
+    this.$store.commit('setCurrentTodo', this.index);
     this.$emit('onClickModal', this.index);
   }
 
   showEditModal (){
+    this.$store.commit('setCurrentTodo', this.index);
     this.$emit('onClickEditModal', this.index);
   }
 

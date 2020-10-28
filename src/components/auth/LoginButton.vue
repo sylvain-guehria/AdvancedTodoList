@@ -82,7 +82,7 @@ import LoginModal from './LoginModal.vue';
 import SignUpModal from './SignUpModal.vue';
 import ForgotPassModal from './ForgotPassModal.vue';
 import { User, Todo } from '../../models/types';
-import firebase, { database } from '../../firebase/firebase';
+import firebase from '../../firebase/firebase';
 
 @Component({
   components: {
@@ -103,33 +103,18 @@ export default class LoginButton extends Vue {
 
   // FIIXME : quand on se log, on doit refresh la page pour actualiser la liste des todos
   mounted () {
-    var listoftodos: Todo[] = [];
     firebase.auth.onAuthStateChanged(user => {
       if (user) {
         this.user.loggedIn = true;
         this.user.data = user;
-
         const uid: string = user.uid;
-        database.ref(`todos/${uid}`).once('value', (snapshot) => {
-          snapshot.forEach(function (childSnapshot) {
-            const currentTodo: Todo = {
-              key: childSnapshot.key || '',
-              task: childSnapshot.val().task,
-              deadline: childSnapshot.val().deadline,
-              importance: childSnapshot.val().importance,
-              description: childSnapshot.val().description,
-              creationDate: childSnapshot.val().dateToday
-            };
-            listoftodos.push(currentTodo);
-          });
-        });
+        this.$store.dispatch('fetchTodos', uid);
       } else {
         this.user.loggedIn = false;
         this.user.data = {};
-        listoftodos = [];
+        this.$store.commit('setTodoList', []);
       }
       this.$store.commit('setUser', this.user);
-      this.$store.commit('setTodoList', listoftodos);
     });
   }
 
@@ -146,11 +131,10 @@ export default class LoginButton extends Vue {
   }
 
   authenticated (){
-    return this.$store.getters.getUser.loggedIn;
+    return this.user.loggedIn;
   }
 
   firstName (){
-    this.user = this.$store.getters.getUser;
     if (this.user.data.displayName) {
       return this.user.data.displayName.split(' ')[0];
     }
