@@ -102,8 +102,11 @@ export default class TodoForm extends Vue {
   }
 
   createTodo (){
+    this.formData.creationDate = new Date();
+    this.formData.deadline = new Date(this.dateHelper);
     this.$emit('onCreate', this.formData);
-    this.writeUserData(this.formData);
+
+    // this.writeUserData(this.formData);
     this.formData = {
       key: '',
       task: '',
@@ -112,17 +115,6 @@ export default class TodoForm extends Vue {
       description: '',
       creationDate: new Date()
     };
-  }
-
-  writeUserData (todo: Todo) {
-    const { task, deadline, importance, description } = todo;
-    database.ref('todos/' + this.useruid).push({
-      task: task,
-      deadline: deadline,
-      importance: importance,
-      description: description,
-      creationDate: this.dateToday
-    });
   }
 }
 </script>

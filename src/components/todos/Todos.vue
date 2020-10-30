@@ -122,10 +122,6 @@ export default class Todos extends Vue {
 
   imageLink = require('../../assets/images/To-Do-List.jpg');
 
-  created () {
-    this.todolist = this.$store.getters.getTodoList;
-  }
-
   createTodo (todo: Todo): void{
     this.$store.dispatch('createTodo', todo);
     this.forceRerenderFromParent();
@@ -142,7 +138,6 @@ export default class Todos extends Vue {
 
   // FIXME : now must edit into vuex then firebase update
   editTodo (todo: Todo): void{
-    console.log('pret a dispatcher todo, ', todo);
     this.$store.dispatch('createTodo', todo);
     this.forceRerenderFromParent();
     this.hide();

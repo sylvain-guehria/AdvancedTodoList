@@ -56,15 +56,14 @@ const mutations = {
 
 // for API, often async
 const actions = {
-  createTodo (payload: Todo) {
-    console.log('le payload', payload);
+  createTodo ({ commit }, payload: Todo) {
     const { uid } = state.user.data;
-
-    database.ref('todo/' + uid).set({
+    database.ref('todos/' + uid).push({
       creationDate: payload.creationDate,
       description: payload.description,
-      importance: payload.description,
-      task: payload.task
+      importance: payload.importance,
+      task: payload.task,
+      deadline: payload.deadline
     });
   },
   fetchTodos ({ commit }: {commit: Function}, payload: string) {
