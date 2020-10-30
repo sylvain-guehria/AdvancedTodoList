@@ -21,10 +21,7 @@ export default class Home extends Vue {
   componentKey: number = 0
 
   forceRerender () {
-    console.log('je force le re render de todo');
-    console.log(this.componentKey);
     this.componentKey += 1;
-    console.log(this.componentKey);
   }
 }
 </script>
