@@ -111,7 +111,8 @@ export default class HeaderList extends Vue {
       this.updatedToDoList = this.lodash.orderBy(this.todolist,
         [function (resultItem: Todo) {
           if (resultItem && resultItem.deadline !== undefined) {
-            return resultItem.deadline.getTime() - new Date().getTime();
+            const deadline = new Date(resultItem.deadline);
+            return deadline.getTime() - new Date().getTime();
           } else { return null; }
         }],
         ['asc']);
@@ -122,7 +123,8 @@ export default class HeaderList extends Vue {
       this.updatedToDoList = this.lodash.orderBy(this.todolist,
         [function (resultItem: Todo) {
           if (resultItem && resultItem.deadline !== undefined) {
-            return resultItem.deadline.getTime() - new Date().getTime();
+            const deadline = new Date(resultItem.deadline);
+            return deadline.getTime() - new Date().getTime();
           } else { return null; }
         }],
         ['desc']);
