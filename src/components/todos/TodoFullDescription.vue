@@ -10,7 +10,7 @@
       >
     </div>
 
-    <v-card-title>{{ currentTodo.task }}</v-card-title>
+    <v-card-title>{{ currentTodo? currentTodo.task: '' }}</v-card-title>
 
     <v-card-text>
       <v-row
@@ -66,17 +66,25 @@ import { myFunctions } from '../helpers/helperfunction';
 
 @Component
 export default class TodoFullDescription extends Vue{
- @Prop() private currentTodo?: Todo;
+  currentTodo: Todo = {
+    key: '',
+    task: '',
+    creationDate: new Date()
+  };
 
- imageLink = require('../../assets/images/todo1.jpg');
+  created () {
+    this.currentTodo = this.$store.getters.getCurrentTodo;
+  }
 
- formatDate = myFunctions.formatDate;
+  imageLink = require('../../assets/images/todo1.jpg');
 
- getdaysleft = myFunctions.getdaysleft;
+  formatDate = myFunctions.formatDate;
 
- closeTask (){
-   this.$emit('onClickCloseModal');
- }
+  getdaysleft = myFunctions.getdaysleft;
+
+  closeTask (){
+    this.$emit('onClickCloseModal');
+  }
 }
 
 </script>

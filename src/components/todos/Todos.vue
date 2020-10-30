@@ -58,7 +58,6 @@
       height="auto"
     >
       <todofulldescp
-        :current-todo="currentTodo"
         @onClickCloseModal="hide"
       />
     </modal>
@@ -71,7 +70,6 @@
       <div>
         <todoeditform
           title="Edit task"
-          :current-todo="currentTodo"
           @onEdit="editTodo"
           @onClose="hide"
         />
@@ -114,39 +112,38 @@ export default class Todos extends Vue {
   currentTodo: Todo ={
     key: '',
     task: '',
-    deadline: new Date(),
+    deadline: new Date().toISOString().substr(0, 10),
     importance: 0,
     description: '',
-    creationDate: new Date()
+    creationDate: new Date().toISOString().substr(0, 10)
   };
 
   @Prop() private title?: string;
 
   imageLink = require('../../assets/images/To-Do-List.jpg');
 
-  created () {
-    this.todolist = this.$store.getters.getTodoList;
+  createTodo (todo: Todo): void{
+    this.$store.dispatch('createTodo', todo);
+    this.forceRerenderFromParent();
+    this.hide();
   }
 
-  // FIXME : now must push into vuex then firebase update
-  createTodo (todo: Todo): void{
-    this.todolist.push(todo);
-    this.hide();
+  forceRerenderFromParent () {
+    this.$emit('onForceRerender');
   }
 
   forceRerender () {
     this.componentKey += 1;
   }
 
-  // FIXME : now must edit into vuex then firebase update
-  editTodo (todo: Todo, date: string): void{
-    todo.deadline = new Date(date);
+  editTodo (todo: Todo): void{
+    this.$store.dispatch('editTodo', todo);
+    this.forceRerenderFromParent();
     this.hide();
   }
 
-  // FIXME : now must delete into vuex then firebase update
-  supressTodo (index: number): void{
-    this.todolist.splice(index, 1);
+  supressTodo (key: string): void{
+    this.$store.dispatch('deleteTodo', key);
   }
 
   show (index: number): void {

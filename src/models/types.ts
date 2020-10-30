@@ -1,10 +1,10 @@
 export interface Todo {
-  key: string ;
+  key?: string ;
   task: string;
-  deadline?: Date;
+  deadline?: string;
   importance?: number;
   description?: string;
-  creationDate: Date;
+  creationDate: string;
 }
 
 export interface User {

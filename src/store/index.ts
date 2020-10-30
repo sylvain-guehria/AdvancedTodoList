@@ -4,8 +4,10 @@ import todos from './modules/todos-module';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     todos
   }
 });
+
+export default store;

@@ -10,7 +10,7 @@
         <p>{{ todo.task }} </p>
       </div>
       <div class="col">
-        {{ formatDate(todo.deadline) }}
+        {{ todo.deadline }}
       </div>
       <div class="col">
         {{ getdaysleft(todo.deadline) }}
@@ -60,18 +60,19 @@ export default class Todos extends Vue {
   @Prop() private index?: number;
 
   supressTodo (){
-    this.$emit('onSuppress', this.index);
+    console.log('keyyu', this.todo ? this.todo.key : '')
+    this.$emit('onSuppress', this.todo ? this.todo.key : '');
   }
 
   showTask (){
+    this.$store.commit('setCurrentTodo', this.index);
     this.$emit('onClickModal', this.index);
   }
 
   showEditModal (){
+    this.$store.commit('setCurrentTodo', this.index);
     this.$emit('onClickEditModal', this.index);
   }
-
-  formatDate = myFunctions.formatDate;
 
   getdaysleft = myFunctions.getdaysleft;
 }
