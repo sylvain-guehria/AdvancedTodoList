@@ -74,10 +74,10 @@ export default class TodoForm extends Vue {
   formData: Todo = {
     key: '',
     task: '',
-    deadline: new Date(),
+    deadline: new Date().toISOString().substr(0, 10),
     importance: 0,
     description: '',
-    creationDate: new Date()
+    creationDate: new Date().toISOString().substr(0, 10)
   };
 
   dateHelper: string = '';
@@ -98,22 +98,22 @@ export default class TodoForm extends Vue {
   }
 
   updated (){
-    this.formData.deadline = new Date(this.dateHelper);
+    this.formData.deadline = this.dateHelper;
   }
 
   createTodo (){
-    this.formData.creationDate = new Date();
-    this.formData.deadline = new Date(this.dateHelper);
+    this.formData.creationDate = new Date().toISOString().substr(0, 10);
+    this.formData.deadline = this.dateHelper;
     this.$emit('onCreate', this.formData);
 
     // this.writeUserData(this.formData);
     this.formData = {
       key: '',
       task: '',
-      deadline: new Date(),
+      deadline: '',
       importance: 0,
       description: '',
-      creationDate: new Date()
+      creationDate: new Date().toISOString().substr(0, 10)
     };
   }
 }

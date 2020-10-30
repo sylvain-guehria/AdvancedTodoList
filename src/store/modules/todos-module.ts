@@ -6,7 +6,7 @@ var coloredtodolist: Todo[] = [];
 var currentTodo: Todo = {
   key: '',
   task: '',
-  creationDate: new Date()
+  creationDate: new Date().toISOString().substr(0, 10)
 };
 var user: User = {
   loggedIn: false,
@@ -51,20 +51,46 @@ const mutations = {
   addNewTodo: (state: State, todo: Todo) => state.todolist.unshift(todo),
   removeTodo: (state: State, index: number) => (
     state.todolist.splice(index, 1)
-  )
+  ),
+  removeTodoByKey (state: State, key: string) {
+    var index = state.todolist.findIndex(function (o){
+      return o.key === key;
+    });
+    if (index !== -1) state.todolist.splice(index, 1);
+  }
 };
 
 // for API, often async
 const actions = {
-  createTodo ({ commit }, payload: Todo) {
+  createTodo ({ commit }: {commit: Function}, payload: Todo) {
     const { uid } = state.user.data;
-    database.ref('todos/' + uid).push({
+    var newTodoKey = database.ref().child(`todos/${uid}`).push().key || 'key';
+    database.ref(`todos/${uid}/${newTodoKey}`).set({
       creationDate: payload.creationDate,
       description: payload.description,
       importance: payload.importance,
       task: payload.task,
       deadline: payload.deadline
     });
+    payload.key = newTodoKey;
+    commit('addNewTodo', payload);
+  },
+  editTodo ({ commit }: {commit: Function}, payload: Todo) {
+    const { uid } = state.user.data;
+    database.ref(`todos/${uid}/${payload.key}`).set({
+      creationDate: payload.creationDate,
+      description: payload.description,
+      importance: payload.importance,
+      task: payload.task,
+      deadline: payload.deadline
+    });
+    commit('removeTodoByKey', payload.key);
+    commit('addNewTodo', payload);
+  },
+  deleteTodo ({ commit }: {commit: Function}, key: string) {
+    const { uid } = state.user.data;
+    database.ref(`todos/${uid}/${key}`).remove();
+    commit('removeTodoByKey', key);
   },
   fetchTodos ({ commit }: {commit: Function}, payload: string) {
     const uid: string = payload;
@@ -77,7 +103,7 @@ const actions = {
           deadline: childSnapshot.val().deadline,
           importance: childSnapshot.val().importance,
           description: childSnapshot.val().description,
-          creationDate: childSnapshot.val().dateToday
+          creationDate: childSnapshot.val().creationDate
         };
         listoftodos.push(currentTodo);
       });
