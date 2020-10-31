@@ -92,45 +92,11 @@ export default class HeaderList extends Vue {
   }
 
   sortBy (attribut: string): void {
-    if (this.currentSortingMode === 'desc'){
-      this.currentSortingMode = 'asc';
-      this.updatedToDoList = this.lodash.orderBy(this.todolist, [attribut], ['asc']);
-      this.$store.commit(this.functionToCall || '', this.updatedToDoList);
-      this.$emit('onForceRerender');
-    } else {
-      this.currentSortingMode = 'desc';
-      this.updatedToDoList = this.lodash.orderBy(this.todolist, [attribut], ['desc']);
-      this.$store.commit(this.functionToCall || '', this.updatedToDoList);
-      this.$emit('onForceRerender');
-    }
+    this.$store.commit('sortBy', attribut);
   }
 
   sortByTimeLeft (): void {
-    if (this.currentSortingMode === 'desc'){
-      this.currentSortingMode = 'asc';
-      this.updatedToDoList = this.lodash.orderBy(this.todolist,
-        [function (resultItem: Todo) {
-          if (resultItem && resultItem.deadline !== undefined) {
-            const deadline = new Date(resultItem.deadline);
-            return deadline.getTime() - new Date().getTime();
-          } else { return null; }
-        }],
-        ['asc']);
-      this.$store.commit(this.functionToCall || '', this.updatedToDoList);
-      this.$emit('onForceRerender');
-    } else {
-      this.currentSortingMode = 'desc';
-      this.updatedToDoList = this.lodash.orderBy(this.todolist,
-        [function (resultItem: Todo) {
-          if (resultItem && resultItem.deadline !== undefined) {
-            const deadline = new Date(resultItem.deadline);
-            return deadline.getTime() - new Date().getTime();
-          } else { return null; }
-        }],
-        ['desc']);
-      this.$store.commit(this.functionToCall || '', this.updatedToDoList);
-      this.$emit('onForceRerender');
-    }
+    this.$store.commit('sortByTimeLeft');
   }
 }
 </script>

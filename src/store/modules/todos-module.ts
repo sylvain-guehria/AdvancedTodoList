@@ -1,5 +1,6 @@
 import { Todo, User, State } from '../../models/types';
 import { database } from '../../firebase/firebase';
+import lodash from 'lodash';
 
 var todolist: Todo[] = [];
 var coloredtodolist: Todo[] = [];
@@ -12,6 +13,8 @@ var user: User = {
   loggedIn: false,
   data: {}
 };
+
+var currentSortingMode = '';
 
 const state: State = {
   todolist: todolist,
@@ -57,6 +60,38 @@ const mutations = {
       return o.key === key;
     });
     if (index !== -1) state.todolist.splice(index, 1);
+  },
+  sortBy (state: State, attribut: string){
+    if (currentSortingMode === 'desc' || currentSortingMode === ''){
+      currentSortingMode = 'asc';
+      state.todolist = lodash.orderBy(state.todolist, [attribut], ['asc']);
+    } else {
+      currentSortingMode = 'desc';
+      state.todolist = lodash.orderBy(state.todolist, [attribut], ['desc']);
+    }
+  },
+  sortByTimeLeft (state: State){
+    if (currentSortingMode === 'desc'){
+      currentSortingMode = 'asc';
+      state.todolist = lodash.orderBy(state.todolist,
+        [function (resultItem: Todo) {
+          if (resultItem && resultItem.deadline !== undefined) {
+            const deadline = new Date(resultItem.deadline);
+            return deadline.getTime() - new Date().getTime();
+          } else { return null; }
+        }],
+        ['asc']);
+    } else {
+      currentSortingMode = 'desc';
+      state.todolist = lodash.orderBy(state.todolist,
+        [function (resultItem: Todo) {
+          if (resultItem && resultItem.deadline !== undefined) {
+            const deadline = new Date(resultItem.deadline);
+            return deadline.getTime() - new Date().getTime();
+          } else { return null; }
+        }],
+        ['desc']);
+    }
   }
 };
 
