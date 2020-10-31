@@ -67,7 +67,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 import * as firebase from 'firebase/app';
 import { Todo } from '../../models/types';
-import { database } from '../../firebase/firebase';
 
 @Component
 export default class TodoForm extends Vue {

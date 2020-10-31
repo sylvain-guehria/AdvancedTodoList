@@ -11,8 +11,6 @@
       </li>
       <li>
         <headerlist
-          :todolist="this.$store.getters.getTodoList"
-          whatlist="normal"
           @onForceRerender="forceRerender"
         />
       </li>
