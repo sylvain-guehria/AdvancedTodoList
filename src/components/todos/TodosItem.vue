@@ -60,7 +60,6 @@ export default class Todos extends Vue {
   @Prop() private index?: number;
 
   supressTodo (){
-    console.log('keyyu', this.todo ? this.todo.key : '')
     this.$emit('onSuppress', this.todo ? this.todo.key : '');
   }
 

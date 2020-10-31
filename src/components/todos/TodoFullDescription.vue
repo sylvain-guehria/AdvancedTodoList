@@ -32,7 +32,7 @@
       </v-row>
 
       <div class="my-4 subtitle-1">
-        Deadline : {{ formatDate(currentTodo.deadline) }}
+        Deadline : {{ currentTodo.deadline }}
       </div>
 
       <div>{{ getdaysleft(currentTodo.deadline) }} days left.</div>
@@ -60,7 +60,7 @@
 
 <script lang="ts">
 
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { Todo } from '../../models/types';
 import { myFunctions } from '../helpers/helperfunction';
 
@@ -69,7 +69,7 @@ export default class TodoFullDescription extends Vue{
   currentTodo: Todo = {
     key: '',
     task: '',
-    creationDate: new Date()
+    creationDate: new Date().toISOString().substr(0, 10)
   };
 
   created () {

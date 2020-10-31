@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import TodosItem from './TodosItem.vue';
 import TodoForm from './TodoForm.vue';
 import TodoEditForm from './TodoEditForm.vue';
@@ -71,64 +71,18 @@ import TodoFullDescription from './TodoFullDescription.vue';
 export default class HeaderList extends Vue {
   currentSortingMode: string='';
 
-  @Prop() whatlist?: string;
-
   updatedToDoList: Todo[] = [];
 
   functionToCall?: string;
 
   todolist: Todo[] = [];
 
-  beforeMount (): void {
-    if (this.whatlist === 'normal') {
-      this.todolist = this.$store.state.todolist;
-      this.functionToCall = 'setTodoList';
-    }
-
-    if (this.whatlist === 'colored') {
-      this.todolist = this.$store.state.coloredtodolist;
-      this.functionToCall = 'setColoredTodoList';
-    }
-  }
-
   sortBy (attribut: string): void {
-    if (this.currentSortingMode === 'desc'){
-      this.currentSortingMode = 'asc';
-      this.updatedToDoList = this.lodash.orderBy(this.todolist, [attribut], ['asc']);
-      this.$store.commit(this.functionToCall || '', this.updatedToDoList);
-      this.$emit('onForceRerender');
-    } else {
-      this.currentSortingMode = 'desc';
-      this.updatedToDoList = this.lodash.orderBy(this.todolist, [attribut], ['desc']);
-      this.$store.commit(this.functionToCall || '', this.updatedToDoList);
-      this.$emit('onForceRerender');
-    }
+    this.$store.commit('sortBy', attribut);
   }
 
   sortByTimeLeft (): void {
-    if (this.currentSortingMode === 'desc'){
-      this.currentSortingMode = 'asc';
-      this.updatedToDoList = this.lodash.orderBy(this.todolist,
-        [function (resultItem: Todo) {
-          if (resultItem && resultItem.deadline !== undefined) {
-            return resultItem.deadline.getTime() - new Date().getTime();
-          } else { return null; }
-        }],
-        ['asc']);
-      this.$store.commit(this.functionToCall || '', this.updatedToDoList);
-      this.$emit('onForceRerender');
-    } else {
-      this.currentSortingMode = 'desc';
-      this.updatedToDoList = this.lodash.orderBy(this.todolist,
-        [function (resultItem: Todo) {
-          if (resultItem && resultItem.deadline !== undefined) {
-            return resultItem.deadline.getTime() - new Date().getTime();
-          } else { return null; }
-        }],
-        ['desc']);
-      this.$store.commit(this.functionToCall || '', this.updatedToDoList);
-      this.$emit('onForceRerender');
-    }
+    this.$store.commit('sortByTimeLeft');
   }
 }
 </script>
