@@ -83,6 +83,7 @@ export default class HeaderList extends Vue {
 
   sortByTimeLeft (): void {
     this.$store.commit('sortByTimeLeft');
+    this.$store.commit('sortByTimeLeftColored');
   }
 }
 </script>

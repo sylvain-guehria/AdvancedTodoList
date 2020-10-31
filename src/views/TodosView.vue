@@ -2,6 +2,7 @@
   <div class="home">
     <todos
       :key="componentKey"
+      what-list="todoList"
       title="My TODO list"
       @onForceRerender="forceRerender"
     />

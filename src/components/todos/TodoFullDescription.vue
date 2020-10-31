@@ -10,7 +10,7 @@
       >
     </div>
 
-    <v-card-title>{{ currentTodo? currentTodo.task: '' }}</v-card-title>
+    <v-card-title>Title : {{ currentTodo? currentTodo.task: '' }}</v-card-title>
 
     <v-card-text>
       <v-row
