@@ -3,6 +3,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/database';
 import Vue from 'vue';
+import store from '../store/index';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -92,6 +93,25 @@ export default {
         .catch(error => {
           reject(error);
         });
+    });
+  },
+  setAuthChange (){
+    const user = {
+      loggedIn: false,
+      data: {}
+    };
+    firebase.auth().onAuthStateChanged(userfb => {
+      if (userfb) {
+        user.loggedIn = true;
+        user.data = userfb;
+        const uid: string = userfb.uid;
+        store.dispatch('fetchTodos', uid);
+      } else {
+        user.loggedIn = false;
+        user.data = {};
+        store.commit('setTodoList', []);
+      }
+      store.commit('setUser', user);
     });
   }
 };

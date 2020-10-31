@@ -10,8 +10,6 @@
       </li>
       <li>
         <headerlist
-          :todolist="coloredtodolist"
-          whatlist="colored"
           @onForceRerender="forceRerender"
         />
       </li>
@@ -58,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import TodosItem from './TodosItem.vue';
 import { Todo } from '../../models/types';
 import TodoFullDescription from './TodoFullDescription.vue';
@@ -94,17 +92,10 @@ export default class ColoredListTodos extends Vue {
     creationDate: new Date().toISOString().substr(0, 10)
   };
 
-  @Prop() private title?: string;
-
   imageLink = require('../../assets/images/To-Do-List.jpg');
 
-  updated (){
-    // this.$store.commit('setColoredTodoList', this.coloredtodolist);
-    this.coloredtodolist = this.$store.state.coloredtodolist;
-  }
-
   beforeMount (): void {
-    this.coloredtodolist = this.$store.state.coloredtodolist;
+    this.coloredtodolist = this.$store.getters.getColoredtodolist;
   }
 
   show (index: number): void {

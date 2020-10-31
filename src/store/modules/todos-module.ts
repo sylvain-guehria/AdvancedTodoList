@@ -142,8 +142,10 @@ const actions = {
         };
         listoftodos.push(currentTodo);
       });
-    });
-    commit('setTodoList', listoftodos);
+    }).then(() => {
+      commit('setTodoList', listoftodos);
+    }
+    );
   }
 };
 

@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import TodosItem from './TodosItem.vue';
 import TodoForm from './TodoForm.vue';
 import TodoEditForm from './TodoEditForm.vue';
@@ -71,25 +71,11 @@ import TodoFullDescription from './TodoFullDescription.vue';
 export default class HeaderList extends Vue {
   currentSortingMode: string='';
 
-  @Prop() whatlist?: string;
-
   updatedToDoList: Todo[] = [];
 
   functionToCall?: string;
 
   todolist: Todo[] = [];
-
-  beforeMount (): void {
-    if (this.whatlist === 'normal') {
-      this.todolist = this.$store.state.todolist;
-      this.functionToCall = 'setTodoList';
-    }
-
-    if (this.whatlist === 'colored') {
-      this.todolist = this.$store.state.coloredtodolist;
-      this.functionToCall = 'setColoredTodoList';
-    }
-  }
 
   sortBy (attribut: string): void {
     this.$store.commit('sortBy', attribut);

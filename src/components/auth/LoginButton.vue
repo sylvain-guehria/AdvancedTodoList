@@ -101,21 +101,8 @@ export default class LoginButton extends Vue {
 
   todolist: Todo[] = [];
 
-  // FIIXME : quand on se log, on doit refresh la page pour actualiser la liste des todos
   mounted () {
-    firebase.auth.onAuthStateChanged(user => {
-      if (user) {
-        this.user.loggedIn = true;
-        this.user.data = user;
-        const uid: string = user.uid;
-        this.$store.dispatch('fetchTodos', uid);
-      } else {
-        this.user.loggedIn = false;
-        this.user.data = {};
-        this.$store.commit('setTodoList', []);
-      }
-      this.$store.commit('setUser', this.user);
-    });
+    firebase.setAuthChange();
   }
 
   showLogin (): void {
@@ -131,15 +118,16 @@ export default class LoginButton extends Vue {
   }
 
   authenticated (){
-    return this.user.loggedIn;
+    return this.$store.getters.getUser.loggedIn;
   }
 
   firstName (){
-    if (this.user.data.displayName) {
-      return this.user.data.displayName.split(' ')[0];
+    const user = this.$store.getters.getUser.data;
+    if (user.displayName) {
+      return user.displayName.split(' ')[0];
     }
-    if (this.user.data.email) {
-      return this.user.data.email.split('@')[0];
+    if (user.email) {
+      return user.email.split('@')[0];
     }
     return null;
   }

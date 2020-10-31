@@ -3,12 +3,15 @@
     <div>
       <h1>Eisenhower Matrix</h1> <h3> {{ numberOfTasks }} Tasks </h3>
     </div>
-    <chartei :todolist="todolist" />
+    <chartei
+      :key="this.$store.getters.getUser.loggedIn"
+      :todolist="this.$store.getters.getTodoList"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Todo } from '../../models/types';
 import Chart from './Chart.vue';
 
@@ -18,12 +21,12 @@ import Chart from './Chart.vue';
   }
 })
 export default class Matrice extends Vue{
-  todolist: Todo[] = [];
+  @Prop() todolist?: Todo[] ;
 
   numberOfTasks: number = 0 ;
 
-  beforeMount (): void {
-    this.todolist = this.$store.state.todolist;
+  mounted (): void {
+    console.log('je get ça', this.todolist);
     this.numberOfTasks = this.todolist ? this.todolist.length : 0;
   }
 }

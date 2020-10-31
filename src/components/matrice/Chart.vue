@@ -68,7 +68,7 @@ import ColoredListTodos from '../todos/ColoredListTodos.vue';
   }
 })
 export default class Chart extends Vue{
-  @Prop() todolist?: Todo[];
+  @Prop() todolist?: Todo[] ;
 
   currentColoredTodoList: Todo[] = [];
 
@@ -109,7 +109,8 @@ export default class Chart extends Vue{
   }
 
   mounted (): void {
-    if (this.todolist){
+    if (this.todolist && this.todolist.length > 0){
+      console.log('ya data', this.todolist);
       for (const task of this.todolist){
         // red Task : important and urgent
         if (

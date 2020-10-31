@@ -1,6 +1,9 @@
 <template>
   <div class="about">
-    <matrice />
+    <matrice
+      :key="this.$store.getters.getTodoList ? this.$store.getters.getTodoList.length : 0"
+      :todolist="this.$store.getters.getTodoList"
+    />
   </div>
 </template>
 
@@ -14,5 +17,6 @@ import Matrice from '../components/matrice/Matrice.vue';
   }
 })
 
-export default class MatriceView extends Vue{}
+export default class MatriceView extends Vue{
+}
 </script>
