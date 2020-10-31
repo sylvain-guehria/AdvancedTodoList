@@ -50,7 +50,7 @@
       width="80%"
     >
       <div>
-        <coloredlisttodos />
+        <coloredlisttodos what-list="coloredTodoList" />
       </div>
     </modal>
   </div>
@@ -60,11 +60,11 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Todo } from '../../models/types';
 import { myFunctions } from '../helpers/helperfunction';
-import ColoredListTodos from '../todos/ColoredListTodos.vue';
+import Todos from '../todos/Todos.vue';
 
 @Component({
   components: {
-    coloredlisttodos: ColoredListTodos
+    coloredlisttodos: Todos
   }
 })
 export default class Chart extends Vue{
@@ -110,7 +110,6 @@ export default class Chart extends Vue{
 
   mounted (): void {
     if (this.todolist && this.todolist.length > 0){
-      console.log('ya data', this.todolist);
       for (const task of this.todolist){
         // red Task : important and urgent
         if (
