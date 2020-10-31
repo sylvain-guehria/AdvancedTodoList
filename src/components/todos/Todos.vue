@@ -15,7 +15,8 @@
         />
       </li>
       <li
-        v-for="(todo, index) in this.$store.getters.getTodoList"
+        v-for="(todo, index) in whatList === 'todoList' ?
+          this.$store.getters.getTodoList : this.$store.getters.getColoredtodolist"
         :key="index"
       >
         <todositem
@@ -99,6 +100,8 @@ import HeaderList from './HeaderList.vue';
 })
 
 export default class Todos extends Vue {
+  @Prop() whatList?: string;
+
   todolist: Todo[] = [];
 
   currentIndex: number = 0;

@@ -65,9 +65,11 @@ const mutations = {
     if (currentSortingMode === 'desc' || currentSortingMode === ''){
       currentSortingMode = 'asc';
       state.todolist = lodash.orderBy(state.todolist, [attribut], ['asc']);
+      state.coloredtodolist = lodash.orderBy(state.coloredtodolist, [attribut], ['asc']);
     } else {
       currentSortingMode = 'desc';
       state.todolist = lodash.orderBy(state.todolist, [attribut], ['desc']);
+      state.coloredtodolist = lodash.orderBy(state.coloredtodolist, [attribut], ['desc']);
     }
   },
   sortByTimeLeft (state: State){
@@ -84,6 +86,29 @@ const mutations = {
     } else {
       currentSortingMode = 'desc';
       state.todolist = lodash.orderBy(state.todolist,
+        [function (resultItem: Todo) {
+          if (resultItem && resultItem.deadline !== undefined) {
+            const deadline = new Date(resultItem.deadline);
+            return deadline.getTime() - new Date().getTime();
+          } else { return null; }
+        }],
+        ['desc']);
+    }
+  },
+  sortByTimeLeftColored (state: State){
+    if (currentSortingMode === 'desc'){
+      currentSortingMode = 'asc';
+      state.coloredtodolist = lodash.orderBy(state.coloredtodolist,
+        [function (resultItem: Todo) {
+          if (resultItem && resultItem.deadline !== undefined) {
+            const deadline = new Date(resultItem.deadline);
+            return deadline.getTime() - new Date().getTime();
+          } else { return null; }
+        }],
+        ['asc']);
+    } else {
+      currentSortingMode = 'desc';
+      state.coloredtodolist = lodash.orderBy(state.coloredtodolist,
         [function (resultItem: Todo) {
           if (resultItem && resultItem.deadline !== undefined) {
             const deadline = new Date(resultItem.deadline);

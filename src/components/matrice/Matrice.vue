@@ -26,7 +26,6 @@ export default class Matrice extends Vue{
   numberOfTasks: number = 0 ;
 
   mounted (): void {
-    console.log('je get ça', this.todolist);
     this.numberOfTasks = this.todolist ? this.todolist.length : 0;
   }
 }
