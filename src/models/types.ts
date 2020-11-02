@@ -3,8 +3,9 @@ export interface Todo {
   task: string;
   deadline?: string;
   importance?: number;
-  description?: string;
+  description?: SubTask[];
   creationDate: string;
+  isdone?: boolean;
 }
 
 export interface User {
@@ -17,4 +18,15 @@ export interface State {
   coloredtodolist: Todo[];
   user: User;
   currentTodo: Todo;
+}
+
+export interface SubTask {
+  key?: string ;
+  label: string;
+  isdone?: boolean;
+  order?: number;
+}
+
+export type HTMLElementEvent<T extends HTMLElement> = Event & {
+  target: T;
 }

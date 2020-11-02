@@ -21,13 +21,10 @@
       <div class="form-group ">
         <v-text-field
           v-model="formData.task"
-          label="Task name"
+          label="Task title"
         /><br>
-        <v-textarea
-          v-model="formData.description"
-          auto-grow
-          clearable
-          placeholder="Task Description"
+        <subtasks
+          @onSubmitSubTasks="setSubTasks"
         />
         <br>
         <div class="row ml-1">
@@ -66,16 +63,21 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import * as firebase from 'firebase/app';
-import { Todo } from '../../models/types';
+import { Todo, SubTask } from '../../models/types';
+import SubtaskViewer from './SubTaskViewer.vue';
 
-@Component
+@Component({
+  components: {
+    subtasks: SubtaskViewer
+  }
+})
 export default class TodoForm extends Vue {
   formData: Todo = {
     key: '',
     task: '',
     deadline: new Date().toISOString().substr(0, 10),
     importance: 0,
-    description: '',
+    description: [],
     creationDate: new Date().toISOString().substr(0, 10)
   };
 
@@ -84,6 +86,8 @@ export default class TodoForm extends Vue {
   dateToday: string = '';
 
   useruid: string = '';
+
+  subTasks: SubTask[] = [];
 
   created (){
     this.dateHelper = new Date().toISOString().substr(0, 10);
@@ -100,10 +104,15 @@ export default class TodoForm extends Vue {
     this.formData.deadline = this.dateHelper;
   }
 
+  setSubTasks (subtasks: SubTask[]){
+    this.formData.description = subtasks;
+  }
+
   createTodo (){
-    this.formData.creationDate = new Date().toISOString().substr(0, 10);
+    this.formData.creationDate = this.dateToday;
     this.formData.deadline = this.dateHelper;
     this.$emit('onCreate', this.formData);
+    // this.$emit('onClose');
 
     // this.writeUserData(this.formData);
     this.formData = {
@@ -111,7 +120,7 @@ export default class TodoForm extends Vue {
       task: '',
       deadline: '',
       importance: 0,
-      description: '',
+      description: [],
       creationDate: new Date().toISOString().substr(0, 10)
     };
   }

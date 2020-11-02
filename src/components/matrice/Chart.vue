@@ -48,6 +48,7 @@
       name="listmodal"
       height="auto"
       width="80%"
+      @before-close="beforeClose"
     >
       <div>
         <coloredlisttodos what-list="coloredTodoList" />
@@ -84,8 +85,10 @@ export default class Chart extends Vue{
 
   imageLink = require('../../assets/images/4color.png');
 
-  hideListModal (): void {
-    this.$modal.hide('listmodal');
+  beforeClose () {
+    this.$store.commit('setColoredTodoList', []);
+    this.clearAllList();
+    this.sortAllColoredList();
   }
 
   showListModal (color: string): void {
@@ -108,7 +111,14 @@ export default class Chart extends Vue{
     this.$modal.show('listmodal');
   }
 
-  mounted (): void {
+  clearAllList (): void {
+    this.redTasks = [];
+    this.yellowTasks = [];
+    this.greenTasks = [];
+    this.blueTasks = [];
+  }
+
+  sortAllColoredList (): void {
     if (this.todolist && this.todolist.length > 0){
       for (const task of this.todolist){
         // red Task : important and urgent
@@ -154,6 +164,10 @@ export default class Chart extends Vue{
         if (task){ this.noCategorieTasks.push(task); }
       }
     }
+  }
+
+  mounted (): void {
+    this.sortAllColoredList();
   }
 }
 

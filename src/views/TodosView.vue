@@ -4,7 +4,6 @@
       :key="componentKey"
       what-list="todoList"
       title="My TODO list"
-      @onForceRerender="forceRerender"
     />
   </div>
 </template>
@@ -21,8 +20,8 @@ import Todos from '../components/todos/Todos.vue';
 export default class Home extends Vue {
   componentKey: number = 0
 
-  forceRerender () {
-    this.componentKey += 1;
-  }
+//   forceRerender () {
+//     //this.componentKey += 1;
+//   }
 }
 </script>

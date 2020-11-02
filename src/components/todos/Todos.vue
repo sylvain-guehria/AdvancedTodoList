@@ -10,9 +10,7 @@
         >
       </li>
       <li>
-        <headerlist
-          @onForceRerender="forceRerender"
-        />
+        <headerlist />
       </li>
       <li
         v-for="(todo, index) in whatList === 'todoList' ?
@@ -43,6 +41,7 @@
       scrollable
       name="formmodal"
       height="auto"
+      @before-close="beforeCloseForm"
     >
       <div>
         <todoform
@@ -55,22 +54,22 @@
       scrollable
       name="viewmodal"
       height="auto"
+      @before-close="beforeCloseForm"
     >
       <todofulldescp
-        @onClickCloseModal="hide"
+        @onClickCloseDescriptionModal="hideviewmodal"
       />
     </modal>
     <modal
       scrollable
       name="editmodal"
       height="auto"
-      @onClickCloseModal="hide"
+      @before-close="beforeCloseForm"
     >
       <div>
         <todoeditform
           title="Edit task"
           @onEdit="editTodo"
-          @onClose="hide"
         />
       </div>
     </modal>
@@ -115,7 +114,7 @@ export default class Todos extends Vue {
     task: '',
     deadline: new Date().toISOString().substr(0, 10),
     importance: 0,
-    description: '',
+    description: [],
     creationDate: new Date().toISOString().substr(0, 10)
   };
 
@@ -125,48 +124,36 @@ export default class Todos extends Vue {
 
   createTodo (todo: Todo): void{
     this.$store.dispatch('createTodo', todo);
-    this.forceRerenderFromParent();
-    this.hide();
+    this.$modal.hide('formmodal');
   }
 
-  forceRerenderFromParent () {
-    this.$emit('onForceRerender');
-  }
-
-  forceRerender () {
-    this.componentKey += 1;
+  hideviewmodal (): void{
+    this.$modal.hide('viewmodal');
   }
 
   editTodo (todo: Todo): void{
     this.$store.dispatch('editTodo', todo);
-    this.forceRerenderFromParent();
-    this.hide();
+    this.$modal.hide('editmodal');
   }
 
   supressTodo (key: string): void{
     this.$store.dispatch('deleteTodo', key);
   }
 
-  show (index: number): void {
-    this.currentIndex = index;
-    this.currentTodo = this.todolist[index];
+  show (): void {
     this.$modal.show('viewmodal');
   }
 
-  hide () {
-    this.$modal.hide('editmodal');
-    this.$modal.hide('viewmodal');
-    this.$modal.hide('formmodal');
-  }
-
-  showEditModal (index: number): void {
-    this.currentIndex = index;
-    this.currentTodo = this.todolist[index];
+  showEditModal (): void {
     this.$modal.show('editmodal');
   }
 
   showFormModal (): void {
     this.$modal.show('formmodal');
+  }
+
+  beforeCloseForm () {
+    this.$store.commit('resetCurrentTodo');
   }
 }
 </script>

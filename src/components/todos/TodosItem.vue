@@ -13,6 +13,9 @@
         {{ todo.deadline }}
       </div>
       <div class="col">
+        {{ todo.creationDate }}
+      </div>
+      <div class="col">
         {{ getdaysleft(todo.deadline) }}
       </div>
       <div class="col">
@@ -64,13 +67,13 @@ export default class Todos extends Vue {
   }
 
   showTask (){
-    this.$store.commit('setCurrentTodo', this.index);
-    this.$emit('onClickModal', this.index);
+    this.$store.commit('setCurrentTodo', this.todo ? this.todo.key : '');
+    this.$emit('onClickModal');
   }
 
   showEditModal (){
-    this.$store.commit('setCurrentTodo', this.index);
-    this.$emit('onClickEditModal', this.index);
+    this.$store.commit('setCurrentTodo', this.todo ? this.todo.key : '');
+    this.$emit('onClickEditModal');
   }
 
   getdaysleft = myFunctions.getdaysleft;
