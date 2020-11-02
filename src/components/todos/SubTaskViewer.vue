@@ -71,12 +71,9 @@ export default class SubTaskViewer extends Vue {
 
   mounted (): void {
     this.currentTodo = { ...this.$store.getters.getCurrentTodo };
-    console.log('current todo from viwer', this.currentTodo);
     if (this.currentTodo.key){
       const listTasks: SubTask[] = this.currentTodo.description || [];
-      console.log('subta', listTasks);
       this.subtasks = [...listTasks];
-      console.log('subta2', this.subtasks);
     } else {
       this.subtasks = [];
     }
