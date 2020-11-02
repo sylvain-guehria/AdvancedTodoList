@@ -66,13 +66,11 @@ import TodosItem from './TodosItem.vue';
 import TodoForm from './TodoForm.vue';
 import TodoEditForm from './TodoEditForm.vue';
 import { Todo } from '../../models/types';
-import TodoFullDescription from './TodoFullDescription.vue';
 
 @Component({
   components: {
     todositem: TodosItem,
     todoform: TodoForm,
-    todofulldescp: TodoFullDescription,
     todoeditform: TodoEditForm
   }
 })

@@ -83,7 +83,7 @@ export default class TodoFullDescription extends Vue{
   getdaysleft = myFunctions.getdaysleft;
 
   closeTask (){
-    this.$emit('onClickCloseModal');
+    this.$emit('onClickCloseDescriptionModal');
   }
 }
 

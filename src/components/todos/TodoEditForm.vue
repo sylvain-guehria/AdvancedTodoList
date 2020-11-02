@@ -21,13 +21,10 @@
       <div class="form-group ">
         <v-text-field
           v-model="currentTodo.task"
-          label="Task name"
+          label="Task title"
         /><br>
-        <v-textarea
-          v-model="currentTodo.description"
-          auto-grow
-          clearable
-          placeholder="Task Description"
+        <subtasks
+          @onSubmitSubTasks="setSubTasks"
         />
         <br>
         <div class="row ml-1">
@@ -64,11 +61,18 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Todo } from '../../models/types';
+import { Todo, SubTask } from '../../models/types';
+import SubtaskViewer from './SubTaskViewer.vue';
 
-@Component
+@Component({
+  components: {
+    subtasks: SubtaskViewer
+  }
+})
 export default class TodoEditForm extends Vue {
   dateHelper: string = '';
+
+  description: SubTask[]= [];
 
   currentTodo: Todo = {
     key: '',
@@ -76,11 +80,17 @@ export default class TodoEditForm extends Vue {
     creationDate: new Date().toISOString().substr(0, 10)
   };
 
+  setSubTasks (subtasks: SubTask[]){
+    this.description = { ...subtasks };
+  }
+
   created () {
-    this.currentTodo = this.$store.getters.getCurrentTodo;
+    this.currentTodo = { ...this.$store.getters.getCurrentTodo };
+    console.log('je created', this.$store.getters.getCurrentTodo);
   }
 
   editTodo (){
+    this.currentTodo.description = { ...this.description };
     this.$emit('onEdit', this.currentTodo);
     this.$emit('onClose');
   }

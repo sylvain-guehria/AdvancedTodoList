@@ -5,9 +5,9 @@ import lodash from 'lodash';
 var todolist: Todo[] = [];
 var coloredtodolist: Todo[] = [];
 var currentTodo: Todo = {
-  key: '',
   task: '',
-  creationDate: new Date().toISOString().substr(0, 10)
+  creationDate: new Date().toISOString().substr(0, 10),
+  description: []
 };
 var user: User = {
   loggedIn: false,
@@ -55,6 +55,13 @@ const mutations = {
     if (todofinded){
       state.currentTodo = todofinded;
     }
+  },
+  resetCurrentTodo (){
+    state.currentTodo = {
+      task: '',
+      creationDate: new Date().toISOString().substr(0, 10),
+      description: []
+    };
   },
   addNewTodo: (state: State, todo: Todo) => state.todolist.unshift(todo),
   removeTodo: (state: State, key: string) => {
