@@ -13,6 +13,9 @@
         {{ todo.deadline }}
       </div>
       <div class="col">
+        {{ todo.creationDate }}
+      </div>
+      <div class="col">
         {{ getdaysleft(todo.deadline) }}
       </div>
       <div class="col">

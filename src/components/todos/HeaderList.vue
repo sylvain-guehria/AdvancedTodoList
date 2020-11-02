@@ -25,6 +25,15 @@
           </v-btn>
         </div>
         <div class="col">
+          <strong>Creation date</strong><v-btn
+            icon
+            color="green"
+            @click="sortByTimeLeft"
+          >
+            <v-icon>mdi-cached</v-icon>
+          </v-btn>
+        </div>
+        <div class="col">
           <strong>Number days left</strong><v-btn
             icon
             color="green"
