@@ -48,18 +48,33 @@ const mutations = {
   setUser (state: State, user: User) {
     state.user = user;
   },
-  setCurrentTodo (state: State, index: number) {
-    state.currentTodo = state.todolist[index];
+  setCurrentTodo (state: State, key: string) {
+    const todofinded = state.todolist.find(obj => {
+      return obj.key === key;
+    });
+    if (todofinded){
+      state.currentTodo = todofinded;
+    }
   },
   addNewTodo: (state: State, todo: Todo) => state.todolist.unshift(todo),
-  removeTodo: (state: State, index: number) => (
-    state.todolist.splice(index, 1)
-  ),
+  removeTodo: (state: State, key: string) => {
+    const index = state.todolist.findIndex(todo => todo.key === key);
+    state.todolist.splice(index, 1);
+  },
   removeTodoByKey (state: State, key: string) {
     var index = state.todolist.findIndex(function (o){
       return o.key === key;
     });
     if (index !== -1) state.todolist.splice(index, 1);
+  },
+  editTodoByKey (state: State, todo: Todo){
+    var index = state.todolist.findIndex(function (o){
+      return o.key === todo.key;
+    });
+    if (index !== -1) {
+      state.todolist.splice(index, 1);
+      state.todolist.splice(index, 0, todo);
+    }
   },
   sortBy (state: State, attribut: string){
     if (currentSortingMode === 'desc' || currentSortingMode === ''){
@@ -144,8 +159,7 @@ const actions = {
       task: payload.task,
       deadline: payload.deadline
     });
-    commit('removeTodoByKey', payload.key);
-    commit('addNewTodo', payload);
+    commit('editTodoByKey', payload);
   },
   deleteTodo ({ commit }: {commit: Function}, key: string) {
     const { uid } = state.user.data;

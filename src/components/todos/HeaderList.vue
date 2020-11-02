@@ -7,7 +7,7 @@
         class="row"
       >
         <div class="col ">
-          <strong> task</strong><v-btn
+          <strong>Task Title</strong><v-btn
             icon
             color="green"
             @click="sortBy('task')"
@@ -16,7 +16,7 @@
           </v-btn>
         </div>
         <div class="col">
-          <strong>deadline</strong><v-btn
+          <strong>Deadline</strong><v-btn
             icon
             color="green"
             @click="sortBy('deadline')"
@@ -34,7 +34,7 @@
           </v-btn>
         </div>
         <div class="col">
-          <strong>importance (/100)</strong><v-btn
+          <strong>Importance (/100)</strong><v-btn
             icon
             color="green"
             @click="sortBy('importance')"
@@ -82,8 +82,11 @@ export default class HeaderList extends Vue {
   }
 
   sortByTimeLeft (): void {
-    this.$store.commit('sortByTimeLeft');
-    this.$store.commit('sortByTimeLeftColored');
+    if (this.$store.getters.getColoredtodolist.length > 0) {
+      this.$store.commit('sortByTimeLeftColored');
+    } else {
+      this.$store.commit('sortByTimeLeft');
+    }
   }
 }
 </script>
