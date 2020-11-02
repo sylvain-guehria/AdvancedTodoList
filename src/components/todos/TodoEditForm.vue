@@ -21,7 +21,7 @@
       <div class="form-group ">
         <v-text-field
           v-model="currentTodo.task"
-          label="Task name"
+          label="Task title"
         /><br>
         <v-textarea
           v-model="currentTodo.description"

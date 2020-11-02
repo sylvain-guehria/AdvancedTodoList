@@ -17,10 +17,7 @@
       </div>
       <v-spacer />
       <v-spacer />
-      <loginbutton
-        :key="componentKey"
-        @onForceRerender="forceRerender"
-      />
+      <loginbutton />
     </v-app-bar>
   </v-card>
 </template>

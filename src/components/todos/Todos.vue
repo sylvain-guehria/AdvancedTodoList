@@ -10,9 +10,7 @@
         >
       </li>
       <li>
-        <headerlist
-          @onForceRerender="forceRerender"
-        />
+        <headerlist />
       </li>
       <li
         v-for="(todo, index) in whatList === 'todoList' ?
@@ -56,7 +54,9 @@
       name="viewmodal"
       height="auto"
     >
-      <todofulldescp />
+      <todofulldescp
+        @onClickCloseDescriptionModal="hideviewmodal"
+      />
     </modal>
     <modal
       scrollable
@@ -121,21 +121,25 @@ export default class Todos extends Vue {
 
   createTodo (todo: Todo): void{
     this.$store.dispatch('createTodo', todo);
-    this.forceRerenderFromParent();
+    // this.forceRerenderFromParent();
     this.$modal.hide('formmodal');
   }
 
-  forceRerenderFromParent () {
-    //this.$emit('onForceRerender');
+  hideviewmodal (): void{
+    this.$modal.hide('viewmodal');
   }
 
-  forceRerender () {
-    //this.componentKey += 1;
-  }
+  // forceRerenderFromParent () {
+  //   //this.$emit('onForceRerender');
+  // }
+
+  // forceRerender () {
+  //   //this.componentKey += 1;
+  // }
 
   editTodo (todo: Todo): void{
     this.$store.dispatch('editTodo', todo);
-    this.forceRerenderFromParent();
+    // this.forceRerenderFromParent();
     this.$modal.hide('editmodal');
   }
 
