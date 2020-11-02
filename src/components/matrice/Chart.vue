@@ -108,7 +108,6 @@ export default class Chart extends Vue{
         break;
     }
     this.$store.commit('setColoredTodoList', this.currentColoredTodoList);
-    console.log('show colored current', this.$store.getters.getColoredtodolist);
     this.$modal.show('listmodal');
   }
 

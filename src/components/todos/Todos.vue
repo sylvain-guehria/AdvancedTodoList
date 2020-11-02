@@ -56,21 +56,17 @@
       name="viewmodal"
       height="auto"
     >
-      <todofulldescp
-        @onClickCloseModal="hide"
-      />
+      <todofulldescp />
     </modal>
     <modal
       scrollable
       name="editmodal"
       height="auto"
-      @onClickCloseModal="hide"
     >
       <div>
         <todoeditform
           title="Edit task"
           @onEdit="editTodo"
-          @onClose="hide"
         />
       </div>
     </modal>
@@ -126,21 +122,21 @@ export default class Todos extends Vue {
   createTodo (todo: Todo): void{
     this.$store.dispatch('createTodo', todo);
     this.forceRerenderFromParent();
-    this.hide();
+    this.$modal.hide('formmodal');
   }
 
   forceRerenderFromParent () {
-    this.$emit('onForceRerender');
+    //this.$emit('onForceRerender');
   }
 
   forceRerender () {
-    this.componentKey += 1;
+    //this.componentKey += 1;
   }
 
   editTodo (todo: Todo): void{
     this.$store.dispatch('editTodo', todo);
     this.forceRerenderFromParent();
-    this.hide();
+    this.$modal.hide('editmodal');
   }
 
   supressTodo (key: string): void{
@@ -151,12 +147,6 @@ export default class Todos extends Vue {
     this.currentIndex = index;
     this.currentTodo = this.todolist[index];
     this.$modal.show('viewmodal');
-  }
-
-  hide () {
-    this.$modal.hide('editmodal');
-    this.$modal.hide('viewmodal');
-    this.$modal.hide('formmodal');
   }
 
   showEditModal (index: number): void {

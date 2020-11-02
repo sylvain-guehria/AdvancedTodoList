@@ -104,6 +104,7 @@ export default class TodoForm extends Vue {
     this.formData.creationDate = new Date().toISOString().substr(0, 10);
     this.formData.deadline = this.dateHelper;
     this.$emit('onCreate', this.formData);
+    //this.$emit('onClose');
 
     // this.writeUserData(this.formData);
     this.formData = {

@@ -22,7 +22,7 @@ export default class Home extends Vue {
   componentKey: number = 0
 
   forceRerender () {
-    this.componentKey += 1;
+    //this.componentKey += 1;
   }
 }
 </script>
