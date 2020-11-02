@@ -68,12 +68,12 @@ export default class Todos extends Vue {
 
   showTask (){
     this.$store.commit('setCurrentTodo', this.todo ? this.todo.key : '');
-    this.$emit('onClickModal', this.todo ? this.todo.key : '');
+    this.$emit('onClickModal');
   }
 
   showEditModal (){
     this.$store.commit('setCurrentTodo', this.todo ? this.todo.key : '');
-    this.$emit('onClickEditModal', this.todo ? this.todo.key : '');
+    this.$emit('onClickEditModal');
   }
 
   getdaysleft = myFunctions.getdaysleft;

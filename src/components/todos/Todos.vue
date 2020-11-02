@@ -41,6 +41,7 @@
       scrollable
       name="formmodal"
       height="auto"
+      @before-close="beforeCloseForm"
     >
       <div>
         <todoform
@@ -53,6 +54,7 @@
       scrollable
       name="viewmodal"
       height="auto"
+      @before-close="beforeCloseForm"
     >
       <todofulldescp
         @onClickCloseDescriptionModal="hideviewmodal"
@@ -62,6 +64,7 @@
       scrollable
       name="editmodal"
       height="auto"
+      @before-close="beforeCloseForm"
     >
       <div>
         <todoeditform
@@ -111,7 +114,7 @@ export default class Todos extends Vue {
     task: '',
     deadline: new Date().toISOString().substr(0, 10),
     importance: 0,
-    description: '',
+    description: [],
     creationDate: new Date().toISOString().substr(0, 10)
   };
 
@@ -121,7 +124,6 @@ export default class Todos extends Vue {
 
   createTodo (todo: Todo): void{
     this.$store.dispatch('createTodo', todo);
-    // this.forceRerenderFromParent();
     this.$modal.hide('formmodal');
   }
 
@@ -129,17 +131,8 @@ export default class Todos extends Vue {
     this.$modal.hide('viewmodal');
   }
 
-  // forceRerenderFromParent () {
-  //   //this.$emit('onForceRerender');
-  // }
-
-  // forceRerender () {
-  //   //this.componentKey += 1;
-  // }
-
   editTodo (todo: Todo): void{
     this.$store.dispatch('editTodo', todo);
-    // this.forceRerenderFromParent();
     this.$modal.hide('editmodal');
   }
 
@@ -147,20 +140,20 @@ export default class Todos extends Vue {
     this.$store.dispatch('deleteTodo', key);
   }
 
-  show (index: number): void {
-    this.currentIndex = index;
-    this.currentTodo = this.todolist[index];
+  show (): void {
     this.$modal.show('viewmodal');
   }
 
-  showEditModal (index: number): void {
-    this.currentIndex = index;
-    this.currentTodo = this.todolist[index];
+  showEditModal (): void {
     this.$modal.show('editmodal');
   }
 
   showFormModal (): void {
     this.$modal.show('formmodal');
+  }
+
+  beforeCloseForm () {
+    this.$store.commit('resetCurrentTodo');
   }
 }
 </script>
