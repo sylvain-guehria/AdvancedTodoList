@@ -40,10 +40,12 @@
 
     <v-divider class="mx-4" />
 
-    <v-card-title> Description :</v-card-title>
+    <v-card-title> task list :</v-card-title>
 
     <v-card-text>
-      {{ currentTodo.description }}
+      <subtasks
+        @onSubmitSubTasksDescrp="addsubtaskwithoutsubmit"
+      />
     </v-card-text>
 
     <v-card-actions>
@@ -61,10 +63,15 @@
 <script lang="ts">
 
 import { Component, Vue } from 'vue-property-decorator';
-import { Todo } from '../../models/types';
+import { SubTask, Todo } from '../../models/types';
 import { myFunctions } from '../helpers/helperfunction';
+import SubTaskforDescrpition from './SubTaskforDescrpition.vue';
 
-@Component
+@Component({
+  components: {
+    subtasks: SubTaskforDescrpition
+  }
+})
 export default class TodoFullDescription extends Vue{
   currentTodo: Todo = {
     key: '',
@@ -84,6 +91,11 @@ export default class TodoFullDescription extends Vue{
 
   closeTask (){
     this.$emit('onClickCloseDescriptionModal');
+  }
+
+  // FIXME : MAJ DIRECTEMENT dans la task dans firebase + dans le store
+  addsubtaskwithoutsubmit (subtask: SubTask[]){
+    console.log(subtask);
   }
 }
 
