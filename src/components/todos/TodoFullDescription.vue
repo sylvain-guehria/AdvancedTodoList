@@ -93,9 +93,9 @@ export default class TodoFullDescription extends Vue{
     this.$emit('onClickCloseDescriptionModal');
   }
 
-  // FIXME : MAJ DIRECTEMENT dans la task dans firebase + dans le store
-  addsubtaskwithoutsubmit (subtask: SubTask[]){
-    console.log(subtask);
+  addsubtaskwithoutsubmit (subtasks: SubTask[]){
+    this.currentTodo.description = subtasks;
+    this.$store.dispatch('editTodo', this.currentTodo);
   }
 }
 
