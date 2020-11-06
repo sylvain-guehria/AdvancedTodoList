@@ -86,7 +86,6 @@ export default class TodoEditForm extends Vue {
 
   created () {
     this.currentTodo = { ...this.$store.getters.getCurrentTodo };
-    console.log('je created', this.$store.getters.getCurrentTodo);
   }
 
   editTodo (){

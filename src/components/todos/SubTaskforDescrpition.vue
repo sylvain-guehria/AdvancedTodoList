@@ -19,7 +19,7 @@
         Add
       </button>
     </form>
-
+    <br>
     <div
       v-if="subtasks && subtasks.length > 0"
       class="todo-subtasks"
@@ -98,7 +98,7 @@ export default class SubTaskViewer extends Vue {
     });
 
     this.subTaskInput = '';
-    this.$emit('onSubmitSubTasks', this.subtasks);
+    this.$emit('onSubmitSubTasksDescrp', this.subtasks);
   }
 
   updateSubTask (e: HTMLElementEvent<HTMLTextAreaElement>, subtask: SubTask){
@@ -107,12 +107,12 @@ export default class SubTaskViewer extends Vue {
       subtask.label = e.target.innerText;
       e.target.blur();
     }
-    this.$emit('onSubmitSubTasks', this.subtasks);
+    this.$emit('onSubmitSubTasksDescrp', this.subtasks);
   }
 
   completeSubTask (subtask: SubTask){
     subtask.isdone = !subtask.isdone;
-    this.$emit('onSubmitSubTasks', this.subtasks);
+    this.$emit('onSubmitSubTasksDescrp', this.subtasks);
   }
 
   removeSubTask (subtask: SubTask){
@@ -122,7 +122,7 @@ export default class SubTaskViewer extends Vue {
       this.subtasks.forEach((subtask, index) => {
         subtask.order = index;
       });
-      this.$emit('onSubmitSubTasks', this.subtasks);
+      this.$emit('onSubmitSubTasksDescrp', this.subtasks);
     }
   }
 }
