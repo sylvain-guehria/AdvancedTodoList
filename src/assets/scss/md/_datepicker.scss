@@ -1,0 +1,98 @@
+.vdp-datepicker {
+  .vdp-datepicker__calendar {
+    top: 122%;
+    width: 100%;
+    padding: 20px 10%;
+    color: $text-dark;
+    @extend .square-container;
+    @extend .top-container-arrow;
+
+    &:after,
+    &:before {
+      opacity: 1;
+    }
+
+    .cell {
+      @extend .animation-transition-general;
+      border: none;
+    }
+    .cell.selected {
+      background-color: $main-cta;
+      color: white;
+      &:hover {
+        color: $text-dark;
+      }
+    }
+    .cell:not(.blank):not(.disabled).day:hover,
+    .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).month:hover,
+    .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).year:hover {
+      background-color: $lines;
+      border: none;
+    }
+    .vdp-datepicker__calendar header .next.disabled:after {
+      border-color: #ddd !important;
+      border-left: 0px !important;
+    }
+
+    .vdp-datepicker__calendar header .prev.disabled:after {
+      border-color: #ddd !important;
+      border-right: 2px solid !important;
+    }
+
+    .cell.day.today {
+      border: 1px solid $borders;
+    }
+
+    header {
+      .next:after {
+        @extend .arrow-right;
+        left: 40%;
+      }
+      .prev:after {
+        @extend .arrow-left;
+      }
+
+      .prev.disabled:after {
+        border-right: 2px solid #ddd !important;
+        border-color: #ddd !important;
+      }
+    }
+
+    .day__month_btn,
+    .month__year_btn,
+    header span:nth-child(2) {
+      @extend .h3;
+      line-height: inherit;
+      margin: inherit;
+    }
+  }
+
+  input {
+    -webkit-text-fill-color: inherit !important;
+    &:disabled {
+      background-color: $field-disabled-background-color;
+    }
+  }
+}
+
+.md-field.app-datepicker {
+  .feather.icon-deco {
+    z-index: 3;
+    cursor: initial;
+  }
+
+  .vdp-datepicker__clear-button {
+    cursor: pointer;
+    font-style: normal;
+    margin: auto;
+    position: absolute;
+    top: 22px;
+    left: calc(100% - 60px);
+    width: 24px;
+    z-index: 4;
+    span i {
+      font-style: normal;
+      font-size: 24px;
+    }
+  }
+}

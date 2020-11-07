@@ -1,0 +1,378 @@
+.form-horizontal {
+  // Consistent vertical alignment of radios and checkboxes
+  .radio,
+  .checkbox,
+  .radio-inline,
+  .checkbox-inline {
+    padding-top: 0;
+  }
+
+  .radio {
+    margin-bottom: 10px;
+  }
+
+  label {
+    text-align: right;
+  }
+
+  label.control-label {
+    margin: 0;
+  }
+}
+
+.form-newsletter {
+  .input-group,
+  .form-group {
+    float: left;
+    width: 78%;
+    margin-right: 2%;
+    margin-top: 9px;
+  }
+
+  .btn {
+    float: left;
+    width: 20%;
+    margin: 9px 0 0;
+  }
+}
+
+.full-form {
+  padding: 5% 15%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  & > .md-layout {
+    max-width: $form-max-width;
+  }
+}
+
+label {
+  font-size: $font-size-small;
+  line-height: 20px;
+  color: $text-dark;
+  text-transform: uppercase;
+  display: flex;
+
+  &.mandatory {
+    &::after {
+      content: '*';
+    }
+  }
+
+  i {
+    @extend .standard-icon;
+    color: $main-cta;
+  }
+
+  &.md-radio-label,
+  &.md-checkbox-label {
+    text-transform: none;
+    font-size: $font-size-base;
+  }
+}
+
+.md-field {
+  margin-top: 0;
+  padding-top: 10px;
+
+  &.md-required label:after {
+    content: none !important;
+  }
+  &.light-bottom-margin {
+    margin-bottom: 10px;
+  }
+}
+
+.md-layout-item.small-margin-bottom .md-field {
+  margin-bottom: 10px;
+}
+
+.align-left {
+  float: left;
+  text-align: initial;
+}
+
+.navigation-form {
+  .data-block {
+    margin: unset;
+  }
+
+  .form-sub-part {
+    width: 100%;
+  }
+
+  .form-nav-title {
+    padding: 15px 15px 10px 15px !important;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    & > div:first-child {
+      font-weight: bold;
+    }
+  }
+
+  .dash-notif-block {
+    margin-left: 20px;
+  }
+
+  .nav-form-block {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .dashboard-right-panel {
+    align-self: flex-start;
+    margin-left: 25px;
+    position: sticky;
+    top: 20px;
+
+    & > .data-block {
+      margin: unset;
+      @extend .flex-column;
+      padding: 20px 30px 20px 30px;
+    }
+
+    .light-horizontal-separator {
+      padding: 0 !important;
+      margin-bottom: 5px;
+    }
+
+    .form-nav-link {
+      width: 100%;
+      text-align: left;
+      padding-left: 30px;
+      padding-right: 20px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      .feather.icon-success {
+        opacity: 1;
+      }
+    }
+  }
+  a,
+  a:visited,
+  a:hover,
+  a:active {
+    color: inherit !important;
+    cursor: pointer;
+  }
+}
+
+// Validation icons and messages
+
+.free-validation {
+  align-self: center;
+  margin-left: 10px;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: block;
+
+  .feather {
+    width: 20px;
+  }
+  .talk-bubble.display-below {
+    top: 35px;
+    right: -20px;
+  }
+}
+
+.feather.icon-error {
+  z-index: 4;
+  opacity: 0;
+}
+
+.feather.icon-success {
+  z-index: 2;
+  opacity: 0;
+}
+
+.feather.icon-deco {
+  z-index: 1;
+  color: $text-dark;
+  opacity: 1;
+  @extend .animation-transition-general;
+}
+
+.feather.icon-success {
+  color: $positive;
+}
+.feather.icon-error {
+  color: $alert;
+  cursor: pointer;
+}
+
+.input-success {
+  .icon-success {
+    opacity: 1;
+  }
+  .icon-deco {
+    opacity: 0;
+  }
+}
+.input-error {
+  .icon-error {
+    opacity: 1;
+    &:hover {
+      & ~ .talk-bubble {
+        opacity: 1;
+        z-index: 2;
+      }
+    }
+  }
+  .icon-deco {
+    opacity: 0;
+  }
+}
+
+.md-field .talk-bubble,
+.free-validation .talk-bubble {
+  opacity: 0;
+  @extend .tri-right;
+  @extend .animation-transition-general;
+  z-index: -1;
+}
+
+.total-field {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  .h3 {
+    margin: 0;
+    margin-right: 30px;
+  }
+
+  .h1 {
+    margin: 0;
+  }
+}
+
+.tags-list {
+  margin-top: 0px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  .md-button.md-tertiary {
+    margin-bottom: 0px;
+    margin-right: 12px;
+    &.active {
+      background: linear-gradient(#419ed7, #3092d0) !important;
+      color: white !important;
+      border: none !important;
+    }
+  }
+  .menu-title {
+    align-self: center;
+    margin-right: 10px;
+    margin-top: 5px;
+  }
+  .input-error {
+    align-self: center;
+    margin-right: 10px;
+    margin-left: 0px;
+    margin-top: 5px;
+  }
+}
+
+.form-nav-link {
+  padding-right: 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.feather.icon-success {
+  color: $positive;
+}
+.feather.icon-refuse {
+  color: $negative;
+}
+
+.form-block-img {
+  align-self: flex-end;
+  padding-bottom: 20px;
+}
+
+.radio-text-square {
+  //square-container
+  border: 1px solid $borders;
+  border-radius: 2px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 10px 20px 20px 10px;
+  width: 40%;
+  background-color: $ui-second;
+  cursor: pointer;
+
+  &.checked {
+    background-color: $ui-main;
+    &.readonly {
+      background-color: $input-disabled-background;
+    }
+  }
+
+  .md-radio.md-theme-default {
+    margin: 0px;
+    display: block;
+  }
+}
+
+// Readonly mode
+
+.readonly-mode {
+  .md-field.md-disabled .md-input,
+  .vdp-datepicker input:disabled,
+  .vs--disabled .vs__dropdown-toggle,
+  .v-select .vs__dropdown-toggle .vs__search,
+  .v-select.vs--disabled .vs__selected-options .vs__selected {
+    background-color: white;
+    cursor: initial !important;
+  }
+
+  .tags-list .md-button.md-tertiary {
+    cursor: initial !important;
+  }
+
+  .project-pictures .active-filters a:hover {
+    cursor: initial !important;
+    text-decoration: none !important;
+    color: #57616b !important;
+  }
+
+  .md-field .md-textarea {
+    height: fit-content !important;
+  }
+
+  .data-block > div:not(.vert-hr).no-padding-top-bottom {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+}
+
+// form element pictures crud
+.project-pictures {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+
+  & > div {
+    display: flex;
+    width: 21%;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.md-field.disabled {
+  .feather {
+    cursor: initial;
+  }
+}

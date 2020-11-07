@@ -1,0 +1,155 @@
+.md-tabs.md-theme-default {
+  max-width: 100%;
+
+  .md-tabs-navigation {
+    margin: -35px 0 0;
+    font-family: $font-family-primary;
+    background-color: transparent;
+
+    .badge {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      border-radius: 100%;
+      color: $text-dark !important;
+      font-size: 10px;
+      font-style: normal;
+      letter-spacing: -0.05em;
+      border: 1px solid $text-dark;
+      margin-left: 10px;
+    }
+
+    .md-icon-label .md-button-content {
+      flex-direction: row;
+    }
+
+    & + .md-tabs-content {
+      background-color: transparent;
+      .md-checkbox.md-checked .md-checkbox-container:after {
+        top: 0px;
+        left: 5px;
+      }
+    }
+
+    .md-button,
+    .md-button:hover,
+    .md-button:focus,
+    .md-button:active {
+      background-color: transparent !important;
+      box-shadow: none;
+    }
+
+    .md-button.md-tab-nav-button {
+      border: 1px solid $borders;
+      border-bottom-width: 0px;
+      border-radius: 10px 20px 0 0;
+      background-color: $lines;
+      .md-button-content {
+        display: flex;
+        .md-tab-label,
+        .md-tab-icon {
+          color: $text-dark !important;
+          font-weight: 400;
+          font-size: $font-size-base;
+        }
+      }
+      &:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle)
+        .md-ripple {
+        padding: 20px 18px;
+      }
+      &:not(.md-active):hover {
+        background-color: $lines !important;
+        .badge {
+          color: $text-dark !important;
+        }
+      }
+    }
+
+    .md-active,
+    .md-active:hover,
+    .md-active:focus {
+      background-color: $lines !important;
+      box-shadow: none;
+
+      .badge {
+        background-color: $alert;
+        color: white !important;
+        border: none;
+      }
+    }
+
+    .md-icon-label {
+      height: auto;
+      border-radius: 3px;
+      line-height: 24px;
+      font-size: 12px;
+
+      .md-tab-icon + .md-tab-label {
+        margin-top: 1px;
+      }
+
+      .md-ripple {
+        padding: 10px 15px;
+      }
+    }
+  }
+}
+
+.md-tabs-indicator {
+  display: none;
+}
+
+.md-nav-tabs-title {
+  position: absolute;
+  z-index: 9999;
+  top: 6px;
+  color: $text-dark;
+  font-size: initial;
+  margin-left: 15px;
+}
+
+.md-tab {
+  max-width: 100%;
+  padding: 0 0 0 0;
+}
+
+// Simple design
+
+.md-tabs.md-theme-default.simple-tabs {
+  margin-top: 40px;
+  & > .md-tabs-navigation:first-child .md-button.md-tab-nav-button {
+    border: none;
+    background-color: transparent !important;
+    @extend .animation-transition-general;
+    @extend .menu-title;
+
+    &:hover {
+      background-color: transparent !important;
+    }
+
+    .md-button-content {
+      color: $text-dark;
+    }
+
+    .md-ripple {
+      padding-bottom: 15px !important;
+      border-bottom: 1px solid $lines;
+    }
+
+    &.md-active .md-ripple:after {
+      content: ' ';
+      height: 2px;
+      width: 70%;
+      background-color: $headline-h1;
+      position: absolute;
+      bottom: 0;
+    }
+  }
+
+  & > .md-tabs-navigation + .md-tabs-content {
+    padding-top: 30px;
+  }
+}

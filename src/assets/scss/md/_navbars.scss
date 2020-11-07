@@ -1,0 +1,334 @@
+.md-toolbar {
+  min-height: 56px;
+  padding: 20px 15px 10px 15px;
+  border-radius: 3px;
+  margin-bottom: 30px;
+
+  &.md-transparent {
+    background-color: transparent !important;
+    box-shadow: none;
+
+    .md-list .md-list-item-content,
+    &,
+    &:hover,
+    &:focus {
+      color: $black-color !important;
+    }
+  }
+
+  .md-list-item-content {
+    padding: 0;
+  }
+
+  .md-list-item {
+    .md-button {
+      &.md-just-icon {
+        width: auto;
+        min-width: auto;
+        min-height: 48px;
+        border-radius: 3px;
+
+        &,
+        &:hover,
+        &:focus,
+        &:active,
+        &.active,
+        &:active:focus,
+        &:active:hover,
+        &.active:focus,
+        &.active:hover,
+        .open > &.dropdown-toggle,
+        .open > &.dropdown-toggle:focus,
+        .open > &.dropdown-toggle:hover {
+          color: $black-color !important;
+        }
+
+        i {
+          width: 20px;
+          min-width: 20px;
+
+          &,
+          &:hover,
+          &:focus,
+          &:active,
+          &.active,
+          &:active:focus,
+          &:active:hover,
+          &.active:focus,
+          &.active:hover,
+          .open > &.dropdown-toggle,
+          .open > &.dropdown-toggle:focus,
+          .open > &.dropdown-toggle:hover {
+            color: $black-color !important;
+          }
+        }
+      }
+    }
+  }
+
+  .notification {
+    position: absolute;
+    top: -6px;
+    border: 1px solid #fff;
+    right: -8px;
+    font-size: 9px;
+    background: #f44336;
+    color: #ffffff;
+    z-index: 1;
+    min-width: 20px;
+    padding: 0px 5px;
+    height: 20px;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 19px;
+    vertical-align: middle;
+    display: block;
+  }
+
+  .navbar-nav {
+    > li > .dropdown-menu {
+      margin-top: -20px;
+    }
+
+    > li.open > .dropdown-menu {
+      margin-top: 0;
+    }
+
+    > .active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: inherit;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+    > .disabled > a {
+      &,
+      &:hover,
+      &:focus {
+        color: inherit;
+        background-color: transparent;
+        opacity: 0.9;
+      }
+    }
+    .profile-photo {
+      padding: 0 5px 0;
+      .profile-photo-small {
+        height: 40px;
+        width: 40px;
+      }
+    }
+  }
+
+  &.navbar-transparent {
+    background-color: transparent;
+    box-shadow: none;
+    border-bottom: 0;
+
+    .logo-container .brand {
+      color: $white-color;
+    }
+  }
+
+  .md-toolbar-row {
+    min-height: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    &.title {
+      padding-top: 10px;
+    }
+  }
+
+  .md-button {
+    margin: 0;
+  }
+
+  .md-toolbar-toggle .md-button-content {
+    display: block;
+    align-items: unset;
+  }
+
+  &.md-theme-default.md-transparent,
+  &.md-theme-default {
+    color: $gray;
+  }
+
+  &.md-theme-default.md-transparent .md-title,
+  &.md-theme-default .md-title,
+  .md-title {
+    font-size: 36;
+    font-weight: 500;
+    line-height: 40px;
+    color: $headline-h0;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 15px;
+    padding: 10px 0;
+    letter-spacing: normal;
+  }
+
+  .md-toolbar-toggle {
+    width: 40px;
+
+    .icon-bar {
+      position: relative;
+      display: block;
+      width: 22px;
+      height: 2px;
+      background-color: inherit;
+      border: 1px solid;
+      border-radius: 1px;
+
+      & + .icon-bar {
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .md-list {
+    flex-flow: row;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: inherit !important;
+    background-color: transparent !important;
+
+    &:hover .md-list-item > a,
+    &:focus .md-list-item > a,
+    & > a:hover {
+      background-color: transparent !important;
+    }
+
+    .md-list-item > a:not(:last-child) {
+      margin-right: 5px;
+    }
+  }
+
+  .md-field {
+    padding: 0;
+    margin: 0;
+
+    &:after,
+    &:before {
+      bottom: 5px;
+    }
+
+    .md-input {
+      margin-top: 6px;
+    }
+
+    label {
+      top: 15px;
+    }
+
+    &.md-focused label,
+    &.md-has-value label {
+      top: -4px;
+    }
+  }
+
+  .md-collapse {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+.md-menu-content {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  border-radius: $border-radius-base !important;
+  overflow: hidden;
+
+  .md-list .md-list-item a {
+    font-size: 10px;
+  }
+}
+
+.md-list-item a {
+  color: inherit !important;
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  font-weight: $font-weight-default;
+  text-transform: uppercase;
+  overflow: visible;
+
+  border-radius: $border-radius-base;
+  position: relative;
+  display: block;
+  padding: 0;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: inherit;
+    background-color: transparent;
+  }
+
+  .material-icons,
+  .fa {
+    font-size: 20px;
+  }
+
+  &.btn:not(.btn-just-icon) {
+    .fa {
+      position: relative;
+      top: 2px;
+      margin-top: -4px;
+      margin-right: 4px;
+    }
+  }
+}
+
+.md-list-item {
+  margin-left: 5px;
+  list-style: none;
+}
+
+/* Breadcrumb */
+
+[v-cloak] {
+  display: none;
+}
+nav.breadcrumb {
+  display: flex;
+
+  a {
+    padding-right: 5px;
+    font-size: 12px;
+    text-transform: uppercase;
+    line-height: 20px;
+    color: $text-dark !important;
+
+    &,
+    &:active,
+    &:hover,
+    &:visited {
+      @extend .subtitle;
+      color: $text-dark !important;
+    }
+    &:first-child {
+      display: flex;
+    }
+  }
+
+  a,
+  i {
+    color: $text-dark;
+  }
+
+  > div {
+    line-height: 25px;
+    padding-right: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  div:last-child i {
+    display: none;
+  }
+}

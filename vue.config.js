@@ -1,10 +1,3 @@
-module.exports = {
-  publicPath: './',
-  configureWebpack: {
-    devServer: {
-      open: true,
-      port: 8080
-    },
-    devtool: 'source-map'
-  }
-}
+const path = require("path");
+
+module.exports = { runtimeCompiler: true };

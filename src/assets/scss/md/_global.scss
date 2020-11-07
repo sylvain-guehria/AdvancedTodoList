@@ -1,0 +1,217 @@
+.text-align-left {
+  text-align: left;
+}
+.text-align-right {
+  text-align: right;
+}
+.text-align-center {
+  text-align: center;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  .md-checkbox {
+    margin-top: 8px;
+  }
+}
+.flex-start {
+  display: flex;
+  vertical-align: flex-start;
+}
+.flex-space-around {
+  @extend .flex-row;
+  justify-content: space-around;
+}
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+.flex-justif-end {
+  display: flex;
+  justify-content: flex-end;
+}
+.flex-justif-center {
+  display: flex;
+  justify-content: center;
+}
+.flex-vert-align-center {
+  display: flex;
+  align-items: center;
+}
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-responsive {
+  display: flex;
+  flex-direction: row;
+  flex-flow: row nowrap;
+}
+
+.align-self-center {
+  align-self: center;
+}
+
+.padding-left-10 {
+  padding-left: 10px;
+}
+
+.padding-20 {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.padding-bottom-40 {
+  padding-bottom: 40px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.no-margin {
+  margin: 0px !important;
+}
+
+.no-margin-bottom .md-field {
+  margin-bottom: 0px;
+}
+
+.side-margin-20 {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.margin-left-5 {
+  margin-left: 5px;
+}
+
+.margin-left-20 {
+  margin-left: 20px !important;
+}
+
+.margin-left-30 {
+  margin-left: 30px;
+}
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.margin-top-5 {
+  margin-top: 5px;
+}
+
+.margin-top-50 {
+  margin-top: 50px;
+}
+
+.margin-top-30 {
+  margin-top: 30px;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+.margin-bottom-15 {
+  margin-bottom: 15px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.margin-bottom-30 {
+  margin-bottom: 30px;
+}
+
+.margin-top-15 {
+  margin-top: 15px;
+}
+
+.margin-top-20 {
+  margin-top: 20px !important;
+}
+
+.margin-top-40 {
+  margin-top: 40px;
+}
+
+.margin-top-100 {
+  margin-top: 100px;
+}
+
+.margin-right-5 {
+  margin-right: 5px;
+}
+
+.margin-right-10 {
+  margin-right: 10px;
+}
+
+.margin-right-20 {
+  margin-right: 20px;
+}
+
+.margin-right-30 {
+  margin-right: 30px;
+}
+
+.no-padding {
+  padding: 0px !important;
+}
+
+.no-padding-right {
+  padding-right: 0px !important;
+}
+
+.no-padding-top {
+  padding-top: 0px;
+}
+
+.padding-top-10 {
+  padding-top: 10px;
+}
+
+.vert-hr {
+  width: 1px;
+  height: 75%;
+  background-color: $lines;
+}
+.clickable {
+  cursor: pointer;
+}
+
+.disabled-block {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.noscroll {
+  overflow-y: hidden !important;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.hide {
+  visibility: hidden !important;
+}
+
+.background-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+  height: auto;
+}

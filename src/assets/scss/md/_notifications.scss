@@ -1,0 +1,119 @@
+.menu-badge {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $ui-main;
+  border-radius: 100%;
+  color: $text-darker !important;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.notifications {
+  .md-drawer.feed-settings .filters-wrapper {
+    padding-right: 10% !important;
+    padding-left: 10% !important;
+  }
+
+  .md-switch.md-theme-default.md-checked .md-switch-thumb {
+    transform: translate3d(16px, 0, 0) !important;
+  }
+
+  .notification {
+    margin-bottom: 10px;
+    position: relative;
+    display: flex;
+    z-index: 5;
+
+    &:hover {
+      cursor: pointer;
+      & > div {
+        background-color: $header-menu !important;
+      }
+
+      .md-just-icon {
+        opacity: 1;
+        z-index: 2;
+      }
+    }
+
+    &:not(.unread):hover {
+      .bullet {
+        background-color: white !important;
+        width: 11px;
+        height: 11px;
+        opacity: 0 !important;
+        z-index: 2;
+      }
+    }
+
+    &.unread {
+      .bullet {
+        opacity: 1;
+      }
+    }
+
+    .sentence {
+      width: 44%;
+      overflow-wrap: break-word;
+    }
+    .event-title {
+      width: 20%;
+    }
+    .date {
+      overflow-wrap: break-word;
+      width: 14%;
+    }
+    .icon-title {
+      width: 22%;
+      text-align: left;
+      i {
+        @extend .animation-transition-general;
+        opacity: 1;
+        min-width: $icon-size;
+      }
+    }
+
+    .bullet {
+      @extend .animation-transition-general;
+      opacity: 0;
+      width: 10px;
+      height: 10px;
+      border: 1.5px solid $main-cta;
+      border-radius: 100%;
+      background-color: $main-cta;
+      position: absolute;
+      top: 40%;
+      left: -25px;
+    }
+
+    .md-just-icon {
+      @extend .animation-transition-general;
+      opacity: 0;
+      right: -35px;
+      position: absolute;
+      top: 25%;
+      margin: 0px;
+    }
+  }
+
+  .v-time-ago__text {
+    display: block;
+    @extend .light-subtitle-small;
+    @extend .text-align-left;
+    @extend .margin-bottom-10;
+    @extend .margin-top-20;
+  }
+}
+
+.event-notification {
+  .flex-start {
+    .md-button {
+      margin-right: 10px;
+    }
+  }
+}

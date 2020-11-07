@@ -1,0 +1,38 @@
+.tree-item {
+  .feather {
+    cursor: pointer;
+    margin-right: 2px;
+  }
+
+  .folder-item {
+    display: flex;
+    align-items: center;
+    color: $text-dark;
+    height: 40px;
+    padding-left: 10px;
+
+    .folder-name {
+      height: 24px;
+    }
+
+    &.selected {
+      background-color: $element-active;
+    }
+    &:hover {
+      background-color: $lines;
+      cursor: pointer;
+    }
+  }
+}
+
+li.tree-item,
+.tree-item li,
+.tree-item ul {
+  list-style-type: none;
+}
+
+.tree-view {
+  @extend .square-container;
+  @extend .top-container-arrow;
+  padding: 10px;
+}

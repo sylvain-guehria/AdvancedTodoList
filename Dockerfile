@@ -1,22 +1,11 @@
-FROM node:lts-alpine
-
-ARG BASE_URL
-ARG SERVER_URL
-
-WORKDIR /build
-COPY .eslintrc.js .
-COPY babel.config.js .
-COPY package.json .
-COPY postcss.config.js .
-COPY tsconfig.json .
-COPY vue.config.js .
-
-COPY src/ ./src/
-
-RUN echo "VUE_APP_BASE_URL=$BASE_URL" > .env
-RUN echo "VUE_APP_SERVER_URL=$SERVER_URL" >> .env
-RUN cat .env
-
+FROM node:11.6.0-alpine AS builder
+ARG ENV
+WORKDIR /app
+COPY . .
 RUN npm install
+RUN npm rebuild node-sass
+RUN npm run build
 
-CMD [ "npm", "run", "serve" ]
+FROM nginx:1.15.8-alpine
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/dist /usr/share/nginx/html
