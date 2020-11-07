@@ -1,0 +1,164 @@
+@font-face {
+  font-family: "ITC Avant Garde";
+  src: url("/assets/fonts/ITC Avant-Garde/ITCAvantGardeStd-Bk.otf")
+    format("truetype");
+}
+@font-face {
+  font-family: "Open Sans Regular";
+  src: url("/assets/fonts/Open Sans/OpenSans-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Open Sans SemiBold";
+  src: url("/assets/fonts/Open Sans/OpenSans-SemiBold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Open Sans Bold";
+  src: url("/assets/fonts/Open Sans/OpenSans-Bold.ttf") format("truetype");
+}
+
+body,
+h1,
+h2,
+.h1,
+.h2 {
+  font-family: $font-family-primary;
+  font-weight: 300;
+  line-height: 1.5em;
+}
+
+.h0 {
+  color: $headline-h0;
+  font-size: 36px;
+  font-family: $font-family-secondary;
+  font-style: normal;
+  text-transform: uppercase;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  line-height: 40px;
+  word-wrap: break-word;
+  white-space: initial;
+}
+
+h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+h1,
+.h1 {
+  font-size: 24px;
+  line-height: 1.15em;
+  color: $main-cta;
+  font-family: $font-family-secondary;
+}
+h2,
+.h2 {
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: bold;
+  margin: unset;
+  color: $text-dark;
+}
+h3,
+.h3 {
+  font-size: $font-size-base;
+  line-height: 1.5em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.h4 {
+  color: $headline-h1;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+p {
+  font-size: $font-paragraph;
+  margin: 0 0 10px;
+}
+
+.menu-title {
+  font-family: $font-family-primary-semibold;
+  font-weight: $font-weight-bold;
+  margin: 0;
+  line-height: 30px;
+  font-size: 14px;
+}
+
+.subtitle {
+  font-size: $font-size-small;
+  text-transform: uppercase;
+  line-height: 20px;
+}
+.light-subtitle {
+  font-weight: bold;
+  color: $text-light;
+  font-size: $font-size-small;
+  line-height: 20px;
+}
+.black-subtitle {
+  font-weight: bold;
+  font-size: $font-size-small;
+  line-height: 20px;
+}
+.light-subtitle-small {
+  @extend .light-subtitle;
+  font-size: $font-size-mini;
+}
+.ref-subtitle {
+  margin-top: 16px;
+  color: $text-dark;
+  font-size: 12px;
+}
+.light-title {
+  font-family: $font-family-primary-semibold;
+  font-size: 14px;
+}
+
+.white-semibold {
+  font-size: 14px;
+  font-family: $font-family-primary-semibold;
+  color: white;
+}
+
+h2.title {
+  margin-bottom: $margin-base * 2;
+}
+
+h1.light-margin {
+  margin-top: 0px;
+}
+
+.description,
+.card-description,
+.footer-big p {
+  color: $text-dark;
+}
+
+.icon-title {
+  color: $main-cta;
+  text-align: left;
+
+  i:first-child {
+    width: $icon-size;
+    margin-right: 10px;
+  }
+}
+
+a:not(.md-button).underline-link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.capitalize {
+  &::first-letter {
+    text-transform: uppercase;
+  }
+  text-transform: lowercase;
+}

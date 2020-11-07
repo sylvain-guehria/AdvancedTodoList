@@ -17,16 +17,16 @@ const firebaseConfig = {
   measurementId: 'G-WYDMNK5ZVN'
 };
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.default.initializeApp(firebaseConfig);
 
 export const fs = firebaseApp.firestore();
 export const database = firebaseApp.database();
 
 export default {
-  auth: firebase.auth(),
+  auth: firebase.default.auth(),
   loginGoogle () {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider)
+    const provider = new firebase.default.auth.GoogleAuthProvider();
+    firebase.default.auth().signInWithPopup(provider)
       .then(function () {
         Vue.notify({
           title: 'logged in',
@@ -43,7 +43,7 @@ export default {
       });
   },
   logout () {
-    firebase.auth().signOut()
+    firebase.default.auth().signOut()
       .then(function () {
         Vue.notify({
           title: 'You logged out',
@@ -62,7 +62,7 @@ export default {
   signUpEmail (email: string, password: string): Promise<{}> {
     return new Promise((resolve, reject) => {
       firebase
-        .auth()
+        .default.auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
           resolve({ success: true });
@@ -73,9 +73,10 @@ export default {
     });
   },
   loginEmail (email: string, password: string): Promise<{}> {
+    // eslint-disable-next-line no-console
     return new Promise((resolve, reject) => {
       firebase
-        .auth()
+        .default.auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => {
           resolve({ success: true });
@@ -87,7 +88,7 @@ export default {
   },
   sendResetPassEmail (emailAddress: string): Promise<{}>{
     return new Promise((resolve, reject) => {
-      firebase.auth().sendPasswordResetEmail(emailAddress).then(() => {
+      firebase.default.auth().sendPasswordResetEmail(emailAddress).then(() => {
         resolve({ success: true });
       })
         .catch(error => {
@@ -100,7 +101,7 @@ export default {
       loggedIn: false,
       data: {}
     };
-    firebase.auth().onAuthStateChanged(userfb => {
+    firebase.default.auth().onAuthStateChanged(userfb => {
       if (userfb) {
         user.loggedIn = true;
         user.data = userfb;

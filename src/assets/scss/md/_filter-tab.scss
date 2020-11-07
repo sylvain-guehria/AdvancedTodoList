@@ -1,0 +1,99 @@
+.tabs {
+  position: relative;
+  clear: both;
+  margin: 25px 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+
+  .tab {
+    float: left;
+    margin-left: 15px;
+
+    .content {
+      position: absolute;
+      padding-left: $standard-content-left-padding;
+      padding-right: $standard-content-right-padding;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      top: 46px;
+      left: 0;
+      background: transparent;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      opacity: 0;
+      height: 0px;
+
+      & > * {
+        opacity: 0;
+      }
+    }
+
+    .tab-header {
+      background: transparent;
+      padding: 12px;
+      margin-left: -1px;
+      position: relative;
+      left: 1px;
+      display: inherit;
+      cursor: pointer;
+      color: $text-dark;
+      font-size: 14px;
+      font-family: $font-family-primary-semibold;
+
+      .chevron-up {
+        display: none;
+      }
+      .chevron-down {
+        display: inline;
+      }
+
+      .tabs-filters-button {
+        display: flex;
+
+        i {
+          margin-left: 10px;
+          margin-right: 0px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      &.active {
+        background: white;
+        border-radius: 10px 10px 0px 0px;
+        border: 1px solid $lines;
+        border-bottom: 1px solid white;
+        z-index: 2;
+
+        & ~ .content {
+          height: fit-content;
+          border: 1px solid $lines;
+          background: white;
+          z-index: 1;
+          opacity: 1;
+
+          & > * {
+            opacity: 1;
+          }
+        }
+
+        .chevron-up {
+          display: inline;
+        }
+        .chevron-down {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .md-button.md-tertiary.clear-button {
+    width: fit-content;
+    min-width: 60px;
+    margin-top: 0px;
+    margin-left: 30px;
+    margin-right: $standard-content-right-padding;
+  }
+}

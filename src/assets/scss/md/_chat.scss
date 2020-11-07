@@ -1,0 +1,132 @@
+@mixin tri-bottom {
+  position: absolute;
+  top: 90%;
+  right: 0;
+  left: auto;
+  bottom: auto;
+  &:after {
+    content: " ";
+    position: absolute;
+    width: 0;
+    height: 0;
+    bottom: auto;
+    left: auto;
+    right: 10px;
+    top: -10px;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 25px solid lightyellow;
+    border-top: none;
+  }
+  &.warning {
+    &:after {
+      border-bottom-color: $alert;
+      border-right-color: transparent;
+    }
+  }
+  &.success {
+    &.tri-bottom:after {
+      border-bottom-color: $positive;
+      border-right-color: transparent;
+    }
+  }
+}
+
+.talk-bubble {
+  display: inline-block;
+  position: relative;
+  height: auto;
+  background-color: lightyellow;
+  width: 220px;
+  color: white;
+  z-index: 2;
+
+  &.warning {
+    background-color: $alert;
+    &.tri-right:after {
+      border-right-color: $alert;
+      border-bottom-color: transparent;
+    }
+    &.tri-top:after {
+      border-top-color: $alert;
+    }
+  }
+
+  &.success {
+    background-color: $positive;
+    &.tri-right:after {
+      border-right-color: $positive;
+      border-bottom-color: transparent;
+    }
+    &.tri-top:after {
+      border-top-color: $positive;
+    }
+  }
+}
+
+.md-field .talk-bubble.display-below {
+  @include tri-bottom;
+}
+
+.free-validation .talk-bubble {
+  top: -15px;
+  right: -233px;
+  left: auto;
+  &.display-below {
+    @include tri-bottom;
+  }
+}
+
+/* Right triangle */
+.tri-right {
+  position: absolute;
+  top: 22%;
+  left: 99%;
+  right: auto;
+  bottom: auto;
+  &:after {
+    content: " ";
+    position: absolute;
+    width: 0;
+    height: 0;
+    right: auto;
+    bottom: auto;
+    top: auto;
+    border-top: 20px solid transparent;
+    border-right: 25px solid lightyellow;
+    border-bottom: 20px solid transparent;
+    border-left: none;
+    left: -8px;
+    top: 4px;
+  }
+}
+
+.tri-top {
+  width: 264px;
+  &:after {
+    content: " ";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid lightyellow;
+    border-bottom: 10px solid transparent;
+    right: 45%;
+    bottom: -20px;
+  }
+}
+
+/* talk bubble contents */
+.talktext {
+  padding: 1em;
+  text-align: left;
+  line-height: 1.5em;
+  text-align: center;
+}
+.talktext p {
+  white-space: normal;
+  /* remove webkit p margins */
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+}

@@ -1,0 +1,10 @@
+.wrapper {
+  .vue-slider-dot-tooltip-inner {
+    background-color: $main-cta;
+    border-color: $main-cta;
+  }
+  .vue-slider:hover .vue-slider-process,
+  .vue-slider:hover .vue-slider-dot-handle:hover {
+    background-color: $positive;
+  }
+}

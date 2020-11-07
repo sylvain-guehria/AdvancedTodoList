@@ -1,0 +1,291 @@
+@mixin md-reverse($color) {
+  background-color: $ui-second !important;
+  color: $color !important;
+  font-family: $font-family-primary-semibold;
+
+  i {
+    color: $color !important;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    color: $color !important;
+
+    i {
+      color: $color !important;
+    }
+  }
+}
+
+.md-button {
+  border: none;
+  border-radius: $border-radius-extreme;
+  position: relative;
+  margin: 10px 1px;
+  height: auto;
+  line-height: 20px;
+  font-size: $font-size-cta-btn;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  height: $form-component-height;
+  z-index: 1;
+
+  will-change: box-shadow, transform;
+  transition: box-shadow 0.2s $mdb-animation-curve-fast-out-linear-in,
+    background-color 0.2s $mdb-animation-curve-default;
+
+  &:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle)
+    .md-ripple {
+    padding: 15px 30px;
+  }
+
+  &:not(.md-just-icon):not(.md-tab-nav-button) .md-button-content i,
+  &:not(.md-just-icon) .md-button-content i:first-child {
+    @extend .standard-icon;
+  }
+  .md-button-content {
+    display: flex;
+    align-items: center;
+  }
+  div.md-button-content::first-letter {
+    text-transform: capitalize;
+  }
+
+  &.md-wd {
+    min-width: 140px;
+  }
+
+  &.md-block {
+    width: 100%;
+  }
+
+  &:before {
+    display: none;
+  }
+
+  &.large {
+    width: 309px;
+    .md-ripple {
+      padding: 15px 30px;
+    }
+  }
+
+  &,
+  &.md-default {
+    @include btn-styles($main-cta);
+    font-family: $font-family-primary;
+    width: fit-content;
+  }
+  &.md-primary {
+    @include btn-styles($positive);
+    font-family: $font-family-primary;
+  }
+  &.md-secondary {
+    font-weight: 600;
+  }
+  &.md-secondary,
+  &.md-tertiary {
+    background-color: transparent !important;
+    color: $text-dark !important;
+    border: 1px solid $borders;
+    &:hover {
+      @include btn-overlay(0.04);
+      color: $text-dark !important;
+    }
+    &:active,
+    &:focus,
+    &.active {
+      @include btn-overlay(0.08);
+      color: $text-dark !important;
+    }
+    &:not(.md-just-icon) .md-button-content i {
+      color: $text-dark !important;
+    }
+  }
+
+  &.md-tertiary {
+    height: $form-component-small-height;
+    font-size: $font-paragraph;
+    font-weight: 400;
+    min-width: 120px;
+    max-width: 300px;
+    .md-ripple {
+      padding: 8px 20px !important;
+    }
+    &.small {
+      height: 30px;
+    }
+    &.no-focus:not(.active):focus {
+      background-color: transparent !important;
+    }
+  }
+
+  &.icon-right {
+    .md-ripple {
+      min-width: 470px;
+      .md-button-content {
+        justify-content: space-between;
+        width: 100%;
+        i {
+          margin-right: 0px !important;
+        }
+      }
+    }
+  }
+
+  &.md-transparent {
+    background-color: transparent !important;
+    border: 1px solid white !important;
+    color: $ui-second;
+    height: 40px;
+    font-size: 14px;
+    font-weight: 400;
+    transition: 0.3s ease;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+
+  &.md-reverse-main {
+    @include md-reverse($main-cta);
+  }
+
+  &.md-reverse-text-darker {
+    @include md-reverse($text-darker);
+  }
+
+  &:focus,
+  &:active,
+  &:active:focus {
+    outline: 0;
+  }
+
+  &.md-round {
+    border-radius: $border-radius-extreme;
+  }
+
+  &:not(.btn-just-icon):not(.btn-fab) {
+    .fa {
+      font-size: 18px;
+      margin-top: -2px;
+      position: relative;
+      top: 2px;
+    }
+  }
+
+  // Size variations
+  &.md-lg .md-ripple {
+    padding: 18px 36px !important;
+  }
+  &.md-sm .md-ripple {
+    padding: 0.40625rem 1.25rem !important;
+  }
+
+  &.btn-just-icon {
+    font-size: 20px;
+    padding: 12px 12px;
+    line-height: 1em;
+
+    i {
+      width: 20px;
+    }
+    &.btn-lg {
+      font-size: 22px;
+      padding: 13px 18px;
+    }
+  }
+
+  &.md-fab,
+  &.md-just-icon {
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+
+    &.top-right {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+  }
+
+  &.md-icon-button {
+    i {
+      color: $text-dark !important;
+      height: 20px;
+      width: 20px;
+      font-size: 20px !important;
+    }
+    background-color: transparent !important;
+    width: 25px;
+    height: 25px;
+    min-width: 30px;
+
+    .md-ripple {
+      padding: 0px;
+      width: 25px;
+      height: 25px;
+    }
+
+    &:active:hover {
+      @include btn-overlay(0.08);
+    }
+    &:active,
+    &.active,
+    &:hover {
+      background-color: transparent !important;
+      i {
+        color: $text-dark !important;
+      }
+    }
+  }
+
+  &:not(.md-tab-nav-button) .md-button-content {
+    display: flex;
+    align-items: center;
+    i {
+      font-size: 20px !important;
+    }
+  }
+
+  &.icon-big:not(.md-tab-nav-button) .md-button-content i {
+    font-size: 24px !important;
+    height: 24px;
+  }
+}
+
+.btn {
+  // Align icons inside buttons with text
+  .material-icons {
+    vertical-align: middle;
+    top: -1px;
+    position: relative;
+  }
+}
+
+.navbar .navbar-nav > li > {
+  a.btn {
+    margin-top: 2px;
+    margin-bottom: 2px;
+
+    &.btn-fab {
+      margin: 5px 2px;
+    }
+  }
+  a:not(.btn) {
+    .material-icons {
+      margin-top: -3px;
+      top: 0px;
+      position: relative;
+      margin-right: 3px;
+    }
+  }
+  .profile-photo {
+    margin: 5px 2px;
+  }
+}

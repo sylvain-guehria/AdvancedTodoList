@@ -1,0 +1,146 @@
+.md-field {
+  &.input-error,
+  &.input-success {
+    .v-select .vs__actions {
+      visibility: hidden;
+    }
+    &:not(.input-error):not(.input-success) {
+      .v-select .vs__actions {
+        visibility: visible;
+      }
+    }
+  }
+}
+
+.pagination-select {
+  .v-select {
+    width: 72px;
+  }
+  .vs__dropdown-toggle {
+    height: 40px;
+    font-size: 12px !important;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+.v-select.vs--searchable .vs__dropdown-toggle {
+  cursor: pointer;
+}
+
+.v-select {
+  font-family: $font-family-primary !important;
+
+  .vs__dropdown-menu {
+    top: 122%;
+    @extend .square-container;
+
+    .vs__dropdown-option {
+      height: 50px;
+      color: $text-dark;
+      height: 50px;
+      padding: 10px;
+      line-height: 30px;
+      margin: 10px;
+      //@extend .animation-transition-fast;
+
+      &.vs__dropdown-option--selected {
+        background-color: $element-active;
+      }
+    }
+
+    .vs__dropdown-option:hover,
+    .vs__dropdown-option--highlight,
+    .vs__dropdown-option--selected {
+      color: $text-dark;
+      border-radius: 2px;
+    }
+
+    .vs__dropdown-option:hover,
+    .vs__dropdown-option--highlight {
+      background-color: $lines;
+    }
+  }
+
+  .vs__dropdown-toggle {
+    @extend .bottom-container-arrow;
+    transition: none;
+    &:hover:not(:focus):enabled {
+      background-color: $field-hover-background-color;
+      cursor: pointer;
+      .vs__selected-options {
+        cursor: pointer;
+        .vs__selected,
+        .vs--single .vs__selected {
+          background-color: $field-hover-background-color;
+          cursor: pointer;
+        }
+        .vs__search {
+          cursor: pointer;
+        }
+      }
+    }
+    .vs__search {
+      cursor: pointer;
+    }
+  }
+
+  &.vs--open {
+    .vs__dropdown-toggle {
+      border: 1px solid $borders !important;
+      border-radius: 2px !important;
+      background-color: white !important;
+      cursor: text !important;
+      &::after,
+      &::before {
+        opacity: 1;
+      }
+      &:hover:not(:focus) {
+        .vs__selected-options {
+          .vs__selected,
+          .vs--single .vs__selected {
+            background-color: white;
+            cursor: text;
+          }
+        }
+      }
+    }
+  }
+
+  .vs__actions {
+    cursor: pointer;
+  }
+
+  .vs__selected-options {
+    .vs__selected,
+    .vs--single .vs__selected {
+      z-index: 2;
+      background-color: white;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      color: $text-dark;
+    }
+
+    .vs__search,
+    .vs__search:focus {
+      padding-left: 0px;
+    }
+  }
+
+  & + label {
+    margin-left: 5px;
+    top: 32px;
+  }
+
+  &.vs--disabled {
+    .vs__selected-options .vs__search,
+    .v-select .vs__selected-options .vs__search:focus {
+      background-color: transparent;
+    }
+    .vs__selected-options .vs__selected {
+      background-color: $input-disabled-background;
+    }
+  }
+}
