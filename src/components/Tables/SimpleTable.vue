@@ -32,17 +32,13 @@
               <md-icon>more_vert</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item>
-                <feather type="layout" class="md-icon"></feather>
-                <span>Transfer to Gate 5</span>
+              <md-menu-item @click="editTask(item.key)" >
+                <feather type="edit" class="md-icon"></feather>
+                <span>Edit task</span>
               </md-menu-item>
-              <md-menu-item>
-                <feather type="arrow-right-circle" class="md-icon"></feather>
-                <span>My Item 2</span>
-              </md-menu-item>
-              <md-menu-item>
-                <feather type="file-plus" class="md-icon"></feather>
-                <span>My Item 3</span>
+              <md-menu-item @click="deleteTask(item.key)">
+                <feather type="delete" class="md-icon"></feather>
+                <span>Delete task</span>
               </md-menu-item>
             </md-menu-content>
           </md-menu>
@@ -75,6 +71,13 @@ export default {
   }
 },
   methods: {
+    deleteTask (key: string): void{
+    this.$store.dispatch('deleteTodo', key);
+  },
+    editTask (key: string): void{
+      // FIXME
+    //open modal edit
+  },
     onPagination(data) {
       this.paginatedTodos = data;
     },

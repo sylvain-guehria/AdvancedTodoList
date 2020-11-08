@@ -9,10 +9,15 @@
         </div>
       </div>
       <div class="md-layout-item md-size-50 padding-20 text-align-left">
-        <p class="title">{{new Date().toLocaleDateString()}}</p>
+        <p class="title">{{ new Date().toLocaleDateString() }}</p>
       </div>
       <div class="md-layout-item md-size-50 padding-20 text-align-right">
         <p class="subtitle">Start of project phase 2019/12/06</p>
+      </div>
+      <div class="md-layout-item md-size-50 padding-20 text-align-right">
+        <md-button class="md-tertiary" @click="openModalAddTask()">
+          <feather type="star"></feather>Add a task
+        </md-button>
       </div>
       <div class="md-layout-item md-size-100" style="margin-top: 70px">
         <md-tabs>
@@ -25,7 +30,9 @@
             id="tab-home"
             md-label="Tasks not finished"
             md-icon="activity"
-            :md-template-data="{ badge: this.$store.getters.getNumberActiveTask }"
+            :md-template-data="{
+              badge: this.$store.getters.getNumberActiveTask
+            }"
           >
             <simple-table
               :key="this.$store.getters.getNumberActiveTask"
@@ -36,7 +43,9 @@
             id="tab-pages"
             md-label="All tasks"
             md-icon="list"
-            :md-template-data="{ badge: this.$store.getters.getNumberTotalTask }"
+            :md-template-data="{
+              badge: this.$store.getters.getNumberTotalTask
+            }"
           >
             <simple-table
               :key="this.$store.getters.getNumberTotalTask"
@@ -85,6 +94,10 @@ export default {
     }, 0);
   },
   methods: {
+      openModalAddTask (): void{
+      // FIXME
+    //open modal add
+  },
     updateIsActive(value) {
       this.showFilters = value;
     },
@@ -106,3 +119,6 @@ export default {
   }
 };
 </script>
+<style scoped>
+
+</style>
