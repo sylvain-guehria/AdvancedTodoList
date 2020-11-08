@@ -1,16 +1,29 @@
 <template>
   <div class="flex-column">
-    <md-table v-model="paginatedTodos" md-sort="name" md-sort-order="asc" md-card>
+    <md-table
+      v-model="paginatedTodos"
+      md-sort="name"
+      md-sort-order="asc"
+      md-card
+    >
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell md-sort-by="task" md-label="Task Title">{{ item.task }}</md-table-cell>
-        <md-table-cell md-sort-by="deadline" md-label="Deadline">{{ item.deadline }}</md-table-cell>
+        <md-table-cell md-sort-by="task" md-label="Task Title">{{
+          item.task
+        }}</md-table-cell>
+        <md-table-cell md-sort-by="deadline" md-label="Deadline">{{
+          item.deadline
+        }}</md-table-cell>
         <md-table-cell md-sort-by="creationDate" md-label="Creation date">{{
           item.creationDate
         }}</md-table-cell>
         <md-table-cell md-sort-by="numberdaysleft" md-label="Number days left">
           {{ item.numberdaysleft }}
         </md-table-cell>
-        <md-table-cell md-sort-by="importance" md-label="Importance (/100)" class="last-column">
+        <md-table-cell
+          md-sort-by="importance"
+          md-label="Importance (/100)"
+          class="last-column"
+        >
           {{ item.importance }}
         </md-table-cell>
         <md-table-cell md-fixed-header class="more-column right-arrow">
@@ -47,15 +60,18 @@
 
 <script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
-import { myFunctions } from '../../helpers/helperfunction';
-import { Todo } from '../../models/types';
 
 export default {
   name: "simple-table",
   components: {
     "table-pagination": TablePaginationVue
   },
-  props: {},
+  props: ['todolist'],
+  computed: {
+  isCompletelist: function () {
+    return this.completelist;
+  }
+},
   methods: {
     onPagination(data) {
       this.paginatedTodos = data;
@@ -77,25 +93,21 @@ export default {
       );
     },
   },
+  // FIXME : todo list et all todos have the same number of element
   created() {
-    this.todos = this.$store.getters.getTodoList;
+    this.todos = this.todolist;
     this.paginatedTodos = [...this.todos];
-
-    this.paginatedTodos.forEach( (todo: Todo) => {
-      todo.numberdaysleft = this.getdaysleft(todo.deadline);
-    })
+   
   },
   data() {
     return {
       selected: [],
       todos: [],
       paginatedTodos: [],
-      getdaysleft : myFunctions.getdaysleft
     };
   },
 };
 </script>
 
 <style scoped>
-
 </style>

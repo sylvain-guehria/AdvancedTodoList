@@ -18,7 +18,9 @@ export interface State {
   todolist: Todo[];
   coloredtodolist: Todo[];
   user: User;
-  currentTodo: Todo;
+  currentTodo: Todo,
+  numberActiveTask: number,
+  numberTotalTask: number,
 }
 
 export interface SubTask {

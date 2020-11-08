@@ -7,7 +7,7 @@
       <sidebar-link to="/app/todos">
         <feather type="trending-up"></feather>
         <p>Todo list</p>
-        <div class="menu-badge">3</div>
+        <div class="menu-badge">{{ this.$store.getters.getNumberActiveTask}}</div>
       </sidebar-link>
       <sidebar-link to="/app/planning">
         <feather type="calendar"></feather>
@@ -53,9 +53,21 @@ export default {
   beforeCreate: function() {
     document.body.className = "";
   },
+  created(){
+
+    // this.todolist = this.$store.getters.getTodoList;
+
+    // if (this.todolist) {
+    //   this.todonotdone = this.todolist.filter(todo => !todo.isdone);
+    //   this.countertasknotdone = this.todonotdone.length;
+    //   // eslint-disable-next-line no-console
+    //   console.log('ddd', this.countertasknotdone);
+    // }
+  },
   data() {
     return {
-      isNavMini: false
+      isNavMini: false,
+      countertasknotdone: 0
     };
   },
   methods: {
