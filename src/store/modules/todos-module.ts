@@ -4,6 +4,9 @@ import lodash from 'lodash';
 
 var todolist: Todo[] = [];
 var coloredtodolist: Todo[] = [];
+var numberActiveTask = 0;
+var numberTotalTask = 0;
+
 var currentTodo: Todo = {
   task: '',
   creationDate: new Date().toISOString().substr(0, 10),
@@ -20,7 +23,9 @@ const state: State = {
   todolist: todolist,
   coloredtodolist: coloredtodolist,
   user: user,
-  currentTodo: currentTodo
+  currentTodo: currentTodo,
+  numberActiveTask: numberActiveTask,
+  numberTotalTask: numberTotalTask,
 };
 
 const getters = {
@@ -30,11 +35,20 @@ const getters = {
   getTodoList: (state: State) => {
     return state.todolist;
   },
+  getActiveTodoList: (state: State) => {
+    return state.todolist.filter(todo => !todo.isdone);
+  },
   getColoredtodolist: (state: State) => {
     return state.coloredtodolist;
   },
   getCurrentTodo: (state: State) => {
     return state.currentTodo;
+  },
+  getNumberTotalTask: (state: State) => {
+    return state.todolist.length;
+  },
+  getNumberActiveTask: (state: State) => {
+    return state.todolist.filter(todo => !todo.isdone).length;
   }
 };
 
@@ -184,7 +198,8 @@ const actions = {
           deadline: childSnapshot.val().deadline,
           importance: childSnapshot.val().importance,
           description: childSnapshot.val().description,
-          creationDate: childSnapshot.val().creationDate
+          creationDate: childSnapshot.val().creationDate,
+          isdone: childSnapshot.val().isdone
         };
         listoftodos.push(currentTodo);
       });

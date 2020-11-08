@@ -7,7 +7,7 @@
       <sidebar-link to="/app/todos">
         <feather type="trending-up"></feather>
         <p>Todo list</p>
-        <div class="menu-badge">3</div>
+        <div class="menu-badge">{{ this.$store.getters.getNumberActiveTask}}</div>
       </sidebar-link>
       <sidebar-link to="/app/planning">
         <feather type="calendar"></feather>
@@ -55,7 +55,8 @@ export default {
   },
   data() {
     return {
-      isNavMini: false
+      isNavMini: false,
+      countertasknotdone: 0
     };
   },
   methods: {

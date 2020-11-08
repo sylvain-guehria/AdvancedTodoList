@@ -1,15 +1,30 @@
 <template>
   <div class="flex-column">
-    <md-table v-model="paginatedUsers">
+    <md-table
+      v-model="paginatedTodos"
+      md-sort="name"
+      md-sort-order="asc"
+      md-card
+    >
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
-        <md-table-cell md-label="Country">{{ item.country }}</md-table-cell>
-        <md-table-cell md-label="City">{{ item.city }}</md-table-cell>
-        <md-table-cell md-label="Salary">{{ item.salary }}</md-table-cell>
-        <md-table-cell md-label="Large column" class="last-column">
-          {{
-          item.largeData
-          }}
+        <md-table-cell md-sort-by="task" md-label="Task Title">{{
+          item.task
+        }}</md-table-cell>
+        <md-table-cell md-sort-by="deadline" md-label="Deadline">{{
+          item.deadline
+        }}</md-table-cell>
+        <md-table-cell md-sort-by="creationDate" md-label="Creation date">{{
+          item.creationDate
+        }}</md-table-cell>
+        <md-table-cell md-sort-by="numberdaysleft" md-label="Number days left">
+          {{ item.numberdaysleft }}
+        </md-table-cell>
+        <md-table-cell
+          md-sort-by="importance"
+          md-label="Importance (/100)"
+          class="last-column"
+        >
+          {{ item.importance }}
         </md-table-cell>
         <md-table-cell md-fixed-header class="more-column right-arrow">
           <md-menu md-size="medium" :md-offset-x="-175" :md-offset-y="-120">
@@ -17,17 +32,13 @@
               <md-icon>more_vert</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item>
-                <feather type="layout" class="md-icon"></feather>
-                <span>Transfer to Gate 5</span>
+              <md-menu-item @click="editTask(item.key)" >
+                <feather type="edit" class="md-icon"></feather>
+                <span>Edit task</span>
               </md-menu-item>
-              <md-menu-item>
-                <feather type="arrow-right-circle" class="md-icon"></feather>
-                <span>My Item 2</span>
-              </md-menu-item>
-              <md-menu-item>
-                <feather type="file-plus" class="md-icon"></feather>
-                <span>My Item 3</span>
+              <md-menu-item @click="deleteTask(item.key)">
+                <feather type="delete" class="md-icon"></feather>
+                <span>Delete task</span>
               </md-menu-item>
             </md-menu-content>
           </md-menu>
@@ -35,7 +46,7 @@
       </md-table-row>
     </md-table>
     <table-pagination
-      :data="users"
+      :data="todos"
       @pagination="onPagination($event)"
       :serverSide="false"
       @paginationEvent="doServerPagination($event)"
@@ -43,17 +54,32 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
+import { myFunctions } from "../../helpers/helperfunction";
+import { Todo } from "../../models/types";
+
 export default {
   name: "simple-table",
   components: {
     "table-pagination": TablePaginationVue
   },
-  props: {},
+  props: ['todolist'],
+  computed: {
+  isCompletelist: function () {
+    return this.completelist;
+  }
+},
   methods: {
+    deleteTask (key: string): void{
+    this.$store.dispatch('deleteTodo', key);
+  },
+    editTask (key: string): void{
+      // FIXME
+    //open modal edit
+  },
     onPagination(data) {
-      this.paginatedUsers = data;
+      this.paginatedTodos = data;
     },
     doServerPagination(paginationEvent) {
       // eslint-disable-next-line no-console
@@ -70,26 +96,30 @@ export default {
           "length: " +
           paginationEvent.length
       );
-    }
+    },
   },
   created() {
-    for (let i = 0; i < 52; i++) {
-      this.users.push({
-        name: "The name " + i,
-        salary: Math.round(Math.random() * 30000),
-        country: "Country " + i,
-        city: "City " + i,
-        largeData: "The big big big big big large data value"
+    this.todos = this.todolist;
+    this.paginatedTodos = [...this.todos];
+
+    if (this.paginatedTodos) {
+
+      this.paginatedTodos.forEach((todo: Todo) => {
+        todo.numberdaysleft = this.getdaysleft(todo.deadline);
       });
     }
-    this.paginatedUsers = [...this.users];
+   
   },
   data() {
     return {
       selected: [],
-      users: [],
-      paginatedUsers: []
+      todos: [],
+      paginatedTodos: [],
+      getdaysleft: myFunctions.getdaysleft,
     };
-  }
+  },
 };
 </script>
+
+<style scoped>
+</style>
