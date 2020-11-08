@@ -3,10 +3,10 @@
     <div class="logo">
       <a href="#" class="logo-big">
         <div class="logo-img">
-          <img :src="'yourtodoslogo.svg'" alt />
+          <img :src="'../yourtodoslogo.svg'" alt />
         </div>
         <div class="smalllogo" >
-          <img :src="'logo.svg'" alt />
+          <img :src="'../logo.svg'" alt />
         </div>
       </a>
     </div>
