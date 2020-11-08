@@ -60,6 +60,8 @@
 
 <script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
+import { myFunctions } from "../../helpers/helperfunction";
+import { Todo } from "../../models/types";
 
 export default {
   name: "simple-table",
@@ -93,10 +95,16 @@ export default {
       );
     },
   },
-  // FIXME : todo list et all todos have the same number of element
   created() {
     this.todos = this.todolist;
     this.paginatedTodos = [...this.todos];
+
+    if (this.paginatedTodos) {
+
+      this.paginatedTodos.forEach((todo: Todo) => {
+        todo.numberdaysleft = this.getdaysleft(todo.deadline);
+      });
+    }
    
   },
   data() {
@@ -104,6 +112,7 @@ export default {
       selected: [],
       todos: [],
       paginatedTodos: [],
+      getdaysleft: myFunctions.getdaysleft,
     };
   },
 };

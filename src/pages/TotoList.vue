@@ -57,8 +57,6 @@
 <script  lang="ts">
 import { SimpleTable } from "@/components";
 import FiltersDrawer from "../components/FiltersDrawer.vue";
-import { Todo } from "./../models/types";
-import { myFunctions } from "./../helpers/helperfunction";
 
 export default {
   name: "TotoList",
@@ -78,7 +76,6 @@ export default {
       componentKey: 0,
       todolist: [],
       todonotdone: [],
-      getdaysleft: myFunctions.getdaysleft,
       keycomponent: 0
     };
   },
@@ -86,23 +83,6 @@ export default {
     setTimeout(() => {
       this.isLoading = false;
     }, 0);
-
-    // this.todolist = this.$store.getters.getTodoList;
-
-    // if (this.todolist) {
-    //   this.todonotdone = this.todolist.filter(todo => !todo.isdone);
-
-    //   this.todonotdone.forEach((todo: Todo) => {
-    //     todo.numberdaysleft = this.getdaysleft(todo.deadline);
-    //   });
-
-    //   this.todolist.forEach((todo: Todo) => {
-    //     todo.numberdaysleft = this.getdaysleft(todo.deadline);
-    //   });
-
-    //   this.counteralltask = this.todolist.length;
-    //   this.countertasknotdone = this.todonotdone.length;
-    // }
   },
   methods: {
     updateIsActive(value) {

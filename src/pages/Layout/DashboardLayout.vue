@@ -53,17 +53,6 @@ export default {
   beforeCreate: function() {
     document.body.className = "";
   },
-  created(){
-
-    // this.todolist = this.$store.getters.getTodoList;
-
-    // if (this.todolist) {
-    //   this.todonotdone = this.todolist.filter(todo => !todo.isdone);
-    //   this.countertasknotdone = this.todonotdone.length;
-    //   // eslint-disable-next-line no-console
-    //   console.log('ddd', this.countertasknotdone);
-    // }
-  },
   data() {
     return {
       isNavMini: false,
