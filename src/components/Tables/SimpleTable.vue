@@ -1,15 +1,17 @@
 <template>
   <div class="flex-column">
-    <md-table v-model="paginatedUsers">
+    <md-table v-model="paginatedTodos" md-sort="name" md-sort-order="asc" md-card>
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
-        <md-table-cell md-label="Country">{{ item.country }}</md-table-cell>
-        <md-table-cell md-label="City">{{ item.city }}</md-table-cell>
-        <md-table-cell md-label="Salary">{{ item.salary }}</md-table-cell>
-        <md-table-cell md-label="Large column" class="last-column">
-          {{
-          item.largeData
-          }}
+        <md-table-cell md-sort-by="task" md-label="Task Title">{{ item.task }}</md-table-cell>
+        <md-table-cell md-sort-by="deadline" md-label="Deadline">{{ item.deadline }}</md-table-cell>
+        <md-table-cell md-sort-by="creationDate" md-label="Creation date">{{
+          item.creationDate
+        }}</md-table-cell>
+        <md-table-cell md-sort-by="" md-label="Number days left">{{
+          getdaysleft(item.deadline)
+        }}</md-table-cell>
+        <md-table-cell md-sort-by="importance" md-label="Importance (/100)" class="last-column">
+          {{ item.importance }}
         </md-table-cell>
         <md-table-cell md-fixed-header class="more-column right-arrow">
           <md-menu md-size="medium" :md-offset-x="-175" :md-offset-y="-120">
@@ -35,7 +37,7 @@
       </md-table-row>
     </md-table>
     <table-pagination
-      :data="users"
+      :data="todos"
       @pagination="onPagination($event)"
       :serverSide="false"
       @paginationEvent="doServerPagination($event)"
@@ -45,6 +47,8 @@
 
 <script>
 import TablePaginationVue from "./TablePagination.vue";
+import { myFunctions } from '../../helpers/helperfunction';
+
 export default {
   name: "simple-table",
   components: {
@@ -53,7 +57,7 @@ export default {
   props: {},
   methods: {
     onPagination(data) {
-      this.paginatedUsers = data;
+      this.paginatedTodos = data;
     },
     doServerPagination(paginationEvent) {
       // eslint-disable-next-line no-console
@@ -70,26 +74,23 @@ export default {
           "length: " +
           paginationEvent.length
       );
-    }
+    },
   },
   created() {
-    for (let i = 0; i < 52; i++) {
-      this.users.push({
-        name: "The name " + i,
-        salary: Math.round(Math.random() * 30000),
-        country: "Country " + i,
-        city: "City " + i,
-        largeData: "The big big big big big large data value"
-      });
-    }
-    this.paginatedUsers = [...this.users];
+    this.todos = this.$store.getters.getTodoList;
+    this.paginatedTodos = [...this.todos];
   },
   data() {
     return {
       selected: [],
-      users: [],
-      paginatedUsers: []
+      todos: [],
+      paginatedTodos: [],
+      getdaysleft : myFunctions.getdaysleft
     };
-  }
+  },
 };
 </script>
+
+<style scoped>
+
+</style>

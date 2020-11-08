@@ -85,10 +85,10 @@
           <md-tab
             id="tab-home"
             md-label="My opportunities"
-            md-icon="heart"
+            md-icon="activity"
             :md-template-data="{ badge: counter1 }"
           >
-            <simple-table></simple-table>
+            <simple-table :key="this.$store.getters.getTodoList.length"></simple-table>
           </md-tab>
           <md-tab
             id="tab-pages"

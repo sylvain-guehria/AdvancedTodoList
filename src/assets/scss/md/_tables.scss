@@ -24,7 +24,7 @@ table {
 }
 
 .md-table-cell {
-  padding-left: 25px;
+  padding-left: 45px;
   text-align: left;
 }
 
@@ -55,8 +55,6 @@ table {
       font-size: $font-size-small;
       font-weight: bold;
       text-transform: uppercase;
-      padding: 0;
-      @extend .h3;
     }
   }
   tbody {
