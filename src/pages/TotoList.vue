@@ -15,9 +15,9 @@
         <p class="subtitle">Start of project phase 2019/12/06</p>
       </div>
       <div class="md-layout-item md-size-50 padding-20 text-align-right">
-        <md-button class="md-tertiary" @click="openModalAddTask()">
-          <feather type="star"></feather>Add a task
-        </md-button>
+        
+        <edittaskbutton></edittaskbutton>
+
       </div>
       <div class="md-layout-item md-size-100" style="margin-top: 70px">
         <md-tabs>
@@ -66,26 +66,22 @@
 <script  lang="ts">
 import { SimpleTable } from "@/components";
 import FiltersDrawer from "../components/FiltersDrawer.vue";
+import EditTaskButton from "../components/modals/EditTaskButton.vue";
 
 export default {
   name: "TotoList",
   components: {
     SimpleTable,
-    "filters-drawer": FiltersDrawer
+    "filters-drawer": FiltersDrawer,
+    edittaskbutton: EditTaskButton
   },
   data() {
     return {
-      countertasknotdone: 0,
-      counteralltask: 0,
       showFilters: false,
       currentStep: -1,
       stepClass: "step100",
       objectStep: 3,
       isLoading: true,
-      componentKey: 0,
-      todolist: [],
-      todonotdone: [],
-      keycomponent: 0
     };
   },
   created() {
