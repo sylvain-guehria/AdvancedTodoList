@@ -6,6 +6,7 @@ export interface Todo {
   description?: SubTask[];
   creationDate: string;
   isdone?: boolean;
+  numberdaysleft?: number;
 }
 
 export interface User {

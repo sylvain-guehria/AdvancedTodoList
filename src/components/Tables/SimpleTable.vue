@@ -7,9 +7,9 @@
         <md-table-cell md-sort-by="creationDate" md-label="Creation date">{{
           item.creationDate
         }}</md-table-cell>
-        <md-table-cell md-sort-by="" md-label="Number days left">{{
-          getdaysleft(item.deadline)
-        }}</md-table-cell>
+        <md-table-cell md-sort-by="numberdaysleft" md-label="Number days left">
+          {{ item.numberdaysleft }}
+        </md-table-cell>
         <md-table-cell md-sort-by="importance" md-label="Importance (/100)" class="last-column">
           {{ item.importance }}
         </md-table-cell>
@@ -45,9 +45,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from '../../helpers/helperfunction';
+import { Todo } from '../../models/types';
 
 export default {
   name: "simple-table",
@@ -79,6 +80,10 @@ export default {
   created() {
     this.todos = this.$store.getters.getTodoList;
     this.paginatedTodos = [...this.todos];
+
+    this.paginatedTodos.forEach( (todo: Todo) => {
+      todo.numberdaysleft = this.getdaysleft(todo.deadline);
+    })
   },
   data() {
     return {
