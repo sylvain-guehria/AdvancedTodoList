@@ -168,6 +168,7 @@ const actions = {
       task: payload.task,
       deadline: payload.deadline
     });
+
     payload.key = newTodoKey;
     commit('addNewTodo', payload);
   },

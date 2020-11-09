@@ -16,7 +16,10 @@
       </div>
       <div class="md-layout-item md-size-50 padding-20 text-align-right">
         
-        <edittaskbutton></edittaskbutton>
+        <!-- button for drawer add task -->
+    <md-button class="md-tertiary" @click="showAddTask = true">
+      <feather type="plus"></feather>Add a task
+    </md-button>
 
       </div>
       <div class="md-layout-item md-size-100" style="margin-top: 70px">
@@ -54,6 +57,14 @@
           </md-tab>
         </md-tabs>
       </div>
+
+      <!-- drawers -->
+
+      <edit-task-drawer
+        :isActive="showAddTask"
+        @isActive="updateIsActiveAddTask"
+        ></edit-task-drawer>
+
       <filters-drawer
         :isActive="showFilters"
         @isActive="updateIsActive"
@@ -66,18 +77,19 @@
 <script  lang="ts">
 import { SimpleTable } from "@/components";
 import FiltersDrawer from "../components/FiltersDrawer.vue";
-import EditTaskButton from "../components/modals/EditTaskButton.vue";
+import EditTaskDrawer from "../components/modals/EditTaskDrawer.vue";
 
 export default {
   name: "TotoList",
   components: {
     SimpleTable,
     "filters-drawer": FiltersDrawer,
-    edittaskbutton: EditTaskButton
+    "edit-task-drawer": EditTaskDrawer
   },
   data() {
     return {
       showFilters: false,
+      showAddTask: false,
       currentStep: -1,
       stepClass: "step100",
       objectStep: 3,
@@ -96,6 +108,9 @@ export default {
   },
     updateIsActive(value) {
       this.showFilters = value;
+    },
+    updateIsActiveAddTask(value) {
+      this.showAddTask = value;
     },
     stepClick(stepNb) {
       if (this.objectStep >= stepNb) {
