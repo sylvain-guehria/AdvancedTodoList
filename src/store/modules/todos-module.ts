@@ -6,11 +6,13 @@ var todolist: Todo[] = [];
 var coloredtodolist: Todo[] = [];
 var numberActiveTask = 0;
 var numberTotalTask = 0;
+var isLoading:boolean = true;
 
 var currentTodo: Todo = {
   task: '',
   creationDate: new Date().toISOString().substr(0, 10),
-  description: []
+  description: [],
+  isdone: false
 };
 var user: User = {
   loggedIn: false,
@@ -26,9 +28,13 @@ const state: State = {
   currentTodo: currentTodo,
   numberActiveTask: numberActiveTask,
   numberTotalTask: numberTotalTask,
+  isLoading: isLoading
 };
 
 const getters = {
+  getIsLoading: (state: State) => {
+    return state.isLoading;
+  },
   getUser: (state: State) => {
     return state.user;
   },
@@ -53,6 +59,9 @@ const getters = {
 };
 
 const mutations = {
+  setIsLoading(state: State, bool: boolean) {
+    state.isLoading = bool;
+  },
   setTodoList (state: State, newList: Todo[]) {
     state.todolist = newList;
   },
@@ -74,7 +83,8 @@ const mutations = {
     state.currentTodo = {
       task: '',
       creationDate: new Date().toISOString().substr(0, 10),
-      description: []
+      description: [],
+      isdone: false
     };
   },
   addNewTodo: (state: State, todo: Todo) => state.todolist.unshift(todo),
@@ -161,6 +171,7 @@ const actions = {
   createTodo ({ commit }: {commit: Function}, payload: Todo) {
     const { uid } = state.user.data;
     var newTodoKey = database.ref().child(`todos/${uid}`).push().key || 'key';
+    if (!newTodoKey){return}
     database.ref(`todos/${uid}/${newTodoKey}`).set({
       creationDate: payload.creationDate,
       description: payload.description,
@@ -168,17 +179,30 @@ const actions = {
       task: payload.task,
       deadline: payload.deadline
     });
+
     payload.key = newTodoKey;
     commit('addNewTodo', payload);
   },
   editTodo ({ commit }: {commit: Function}, payload: Todo) {
     const { uid } = state.user.data;
+    if(!payload.key){return}
     database.ref(`todos/${uid}/${payload.key}`).set({
+      ...payload,
+      isdone : payload.isdone ||false,
       creationDate: payload.creationDate,
       description: payload.description,
       importance: payload.importance,
       task: payload.task,
       deadline: payload.deadline
+    });
+    commit('editTodoByKey', payload);
+  },
+  setTodoDone ({ commit }: {commit: Function}, payload: Todo) {
+    payload.isdone = !payload.isdone;
+    const { uid } = state.user.data;
+    database.ref(`todos/${uid}/${payload.key}`).set({
+      ...payload,
+      isdone: payload.isdone
     });
     commit('editTodoByKey', payload);
   },
@@ -205,6 +229,7 @@ const actions = {
       });
     }).then(() => {
       commit('setTodoList', listoftodos);
+      commit('setIsLoading', false);
     }
     );
   }

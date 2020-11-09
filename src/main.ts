@@ -5,11 +5,15 @@ import Notifications from 'vue-notification';
 import router from "./routes/routes";
 import store from './store/';
 
+
 // Plugins
 import GlobalDirectives from "./globalDirectives";
 
 // MaterialDashboard plugin
 import MaterialDashboard from "./material-dashboard";
+
+export const bus = new Vue();
+
 
 Vue.use(VModal);
 Vue.use(Notifications);
