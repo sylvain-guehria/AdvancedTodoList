@@ -6,6 +6,15 @@
       md-sort-order="asc"
       md-card
     >
+      <md-empty-state
+      class="md-primary"
+      md-rounded
+      md-icon="done"
+      md-label="Nothing to do!"
+      md-description="Create a Task with the button above and it will show up here.">
+    </md-empty-state>
+
+
       <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell md-sort-by="task" md-label="Task Title">{{
           item.task
@@ -116,6 +125,7 @@ export default {
       todos: [],
       paginatedTodos: [],
       getdaysleft: myFunctions.getdaysleft,
+      isLoading:true
     };
   },
 };
