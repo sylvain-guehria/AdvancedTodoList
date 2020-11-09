@@ -4,7 +4,7 @@
       <label> <feather type="list"></feather>Subtask </label>
       <input-text
         type="text"
-        initialvalue="Add subtask"
+        initialvalue="Your subtask"
         :vmodel="subTaskInput"
         @vmodel="subTaskInput = $event"
       ></input-text>
@@ -16,27 +16,36 @@
     </div>
 
     <div v-if="subtasks && subtasks.length > 0">
-      <div
-        v-for="subtask in subtasks"
-        :key="subtask.order"
-      >
-          <md-checkbox
-            v-model="subtask.isdone"
-            @click="completeSubTask(subtask)"
-            >mark as done</md-checkbox
-          >
-
-          <span
-            class="label"
-            contenteditable="true"
-            :class="{ completed: subtask.isdone }"
-            @keydown.enter="updateSubTask($event, subtask)"
-            @blur="updateSubTask($event, subtask)"
-            >{{ subtask.label }}</span
-          >
-
-          <md-icon @click="removeSubTask(subtask)">close</md-icon>
+      <div>
+        .
       </div>
+      <!-- table -->
+      <div class="my-table">
+      <md-table v-model="subtasks">
+        <md-table-row slot="md-table-row" slot-scope="{ item }">
+          <md-table-cell md-label="Sub-task" class="testt"
+            ><span
+              class="label"
+              contenteditable="true"
+              :class="{ completed: item.isdone }"
+              @keydown.enter="updateSubTask($event, item)"
+              @blur="updateSubTask($event, item)"
+              >{{ item.label }}</span
+            ></md-table-cell
+          >
+          <md-table-cell md-label="Done">
+            <md-checkbox
+              v-model="item.isdone"
+              @click="completeSubTask(item)"
+            ></md-checkbox
+          ></md-table-cell>
+          <md-table-cell md-label="Delete">
+            <td @click="removeSubTask(item)"><md-icon>close</md-icon></td>
+          </md-table-cell>
+        </md-table-row>
+      </md-table>
+      </div>
+      <!-- fin table -->
     </div>
   </div>
 </template>
@@ -107,19 +116,33 @@ export default class SubTaskViewer extends Vue {
   }
 
   removeSubTask(subtask: SubTask) {
-    if (subtask.order) {
+    if (subtask.order || subtask.order === 0) {
       this.subtasks.splice(subtask.order, 1);
 
       this.subtasks.forEach((subtask, index) => {
         subtask.order = index;
       });
-      this.$emit("onSubmitSubTasks", this.subtasks);
+      // this.$emit("onSubmitSubTasks", this.subtasks);
     }
   }
 }
 </script>
 
 <style scoped>
+
+.my-table{
+  width: 95%;
+  position: absolute;
+  left : 15px;
+  margin-top : 100px
+
+}
+
+.testt{
+  width: 100%;
+  height: auto;
+}
+
 .subtask-button {
   width: 100%;
   display: flex;
@@ -127,13 +150,13 @@ export default class SubTaskViewer extends Vue {
 
 .label {
   display: inline-block;
-  width: 200px;
-  padding: 8px;
+  border: 1px solid transparent;
   font-size: 16px;
-  vertical-align: middle;
+  max-width: 140px;
 }
 
 .completed {
-  text-decoration: line-through;
+  font-style: oblique;
+  text-shadow: grey 1px 0 10px;
 }
 </style>
