@@ -6,24 +6,29 @@
       md-sort-order="asc"
       md-card
     >
-
-    
-     <md-empty-state v-if="this.$store.getters.getIsLoading"
-      ><div class="spinner-rotate"></div></md-empty-state>
+      <md-empty-state v-if="this.$store.getters.getIsLoading"
+        ><div class="spinner-rotate"></div
+      ></md-empty-state>
 
       <md-empty-state
-       v-if="!this.$store.getters.getIsLoading"
+        v-if="!this.$store.getters.getIsLoading"
         class="md-primary"
         md-rounded
         md-icon="done"
         md-label="Nothing to do!"
         md-description="Create a Task with the button above and it will show up here."
-      ></md-empty-state> 
+      ></md-empty-state>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item }" @click="DisplayTask">
-        <md-table-cell md-sort-by="task" md-label="Task Title">{{
-          item.task
-        }}</md-table-cell>
+      <md-table-row
+       @click="DisplayTask(item.key)"
+        slot="md-table-row"
+        slot-scope="{ item }"
+      >
+        <md-table-cell md-sort-by="task" md-label="Task Title"
+          >{{ item.task }} &nbsp; ({{
+            item.description ? item.description.length : 0
+          }})</md-table-cell
+        >
         <md-table-cell md-sort-by="deadline" md-label="Deadline">{{
           item.deadline
         }}</md-table-cell>
@@ -40,8 +45,8 @@
         >
           {{ item.importance }}
         </md-table-cell>
-        <md-table-cell md-fixed-header class="more-column right-arrow">
-          <md-menu md-size="medium" :md-offset-x="-175" :md-offset-y="-120">
+        <md-table-cell md-fixed-header class="more-column right-arrow" >
+          <md-menu md-size="medium" :md-offset-x="-175" :md-offset-y="-120" v-on:click.stop>
             <md-button md-menu-trigger>
               <md-icon>more_vert</md-icon>
             </md-button>
@@ -58,7 +63,7 @@
                 <feather type="check" class="md-icon"></feather>
                 <span>Mark task as done</span>
               </md-menu-item>
-               <md-menu-item @click="setTodoDone(item)" v-show="item.isdone">
+              <md-menu-item @click="setTodoDone(item)" v-show="item.isdone">
                 <feather type="arrow-up-left" class="md-icon"></feather>
                 <span>Mark task as not done</span>
               </md-menu-item>
@@ -84,7 +89,7 @@ import { Todo } from "../../models/types";
 export default {
   name: "simple-table",
   components: {
-    "table-pagination": TablePaginationVue
+    "table-pagination": TablePaginationVue,
   },
   props: ["todolist"],
   computed: {
@@ -97,11 +102,10 @@ export default {
       this.$store.dispatch("deleteTodo", key);
     },
     editTodo(key: string): void {
-      this.$emit("editTaskEvent", { key: key});
+      this.$emit("editTaskEvent", { key: key });
     },
     DisplayTask(key: string): void {
-      // FIXME
-      //open modal display
+      this.$emit("showReadOnlyTaskDrawer", { key: key });
     },
     setTodoDone(item: Todo): void {
       this.$store.dispatch("setTodoDone", item);
@@ -124,7 +128,7 @@ export default {
           "length: " +
           paginationEvent.length
       );
-    }
+    },
   },
   created() {
     this.todos = this.todolist;
@@ -148,5 +152,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

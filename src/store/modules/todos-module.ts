@@ -11,7 +11,8 @@ var isLoading:boolean = true;
 var currentTodo: Todo = {
   task: '',
   creationDate: new Date().toISOString().substr(0, 10),
-  description: []
+  description: [],
+  isdone: false
 };
 var user: User = {
   loggedIn: false,
@@ -82,7 +83,8 @@ const mutations = {
     state.currentTodo = {
       task: '',
       creationDate: new Date().toISOString().substr(0, 10),
-      description: []
+      description: [],
+      isdone: false
     };
   },
   addNewTodo: (state: State, todo: Todo) => state.todolist.unshift(todo),
@@ -169,6 +171,7 @@ const actions = {
   createTodo ({ commit }: {commit: Function}, payload: Todo) {
     const { uid } = state.user.data;
     var newTodoKey = database.ref().child(`todos/${uid}`).push().key || 'key';
+    if (!newTodoKey){return}
     database.ref(`todos/${uid}/${newTodoKey}`).set({
       creationDate: payload.creationDate,
       description: payload.description,
@@ -182,8 +185,10 @@ const actions = {
   },
   editTodo ({ commit }: {commit: Function}, payload: Todo) {
     const { uid } = state.user.data;
+    if(!payload.key){return}
     database.ref(`todos/${uid}/${payload.key}`).set({
       ...payload,
+      isdone : payload.isdone ||false,
       creationDate: payload.creationDate,
       description: payload.description,
       importance: payload.importance,

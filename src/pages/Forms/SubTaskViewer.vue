@@ -3,13 +3,14 @@
     <div class="md-layout-item md-small-size-100 md-size-100">
       <label> <feather type="list"></feather>Subtask </label>
       <input-text
+       :disabled="readOnlyLocal"
         type="text"
         initialvalue="Your subtask"
         :vmodel="subTaskInput"
         @vmodel="subTaskInput = $event"
       ></input-text>
-      <div class="subtask-button">
-        <md-button class="md-tertiary" @click="addSubTask">
+      <div class="subtask-button" v-show="!readOnlyLocal">
+        <md-button class="md-tertiary" @click="addSubTask" >
           <feather type="plus"></feather>Add subtask
         </md-button>
       </div>
@@ -26,7 +27,7 @@
           <md-table-cell md-label="Sub-task" class="testt"
             ><span
               class="label"
-              contenteditable="true"
+              :contenteditable="!readOnlyLocal"
               :class="{ completed: item.isdone }"
               @keydown.enter="updateSubTask($event, item)"
               @blur="updateSubTask($event, item)"
@@ -35,11 +36,12 @@
           >
           <md-table-cell md-label="Done">
             <md-checkbox
+             :disabled="readOnlyLocal"
               v-model="item.isdone"
               @click="completeSubTask(item)"
             ></md-checkbox
           ></md-table-cell>
-          <md-table-cell md-label="Delete">
+          <md-table-cell md-label="Delete" v-if="!readOnlyLocal">
             <td @click="removeSubTask(item)"><md-icon>close</md-icon></td>
           </md-table-cell>
         </md-table-row>
@@ -66,24 +68,28 @@ import {bus} from '../../main';
 export default class SubTaskViewer extends Vue {
 
   @Prop() subtasksreceived: SubTask[];
+  @Prop() readonly: boolean ;
   subTaskInput: string = "";
   subtasks: SubTask[]= [];
   hasError: boolean = false;
 
+  readOnlyLocal: boolean =false;
+
   currentTodo: Todo = {
     task: "",
     creationDate: new Date().toISOString().substr(0, 10),
-    description: []
+    description: [],
+    isdone: false
   };
 
-
   @Watch("subtasksreceived", { immediate: false })
-  chazngeSubtasks() {
+  changeSubtasks() {
     this.subtasks = [...this.subtasksreceived];
   }
 
   mounted(){
     bus.$on('resetSubTasks', this.resetSubTasks);
+    this.readOnlyLocal = this.readonly;
   }
 
   resetSubTasks(): void {

@@ -9,10 +9,7 @@
         </div>
         <div class="filters-summary">
           <div class="md-layout-item md-size-100">
-            <h1>Add a task</h1>
-            <md-button class="md-tertiary" @click="resteForm">
-              <feather type="trash-2"></feather>Reset
-            </md-button>
+            <h1>Display task</h1>
           </div>
         </div>
       </div>
@@ -21,6 +18,7 @@
           <div class="md-layout-item md-small-size-100 md-size-100">
             <label> <feather type="pen-tool"></feather>Task title </label>
             <input-text
+              :disabled="true"
               type="text"
               initialvalue="Your title"
               :vmodel="formData.task"
@@ -34,7 +32,11 @@
             </label>
             <div class="spinner">
               <div class="importance">
-                <input type="range" v-model.number="formData.importance" />
+                <input
+                  :disabled="true"
+                  type="range"
+                  v-model.number="formData.importance"
+                />
                 {{ formData.importance }}%
               </div>
               <md-progress-spinner
@@ -49,6 +51,7 @@
             <label> <feather type="calendar"></feather>Deadline </label>
             <md-field>
               <datepicker
+                :disabled="true"
                 placeholder="YYYY/MM/DD"
                 v-model="selectedDate"
               ></datepicker>
@@ -56,13 +59,9 @@
           </div>
 
           <sub-tasks-viewer
-            @onSubmitSubTasks="setSubTasks"
+            :readonly="true"
             :subtasksreceived="this.formData.description"
           ></sub-tasks-viewer>
-
-          <md-button class="md-tertiary" @click="actionTodo">
-            <feather type="save"></feather>Save
-          </md-button>
         </div>
       </div>
     </div>
@@ -83,7 +82,7 @@ import { bus } from "../../main";
     "sub-tasks-viewer": SubtaskViewer
   }
 })
-export default class EditTaskDrawer extends Vue {
+export default class ReadOnlyTaskDrawer extends Vue {
   @Prop() isActive!: boolean;
 
   filtersNb: number = 0;
@@ -139,7 +138,7 @@ export default class EditTaskDrawer extends Vue {
     this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
     this.formData.deadline = this.dateHelper;
 
-    let todo: Todo = {...this.formData};
+    let todo: Todo = { ...this.formData };
 
     let action: string = todo.key ? "editTodo" : "createTodo";
 

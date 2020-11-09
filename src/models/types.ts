@@ -5,7 +5,7 @@ export interface Todo {
   importance?: number;
   description?: SubTask[];
   creationDate: string;
-  isdone?: boolean;
+  isdone: boolean;
   numberdaysleft?: number;
 }
 
@@ -27,7 +27,7 @@ export interface State {
 export interface SubTask {
   key?: string ;
   label: string;
-  isdone?: boolean;
+  isdone: boolean;
   order?: number;
 }
 
