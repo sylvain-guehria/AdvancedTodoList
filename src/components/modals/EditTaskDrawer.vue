@@ -14,9 +14,6 @@
               <feather type="trash-2"></feather>Reset
             </md-button>
           </div>
-          <div class="md-layout-item md-size-100 text-left">
-            <h3>...</h3>
-          </div>
         </div>
       </div>
       <div class="content">
@@ -58,8 +55,10 @@
             </md-field>
           </div>
 
+          <sub-tasks-viewer></sub-tasks-viewer>
+
           <md-button class="md-tertiary" @click="createTodo">
-            <feather type="plus"></feather>Add
+            <feather type="save"></feather>Save
           </md-button>
         </div>
       </div>
@@ -71,10 +70,12 @@
 import { Component, Vue, Prop, PropSync } from "vue-property-decorator";
 import { Todo, SubTask } from "../../models/types";
 import InputText from "../../components/Form/InputText.vue";
+import SubtaskViewer from '../../pages/Forms/SubTaskViewer.vue'
 
 @Component({
   components: {
-    "input-text": InputText
+    "input-text": InputText,
+    "sub-tasks-viewer": SubtaskViewer
   }
 })
 export default class EditTaskDrawer extends Vue {

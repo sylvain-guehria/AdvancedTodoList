@@ -125,3 +125,10 @@ export default class FiltersDrawer extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+ .sticky + .content {
+    top: 250px !important;
+  }
+
+</style>
