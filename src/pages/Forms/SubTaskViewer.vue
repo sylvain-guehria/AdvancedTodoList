@@ -112,7 +112,7 @@ export default class SubTaskViewer extends Vue {
 
   completeSubTask(subtask: SubTask) {
     subtask.isdone = !subtask.isdone;
-    // this.$emit("onSubmitSubTasks", this.subtasks);
+    this.$emit("onSubmitSubTasks", this.subtasks);
   }
 
   removeSubTask(subtask: SubTask) {
@@ -122,7 +122,7 @@ export default class SubTaskViewer extends Vue {
       this.subtasks.forEach((subtask, index) => {
         subtask.order = index;
       });
-      // this.$emit("onSubmitSubTasks", this.subtasks);
+      this.$emit("onSubmitSubTasks", this.subtasks);
     }
   }
 }

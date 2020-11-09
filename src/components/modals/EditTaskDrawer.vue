@@ -55,7 +55,7 @@
             </md-field>
           </div>
 
-          <sub-tasks-viewer></sub-tasks-viewer>
+          <sub-tasks-viewer @onSubmitSubTasks="setSubTasks"></sub-tasks-viewer>
 
           <md-button class="md-tertiary" @click="createTodo">
             <feather type="save"></feather>Save
@@ -140,6 +140,10 @@ export default class EditTaskDrawer extends Vue {
 
     this.toggleMenu();
     this.resteForm();
+  }
+
+  setSubTasks (subtasks: SubTask[]){
+    this.formData.description = subtasks;
   }
 
   resteForm() {
