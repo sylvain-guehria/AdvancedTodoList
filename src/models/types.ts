@@ -21,6 +21,7 @@ export interface State {
   currentTodo: Todo,
   numberActiveTask: number,
   numberTotalTask: number,
+  isLoading: boolean
 }
 
 export interface SubTask {

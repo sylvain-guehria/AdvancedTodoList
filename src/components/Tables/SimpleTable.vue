@@ -6,14 +6,19 @@
       md-sort-order="asc"
       md-card
     >
+
+    
+     <md-empty-state v-if="this.$store.getters.getIsLoading"
+      ><div class="spinner-rotate"></div></md-empty-state>
+
       <md-empty-state
+       v-if="!this.$store.getters.getIsLoading"
         class="md-primary"
         md-rounded
         md-icon="done"
         md-label="Nothing to do!"
         md-description="Create a Task with the button above and it will show up here."
-      >
-      </md-empty-state>
+      ></md-empty-state> 
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell md-sort-by="task" md-label="Task Title">{{
@@ -134,11 +139,11 @@ export default {
       todos: [],
       paginatedTodos: [],
       getdaysleft: myFunctions.getdaysleft,
-      isLoading: true
     };
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
 </style>

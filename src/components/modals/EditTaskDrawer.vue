@@ -81,7 +81,6 @@ import {bus} from '../../main';
   }
 })
 export default class EditTaskDrawer extends Vue {
-  isLoading: boolean = false;
 
   @Prop() isActive!: boolean;
 
