@@ -17,7 +17,7 @@
       <div class="md-layout-item md-size-50 padding-20 text-align-right">
         
         <!-- button for drawer add task -->
-    <md-button class="md-tertiary" @click="showAddTask = true">
+    <md-button class="md-tertiary" @click="showDrawerAddTask">
       <feather type="plus"></feather>Add a task
     </md-button>
 
@@ -102,9 +102,9 @@ export default {
     }, 0);
   },
   methods: {
-      openModalAddTask (): void{
-      // FIXME
-    //open modal add
+      showDrawerAddTask (): void{
+      this.$store.commit('resetCurrentTodo');
+      this.showAddTask = true
   },
     updateIsActive(value) {
       this.showFilters = value;

@@ -70,7 +70,9 @@
 import { Component, Vue, Prop, PropSync } from "vue-property-decorator";
 import { Todo, SubTask } from "../../models/types";
 import InputText from "../../components/Form/InputText.vue";
-import SubtaskViewer from '../../pages/Forms/SubTaskViewer.vue'
+import SubtaskViewer from '../../pages/Forms/SubTaskViewer.vue';
+
+import {bus} from '../../main';
 
 @Component({
   components: {
@@ -140,6 +142,9 @@ export default class EditTaskDrawer extends Vue {
 
     this.toggleMenu();
     this.resteForm();
+    this.$store.commit('resetCurrentTodo');
+    //emitt event for child
+    bus.$emit('resetSubTasks');
   }
 
   setSubTasks (subtasks: SubTask[]){

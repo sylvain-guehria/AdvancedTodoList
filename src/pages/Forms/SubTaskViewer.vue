@@ -55,6 +55,9 @@ import { SubTask, HTMLElementEvent, Todo } from "@/models/types";
 import { Component, Vue } from "vue-property-decorator";
 import InputText from "../../components/Form/InputText.vue";
 
+import {bus} from '../../main';
+
+
 @Component({
   components: {
     "input-text": InputText
@@ -73,14 +76,12 @@ export default class SubTaskViewer extends Vue {
     description: []
   };
 
-  mounted(): void {
-    this.currentTodo = { ...this.$store.getters.getCurrentTodo };
-    if (this.currentTodo.key) {
-      const listTasks: SubTask[] = this.currentTodo.description || [];
-      this.subtasks = [...listTasks];
-    } else {
+  mounted(){
+    bus.$on('resetSubTasks', this.resetSubTasks);
+  }
+
+  resetSubTasks(): void {
       this.subtasks = [];
-    }
   }
 
   addSubTask() {
