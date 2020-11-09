@@ -20,7 +20,7 @@
         md-description="Create a Task with the button above and it will show up here."
       ></md-empty-state> 
 
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
+      <md-table-row slot="md-table-row" slot-scope="{ item }" @click="DisplayTask">
         <md-table-cell md-sort-by="task" md-label="Task Title">{{
           item.task
         }}</md-table-cell>
@@ -46,11 +46,11 @@
               <md-icon>more_vert</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item @click="editTask(item.key)">
+              <md-menu-item @click="editTodo(item.key)">
                 <feather type="edit" class="md-icon"></feather>
                 <span>Edit task</span>
               </md-menu-item>
-              <md-menu-item @click="deleteTask(item.key)">
+              <md-menu-item @click="deleteTodo(item.key)">
                 <feather type="delete" class="md-icon"></feather>
                 <span>Delete task</span>
               </md-menu-item>
@@ -93,12 +93,15 @@ export default {
     }
   },
   methods: {
-    deleteTask(key: string): void {
+    deleteTodo(key: string): void {
       this.$store.dispatch("deleteTodo", key);
     },
-    editTask(key: string): void {
+    editTodo(key: string): void {
+      this.$emit("editTaskEvent", { key: key});
+    },
+    DisplayTask(key: string): void {
       // FIXME
-      //open modal edit
+      //open modal display
     },
     setTodoDone(item: Todo): void {
       this.$store.dispatch("setTodoDone", item);

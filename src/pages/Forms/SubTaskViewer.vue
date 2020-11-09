@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { SubTask, HTMLElementEvent, Todo } from "@/models/types";
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import InputText from "../../components/Form/InputText.vue";
 
 import {bus} from '../../main';
@@ -64,17 +64,23 @@ import {bus} from '../../main';
   }
 })
 export default class SubTaskViewer extends Vue {
+
+  @Prop() subtasksreceived: SubTask[];
   subTaskInput: string = "";
-
+  subtasks: SubTask[]= [];
   hasError: boolean = false;
-
-  subtasks: SubTask[] = [];
 
   currentTodo: Todo = {
     task: "",
     creationDate: new Date().toISOString().substr(0, 10),
     description: []
   };
+
+
+  @Watch("subtasksreceived", { immediate: false })
+  chazngeSubtasks() {
+    this.subtasks = [...this.subtasksreceived];
+  }
 
   mounted(){
     bus.$on('resetSubTasks', this.resetSubTasks);

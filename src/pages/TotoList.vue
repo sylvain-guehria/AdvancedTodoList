@@ -40,6 +40,7 @@
             <simple-table
               :key="this.$store.getters.getNumberActiveTask"
               :todolist="this.$store.getters.getActiveTodoList"
+              @editTaskEvent="showDrawerEditTask"
             ></simple-table>
           </md-tab>
           <md-tab
@@ -53,6 +54,7 @@
             <simple-table
               :key="this.$store.getters.getNumberTotalTask"
               :todolist="this.$store.getters.getTodoList"
+              @editTaskEvent="showDrawerEditTask"
             ></simple-table>
           </md-tab>
         </md-tabs>
@@ -78,6 +80,7 @@
 import { SimpleTable } from "@/components";
 import FiltersDrawer from "../components/FiltersDrawer.vue";
 import EditTaskDrawer from "../components/modals/EditTaskDrawer.vue";
+import {bus} from '../main';
 
 export default {
   name: "TotoList",
@@ -104,7 +107,16 @@ export default {
   methods: {
       showDrawerAddTask (): void{
       this.$store.commit('resetCurrentTodo');
-      this.showAddTask = true
+
+        // eslint-disable-next-line no-console
+      console.log(this.$store.getters.getCurrentTodo);
+      
+      //bus.$emit('resetSubTasks');
+      this.showAddTask = true;
+  },
+    showDrawerEditTask (payload): void{
+      this.$store.commit('setCurrentTodo', payload.key);
+      this.showAddTask = true;
   },
     updateIsActive(value) {
       this.showFilters = value;

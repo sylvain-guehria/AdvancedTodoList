@@ -55,7 +55,7 @@
             </md-field>
           </div>
 
-          <sub-tasks-viewer @onSubmitSubTasks="setSubTasks"></sub-tasks-viewer>
+          <sub-tasks-viewer @onSubmitSubTasks="setSubTasks" :subtasksreceived="this.formData.description"></sub-tasks-viewer>
 
           <md-button class="md-tertiary" @click="createTodo">
             <feather type="save"></feather>Save
@@ -67,7 +67,7 @@
 </template>
 
 <script lang='ts'>
-import { Component, Vue, Prop, PropSync } from "vue-property-decorator";
+import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import { Todo, SubTask } from "../../models/types";
 import InputText from "../../components/Form/InputText.vue";
 import SubtaskViewer from '../../pages/Forms/SubTaskViewer.vue';
@@ -87,6 +87,7 @@ export default class EditTaskDrawer extends Vue {
   filtersNb: number = 0;
   list = [];
   selectedDate: Date = new Date();
+  currentTodo: Todo ;
 
   get localIsActive(): boolean {
     return this.isActive;
@@ -97,6 +98,14 @@ export default class EditTaskDrawer extends Vue {
 
   public toggleMenu() {
     this.localIsActive = false;
+  }
+
+  @Watch("isActive", { immediate: false })
+  isThereACurrentTodo() {
+    this.currentTodo = this.$store.getters.getCurrentTodo
+     if(this.currentTodo && this.currentTodo.key){
+       this.formData = { ...this.currentTodo }
+     }
   }
 
   formData: Todo = {
