@@ -7,13 +7,13 @@
       md-card
     >
       <md-empty-state
-      class="md-primary"
-      md-rounded
-      md-icon="done"
-      md-label="Nothing to do!"
-      md-description="Create a Task with the button above and it will show up here.">
-    </md-empty-state>
-
+        class="md-primary"
+        md-rounded
+        md-icon="done"
+        md-label="Nothing to do!"
+        md-description="Create a Task with the button above and it will show up here."
+      >
+      </md-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell md-sort-by="task" md-label="Task Title">{{
@@ -41,13 +41,21 @@
               <md-icon>more_vert</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item @click="editTask(item.key)" >
+              <md-menu-item @click="editTask(item.key)">
                 <feather type="edit" class="md-icon"></feather>
                 <span>Edit task</span>
               </md-menu-item>
               <md-menu-item @click="deleteTask(item.key)">
                 <feather type="delete" class="md-icon"></feather>
                 <span>Delete task</span>
+              </md-menu-item>
+              <md-menu-item @click="setTodoDone(item)" v-show="!item.isdone">
+                <feather type="check" class="md-icon"></feather>
+                <span>Mark task as done</span>
+              </md-menu-item>
+               <md-menu-item @click="setTodoDone(item)" v-show="item.isdone">
+                <feather type="arrow-up-left" class="md-icon"></feather>
+                <span>Mark task as not done</span>
               </md-menu-item>
             </md-menu-content>
           </md-menu>
@@ -73,20 +81,23 @@ export default {
   components: {
     "table-pagination": TablePaginationVue
   },
-  props: ['todolist'],
+  props: ["todolist"],
   computed: {
-  isCompletelist: function () {
-    return this.completelist;
-  }
-},
+    isCompletelist: function() {
+      return this.completelist;
+    }
+  },
   methods: {
-    deleteTask (key: string): void{
-    this.$store.dispatch('deleteTodo', key);
-  },
-    editTask (key: string): void{
+    deleteTask(key: string): void {
+      this.$store.dispatch("deleteTodo", key);
+    },
+    editTask(key: string): void {
       // FIXME
-    //open modal edit
-  },
+      //open modal edit
+    },
+    setTodoDone(item: Todo): void {
+      this.$store.dispatch("setTodoDone", item);
+    },
     onPagination(data) {
       this.paginatedTodos = data;
     },
@@ -105,19 +116,17 @@ export default {
           "length: " +
           paginationEvent.length
       );
-    },
+    }
   },
   created() {
     this.todos = this.todolist;
     this.paginatedTodos = [...this.todos];
 
     if (this.paginatedTodos) {
-
       this.paginatedTodos.forEach((todo: Todo) => {
         todo.numberdaysleft = this.getdaysleft(todo.deadline);
       });
     }
-   
   },
   data() {
     return {
@@ -125,9 +134,9 @@ export default {
       todos: [],
       paginatedTodos: [],
       getdaysleft: myFunctions.getdaysleft,
-      isLoading:true
+      isLoading: true
     };
-  },
+  }
 };
 </script>
 

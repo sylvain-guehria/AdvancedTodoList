@@ -183,6 +183,14 @@ const actions = {
     });
     commit('editTodoByKey', payload);
   },
+  setTodoDone ({ commit }: {commit: Function}, payload: Todo) {
+    payload.isdone = !payload.isdone;
+    const { uid } = state.user.data;
+    database.ref(`todos/${uid}/${payload.key}`).set({
+      isdone: payload.isdone
+    });
+    commit('editTodoByKey', payload);
+  },
   deleteTodo ({ commit }: {commit: Function}, key: string) {
     const { uid } = state.user.data;
     database.ref(`todos/${uid}/${key}`).remove();
