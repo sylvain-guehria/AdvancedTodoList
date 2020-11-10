@@ -5,7 +5,8 @@ export interface Todo {
   importance?: number;
   description?: SubTask[];
   creationDate: string;
-  isdone?: boolean;
+  isdone: boolean;
+  numberdaysleft?: number;
 }
 
 export interface User {
@@ -17,13 +18,16 @@ export interface State {
   todolist: Todo[];
   coloredtodolist: Todo[];
   user: User;
-  currentTodo: Todo;
+  currentTodo: Todo,
+  numberActiveTask: number,
+  numberTotalTask: number,
+  isLoading: boolean
 }
 
 export interface SubTask {
   key?: string ;
   label: string;
-  isdone?: boolean;
+  isdone: boolean;
   order?: number;
 }
 

@@ -1,0 +1,75 @@
+.accordion {
+  margin-bottom: 10px;
+
+  .accordion-btn {
+    @extend .animation-transition-fast;
+    @extend .icon-title;
+    background-color: $header-menu;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    outline: none;
+
+    i:last-child {
+      width: 24p;
+      margin-right: 10px;
+    }
+
+    &:hover {
+      background-color: white;
+    }
+  }
+
+  &.active {
+    .accordion-btn {
+      background-color: white;
+    }
+    .panel {
+      padding-bottom: 10px;
+      max-height: 3000px;
+      transition: max-height 0.25s ease-in;
+    }
+  }
+
+  .panel {
+    @extend .animation-transition-general;
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    transition: max-height 0.25s ease-out;
+    overflow: hidden;
+  }
+}
+
+.accordion.transparent {
+  position: relative;
+  &.active .panel {
+    overflow: visible;
+  }
+
+  .accordion-btn {
+    @extend .h2;
+    background-color: #f3f7fb;
+  }
+
+  .panel {
+    & > .data-block:first-child {
+      padding: 30px;
+      padding-bottom: 10px;
+      overflow: visible;
+
+      & > div {
+        padding-top: 0px;
+        padding-bottom: 0px;
+      }
+    }
+  }
+
+  .accordion-btn,
+  .panel {
+    background-color: transparent;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

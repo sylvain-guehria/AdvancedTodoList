@@ -1,0 +1,62 @@
+.fullcontent {
+  .md-toolbar-section-start {
+    justify-content: center;
+    padding: 30px;
+  }
+
+  .md-layout-item {
+    flex: none;
+  }
+
+  .main-panel {
+    float: none;
+    width: 100%;
+
+    & > .content {
+      min-height: auto;
+    }
+
+    .login-square {
+      height: 294px;
+      width: 451px;
+      @extend .animation-transition-general;
+      @extend .square-container;
+      padding: 20px;
+
+      .login-subtitle {
+        padding-top: 10px;
+        padding-bottom: $padding-base-section;
+      }
+
+      .md-button.md-default {
+        width: 80%;
+      }
+    }
+
+    .login-bottom {
+      padding: 10% 10% 5% 10%;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      z-index: 2;
+      .avatar-img {
+        width: 70px;
+        float: right;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .md-button {
+        margin-left: 70px;
+      }
+
+      & > div {
+        padding-bottom: 10px;
+      }
+    }
+  }
+}
+
+.md-content.md-theme-default {
+  color: $text-dark;
+}

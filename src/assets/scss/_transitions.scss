@@ -1,0 +1,108 @@
+// Fade
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// Slide-fade
+.slide-fade-enter-active,
+.slide-fade-down-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active,
+.slide-fade-down-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter, .slide-fade-leave-to
+  /* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+.slide-fade-down-enter, .slide-fade-down-leave-to
+  /* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+// Slide-fade-exchange
+.slide-fade-exchange-enter-active,
+.slide-fade-exchange-down-enter-active {
+  transition: all 1s ease;
+}
+.slide-fade-exchange-leave-active,
+.slide-fade-exchange-down-leave-active {
+  transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-exchange-enter, .slide-fade-exchange-leave-to
+  /* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(20px);
+  opacity: 0;
+}
+.slide-fade-exchange-down-enter, .slide-fade-exchange-down-leave-to
+  /* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+//List
+
+.list-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+// Modal
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+// Quick fade
+.quick-fade-enter-active,
+.quick-fade-down-enter-active {
+  transition: all 0.3s ease-in;
+}
+.quick-fade-leave-active,
+.quick-fade-down-leave-active {
+  transition: all 0s ease-out;
+}
+.quick-fade-enter,
+.quick-fade-leave-to {
+  opacity: 0;
+}
+.quick-fade-down-enter,
+.quick-fade-down-leave-to {
+  opacity: 0;
+}
+
+// List complete
+.list-complete-enter, .list-complete-leave-to
+/* .list-complete-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+.list-complete-leave-active {
+  position: absolute;
+  visibility: hidden;
+}

@@ -1,0 +1,201 @@
+.md-field {
+  width: 100%;
+  .md-input,
+  .md-textarea,
+  &.md-has-textarea:not(.md-autogrow) .md-textarea,
+  .vs__dropdown-toggle,
+  .vdp-datepicker input {
+    max-width: 100%;
+    height: 60px;
+    border: 1px solid $borders;
+    border-radius: 2px;
+    background-color: white;
+    padding: $input-top-padding $field-left-padding;
+    font-size: $font-size-base !important;
+    -webkit-text-fill-color: $black-color;
+    @extend .animation-transition-fast;
+
+    &:hover:not(:focus):enabled {
+      background-color: $field-hover-background-color;
+      cursor: pointer;
+    }
+  }
+
+  input[type='file']:hover {
+    background-color: white !important;
+    cursor: inherit !important;
+  }
+
+  &.disabled:hover {
+    .feather.icon-deco {
+      cursor: auto;
+    }
+  }
+
+  .v-select,
+  .vdp-datepicker,
+  .vdp-datepicker input {
+    width: 100%;
+  }
+
+  .md-textarea {
+    height: 150px !important;
+  }
+
+  .md-file {
+    i:first-child {
+      display: none;
+    }
+    .md-input {
+      margin-left: 0px;
+    }
+  }
+  .inputFileCover {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 2;
+    background-color: white;
+    width: calc(100% - 70px);
+    text-align: left;
+    height: 40px;
+    padding-top: 10px;
+    @extend .animation-transition-fast;
+
+    &:hover,
+    &:hover ~ input {
+      background-color: $field-hover-background-color;
+      cursor: pointer;
+    }
+  }
+
+  .sidebar &.md-theme-default.md-focused .md-input {
+    color: $white-color !important;
+    -webkit-text-fill-color: $white-color !important;
+  }
+
+  &.md-has-textarea:not(.md-autogrow) {
+    label {
+      top: $field-top-padding;
+      left: $field-left-padding;
+    }
+    .md-count {
+      bottom: -22px;
+    }
+  }
+
+  &.md-has-textarea:not(.md-autogrow).md-focused .md-textarea {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .vdp-datepicker ::placeholder,
+  label,
+  ::placeholder {
+    font-size: 14px;
+    font-weight: 400;
+    color: $mdb-input-placeholder-color !important;
+    line-height: 1.4;
+    top: $field-top-padding;
+    opacity: 1;
+    left: $field-left-padding;
+    z-index: 1;
+    text-transform: unset;
+  }
+
+  &:before,
+  &:after {
+    transform: none;
+    content: none;
+  }
+
+  &.md-disabled {
+    .md-input {
+      cursor: not-allowed;
+      background-color: $field-disabled-background-color;
+    }
+  }
+
+  &.md-focused:before {
+    transform: none;
+    opacity: 0;
+  }
+
+  &.md-focused label,
+  &.md-has-value label,
+  &.md-focused.md-has-value label,
+  &.md-has-textarea:not(.md-autogrow).md-focused label,
+  .vs--open + label {
+    top: $field-top-padding;
+    display: none;
+  }
+
+  & > .md-icon,
+  & > i {
+    margin: auto;
+    position: absolute;
+    top: $field-top-padding;
+    left: calc(100% - 40px);
+    width: $input-icon-size;
+
+    & + .md-input {
+      padding-right: 45px;
+    }
+    & ~ .md-input {
+      margin-left: 0px;
+    }
+  }
+
+  &.md-has-textarea > .md-icon,
+  &.md-has-textarea > i {
+    top: auto;
+    bottom: $field-top-padding;
+  }
+
+  &.big-txt-height.md-has-textarea textarea {
+    height: 240px !important;
+  }
+
+  // Input password
+  &.md-has-password {
+    &.input-error .md-toggle-password,
+    &.input-success .md-toggle-password {
+      display: none;
+    }
+    .md-toggle-password {
+      display: block;
+      z-index: 4;
+      top: 30px;
+      right: 8px;
+      bottom: auto;
+      width: auto;
+      height: auto;
+      min-width: auto;
+      background-color: transparent !important;
+
+      .md-ripple {
+        width: auto;
+        height: auto;
+      }
+    }
+  }
+
+  &.input-with-arrow {
+    @extend .bottom-container-arrow;
+  }
+}
+
+.md-field .md-input-action {
+  top: 8px;
+  border-radius: 50%;
+  background-color: $white-color !important;
+
+  .md-button-content i {
+    width: 18px;
+    height: 18px;
+
+    svg {
+      fill: $text-dark !important;
+    }
+  }
+}

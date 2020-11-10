@@ -1,0 +1,309 @@
+.planning-calendar {
+  .month {
+    width: 100%;
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px 10px 0 0;
+    border: 1px solid $soft-shadows;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+
+    .week-header {
+      display: flex;
+      align-items: center;
+      height: 50px;
+      user-select: none;
+      background-color: $lines;
+      border-radius: 9px 9px 0 0;
+      border-right-width: 1px;
+    }
+
+    .week-header-day {
+      flex: 1 0 20px;
+      padding: 4px;
+      padding-bottom: 0px;
+      font-size: $font-size-small;
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 20px;
+      margin: 0px;
+      @extend .h3;
+    }
+  }
+
+  .week {
+    display: flex;
+    flex: 1;
+  }
+
+  .day {
+    flex: 1;
+    position: relative;
+    width: 0;
+    border-right: $soft-shadows 1px solid;
+    border-bottom: $soft-shadows 1px solid;
+    padding: 10px 10px 4px 10px;
+    user-select: none;
+    height: 110px;
+
+    & > div:first-child {
+      margin-bottom: 10px;
+    }
+
+    .ds-dom {
+      text-decoration: none;
+      color: $text-dark;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      user-select: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &.today-dom {
+        border-radius: 2px;
+        background-color: $headline-h1;
+        color: white;
+        display: inline-block;
+        position: relative;
+        z-index: 1;
+        &:hover {
+          color: white !important;
+        }
+      }
+    }
+  }
+
+  .out-calendar {
+    .ds-dom {
+      color: $text-light;
+    }
+    .calendar-event .event-info,
+    .more-events {
+      @extend .light-subtitle;
+    }
+  }
+
+  .calendar-toolbar {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+
+    .toolbar-month {
+      align-items: center;
+      align-self: flex-end;
+      margin-bottom: 5px;
+      @extend .flex-start;
+
+      .menu-title {
+        margin-right: 10px;
+      }
+      .md-button.md-just-icon {
+        margin: 0px;
+      }
+      .md-just-icon i {
+        height: 25px !important;
+      }
+    }
+
+    .toolbar-buttons {
+      @extend .flex-start;
+    }
+  }
+
+  .more-events {
+    @extend .black-subtitle;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .calendar-event {
+    position: relative;
+    @extend .left-container-arrow;
+
+    &::after,
+    &::before {
+      transition: none;
+    }
+
+    &.display-modal-left {
+      @extend .right-container-arrow;
+
+      .modal-component.event-detail-modal .modal-wrapper {
+        left: -350px;
+        .modal-header {
+          height: auto !important;
+          min-height: 70px;
+        }
+
+        .modal-footer {
+          & > div {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 15px;
+            padding-bottom: 5px;
+          }
+        }
+      }
+
+      &.selected {
+        &::after,
+        &::before {
+          top: 0px;
+        }
+        &::before {
+          left: -6px;
+        }
+        &::after {
+          left: -5px;
+        }
+      }
+    }
+
+    .event-info {
+      @extend .black-subtitle;
+      @extend .animation-transition-general;
+      display: flex;
+      align-items: center;
+      border-radius: 2px;
+
+      &:hover {
+        background-color: $hover-dark;
+        cursor: pointer;
+      }
+
+      .event-text {
+        white-space: nowrap;
+        overflow: hidden;
+        padding-left: 5px;
+      }
+
+      .bullet {
+        margin-left: 3px;
+        flex-shrink: 0;
+      }
+    }
+
+    &.selected {
+      &::after,
+      &::before {
+        opacity: 1;
+        top: 0px;
+      }
+      &::before {
+        z-index: 1004;
+        right: -5px;
+      }
+      &::after {
+        right: -6px;
+        z-index: 1005;
+      }
+      .event-info {
+        background-color: $hover-dark;
+      }
+    }
+  }
+}
+
+.event-creation-modal.md-dialog.md-theme-default {
+  width: 720px;
+
+  .md-dialog-container {
+    max-width: 100% !important;
+    .md-checkbox {
+      margin-top: 0px;
+    }
+
+    .md-dialog-content {
+      overflow-x: hidden;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .md-dialog-actions {
+      padding-bottom: 30px !important;
+      justify-content: flex-end;
+      padding-right: 30px;
+    }
+  }
+}
+
+.bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+
+  &.bullet1 {
+    border-color: $positive;
+    background-color: $positive;
+  }
+  &.bullet2 {
+    border-color: $bullet1;
+    background-color: $bullet1;
+  }
+  &.bullet3 {
+    border-color: $bullet2;
+    background-color: $bullet2;
+  }
+  &.bullet4 {
+    border-color: $bullet3;
+    background-color: $bullet3;
+  }
+  &.bullet5 {
+    border-color: $main-cta;
+    background-color: $main-cta;
+  }
+  &.bullet6 {
+    border-color: $bullet4;
+    background-color: $bullet4;
+  }
+}
+
+// event detail
+
+.modal-component.event-detail-modal {
+  .modal-wrapper {
+    left: 100%;
+    top: -70px;
+    width: 350px;
+    max-height: 460px;
+
+    .modal-header {
+      height: 70px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .modal-body {
+      margin: 0px;
+      padding-left: 20px;
+      padding-right: 20px;
+
+      .icon-list-item {
+        display: flex;
+        font-size: $font-size-base;
+
+        i {
+          color: $headline-h1;
+          margin-right: 20px;
+        }
+
+        .list-item-text {
+          text-align: left;
+          &.description {
+            width: 100%;
+          }
+        }
+
+        .bullet {
+          margin-top: 5px;
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}

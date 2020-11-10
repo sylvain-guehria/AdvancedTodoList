@@ -1,26 +1,32 @@
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-import vuetify from './plugins/vuetify';
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Vue from "vue";
+import App from "./App.vue";
 import VModal from 'vue-js-modal';
 import Notifications from 'vue-notification';
-import VueLodash from 'vue-lodash';
-import lodash from 'lodash';
+import router from "./routes/routes";
 import store from './store/';
 
-import './assets/css/modalstyle.css';
+
+// Plugins
+import GlobalDirectives from "./globalDirectives";
+
+// MaterialDashboard plugin
+import MaterialDashboard from "./material-dashboard";
+
+export const bus = new Vue();
+
 
 Vue.use(VModal);
 Vue.use(Notifications);
-Vue.use(VueLodash, { lodash: lodash });
 
-Vue.config.productionTip = false;
+Vue.use(MaterialDashboard);
+Vue.use(GlobalDirectives);
 
+/* eslint-disable no-new */
 new Vue({
-  vuetify,
+  el: "#app",
   router,
+  data: {},
   store,
   render: h => h(App)
-}).$mount('#app');
+});
+
