@@ -135,7 +135,6 @@ export default class DayBlock extends Vue {
       this.todolistOfDay = this.todolist.filter(
         (todo) => { 
           // eslint-disable-next-line no-console
-      console.log(todo.deadline, string_date);
           return todo.deadline === string_date }
       );
     }

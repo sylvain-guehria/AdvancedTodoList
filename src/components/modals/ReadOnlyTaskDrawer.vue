@@ -58,6 +58,17 @@
             </md-field>
           </div>
 
+          <div class="md-layout-item md-small-size-100 md-size-100">
+            <label> <feather type="calendar"></feather>Created on </label>
+            <md-field>
+              <datepicker
+                :disabled="true"
+                placeholder="YYYY/MM/DD"
+                v-model="formData.creationDate"
+              ></datepicker>
+            </md-field>
+          </div>
+
           <sub-tasks-viewer
             :readonly="true"
             :subtasksreceived="this.formData.description"

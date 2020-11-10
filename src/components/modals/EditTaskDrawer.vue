@@ -9,7 +9,9 @@
         </div>
         <div class="filters-summary">
           <div class="md-layout-item md-size-100">
-            <h1>Add a task</h1>
+            <h1 v-if="this.formData.key">Edit a task</h1>
+            <h1 v-if="!this.formData.key">Add a task</h1>
+        
             <md-button class="md-tertiary" @click="resteForm">
               <feather type="trash-2"></feather>Reset
             </md-button>
@@ -108,6 +110,7 @@ export default class EditTaskDrawer extends Vue {
     this.currentTodo = this.$store.getters.getCurrentTodo;
     if (this.currentTodo && this.currentTodo.key) {
       this.formData = { ...this.currentTodo };
+      this.selectedDate = new Date(this.currentTodo.deadline);
     }
 
     if (!this.isActive) {
@@ -181,6 +184,7 @@ export default class EditTaskDrawer extends Vue {
       creationDate: new Date().toISOString().substr(0, 10),
       isdone: false
     };
+    bus.$emit("resetSubTasks");
     this.selectedDate = new Date();
   }
 }
