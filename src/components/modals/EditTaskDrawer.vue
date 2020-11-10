@@ -151,18 +151,20 @@ export default class EditTaskDrawer extends Vue {
     this.$store
       .dispatch(action, todo)
       .then(() => {
-        this.$notify({
-          title: "Task created",
-          text: "it is now in your list =)",
-          type: "success"
-        });
+         this.$toasted.show("Task created, it is now in your list =)", {
+            icon: "create",
+            theme: "outline",
+            position: "top-center",
+            duration: 5000
+          });
       })
       .catch((error: Error) => {
-        this.$notify({
-          title: "Cannot create task",
-          text: error.message,
-          type: "error"
-        });
+        this.$toasted.show("Cannot create task", {
+            icon: "create",
+            theme: "bubble",
+            position: "top-center",
+            duration: 5000
+          });
       });
 
     this.toggleMenu();

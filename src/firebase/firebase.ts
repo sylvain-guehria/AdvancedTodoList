@@ -28,34 +28,38 @@ export default {
     const provider = new firebase.default.auth.GoogleAuthProvider();
     firebase.default.auth().signInWithPopup(provider)
       .then(function () {
-        Vue.notify({
-          title: 'logged in',
-          text: 'Hello =)',
-          type: 'success'
+        Vue.toasted.show("Logged-in, Hello", {
+          icon: "create",
+          theme: "outline",
+          position: "top-center",
+          duration: 5000
         });
       })
       .catch(function (error){
-        Vue.notify({
-          title: 'error loggin google',
-          text: error.mesage,
-          type: 'error'
+        Vue.toasted.show("Error google..", {
+          icon: "create",
+          theme: "outline",
+          position: "top-center",
+          duration: 5000
         });
       });
   },
   logout () {
     firebase.default.auth().signOut()
       .then(function () {
-        Vue.notify({
-          title: 'You logged out',
-          text: 'Goodbye dear friend ! =)',
-          type: 'warning'
+        Vue.toasted.show("You logged-out, goodbye", {
+          icon: "create",
+          theme: "outline",
+          position: "top-center",
+          duration: 5000
         });
       })
       .catch(function (error) {
-        Vue.notify({
-          title: 'Cannot log out',
-          text: error.message,
-          type: 'error'
+        Vue.toasted.show("Cannot log-out", {
+          icon: "create",
+          theme: "outline",
+          position: "top-center",
+          duration: 5000
         });
       });
   },

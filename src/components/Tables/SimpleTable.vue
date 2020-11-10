@@ -20,7 +20,7 @@
       ></md-empty-state>
 
       <md-table-row
-       @click="DisplayTask(item.key)"
+        @click="DisplayTask(item.key)"
         slot="md-table-row"
         slot-scope="{ item }"
       >
@@ -45,8 +45,13 @@
         >
           {{ item.importance }}
         </md-table-cell>
-        <md-table-cell md-fixed-header class="more-column right-arrow" >
-          <md-menu md-size="medium" :md-offset-x="-175" :md-offset-y="-120" v-on:click.stop>
+        <md-table-cell md-fixed-header class="more-column right-arrow">
+          <md-menu
+            md-size="medium"
+            :md-offset-x="-175"
+            :md-offset-y="-120"
+            v-on:click.stop
+          >
             <md-button md-menu-trigger>
               <md-icon>more_vert</md-icon>
             </md-button>
@@ -89,7 +94,7 @@ import { Todo } from "../../models/types";
 export default {
   name: "simple-table",
   components: {
-    "table-pagination": TablePaginationVue,
+    "table-pagination": TablePaginationVue
   },
   props: ["todolist"],
   computed: {
@@ -99,7 +104,21 @@ export default {
   },
   methods: {
     deleteTodo(key: string): void {
-      this.$store.dispatch("deleteTodo", key);
+      this.$store
+        .dispatch("deleteTodo", key)
+        .then(() => {
+          this.$toasted.show("Task deleted, it is no longer in your list", {
+            icon: "delete_outline",
+            theme: "bubble",
+            position: "top-center",
+            duration: 5000
+          });
+        })
+        .catch((error: Error) => {
+          this.$toasted.show("Cannot deleted Task", {
+            icon: "delete_outline"
+          });
+        });
     },
     editTodo(key: string): void {
       this.$emit("editTaskEvent", { key: key });
@@ -128,7 +147,7 @@ export default {
           "length: " +
           paginationEvent.length
       );
-    },
+    }
   },
   created() {
     this.todos = this.todolist;
@@ -145,7 +164,7 @@ export default {
       selected: [],
       todos: [],
       paginatedTodos: [],
-      getdaysleft: myFunctions.getdaysleft,
+      getdaysleft: myFunctions.getdaysleft
     };
   }
 };
