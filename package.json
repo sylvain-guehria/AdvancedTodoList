@@ -15,6 +15,7 @@
     "dayspan": "^0.12.2",
     "feather-icons": "^4.24.1",
     "firebase": "^8.0.1",
+    "material-design-icons": "^3.0.1",
     "moment": "^2.24.0",
     "vue": "2.6.10",
     "vue-breadcrumbs": "^1.2.0",
@@ -29,6 +30,7 @@
     "vue-router": "3.0.6",
     "vue-select": "https://github.com/HeleneDalBoSerial/vue-select.git#v3.4.5",
     "vue-social-sharing": "2.4.5",
+    "vue-toasted": "^1.1.28",
     "vue2-timeago": "^1.2.3",
     "vuejs-datepicker": "^1.6.2",
     "vuex": "^3.5.1"

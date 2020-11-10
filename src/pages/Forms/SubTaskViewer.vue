@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="md-layout-item md-small-size-100 md-size-100">
+    <div class="md-layout-item md-small-size-100 md-size-100" v-show="!readOnlyLocal" >
       <label> <feather type="list"></feather>Subtask </label>
       <input-text
        :disabled="readOnlyLocal"
@@ -18,7 +18,7 @@
 
     <div v-if="subtasks && subtasks.length > 0">
       <div>
-        .
+        <feather type="corner-right-down"></feather>
       </div>
       <!-- table -->
       <div class="my-table">
@@ -82,9 +82,9 @@ export default class SubTaskViewer extends Vue {
     isdone: false
   };
 
-  @Watch("subtasksreceived", { immediate: false })
+  @Watch("subtasksreceived", { immediate: true })
   changeSubtasks() {
-    this.subtasks = [...this.subtasksreceived];
+    if(this.subtasksreceived) {this.subtasks = [...this.subtasksreceived];}
   }
 
   mounted(){
@@ -94,6 +94,7 @@ export default class SubTaskViewer extends Vue {
 
   resetSubTasks(): void {
       this.subtasks = [];
+      this.subTaskInput = '';
   }
 
   addSubTask() {

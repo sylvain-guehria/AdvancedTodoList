@@ -53,7 +53,18 @@
               <datepicker
                 :disabled="true"
                 placeholder="YYYY/MM/DD"
-                v-model="selectedDate"
+                v-model="formData.deadline"
+              ></datepicker>
+            </md-field>
+          </div>
+
+          <div class="md-layout-item md-small-size-100 md-size-100">
+            <label> <feather type="calendar"></feather>Created on </label>
+            <md-field>
+              <datepicker
+                :disabled="true"
+                placeholder="YYYY/MM/DD"
+                v-model="formData.creationDate"
               ></datepicker>
             </md-field>
           </div>
@@ -145,18 +156,20 @@ export default class ReadOnlyTaskDrawer extends Vue {
     this.$store
       .dispatch(action, todo)
       .then(() => {
-        this.$notify({
-          title: "Task created",
-          text: "it is now in your list =)",
-          type: "success"
-        });
+        this.$toasted.show("Task created, it is now in your list =)", {
+            icon: "create",
+            theme: "outline",
+            position: "top-center",
+            duration: 5000
+          });
       })
       .catch((error: Error) => {
-        this.$notify({
-          title: "Cannot create task",
-          text: error.message,
-          type: "error"
-        });
+       this.$toasted.show("Cannot create task", {
+            icon: "create",
+            theme: "bubble",
+            position: "top-center",
+            duration: 5000
+          });
       });
 
     this.toggleMenu();
