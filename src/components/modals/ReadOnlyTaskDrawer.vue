@@ -53,7 +53,7 @@
               <datepicker
                 :disabled="true"
                 placeholder="YYYY/MM/DD"
-                v-model="selectedDate"
+                v-model="formData.deadline"
               ></datepicker>
             </md-field>
           </div>
