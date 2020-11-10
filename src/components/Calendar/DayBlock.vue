@@ -192,3 +192,4 @@ export default class DayBlock extends Vue {
 
 
 
+

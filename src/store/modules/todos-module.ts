@@ -170,17 +170,13 @@ const mutations = {
 const actions = {
   createTodo ({ commit }: {commit: Function}, payload: Todo) {
 
-    Object.keys(payload).forEach(key => payload[key] === undefined ? delete payload[key] : {});
+    Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
 
     const { uid } = state.user.data;
     var newTodoKey = database.ref().child(`todos/${uid}`).push().key || 'key';
     if (!newTodoKey){return}
     database.ref(`todos/${uid}/${newTodoKey}`).set({
-      creationDate: payload.creationDate,
-      description: payload.description,
-      importance: payload.importance,
-      task: payload.task,
-      deadline: payload.deadline
+      ...payload
     });
 
     payload.key = newTodoKey;
@@ -188,18 +184,12 @@ const actions = {
   },
   editTodo ({ commit }: {commit: Function}, payload: Todo) {
 
-    Object.keys(payload).forEach(key => payload[key] === undefined ? delete payload[key] : {});
+    Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
 
     const { uid } = state.user.data;
     if(!payload.key){return}
     database.ref(`todos/${uid}/${payload.key}`).set({
       ...payload,
-      isdone : payload.isdone ||false,
-      creationDate: payload.creationDate,
-      description: payload.description,
-      importance: payload.importance,
-      task: payload.task,
-      deadline: payload.deadline
     });
     commit('editTodoByKey', payload);
   },

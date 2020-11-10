@@ -24,6 +24,7 @@
             <label> <feather type="pen-tool"></feather>Task title </label>
             <input-text
               type="text"
+              :maxlength="200"
               initialvalue="Your title"
               :vmodel="formData.task"
               @vmodel="formData.task = $event"
@@ -141,6 +142,7 @@ export default class EditTaskDrawer extends Vue {
   actionTodo() {
     this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
     this.formData.deadline = this.dateHelper;
+
 
     let todo: Todo = {...this.formData};
 

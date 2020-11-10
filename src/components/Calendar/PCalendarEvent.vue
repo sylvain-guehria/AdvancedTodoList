@@ -5,7 +5,7 @@
   >
     <div class="event-info" @click="showDetail = true">
       <div class="bullet" :class="bulletClass"></div>
-      <div class="event-text return-line">{{ Title }}</div>
+      <div class="event-text">{{ Title }}</div>
     </div>
     <modal
       :show="showDetail"
@@ -13,7 +13,7 @@
       class="event-detail-modal"
     >
       <div slot="header">
-        <div class="md-layout-item md-size-100 align-left">
+        <div class="md-layout-item md-size-100 align-left return-line">
           <h1>{{ event.task }}</h1>
           <div class="horizontal-separator"></div>
         </div>
@@ -153,6 +153,9 @@ export default class PCalendarEvent extends Vue {
 }
 
 .return-line{
-  line-break: auto;
+word-break: break-word;
+}
+.event-info{
+  font-size: 15px !important;
 }
 </style>
