@@ -1,7 +1,10 @@
 <template>
   <div class="md-layout-item md-size-100">
     <toolbar :calendar="calendar" @monthChange="monthChanged($event)" />
-    <weeks-view :calendar="calendar" />
+    <weeks-view
+      :calendar="calendar"
+      :key="this.$store.getters.getNumberTotalTask"
+    />
   </div>
 </template>
 

@@ -9,7 +9,9 @@
         </div>
         <div class="filters-summary">
           <div class="md-layout-item md-size-100">
-            <h1>Add a task</h1>
+            <h1 v-if="this.formData.key">Edit a task</h1>
+            <h1 v-if="!this.formData.key">Add a task</h1>
+        
             <md-button class="md-tertiary" @click="resteForm">
               <feather type="trash-2"></feather>Reset
             </md-button>
@@ -22,6 +24,7 @@
             <label> <feather type="pen-tool"></feather>Task title </label>
             <input-text
               type="text"
+              :maxlength="200"
               initialvalue="Your title"
               :vmodel="formData.task"
               @vmodel="formData.task = $event"
@@ -108,6 +111,7 @@ export default class EditTaskDrawer extends Vue {
     this.currentTodo = this.$store.getters.getCurrentTodo;
     if (this.currentTodo && this.currentTodo.key) {
       this.formData = { ...this.currentTodo };
+      this.selectedDate = new Date(this.currentTodo.deadline);
     }
 
     if (!this.isActive) {
@@ -139,6 +143,7 @@ export default class EditTaskDrawer extends Vue {
     this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
     this.formData.deadline = this.dateHelper;
 
+
     let todo: Todo = {...this.formData};
 
     let action: string = todo.key ? "editTodo" : "createTodo";
@@ -146,18 +151,20 @@ export default class EditTaskDrawer extends Vue {
     this.$store
       .dispatch(action, todo)
       .then(() => {
-        this.$notify({
-          title: "Task created",
-          text: "it is now in your list =)",
-          type: "success"
-        });
+         this.$toasted.show("Task created, it is now in your list =)", {
+            icon: "create",
+            theme: "outline",
+            position: "top-center",
+            duration: 5000
+          });
       })
       .catch((error: Error) => {
-        this.$notify({
-          title: "Cannot create task",
-          text: error.message,
-          type: "error"
-        });
+        this.$toasted.show("Cannot create task", {
+            icon: "create",
+            theme: "bubble",
+            position: "top-center",
+            duration: 5000
+          });
       });
 
     this.toggleMenu();
@@ -181,6 +188,7 @@ export default class EditTaskDrawer extends Vue {
       creationDate: new Date().toISOString().substr(0, 10),
       isdone: false
     };
+    bus.$emit("resetSubTasks");
     this.selectedDate = new Date();
   }
 }

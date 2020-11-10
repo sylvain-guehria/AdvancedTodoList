@@ -216,17 +216,19 @@ export default class LoginModal extends Vue {
     }
 
     firebase.signUpEmail(this.user.data.email, this.user.data.password).then(() => {
-      this.$notify({
-        title: 'You signed up',
-        text: 'Welcome ! =)',
-        type: 'success'
-      });
+     this.$toasted.show("You signed up, Welcome", {
+            icon: "create",
+            theme: "bubble",
+            position: "top-center",
+            duration: 5000
+          });
     }).catch((error: Error) => {
-      this.$notify({
-        title: 'Cannot register you',
-        text: error.message,
-        type: 'error'
-      });
+     this.$toasted.show("Cannot register you" + error, {
+            icon: "create",
+            theme: "bubble",
+            position: "top-center",
+            duration: 5000
+          });
     });
   }
 
@@ -276,19 +278,21 @@ export default class LoginModal extends Vue {
     firebase
       .loginEmail(this.user.data.email, this.user.data.password)
       .then(() => {
-        this.$notify({
-          title: "You logged in",
-          text: "Hello user! =)",
-          type: "success"
-        });
+         this.$toasted.show("We logged you in, Hello", {
+            icon: "create",
+            theme: "outline",
+            position: "top-center",
+            duration: 5000
+          });
         this.goToApp();
       })
       .catch((error: Error) => {
-        this.$notify({
-          title: "Cannot logge you in",
-          text: error.message,
-          type: "error"
-        });
+       this.$toasted.show("Cannot logged you in..", {
+            icon: "create",
+            theme: "outline",
+            position: "top-center",
+            duration: 5000
+          });
       });
   }
 }

@@ -4,6 +4,7 @@ import VModal from 'vue-js-modal';
 import Notifications from 'vue-notification';
 import router from "./routes/routes";
 import store from './store/';
+import VueToasted from 'vue-toasted';
 
 
 // Plugins
@@ -14,6 +15,9 @@ import MaterialDashboard from "./material-dashboard";
 
 export const bus = new Vue();
 
+Vue.use(VueToasted, {
+  iconPack : 'material' 
+});
 
 Vue.use(VModal);
 Vue.use(Notifications);
