@@ -72,10 +72,12 @@
             :readonly="true"
             :subtasksreceived="this.formData.description"
           ></sub-tasks-viewer> -->
-          <div class='readonly-subtasks'>
-          <read-only-task-viewer
-          :subtasksreceived="this.formData.description">
-          </read-only-task-viewer>
+          <div class="readonly-subtasks" v-if="this.formData.description">
+            <read-only-task-viewer
+              :subtasksreceived="this.formData.description"
+              :todo="this.formData"
+            >
+            </read-only-task-viewer>
           </div>
         </div>
       </div>
@@ -90,13 +92,13 @@ import InputText from "../../components/Form/InputText.vue";
 import SubtaskViewer from "../../pages/Forms/SubTaskViewer.vue";
 
 import { bus } from "../../main";
-import ReadOnlySubTask from './ReadOnlySubTask.vue';
+import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue";
 
 @Component({
   components: {
     "input-text": InputText,
     // "sub-tasks-viewer": SubtaskViewer
-    "read-only-task-viewer" : ReadOnlySubTask 
+    "read-only-task-viewer": ReadOnlySubTask
   }
 })
 export default class ReadOnlyTaskDrawer extends Vue {
@@ -185,10 +187,10 @@ export default class ReadOnlyTaskDrawer extends Vue {
 .imp-input {
   margin-bottom: 15px;
 }
-.readonly-subtasks{
+.readonly-subtasks {
   display: inline-block;
   width: 100%;
   margin: auto;
-  margin-top: 100px ;
+  margin-top: 100px;
 }
 </style>

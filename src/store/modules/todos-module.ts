@@ -1,4 +1,4 @@
-import { Todo, User, State } from '../../models/types';
+import { Todo, User, State, SubTask } from '../../models/types';
 import { database } from '../../firebase/firebase';
 import lodash from 'lodash';
 
@@ -201,6 +201,14 @@ const actions = {
       isdone: payload.isdone
     });
     commit('editTodoByKey', payload);
+  },
+  setSubTaskDone ({ commit }: {commit: Function}, { todo, subtask}: { todo: Todo, subtask: SubTask} ) {
+    subtask.isdone = !subtask.isdone;
+    const { uid } = state.user.data;
+    database.ref(`todos/${uid}/${todo.key}/description/${subtask.order}`).set({
+      ...subtask,
+      isdone: subtask.isdone
+    });
   },
   deleteTodo ({ commit }: {commit: Function}, key: string) {
     const { uid } = state.user.data;

@@ -58,6 +58,7 @@
           <div class="md-layout-item md-size-100 icon-list-item" v-if="event.description && event.description.length > 0 ">
             <sub-task-readonly
               :subtasksreceived="event.description"
+              :todo="event"
             ></sub-task-readonly>
           </div>
         </div>
@@ -73,7 +74,7 @@ import DayBlock from "./DayBlock.vue";
 import moment from "moment";
 import Modal from "@/components/Modal.vue";
 import SubTaskViewer from "@/pages/Forms/SubTaskViewer.vue";
-import ReadOnlySubTask from "../modals/ReadOnlySubTask.vue";
+import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue"
 import { myFunctions } from "../../helpers/helperfunction";
 
 @Component({
