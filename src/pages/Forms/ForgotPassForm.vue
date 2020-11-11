@@ -44,16 +44,16 @@ export default class ForgotPassForm extends Vue {
     Firebase.sendResetPassEmail(this.email).then(() => {
       this.$modal.hide('forgotpassmodal');
       this.$toasted.show("We just sent you an email to reset your password", {
-            icon: "create",
+            icon: "mail_outline",
             theme: "bubble",
-            position: "top-center",
+            position: "bottom-right",
             duration: 5000
           });
     }).catch((error: Error) => {
      this.$toasted.show("Cannot send the email at the moment", {
-            icon: "create",
+            icon: "error-outline",
             theme: "bubble",
-            position: "top-center",
+            position: "bottom-right",
             duration: 5000
           });
     });

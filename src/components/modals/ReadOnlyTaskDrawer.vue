@@ -145,44 +145,6 @@ export default class ReadOnlyTaskDrawer extends Vue {
 
   subTasks: SubTask[] = [];
 
-  actionTodo() {
-    this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
-    this.formData.deadline = this.dateHelper;
-
-    let todo: Todo = { ...this.formData };
-
-    let action: string = todo.key ? "editTodo" : "createTodo";
-
-    this.$store
-      .dispatch(action, todo)
-      .then(() => {
-        this.$toasted.show("Task created, it is now in your list =)", {
-            icon: "create",
-            theme: "outline",
-            position: "top-center",
-            duration: 5000
-          });
-      })
-      .catch((error: Error) => {
-       this.$toasted.show("Cannot create task", {
-            icon: "create",
-            theme: "bubble",
-            position: "top-center",
-            duration: 5000
-          });
-      });
-
-    this.toggleMenu();
-    this.resteForm();
-    this.$store.commit("resetCurrentTodo");
-    //emitt event for child
-    bus.$emit("resetSubTasks");
-  }
-
-  setSubTasks(subtasks: SubTask[]) {
-    this.formData.description = [...subtasks];
-  }
-
   resteForm() {
     this.formData = {
       key: "",

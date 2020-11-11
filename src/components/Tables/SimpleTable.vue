@@ -110,13 +110,16 @@ export default {
           this.$toasted.show("Task deleted, it is no longer in your list", {
             icon: "delete_outline",
             theme: "bubble",
-            position: "top-center",
+            position: "bottom-right",
             duration: 5000
           });
         })
         .catch((error: Error) => {
           this.$toasted.show("Cannot deleted Task", {
-            icon: "delete_outline"
+            icon: "error_outline",
+            theme: "bubble",
+            position: "bottom-right",
+            duration: 5000
           });
         });
     },

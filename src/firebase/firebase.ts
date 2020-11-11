@@ -24,46 +24,46 @@ export const database = firebaseApp.database();
 
 export default {
   auth: firebase.default.auth(),
-  loginGoogle () {
+  loginGoogle() {
     const provider = new firebase.default.auth.GoogleAuthProvider();
     firebase.default.auth().signInWithPopup(provider)
       .then(function () {
-        Vue.toasted.show("Logged-in, Hello", {
-          icon: "create",
-          theme: "outline",
-          position: "top-center",
+        Vue.toasted.show("Logged-in with google, Hello", {
+          icon: "login",
+          theme: "bubble",
+          position: "bottom-right",
           duration: 5000
         });
       })
-      .catch(function (error){
+      .catch(function (error) {
         Vue.toasted.show("Error google..", {
-          icon: "create",
-          theme: "outline",
-          position: "top-center",
+          icon: "error_outline",
+          theme: "bubble",
+          position: "bottom-right",
           duration: 5000
         });
       });
   },
-  logout () {
+  logout() {
     firebase.default.auth().signOut()
       .then(function () {
         Vue.toasted.show("You logged-out, goodbye", {
-          icon: "create",
-          theme: "outline",
-          position: "top-center",
+          icon: "subdirectory_arrow_left",
+          theme: "bubble",
+          position: "bottom-right",
           duration: 5000
         });
       })
       .catch(function (error) {
         Vue.toasted.show("Cannot log-out", {
-          icon: "create",
-          theme: "outline",
-          position: "top-center",
+          icon: "error_outline",
+          theme: "bubble",
+          position: "bottom-right",
           duration: 5000
         });
       });
   },
-  signUpEmail (email: string, password: string): Promise<{}> {
+  signUpEmail(email: string, password: string): Promise<{}> {
     return new Promise((resolve, reject) => {
       firebase
         .default.auth()
@@ -76,7 +76,7 @@ export default {
         });
     });
   },
-  loginEmail (email: string, password: string): Promise<{}> {
+  loginEmail(email: string, password: string): Promise<{}> {
     // eslint-disable-next-line no-console
     return new Promise((resolve, reject) => {
       firebase
@@ -90,7 +90,7 @@ export default {
         });
     });
   },
-  sendResetPassEmail (emailAddress: string): Promise<{}>{
+  sendResetPassEmail(emailAddress: string): Promise<{}> {
     return new Promise((resolve, reject) => {
       firebase.default.auth().sendPasswordResetEmail(emailAddress).then(() => {
         resolve({ success: true });
@@ -100,7 +100,7 @@ export default {
         });
     });
   },
-  setAuthChange (){
+  setAuthChange() {
     const user = {
       loggedIn: false,
       data: {}
