@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="md-layout-item md-size-50 padding-20 text-align-right">
-        <p class="subtitle">Start of project phase 2019/12/06</p>
+        <!-- <p class="subtitle">Start of project phase 2019/12/06</p> -->
       </div>
       <div class="md-layout-item md-size-50 padding-20 text-align-right">
         
@@ -90,7 +90,6 @@
 import { SimpleTable } from "@/components";
 import FiltersDrawer from "../components/FiltersDrawer.vue";
 import EditTaskDrawer from "../components/modals/EditTaskDrawer.vue";
-import {bus} from '../main';
 import ReadOnlyTaskDrawer from  '../components/modals/ReadOnlyTaskDrawer.vue'
 
 export default {
@@ -123,8 +122,10 @@ export default {
       this.showAddTask = true;
   },
     showDrawerEditTask (payload): void{
+      if(payload){
       this.$store.commit('setCurrentTodo', payload.key);
       this.showAddTask = true;
+      }
   },
   showReadOnlyTaskDrawer(payload): void {
       this.$store.commit('setCurrentTodo', payload.key);

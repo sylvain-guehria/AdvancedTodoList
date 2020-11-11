@@ -13,8 +13,15 @@
       class="event-detail-modal"
     >
       <div slot="header">
-        <div class="md-layout-item md-size-100 align-left return-line">
-          <h1>{{ event.task }}</h1>
+        <div class="go-edit">
+          <div @click="editTodoFromEvent(event)">
+            <feather type="edit"></feather>
+          </div>
+        </div>
+        <div class="md-layout-item md-size-100 header-title">
+          <h1>
+            {{ event.task }}
+          </h1>
           <div class="horizontal-separator"></div>
         </div>
       </div>
@@ -53,9 +60,17 @@
             </div>
           </div>
           <div class="md-layout-item md-size-100 icon-list-item">
-            <feather type="list"></feather>{{event.description && event.description.length > 0 ? 'Subtasks' : 'No subtask'}}
+            <feather type="list"></feather
+            >{{
+              event.description && event.description.length > 0
+                ? "Subtasks"
+                : "No subtask"
+            }}
           </div>
-          <div class="md-layout-item md-size-100 icon-list-item" v-if="event.description && event.description.length > 0 ">
+          <div
+            class="md-layout-item md-size-100 icon-list-item"
+            v-if="event.description && event.description.length > 0"
+          >
             <sub-task-readonly
               :subtasksreceived="event.description"
               :todo="event"
@@ -74,8 +89,10 @@ import DayBlock from "./DayBlock.vue";
 import moment from "moment";
 import Modal from "@/components/Modal.vue";
 import SubTaskViewer from "@/pages/Forms/SubTaskViewer.vue";
-import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue"
+import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue";
 import { myFunctions } from "../../helpers/helperfunction";
+
+import { bus } from "../../main";
 
 @Component({
   components: {
@@ -91,12 +108,15 @@ export default class PCalendarEvent extends Vue {
 
   showDetail: boolean = false;
 
+  editTodoFromEvent(payload) {
+       this.$router.push("/app/todos");
+  }
+
   get Title() {
     return this.event.task;
   }
 
   get bulletClass() {
-    // FIXME : color selon matrice
     const index = this.giveColorTodo();
     const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
     return classes[index];
@@ -121,7 +141,7 @@ export default class PCalendarEvent extends Vue {
         myFunctions.getdaysleft(this.event.deadline) >= 2 &&
         this.event.importance >= 50
       ) {
-       return 2;
+        return 2;
       }
       // blue task : urgent but not important
       if (
@@ -153,10 +173,21 @@ export default class PCalendarEvent extends Vue {
   color: green;
 }
 
-.return-line{
-word-break: break-word;
+.header-title {
+  word-break: break-word;
+  margin-top: 50px;
 }
-.event-info{
+.event-info {
   font-size: 15px !important;
+}
+
+h1 {
+  display: flex;
+}
+.go-edit {
+  position: absolute;
+  top: 7px;
+  left: 10px;
+  cursor: pointer ;
 }
 </style>
