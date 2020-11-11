@@ -5,7 +5,7 @@
   >
     <div class="event-info" @click="showDetail = true">
       <div class="bullet" :class="bulletClass"></div>
-      <div class="event-text">{{ Title }}</div>
+      <div class="event-text">{{ Title }} &nbsp; ({{getNumberSubTaskActive()}})</div>
     </div>
     <modal
       :show="showDetail"
@@ -20,7 +20,7 @@
         </div>
         <div class="md-layout-item md-size-100 header-title">
           <h1>
-            {{ event.task }}
+            {{ event.task }} 
           </h1>
           <div class="horizontal-separator"></div>
         </div>
@@ -117,6 +117,10 @@ export default class PCalendarEvent extends Vue {
   get Title() {
     return this.event.task;
   }
+
+  getNumberSubTaskActive() : number{
+      return this.event.description ? this.event.description.filter(subtask => !subtask.isdone).length : 0
+    }
 
   get bulletClass() {
     const index = this.giveColorTodo();

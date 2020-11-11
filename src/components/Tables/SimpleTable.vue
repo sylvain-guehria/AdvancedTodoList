@@ -26,7 +26,7 @@
       >
         <md-table-cell md-sort-by="task" md-label="Task Title"
           >{{ item.task }} &nbsp; ({{
-            item.description ? item.description.length : 0
+            getNumberSubTaskActive(item)
           }})</md-table-cell
         >
         <md-table-cell md-sort-by="deadline" md-label="Deadline">{{
@@ -103,6 +103,9 @@ export default {
     }
   },
   methods: {
+    getNumberSubTaskActive(item) : number{
+      return item.description ? item.description.filter(subtask => !subtask.isdone).length : 0
+    },
     deleteTodo(key: string): void {
       this.$store
         .dispatch("deleteTodo", key)
