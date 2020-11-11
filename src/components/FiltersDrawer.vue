@@ -194,18 +194,20 @@ export default class FiltersDrawer extends Vue {
 
   @Watch("filter_data", { immediate: false, deep: true })
   changeFilters(val) {
+
     if (
-      val.selectedDateCreateBefore &&
-      val.selectedDateCreateAfter &&
-      val.selectedDateDeadLinBefore &&
-      val.selectedDateDeadLineAfter &&
-      val.title_contain &&
-      val.task_state &&
-      val.max_importance &&
-      val.min_importance
+      !val.selectedDateCreateBefore &&
+      !val.selectedDateCreateAfter &&
+      !val.selectedDateDeadLinBefore &&
+      !val.selectedDateDeadLineAfter &&
+      !val.title_contain &&
+      !val.task_state &&
+      !val.max_importance &&
+      !val.min_importance
     ) {
       return;
     }
+
     this.todolist = [...this.$store.getters.getTodoList];
 
     if (val.selectedDateCreateBefore) {
@@ -266,6 +268,7 @@ export default class FiltersDrawer extends Vue {
       );
     }
 
+    this.$emit('activeFilterTab', 'tab-posts');
     this.$store.commit("setFilteredTodoList", this.todolist);
   }
 
@@ -282,6 +285,7 @@ export default class FiltersDrawer extends Vue {
     };
     this.$store.commit("setFilteredTodoList", []);
     this.todolist = [];
+    this.$emit('activeFilterTab', 'tab-home');
   }
 
   get min_importance_mirror(): number {
