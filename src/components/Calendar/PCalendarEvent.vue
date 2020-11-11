@@ -14,7 +14,7 @@
     >
       <div slot="header">
         <div class="go-edit">
-          <div @click="editTodoFromEvent(event)">
+          <div @click="showDrawerEditTask(event)">
             <feather type="edit"></feather>
           </div>
         </div>
@@ -91,14 +91,13 @@ import Modal from "@/components/Modal.vue";
 import SubTaskViewer from "@/pages/Forms/SubTaskViewer.vue";
 import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue";
 import { myFunctions } from "../../helpers/helperfunction";
-
-import { bus } from "../../main";
+import { bus } from '../../main';
 
 @Component({
   components: {
     modal: Modal,
     "sub-tasks-viewer": SubTaskViewer,
-    "sub-task-readonly": ReadOnlySubTask
+    "sub-task-readonly": ReadOnlySubTask,
   }
 })
 export default class PCalendarEvent extends Vue {
@@ -106,11 +105,14 @@ export default class PCalendarEvent extends Vue {
   @Prop() calendar!: Calendar<any, any>;
   @Prop() event!: any;
 
-  showDetail: boolean = false;
-
-  editTodoFromEvent(payload) {
-       this.$router.push("/app/todos");
+  showDrawerEditTask(payload): void {
+    if (payload) {
+      this.showDetail = false;
+      bus.$emit('openDrawerEdit', payload);
+    }
   }
+
+  showDetail: boolean = false;
 
   get Title() {
     return this.event.task;
@@ -188,6 +190,6 @@ h1 {
   position: absolute;
   top: 7px;
   left: 10px;
-  cursor: pointer ;
+  cursor: pointer;
 }
 </style>
