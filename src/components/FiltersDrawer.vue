@@ -10,16 +10,13 @@
         <div class="filters-summary">
           <div class="md-layout-item md-size-100">
             <h1>Manage filters</h1>
-            <md-button class="md-tertiary">
+            <md-button class="md-tertiary" @click="reset_filter">
               <feather type="trash-2"></feather>Reset
             </md-button>
           </div>
           <div class="md-layout-item md-size-100 text-left">
-            <h3>{{ filtersNb }} filters added</h3>
-            <p v-if="false">
-              The filters you select will appear directly here. Just click on
-              them to delete.
-            </p>
+            <h3>{{ getNumberFilter() }} filters added</h3>
+            <h3>{{ getNumberCorresonpondingTask() }} corresponding task(s)</h3>
             <div v-if="true" class="active-filters">
               <a
                 v-for="filter in selectedFilters"
@@ -39,7 +36,7 @@
               <v-select
                 :options="list"
                 :clearable="false"
-                v-model="task_state"
+                v-model="filter_data.task_state"
               ></v-select>
               <label>task done, not done or both</label>
             </md-field>
@@ -52,8 +49,8 @@
             <input-text
               type="text"
               initialvalue="Contain the words..."
-              :vmodel="title_contain"
-              @vmodel="title_contain = $event"
+              :vmodel="filter_data.title_contain"
+              @vmodel="filter_data.title_contain = $event"
             ></input-text>
           </div>
 
@@ -64,7 +61,7 @@
             <md-field>
               <datepicker
                 placeholder="YYYY/MM/DD"
-                v-model="selectedDateDeadLineAfter"
+                v-model="filter_data.selectedDateDeadLineAfter"
               ></datepicker>
             </md-field>
           </div>
@@ -73,7 +70,7 @@
             <md-field>
               <datepicker
                 placeholder="YYYY/MM/DD"
-                v-model="selectedDateDeadLinBefore"
+                v-model="filter_data.selectedDateDeadLinBefore"
               ></datepicker>
             </md-field>
           </div>
@@ -85,7 +82,7 @@
             <md-field>
               <datepicker
                 placeholder="YYYY/MM/DD"
-                v-model="selectedDateCreateAfter"
+                v-model="filter_data.selectedDateCreateAfter"
               ></datepicker>
             </md-field>
           </div>
@@ -94,7 +91,7 @@
             <md-field>
               <datepicker
                 placeholder="YYYY/MM/DD"
-                v-model="selectedDateCreateBefore"
+                v-model="filter_data.selectedDateCreateBefore"
               ></datepicker>
             </md-field>
 
@@ -104,35 +101,37 @@
             </label>
 
             <div class="bar-min-max">
-            <div class="min">
-              <label>
-              Min
-              </label>
-              <input type="range" v-model.number="min_importance" />
-              {{ min_importance }}%
-            </div>
+              <div class="min">
+                <label> Min </label>
+                <input
+                  type="range"
+                  v-model.number="filter_data.min_importance"
+                />
+                {{ filter_data.min_importance }}%
+              </div>
 
-            <div class="max">
-               <label>
-              Max
-              </label>
-              <input type="range" v-model.number="max_importance" />
-              {{ max_importance }}%
-            </div>
+              <div class="max">
+                <label> Max </label>
+                <input
+                  type="range"
+                  v-model.number="filter_data.max_importance"
+                />
+                {{ filter_data.max_importance }}%
+              </div>
             </div>
 
             <div class="prog-bar">
               <div class="mirror">
-              <md-progress-bar
-                md-mode="buffer"
-                :md-value="min_importance_mirror"
-                :md-buffer="buffer"
-              ></md-progress-bar>
+                <md-progress-bar
+                  md-mode="buffer"
+                  :md-value="min_importance_mirror"
+                  :md-buffer="buffer"
+                ></md-progress-bar>
               </div>
               <md-progress-bar
                 class="md-accent"
                 md-mode="buffer"
-                :md-value="max_importance"
+                :md-value="filter_data.max_importance"
                 :md-buffer="buffer"
               ></md-progress-bar>
             </div>
@@ -145,33 +144,148 @@
   </md-drawer>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, PropSync } from "vue-property-decorator";
+import { Todo } from "@/models/types";
+import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import InputText from "./../components/Form/InputText.vue";
 
 @Component({
   components: {
-    "input-text": InputText
-  }
+    "input-text": InputText,
+  },
 })
 export default class FiltersDrawer extends Vue {
   @Prop() isActive!: boolean;
 
+  list = ["done", "not done", "any"];
   filtersNb: number = 0;
-  list = ["finished", "not finished", "both"];
-  selectedDateCreateBefore: Date = new Date();
-  selectedDateCreateAfter: Date = new Date();
-  selectedDateDeadLinBefore: Date = new Date();
-  selectedDateDeadLineAfter: Date = new Date();
-  title_contain: string = "";
-  task_state: string = "";
-  max_importance: number = 100;
-  min_importance: number = 0;
+  todolist: Todo[] = [];
+
+  selectedFilters: Array<string> = [];
   buffer: number = 0;
 
-  selectedFilters: Array<string> = ["Glass Maker", "Switzerland"];
+  filter_data = {
+    selectedDateCreateBefore: null,
+    selectedDateCreateAfter: null,
+    selectedDateDeadLinBefore: null,
+    selectedDateDeadLineAfter: null,
+    title_contain: null,
+    task_state: null,
+    max_importance: null,
+    min_importance: null,
+  };
+
+  mounted() {
+    this.todolist = [...this.$store.getters.getTodoList];
+  }
+
+  getNumberFilter(): number {
+    let number: number = 0;
+    for (const [key, value] of Object.entries(this.filter_data)) {
+      if (value) {
+        number = number + 1;
+      }
+    }
+    return number;
+  }
+
+  getNumberCorresonpondingTask(): number {
+    return this.$store.getters.getNumberFilteredTask;
+  }
+
+  @Watch("filter_data", { immediate: false, deep: true })
+  changeFilters(val) {
+    if (
+      val.selectedDateCreateBefore &&
+      val.selectedDateCreateAfter &&
+      val.selectedDateDeadLinBefore &&
+      val.selectedDateDeadLineAfter &&
+      val.title_contain &&
+      val.task_state &&
+      val.max_importance &&
+      val.min_importance
+    ) {
+      return;
+    }
+    this.todolist = [...this.$store.getters.getTodoList];
+
+    if (val.selectedDateCreateBefore) {
+      this.todolist = this.todolist.filter(
+        (todo) =>
+          todo.creationDate <
+          val.selectedDateCreateBefore.toISOString().substr(0, 10)
+      );
+    }
+    if (val.selectedDateCreateAfter) {
+      this.todolist = this.todolist.filter(
+        (todo) =>
+          todo.creationDate >
+          val.selectedDateCreateAfter.toISOString().substr(0, 10)
+      );
+    }
+
+    if (val.selectedDateDeadLinBefore) {
+      this.todolist = this.todolist.filter(
+        (todo) =>
+          todo.deadline <
+          val.selectedDateDeadLinBefore.toISOString().substr(0, 10)
+      );
+    }
+
+    if (val.selectedDateDeadLineAfter) {
+      this.todolist = this.todolist.filter(
+        (todo) =>
+          todo.deadline >
+          val.selectedDateDeadLineAfter.toISOString().substr(0, 10)
+      );
+    }
+
+    if (val.title_contain) {
+      this.todolist = this.todolist.filter((todo) =>
+        todo.task.includes(val.title_contain)
+      );
+    }
+
+    if (val.task_state) {
+      if (val.task_state === "done") {
+        this.todolist = this.todolist.filter((todo) => todo.isdone);
+      }
+      if (val.task_state === "not done") {
+        this.todolist = this.todolist.filter((todo) => !todo.isdone);
+      }
+    }
+
+    if (val.max_importance) {
+      this.todolist = this.todolist.filter(
+        (todo) => todo.importance < val.max_importance
+      );
+    }
+
+    if (val.min_importance) {
+      this.todolist = this.todolist.filter(
+        (todo) => todo.importance > val.min_importance
+      );
+    }
+
+    this.$store.commit("setFilteredTodoList", this.todolist);
+  }
+
+  reset_filter(): void {
+    this.filter_data = {
+      selectedDateCreateBefore: null,
+      selectedDateCreateAfter: null,
+      selectedDateDeadLinBefore: null,
+      selectedDateDeadLineAfter: null,
+      title_contain: null,
+      task_state: null,
+      max_importance: null,
+      min_importance: null,
+    };
+    this.$store.commit("setFilteredTodoList", []);
+    this.todolist = [];
+  }
 
   get min_importance_mirror(): number {
-    return 100 - this.min_importance ;
+    return 100 - this.filter_data.min_importance;
   }
 
   get localIsActive(): boolean {
@@ -209,22 +323,22 @@ export default class FiltersDrawer extends Vue {
   margin-left: 5px;
 }
 
-.bar-min-max{
+.bar-min-max {
   margin-top: 15px;
   margin-left: 25px;
   display: flex;
   widows: 100%;
 }
-.max{
+.max {
   position: absolute;
   right: 0;
 }
-.min{
+.min {
   position: absolute;
   left: 20px;
 }
-.mirror{
-  transform:         scaleX(-1); /* Standard */
-  filter: FlipH;                 /* IE 6/7/8 */
+.mirror {
+  transform: scaleX(-1); /* Standard */
+  filter: FlipH; /* IE 6/7/8 */
 }
 </style>

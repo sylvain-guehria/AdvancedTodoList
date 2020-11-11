@@ -26,7 +26,7 @@
       >
         <md-table-cell md-sort-by="task" md-label="Task Title"
           >{{ item.task }} &nbsp; ({{
-            item.description ? item.description.length : 0
+            getNumberSubTaskActive(item)
           }})</md-table-cell
         >
         <md-table-cell md-sort-by="deadline" md-label="Deadline">{{
@@ -103,6 +103,9 @@ export default {
     }
   },
   methods: {
+    getNumberSubTaskActive(item) : number{
+      return item.description ? item.description.filter(subtask => !subtask.isdone).length : 0
+    },
     deleteTodo(key: string): void {
       this.$store
         .dispatch("deleteTodo", key)
@@ -110,13 +113,16 @@ export default {
           this.$toasted.show("Task deleted, it is no longer in your list", {
             icon: "delete_outline",
             theme: "bubble",
-            position: "top-center",
+            position: "bottom-right",
             duration: 5000
           });
         })
         .catch((error: Error) => {
           this.$toasted.show("Cannot deleted Task", {
-            icon: "delete_outline"
+            icon: "error_outline",
+            theme: "bubble",
+            position: "bottom-right",
+            duration: 5000
           });
         });
     },

@@ -16,6 +16,7 @@ export interface User {
 
 export interface State {
   todolist: Todo[];
+  filtered_todo_list: Todo[];
   coloredtodolist: Todo[];
   user: User;
   currentTodo: Todo,

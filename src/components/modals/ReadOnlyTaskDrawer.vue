@@ -68,11 +68,17 @@
               ></datepicker>
             </md-field>
           </div>
-
-          <sub-tasks-viewer
+          <!-- <sub-tasks-viewer
             :readonly="true"
             :subtasksreceived="this.formData.description"
-          ></sub-tasks-viewer>
+          ></sub-tasks-viewer> -->
+          <div class="readonly-subtasks" v-if="this.formData.description">
+            <read-only-task-viewer
+              :subtasksreceived="this.formData.description"
+              :todo="this.formData"
+            >
+            </read-only-task-viewer>
+          </div>
         </div>
       </div>
     </div>
@@ -86,11 +92,13 @@ import InputText from "../../components/Form/InputText.vue";
 import SubtaskViewer from "../../pages/Forms/SubTaskViewer.vue";
 
 import { bus } from "../../main";
+import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue";
 
 @Component({
   components: {
     "input-text": InputText,
-    "sub-tasks-viewer": SubtaskViewer
+    // "sub-tasks-viewer": SubtaskViewer
+    "read-only-task-viewer": ReadOnlySubTask
   }
 })
 export default class ReadOnlyTaskDrawer extends Vue {
@@ -145,44 +153,6 @@ export default class ReadOnlyTaskDrawer extends Vue {
 
   subTasks: SubTask[] = [];
 
-  actionTodo() {
-    this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
-    this.formData.deadline = this.dateHelper;
-
-    let todo: Todo = { ...this.formData };
-
-    let action: string = todo.key ? "editTodo" : "createTodo";
-
-    this.$store
-      .dispatch(action, todo)
-      .then(() => {
-        this.$toasted.show("Task created, it is now in your list =)", {
-            icon: "create",
-            theme: "outline",
-            position: "top-center",
-            duration: 5000
-          });
-      })
-      .catch((error: Error) => {
-       this.$toasted.show("Cannot create task", {
-            icon: "create",
-            theme: "bubble",
-            position: "top-center",
-            duration: 5000
-          });
-      });
-
-    this.toggleMenu();
-    this.resteForm();
-    this.$store.commit("resetCurrentTodo");
-    //emitt event for child
-    bus.$emit("resetSubTasks");
-  }
-
-  setSubTasks(subtasks: SubTask[]) {
-    this.formData.description = [...subtasks];
-  }
-
   resteForm() {
     this.formData = {
       key: "",
@@ -216,5 +186,11 @@ export default class ReadOnlyTaskDrawer extends Vue {
 }
 .imp-input {
   margin-bottom: 15px;
+}
+.readonly-subtasks {
+  display: inline-block;
+  width: 100%;
+  margin: auto;
+  margin-top: 100px;
 }
 </style>

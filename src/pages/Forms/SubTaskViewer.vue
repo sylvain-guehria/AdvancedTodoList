@@ -154,7 +154,7 @@ export default class SubTaskViewer extends Vue {
 
 .testt{
   width: 100%;
-  height: auto;
+  padding: 5px;
 }
 
 .subtask-button {
@@ -166,7 +166,7 @@ export default class SubTaskViewer extends Vue {
   display: inline-block;
   border: 1px solid transparent;
   font-size: 16px;
-  max-width: 140px;
+  max-width: 300px;
 }
 
 .completed {

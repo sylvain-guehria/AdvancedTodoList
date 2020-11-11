@@ -27,6 +27,9 @@
         <feather type="x-circle"></feather>
         <p>subtask not done</p>
       </div>
+      <div class="legend-2">
+        (x) number of active subtasks
+      </div>
     </div>
   </div>
 </template>

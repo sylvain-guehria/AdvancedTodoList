@@ -219,14 +219,14 @@ export default class LoginModal extends Vue {
      this.$toasted.show("You signed up, Welcome", {
             icon: "create",
             theme: "bubble",
-            position: "top-center",
+            position: "bottom-right",
             duration: 5000
           });
     }).catch((error: Error) => {
      this.$toasted.show("Cannot register you" + error, {
-            icon: "create",
+            icon: "error-outline",
             theme: "bubble",
-            position: "top-center",
+            position: "bottom-right",
             duration: 5000
           });
     });
@@ -279,18 +279,18 @@ export default class LoginModal extends Vue {
       .loginEmail(this.user.data.email, this.user.data.password)
       .then(() => {
          this.$toasted.show("We logged you in, Hello", {
-            icon: "create",
-            theme: "outline",
-            position: "top-center",
+            icon: "login",
+            theme: "bubble",
+            position: "bottom-right",
             duration: 5000
           });
         this.goToApp();
       })
       .catch((error: Error) => {
        this.$toasted.show("Cannot logged you in..", {
-            icon: "create",
-            theme: "outline",
-            position: "top-center",
+            icon: "error-outline",
+            theme: "bubble",
+            position: "bottom-right",
             duration: 5000
           });
       });

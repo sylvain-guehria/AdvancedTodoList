@@ -7,7 +7,7 @@ import FullContentLayout from "@/pages/Layout/FullContentLayout.vue";
 
 import TotoList from "@/pages/TotoList.vue";
 import Planning from "@/pages/Planning.vue";
-import DashboardForm from "@/pages/Forms/DashboardForm.vue";
+import Eisenhower from "@/pages/Eisenhower.vue"
 import Notifications from "@/pages/Notifications.vue";
 import Login from "@/pages/Login.vue";
 import Contactme from "@/pages/Contactme.vue";
@@ -80,7 +80,7 @@ let router = new Router({
         {
           path: "/app/eisenhower",
           name: "Eisenhower matrix",
-          component: DashboardForm,
+          component: Eisenhower,
           meta: {
             breadcrumb: "Eisenhower matrix",
             requiresAuth: true

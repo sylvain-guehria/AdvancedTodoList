@@ -143,26 +143,37 @@ export default class EditTaskDrawer extends Vue {
     this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
     this.formData.deadline = this.dateHelper;
 
+    if(!this.formData.task){
+       this.$toasted.show("Your task must have a title", {
+            icon: "warning",
+            theme: "bubble",
+            position: "top-right",
+            duration: 5000
+          });
+          return '';
+    }
+
 
     let todo: Todo = {...this.formData};
 
     let action: string = todo.key ? "editTodo" : "createTodo";
+    let msg: string = todo.key ? "Task updated" : "Task created";
 
     this.$store
       .dispatch(action, todo)
       .then(() => {
-         this.$toasted.show("Task created, it is now in your list =)", {
+         this.$toasted.show(msg + " , it is now in your list", {
             icon: "create",
-            theme: "outline",
-            position: "top-center",
+            theme: "bubble",
+            position: "bottom-right",
             duration: 5000
           });
       })
       .catch((error: Error) => {
         this.$toasted.show("Cannot create task", {
-            icon: "create",
+            icon: "error_outline",
             theme: "bubble",
-            position: "top-center",
+            position: "bottom-right",
             duration: 5000
           });
       });
