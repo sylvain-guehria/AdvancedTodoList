@@ -3,6 +3,7 @@ import { database } from '../../firebase/firebase';
 import lodash from 'lodash';
 
 var todolist: Todo[] = [];
+var filtered_todo_list: Todo[] = [];
 var coloredtodolist: Todo[] = [];
 var numberActiveTask = 0;
 var numberTotalTask = 0;
@@ -28,7 +29,8 @@ const state: State = {
   currentTodo: currentTodo,
   numberActiveTask: numberActiveTask,
   numberTotalTask: numberTotalTask,
-  isLoading: isLoading
+  isLoading: isLoading,
+  filtered_todo_list : filtered_todo_list
 };
 
 const getters = {
@@ -40,6 +42,9 @@ const getters = {
   },
   getTodoList: (state: State) => {
     return state.todolist;
+  },
+  getFilteredTodoList: (state: State) => {
+    return state.filtered_todo_list;
   },
   getActiveTodoList: (state: State) => {
     return state.todolist.filter(todo => !todo.isdone);
@@ -53,6 +58,9 @@ const getters = {
   getNumberTotalTask: (state: State) => {
     return state.todolist.length;
   },
+  getNumberFilteredTask: (state: State) => {
+    return state.filtered_todo_list.length;
+  },
   getNumberActiveTask: (state: State) => {
     return state.todolist.filter(todo => !todo.isdone).length;
   }
@@ -64,6 +72,9 @@ const mutations = {
   },
   setTodoList (state: State, newList: Todo[]) {
     state.todolist = newList;
+  },
+  setFilteredTodoList (state: State, newList: Todo[]) {
+    state.filtered_todo_list = newList;
   },
   setColoredTodoList (state: State, newList: Todo[]) {
     state.coloredtodolist = newList;

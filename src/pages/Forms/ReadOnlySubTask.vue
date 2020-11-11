@@ -44,8 +44,6 @@ export default class ReadOnlySubTask extends Vue {
   }
 
   setSubtTaskDone(subtask: SubTask): void {
-    // eslint-disable-next-line no-console
-    console.log("je set la subtask", subtask, this.localTodo);
     let todo = this.localTodo;
     this.$store.dispatch("setSubTaskDone", { todo, subtask });
 

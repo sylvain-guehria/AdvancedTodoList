@@ -9,20 +9,20 @@
         </div>
       </div>
       <div class="md-layout-item md-size-50 padding-20 text-align-left">
-        <div class="menu-title"><p class="title">
-        {{ new Date().toLocaleDateString() }}</p>
+        <div class="menu-title">
+          <p class="title">
+            {{ new Date().toLocaleDateString() }}
+          </p>
         </div>
       </div>
       <div class="md-layout-item md-size-50 padding-20 text-align-right">
         <!-- <p class="subtitle">Start of project phase 2019/12/06</p> -->
       </div>
       <div class="md-layout-item md-size-50 padding-20 text-align-right">
-        
         <!-- button for drawer add task -->
-    <md-button class="md-tertiary" @click="showDrawerAddTask">
-      <feather type="plus"></feather>Add a task
-    </md-button>
-
+        <md-button class="md-tertiary" @click="showDrawerAddTask">
+          <feather type="plus"></feather>Add a task
+        </md-button>
       </div>
       <div class="md-layout-item md-size-100" style="margin-top: 70px">
         <md-tabs>
@@ -31,12 +31,13 @@
             <span class="md-tab-label">{{ tab.label }}</span>
             <i class="badge" v-if="tab.data.badge">{{ tab.data.badge }}</i>
           </template>
+
           <md-tab
             id="tab-home"
             md-label="Tasks not finished"
             md-icon="activity"
             :md-template-data="{
-              badge: this.$store.getters.getNumberActiveTask
+              badge: this.$store.getters.getNumberActiveTask,
             }"
           >
             <simple-table
@@ -51,7 +52,7 @@
             md-label="All tasks"
             md-icon="list"
             :md-template-data="{
-              badge: this.$store.getters.getNumberTotalTask
+              badge: this.$store.getters.getNumberTotalTask,
             }"
           >
             <simple-table
@@ -61,6 +62,23 @@
               @showReadOnlyTaskDrawer="showReadOnlyTaskDrawer"
             ></simple-table>
           </md-tab>
+
+            <!-- only when using filter -->
+          <md-tab
+            id="tab-posts"
+            v-if="this.$store.getters.getNumberFilteredTask > 0 "
+            md-label="Filtered tasks"
+            md-icon="filter"
+            :md-template-data="{
+              badge: this.$store.getters.getNumberFilteredTask,
+            }"
+          >
+            <simple-table
+              :key="this.$store.getters.getNumberFilteredTask"
+              :todolist="this.$store.getters.getFilteredTodoList"
+            ></simple-table>
+          </md-tab>
+          <!-- end filter list -->
         </md-tabs>
       </div>
 
@@ -69,18 +87,17 @@
       <edit-task-drawer
         :isActive="showAddTask"
         @isActive="updateIsActiveAddTask"
-        ></edit-task-drawer>
+      ></edit-task-drawer>
 
       <filters-drawer
         :isActive="showFilters"
         @isActive="updateIsActive"
       ></filters-drawer>
-      
-       <read-only-task-viewer
-      :isActive="showReadTask"
-      @isActive="updateIsActiveReadTask"
-    ></read-only-task-viewer>
 
+      <read-only-task-viewer
+        :isActive="showReadTask"
+        @isActive="updateIsActiveReadTask"
+      ></read-only-task-viewer>
     </div>
     <div class="spinner-rotate" v-show="isLoading"></div>
   </div>
@@ -90,7 +107,7 @@
 import { SimpleTable } from "@/components";
 import FiltersDrawer from "../components/FiltersDrawer.vue";
 import EditTaskDrawer from "../components/modals/EditTaskDrawer.vue";
-import ReadOnlyTaskDrawer from  '../components/modals/ReadOnlyTaskDrawer.vue'
+import ReadOnlyTaskDrawer from "../components/modals/ReadOnlyTaskDrawer.vue";
 
 export default {
   name: "TotoList",
@@ -98,7 +115,7 @@ export default {
     SimpleTable,
     "filters-drawer": FiltersDrawer,
     "edit-task-drawer": EditTaskDrawer,
-    "read-only-task-viewer" : ReadOnlyTaskDrawer
+    "read-only-task-viewer": ReadOnlyTaskDrawer,
   },
   data() {
     return {
@@ -117,18 +134,18 @@ export default {
     }, 0);
   },
   methods: {
-      showDrawerAddTask (): void{
-      this.$store.commit('resetCurrentTodo');
+    showDrawerAddTask(): void {
+      this.$store.commit("resetCurrentTodo");
       this.showAddTask = true;
-  },
-    showDrawerEditTask (payload): void{
-      if(payload){
-      this.$store.commit('setCurrentTodo', payload.key);
-      this.showAddTask = true;
+    },
+    showDrawerEditTask(payload): void {
+      if (payload) {
+        this.$store.commit("setCurrentTodo", payload.key);
+        this.showAddTask = true;
       }
-  },
-  showReadOnlyTaskDrawer(payload): void {
-      this.$store.commit('setCurrentTodo', payload.key);
+    },
+    showReadOnlyTaskDrawer(payload): void {
+      this.$store.commit("setCurrentTodo", payload.key);
       this.showReadTask = true;
     },
     updateIsActive(value) {
@@ -152,9 +169,8 @@ export default {
     isReached(stepNb) {
       return this.objectStep >= stepNb;
     },
-  }
+  },
 };
 </script>
 <style scoped>
-
 </style>

@@ -33,8 +33,6 @@ export default {
   },
   methods:{
   showDrawerEditTask(payload){
-    // eslint-disable-next-line no-console
-      console.log('drawer evenntn', payload);
     if (payload) {
       this.$store.commit("setCurrentTodo", payload.key);
       this.showAddTask = true;
