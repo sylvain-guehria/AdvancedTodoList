@@ -25,7 +25,7 @@
         </md-button>
       </div>
       <div class="md-layout-item md-size-100" style="margin-top: 70px">
-        <md-tabs>
+        <md-tabs :md-active-tab="dynamic_tab">
           <template slot="md-tab" slot-scope="{ tab }">
             <feather class="md-tab-icon" :type="tab.icon"></feather>
             <span class="md-tab-label">{{ tab.label }}</span>
@@ -63,10 +63,10 @@
             ></simple-table>
           </md-tab>
 
-            <!-- only when using filter -->
+          <!-- only when using filter -->
           <md-tab
             id="tab-posts"
-            v-if="this.$store.getters.getNumberFilteredTask > 0 "
+            v-if="this.$store.getters.getNumberFilteredTask > 0"
             md-label="Filtered tasks"
             md-icon="filter"
             :md-template-data="{
@@ -92,6 +92,7 @@
       <filters-drawer
         :isActive="showFilters"
         @isActive="updateIsActive"
+        @activeFilterTab="setDynamicTab"
       ></filters-drawer>
 
       <read-only-task-viewer
@@ -126,6 +127,7 @@ export default {
       objectStep: 3,
       isLoading: true,
       showReadTask: false,
+      dynamic_tab: "tab-home",
     };
   },
   created() {
@@ -134,6 +136,9 @@ export default {
     }, 0);
   },
   methods: {
+    setDynamicTab(tab: string) {
+      this.dynamic_tab = tab;
+    },
     showDrawerAddTask(): void {
       this.$store.commit("resetCurrentTodo");
       this.showAddTask = true;
