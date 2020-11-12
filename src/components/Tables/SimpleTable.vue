@@ -6,6 +6,7 @@
       md-sort-order="asc"
       md-card
     >
+
       <md-empty-state v-if="this.$store.getters.getIsLoading"
         ><div class="spinner-rotate"></div
       ></md-empty-state>
@@ -41,9 +42,16 @@
         <md-table-cell
           md-sort-by="importance"
           md-label="Importance (/100)"
-          class="last-column"
         >
           {{ item.importance }}
+        </md-table-cell>
+         <md-table-cell
+          md-label="done / not done"
+          class="last-column"
+        >
+           <feather type="check" v-if="item.isdone"></feather>
+          <feather type="x-circle" v-if="!item.isdone"></feather>
+          
         </md-table-cell>
         <md-table-cell md-fixed-header class="more-column right-arrow">
           <md-menu
