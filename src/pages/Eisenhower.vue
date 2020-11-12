@@ -1,7 +1,7 @@
 <template>
   <div class="content">
   <div class="md-layout-item md-size-100">
-    <eisenhowerChart></eisenhowerChart>
+    <eisenhowerChart :key="this.$store.getters.getNumberTotalTask"></eisenhowerChart>
     <chart-legend></chart-legend>
   </div>
   </div>

@@ -128,10 +128,15 @@ export default class EisenhowerChart extends Vue {
         type: "xy",
       },
     },
+    markers: {
+      // FIXME : display task
+      onClick: function (e) {
+      },
+    },
     xaxis: {
       title: {
         text: "Urgency of the task",
-         style: {
+        style: {
           fontSize: "17px",
           fontWeight: "bold",
           fontFamily: undefined,
