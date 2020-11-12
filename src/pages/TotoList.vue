@@ -82,6 +82,11 @@
         </md-tabs>
       </div>
 
+      <div class="legend-list">
+        <feather type="arrow-up"></feather>
+        <feather type="arrow-down"></feather>
+        <p>click column title to sort</p>
+      </div>
       <!-- drawers -->
 
       <edit-task-drawer
@@ -178,4 +183,13 @@ export default {
 };
 </script>
 <style scoped>
+.legend-list {
+  display: flex;
+  position: absolute;
+  bottom: 220px;
+  left: 50px;
+}
+p {
+  margin-left: 10px;
+}
 </style>
