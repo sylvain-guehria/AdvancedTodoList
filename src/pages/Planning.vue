@@ -2,7 +2,7 @@
   <div class="content no-padding-top planning-calendar">
     <div class="md-layout">
       <planning-calendar :key="this.showAddTask"/>
-      <legend-bullet></legend-bullet>
+      <legend-bullet :planning="true"></legend-bullet>
     </div>
 
     <!-- drawer edti -->

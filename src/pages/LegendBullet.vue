@@ -18,7 +18,7 @@
         <p>Task Not Urgent, Not Important</p>
       </div>
     </div>
-    <div class="legend">
+    <div class="legend" v-if="planning">
       <div class="legend-2">
         <feather type="check"></feather>
         <p>subtask done</p>
@@ -27,20 +27,19 @@
         <feather type="x-circle"></feather>
         <p>subtask not done</p>
       </div>
-      <div class="legend-2">
-        (x) number of active subtasks
-      </div>
+      <div class="legend-2">(x) number of active subtasks</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: ['planning'],
   components: {},
   data() {
     return {};
   },
-  methods: {}
+  methods: {},
 };
 </script>
 <style scoped>
@@ -58,8 +57,8 @@ export default {
 p {
   margin-left: 10px;
 }
-.layout{
+.layout {
   display: flex;
-  margin-top : 25px
+  margin-top: 25px;
 }
 </style>

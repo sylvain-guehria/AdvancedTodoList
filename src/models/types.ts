@@ -7,6 +7,7 @@ export interface Todo {
   creationDate: string;
   isdone: boolean;
   numberdaysleft?: number;
+  urgency?: number;
 }
 
 export interface User {
