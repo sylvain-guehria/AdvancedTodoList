@@ -23,6 +23,19 @@
           <feather type="file-plus"></feather>
           <p>Help</p>
         </sidebar-link>
+<!-- 
+        <md-menu md-direction="top-start">
+            <sidebar-link to="" md-menu-trigger>
+              <feather type="settings"></feather>
+              <p>Settings</p>
+            </sidebar-link>
+          <md-menu-content>
+            <md-menu-item>My Item 1</md-menu-item>
+            <md-menu-item>My Item 2</md-menu-item>
+            <md-menu-item>My Item 3</md-menu-item>
+          </md-menu-content>
+        </md-menu> -->
+
         <sidebar-link to="/login">
           <feather type="settings"></feather>
           <p>Settings</p>
