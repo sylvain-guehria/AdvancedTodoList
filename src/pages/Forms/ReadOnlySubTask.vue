@@ -62,6 +62,7 @@ export default class ReadOnlySubTask extends Vue {
   font-size: 16px;
   max-width: 140px;
   word-break: break-word;
+  font-size: 19px
 }
 
 .my-table {

@@ -114,6 +114,7 @@ import FiltersDrawer from "../components/FiltersDrawer.vue";
 import EditTaskDrawer from "../components/modals/EditTaskDrawer.vue";
 import ReadOnlyTaskDrawer from "../components/modals/ReadOnlyTaskDrawer.vue";
 import LegendBulletVue from './LegendBullet.vue';
+import { bus } from '../main';
 
 export default {
   name: "TotoList",
@@ -140,6 +141,9 @@ export default {
     setTimeout(() => {
       this.isLoading = false;
     }, 0);
+  },
+   mounted (){
+    bus.$on('openDrawerEdit', this.showDrawerEditTask);
   },
   methods: {
     setDynamicTab(tab: string) {

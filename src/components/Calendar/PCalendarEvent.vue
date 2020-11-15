@@ -196,4 +196,10 @@ h1 {
   left: 10px;
   cursor: pointer;
 }
+
+.md-layout-item{
+  font-family: initial;
+  font-size: 19px !important;
+  margin-top: 10px;
+}
 </style>

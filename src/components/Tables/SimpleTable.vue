@@ -20,27 +20,29 @@
       ></md-empty-state>
 
       <md-table-row
-        @click="DisplayTask(item.key)"
         slot="md-table-row"
         slot-scope="{ item }"
+        @click="DisplayModalTask(item)"
       >
         <md-table-cell md-sort-by="task" md-label="Task Title"
-          ><div class="color-flex"> <div class="bullet" :class="bulletClass(item)"></div>
-           {{ item.task }} &nbsp; ({{
-            getNumberSubTaskActive(item)
-          }}) </div> </md-table-cell
-        >
-        <md-table-cell md-sort-by="deadline" md-label="Deadline">{{
+          ><div class="color-flex">
+            <div class="bullet" :class="bulletClass(item)"></div>
+            <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }}) </p>
+          </div>
+        </md-table-cell>
+        <md-table-cell md-sort-by="deadline" md-label="Deadline"> 
+          <p>{{
           item.deadline
-        }}</md-table-cell>
-        <md-table-cell md-sort-by="creationDate" md-label="Creation date">{{
+        }}</p></md-table-cell>
+        <md-table-cell md-sort-by="creationDate" md-label="Creation date">
+          <p>{{
           item.creationDate
-        }}</md-table-cell>
+        }}</p></md-table-cell>
         <md-table-cell md-sort-by="numberdaysleft" md-label="Number days left">
-          {{ item.numberdaysleft }}
+          <p>{{ item.numberdaysleft }}</p>
         </md-table-cell>
         <md-table-cell md-sort-by="importance" md-label="Importance (/100)">
-          {{ item.importance }}
+          <p>{{ item.importance }}</p>
         </md-table-cell>
         <md-table-cell md-label="done / not done" class="last-column">
           <feather type="check" v-if="item.isdone"></feather>
@@ -84,6 +86,21 @@
       :serverSide="false"
       @paginationEvent="doServerPagination($event)"
     ></table-pagination>
+
+    <!-- modal display task -->
+    <div>
+      <md-dialog
+        :md-active.sync="showDialog"
+        :show="showDialog"
+        @show="showDialog = $event"
+      >
+        <display-task-modal
+          :key="item ? item.id : null"
+          :event="item ? item : null"
+          @closeDialog="showDialog = false"
+        ></display-task-modal>
+      </md-dialog>
+    </div>
   </div>
 </template>
 
@@ -91,11 +108,13 @@
 import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from "../../helpers/helperfunction";
 import { Todo } from "../../models/types";
+import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 
 export default {
   name: "simple-table",
   components: {
     "table-pagination": TablePaginationVue,
+    "display-task-modal": DisplayTaskModal,
   },
   props: ["todolist"],
   computed: {
@@ -135,6 +154,10 @@ export default {
     DisplayTask(key: string): void {
       this.$emit("showReadOnlyTaskDrawer", { key: key });
     },
+    DisplayModalTask(item: Todo): void {
+      this.item = item;
+      this.showDialog = true;
+    },
     setTodoDone(item: Todo): void {
       this.$store.dispatch("setTodoDone", item);
     },
@@ -165,31 +188,19 @@ export default {
     giveColorTodo(item): number {
       if (item && item.deadline) {
         // red Task : important and urgent ok
-        if (
-          this.getdaysleft(item.deadline) < 2 &&
-          item.importance >= 50
-        ) {
+        if (this.getdaysleft(item.deadline) < 2 && item.importance >= 50) {
           return 1;
         }
         // orange/jaune tasks : important, not urgent
-        if (
-          this.getdaysleft(item.deadline) >= 2 &&
-          item.importance >= 50
-        ) {
+        if (this.getdaysleft(item.deadline) >= 2 && item.importance >= 50) {
           return 2;
         }
         // blue task : urgent but not important
-        if (
-          this.getdaysleft(item.deadline) < 2 &&
-          item.importance < 50
-        ) {
+        if (this.getdaysleft(item.deadline) < 2 && item.importance < 50) {
           return 3;
         }
         // green  task : not urgent and not important ok
-        if (
-          this.getdaysleft(item.deadline) >= 2 &&
-          item.importance < 50
-        ) {
+        if (this.getdaysleft(item.deadline) >= 2 && item.importance < 50) {
           return 0;
         }
         if (item) {
@@ -214,17 +225,24 @@ export default {
       todos: [],
       paginatedTodos: [],
       getdaysleft: myFunctions.getdaysleft,
+      item: {},
+      showDialog: false,
     };
   },
 };
 </script>
 
 <style lang="css" scoped>
-.color-flex{
+.color-flex {
   display: flex;
 }
-.bullet{
+.bullet {
   margin-right: 10px;
-  margin-top: 3px
+  margin-top: 3px;
+}
+
+p{
+  font-size : 19px !important;
+  font-family: initial;
 }
 </style>

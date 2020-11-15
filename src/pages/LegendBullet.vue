@@ -75,11 +75,14 @@ export default {
   padding: 10px;
   margin-left: 15px;
 }
+
 .bullet {
   margin: 5px;
 }
 p {
   margin-left: 10px;
+  font-family: initial;
+  font-size : 16px !important
 }
 .layout {
   display: flex;
