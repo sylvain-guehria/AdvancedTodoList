@@ -4,7 +4,7 @@
       <h1>Stay productive .!</h1>
     </hgroup>
 
-    <div class="form-structor" v-bind:style="cssProps">
+    <div class="form-structor" :style="{ backgroundImage: `url('${image}')` }">
       <div class="signup" :class="signupclass">
         <h2
           class="form-title font-fam"
@@ -141,15 +141,11 @@ export default class LoginModal extends Vue {
     document.body.className = "login";
   }
 
-  cssProps() {
-           return { backgroundImage: `url(${require('@/assets/images/testimg.jpeg')})` }
-        }
-
   mounted() {
     firebase.setAuthChange();
   }
 
-  image = "./assets/images/testimg.jpeg";
+  image = "testimg.jpeg";
 
   showTooltip: boolean;
 
