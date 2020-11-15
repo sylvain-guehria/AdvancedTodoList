@@ -320,7 +320,7 @@ export default class LoginModal extends Vue {
     background-repeat: no-repeat;
     background-position: left bottom;
     background-size: 500px;
-    background-image: url("<%= webpackConfig.output.publicPath %>testimg.jpeg");
+    background-image: url("/testimg.jpeg");
   }
 
   .signup {
