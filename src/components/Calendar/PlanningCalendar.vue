@@ -3,7 +3,7 @@
     <toolbar :calendar="calendar" @monthChange="monthChanged($event)" />
     <weeks-view
       :calendar="calendar"
-      :key="this.$store.getters.getNumberTotalTask"
+      :key="generatedKey"
     />
   </div>
 </template>
@@ -28,14 +28,26 @@ export default class PlanningCalendar extends Vue {
     this.removeWeekend();
   }
 
+  updated(){
+    this.removeWeekend();
+  }
+
+  get generatedKey(){
+    return this.$store.getters.getNumberTotalTask + this.$store.getters.getWithWeekEnd;
+  }
+
   monthChanged(calendar: Calendar<any, any>) {
     this.removeWeekend();
   }
 
   removeWeekend() {
+    if(!this.$store.getters.getWithWeekEnd){
     this.calendar.days = this.calendar.days.filter(
       d => d.dayOfWeek !== Weekday.SATURDAY && d.dayOfWeek !== Weekday.SUNDAY
     );
+    }else{
+      this.calendar.days = Calendar.months().days
+    }
   }
 }
 </script>

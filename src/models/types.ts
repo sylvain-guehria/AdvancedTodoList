@@ -7,6 +7,7 @@ export interface Todo {
   creationDate: string;
   isdone: boolean;
   numberdaysleft?: number;
+  urgency?: number;
 }
 
 export interface User {
@@ -22,7 +23,9 @@ export interface State {
   currentTodo: Todo,
   numberActiveTask: number,
   numberTotalTask: number,
-  isLoading: boolean
+  isLoading: boolean,
+  with_weekend: boolean,
+  currentLang: string
 }
 
 export interface SubTask {

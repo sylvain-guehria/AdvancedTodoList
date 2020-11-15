@@ -13,6 +13,10 @@ import GlobalDirectives from "./globalDirectives";
 // MaterialDashboard plugin
 import MaterialDashboard from "./material-dashboard";
 
+//chart
+import VueApexCharts from 'vue-apexcharts'
+
+
 export const bus = new Vue();
 
 Vue.use(VueToasted, {
@@ -24,6 +28,10 @@ Vue.use(Notifications);
 
 Vue.use(MaterialDashboard);
 Vue.use(GlobalDirectives);
+Vue.use(VueApexCharts)
+
+Vue.component('apexchart', VueApexCharts)
+
 
 /* eslint-disable no-new */
 new Vue({

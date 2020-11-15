@@ -1,9 +1,9 @@
 <template>
   <div class="week">
-    <template v-for="(day, i) in days">
+    <template v-for="(day, index) in days">
       <day-block
         v-on="$listeners"
-        :key="i"
+        :key="generatedKey(index)"
         :day="day"
         :calendar="calendar"
         :placeholder="placeholder"
@@ -20,8 +20,8 @@ import DayBlock from "./DayBlock.vue";
 
 @Component({
   components: {
-    "day-block": DayBlock
-  }
+    "day-block": DayBlock,
+  },
 })
 export default class DayRow extends Vue {
   @Prop() days!: Array<any>;
@@ -29,8 +29,13 @@ export default class DayRow extends Vue {
   @Prop() placeholder!: CalendarEvent<any, any>;
   @Prop() placeholderForCreate!: Boolean;
 
+
   created() {
     this.removeWeekend();
+  }
+
+  generatedKey(index){
+    return this.$store.getters.getNumberTotalTask + this.$store.getters.getWithWeekEnd + index;
   }
 
   monthChanged(calendar: Calendar<any, any>) {
@@ -38,9 +43,12 @@ export default class DayRow extends Vue {
   }
 
   removeWeekend() {
-    this.calendar.days = this.calendar.days.filter(
-      d => d.dayOfWeek !== Weekday.SATURDAY && d.dayOfWeek !== Weekday.SUNDAY
-    );
+    if (!this.$store.getters.getWithWeekEnd) {
+      this.calendar.days = this.calendar.days.filter(
+        (d) =>
+          d.dayOfWeek !== Weekday.SATURDAY && d.dayOfWeek !== Weekday.SUNDAY
+      );
+    }
   }
 }
 </script>

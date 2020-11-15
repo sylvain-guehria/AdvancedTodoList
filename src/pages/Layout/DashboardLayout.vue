@@ -13,22 +13,36 @@
         <feather type="calendar"></feather>
         <p>Planning</p>
       </sidebar-link>
-      <sidebar-link to="/app/eisenhower">
+      <!-- <sidebar-link to="/app/eisenhower">
         <feather type="pie-chart"></feather>
         <p>Eisenhower</p>
-      </sidebar-link>
+      </sidebar-link> -->
 
       <div class="bottom-menu">
         <sidebar-link to="/app/help">
           <feather type="file-plus"></feather>
           <p>Help</p>
         </sidebar-link>
-        <sidebar-link to="/login">
+
+        <md-menu md-direction="top-start">
+            <sidebar-link to="" md-menu-trigger :noTriangleLeft="true">
+              <feather type="settings"></feather>
+              <p>Settings</p>
+            </sidebar-link>
+          <md-menu-content>
+            <md-menu-item v-if="this.$store.getters.getWithWeekEnd" @click="setWeekEnd(false)"> <feather type="calendar"></feather>Remove week-end</md-menu-item>
+            <md-menu-item v-if="!this.$store.getters.getWithWeekEnd" @click="setWeekEnd(true)"> <feather type="calendar"></feather>Display week-end</md-menu-item>
+            <md-menu-item v-if="this.$store.getters.getCurrentLang !== 'fr'" @click="setCurrentLang('fr')" ><feather type="flag"></feather>set french</md-menu-item>
+            <md-menu-item v-if="this.$store.getters.getCurrentLang !== 'en'" @click="setCurrentLang('en')" ><feather type="flag"></feather>set english</md-menu-item>
+          </md-menu-content>
+        </md-menu>
+
+        <!-- <sidebar-link to="/login">
           <feather type="settings"></feather>
           <p>Settings</p>
-        </sidebar-link>
+        </sidebar-link> -->
         <div  @click="logout" >
-        <sidebar-link to='/'>
+        <sidebar-link to='/' :noTriangleLeft="true">
           <feather type="log-out"></feather>
           <p>Log-out</p>
         </sidebar-link>
@@ -44,7 +58,7 @@
   </div>
 </template>
 <style lang="scss"></style>
-<script>
+<script lang='ts'>
 import TopNavbar from "./TopNavbar.vue";
 import DashboardContent from "./Content.vue";
 import firebase from '../../firebase/firebase';
@@ -62,6 +76,12 @@ export default {
   methods: {
     updateIsNavMini(value) {
       this.isNavMini = value;
+    },
+    setWeekEnd(bool: boolean){
+        this.$store.commit('setWithWeekEnd', bool);
+    },
+    setCurrentLang(lang){
+        this.$store.commit('setCurrentLang', lang);
     },
     logout () {
     firebase.logout();
