@@ -6,7 +6,6 @@
       md-sort-order="asc"
       md-card
     >
-
       <md-empty-state v-if="this.$store.getters.getIsLoading"
         ><div class="spinner-rotate"></div
       ></md-empty-state>
@@ -26,9 +25,10 @@
         slot-scope="{ item }"
       >
         <md-table-cell md-sort-by="task" md-label="Task Title"
-          >{{ item.task }} &nbsp; ({{
+          ><div class="color-flex"> <div class="bullet" :class="bulletClass(item)"></div>
+           {{ item.task }} &nbsp; ({{
             getNumberSubTaskActive(item)
-          }})</md-table-cell
+          }}) </div> </md-table-cell
         >
         <md-table-cell md-sort-by="deadline" md-label="Deadline">{{
           item.deadline
@@ -39,19 +39,12 @@
         <md-table-cell md-sort-by="numberdaysleft" md-label="Number days left">
           {{ item.numberdaysleft }}
         </md-table-cell>
-        <md-table-cell
-          md-sort-by="importance"
-          md-label="Importance (/100)"
-        >
+        <md-table-cell md-sort-by="importance" md-label="Importance (/100)">
           {{ item.importance }}
         </md-table-cell>
-         <md-table-cell
-          md-label="done / not done"
-          class="last-column"
-        >
-           <feather type="check" v-if="item.isdone"></feather>
+        <md-table-cell md-label="done / not done" class="last-column">
+          <feather type="check" v-if="item.isdone"></feather>
           <feather type="x-circle" v-if="!item.isdone"></feather>
-          
         </md-table-cell>
         <md-table-cell md-fixed-header class="more-column right-arrow">
           <md-menu
@@ -102,17 +95,19 @@ import { Todo } from "../../models/types";
 export default {
   name: "simple-table",
   components: {
-    "table-pagination": TablePaginationVue
+    "table-pagination": TablePaginationVue,
   },
   props: ["todolist"],
   computed: {
-    isCompletelist: function() {
+    isCompletelist: function () {
       return this.completelist;
-    }
+    },
   },
   methods: {
-    getNumberSubTaskActive(item) : number{
-      return item.description ? item.description.filter(subtask => !subtask.isdone).length : 0
+    getNumberSubTaskActive(item): number {
+      return item.description
+        ? item.description.filter((subtask) => !subtask.isdone).length
+        : 0;
     },
     deleteTodo(key: string): void {
       this.$store
@@ -122,7 +117,7 @@ export default {
             icon: "delete_outline",
             theme: "bubble",
             position: "bottom-right",
-            duration: 5000
+            duration: 5000,
           });
         })
         .catch((error: Error) => {
@@ -130,7 +125,7 @@ export default {
             icon: "error_outline",
             theme: "bubble",
             position: "bottom-right",
-            duration: 5000
+            duration: 5000,
           });
         });
     },
@@ -161,7 +156,47 @@ export default {
           "length: " +
           paginationEvent.length
       );
-    }
+    },
+    bulletClass(item) {
+      const index = this.giveColorTodo(item);
+      const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
+      return classes[index];
+    },
+    giveColorTodo(item): number {
+      if (item && item.deadline) {
+        // red Task : important and urgent ok
+        if (
+          this.getdaysleft(item.deadline) < 2 &&
+          item.importance >= 50
+        ) {
+          return 1;
+        }
+        // orange/jaune tasks : important, not urgent
+        if (
+          this.getdaysleft(item.deadline) >= 2 &&
+          item.importance >= 50
+        ) {
+          return 2;
+        }
+        // blue task : urgent but not important
+        if (
+          this.getdaysleft(item.deadline) < 2 &&
+          item.importance < 50
+        ) {
+          return 3;
+        }
+        // green  task : not urgent and not important ok
+        if (
+          this.getdaysleft(item.deadline) >= 2 &&
+          item.importance < 50
+        ) {
+          return 0;
+        }
+        if (item) {
+          return 4;
+        }
+      }
+    },
   },
   created() {
     this.todos = this.todolist;
@@ -178,11 +213,18 @@ export default {
       selected: [],
       todos: [],
       paginatedTodos: [],
-      getdaysleft: myFunctions.getdaysleft
+      getdaysleft: myFunctions.getdaysleft,
     };
-  }
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
+.color-flex{
+  display: flex;
+}
+.bullet{
+  margin-right: 10px;
+  margin-top: 3px
+}
 </style>
