@@ -1,25 +1,22 @@
 <template>
   <div class="md-layout">
-    <form class="full-form" @submit.prevent="resetPassword">
+    <form class="full-form">
       <div class="md-layout md-alignment-center-center">
         <div class="md-layout-item">
           <label class="mandatory">
             <feather type="mail"></feather>Email
           </label>
           <input-text
-            type="email"
-            :model="email"
-            :hasError="true"
-            errorMessage="The email format is not valid"
+            :vmodel="email"
+            :hasError="hasError"
+            :errorMessage="errorMessage"
+            @vmodel="email = $event"
           ></input-text>
         </div>
         <div class="md-layout-item md-size-100 text-center">
-
-        <md-button
-          type="submit"
-        >
-          <feather type="key"> </feather>Reset password
-        </md-button>
+          <md-button @click="resetPassword">
+            <feather type="key"> </feather>Reset password
+          </md-button>
         </div>
       </div>
     </form>
@@ -30,33 +27,73 @@
 import { Component, Vue } from "vue-property-decorator";
 import InputText from "@/components/Form/InputText.vue";
 
-import Firebase from '../../firebase/firebase';
+import Firebase from "../../firebase/firebase";
 
 @Component({
   components: {
-    "input-text": InputText
-  }
+    "input-text": InputText,
+  },
 })
 export default class ForgotPassForm extends Vue {
   email: string = "";
+  errorMessage: string = "";
+  hasError: boolean = false;
 
   resetPassword() {
-    Firebase.sendResetPassEmail(this.email).then(() => {
-      this.$modal.hide('forgotpassmodal');
-      this.$toasted.show("We just sent you an email to reset your password", {
-            icon: "mail_outline",
-            theme: "bubble",
-            position: "bottom-right",
-            duration: 5000
-          });
-    }).catch((error: Error) => {
-     this.$toasted.show("Cannot send the email at the moment", {
-            icon: "error-outline",
-            theme: "bubble",
-            position: "bottom-right",
-            duration: 5000
-          });
-    });
+    this.checkResetForm();
+
+    if (this.hasError) {
+      return "";
+    }
+
+    Firebase.sendResetPassEmail(this.email)
+      .then(() => {
+        this.$modal.hide("forgotpassmodal");
+        this.$toasted.show("We just sent you an email to reset your password", {
+          icon: "mail_outline",
+          theme: "bubble",
+          position: "bottom-right",
+          duration: 5000,
+        });
+      })
+      .catch((error: Error) => {
+        this.$toasted.show("Cannot send the email at the moment", {
+          icon: "error-outline",
+          theme: "bubble",
+          position: "bottom-right",
+          duration: 5000,
+        });
+      });
+  }
+
+  checkResetForm(): void {
+     // eslint-disable-next-line no-console
+      console.log('check', this.email);
+
+    const mailformat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordformat = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    if (!this.email) {
+      // eslint-disable-next-line no-console
+      console.log('pas demail');
+      this.errorMessage = "please, enter your email";
+      this.hasError = true;
+      return ;
+    }
+
+    if (!this.email.match(mailformat)) {
+      // eslint-disable-next-line no-console
+      console.log('email val');
+      this.errorMessage = "Your email is not valid";
+      this.hasError = true;
+      return ;
+    }
+
+    this.errorMessage = "";
+
+    this.hasError = false;
+          // eslint-disable-next-line no-console
+      console.log('bout');
   }
 }
 </script>
