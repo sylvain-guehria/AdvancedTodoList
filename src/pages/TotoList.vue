@@ -85,11 +85,6 @@
       <div class="legend-list">
          <legend-bullet :planning="true"></legend-bullet>
       </div>
-       <div class="legend-sorting">
-        <feather type="arrow-up"></feather>
-        <feather type="arrow-down"></feather>
-        <p>click column title to sort</p>
-      </div>
       <!-- drawers -->
 
       <edit-task-drawer
@@ -192,16 +187,7 @@ export default {
 .legend-list {
   display: inline-block;
   position: absolute;
-  bottom: 60px;
+  bottom: 200px;
   left: 50px;
-}
-p {
-  margin-left: 10px;
-}
-.legend-sorting {
-  display: flex;
-  position: absolute;
-  bottom: 220px;
-  left: 550px;
 }
 </style>

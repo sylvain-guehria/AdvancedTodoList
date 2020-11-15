@@ -2,7 +2,7 @@
   <div class="content no-padding-top planning-calendar">
     <div class="md-layout">
       <planning-calendar :key="this.showAddTask"/>
-      <legend-bullet :planning="true"></legend-bullet>
+       <div class="legend"><legend-bullet :planning="true"></legend-bullet></div>
     </div>
 
     <!-- drawer edti -->
@@ -49,3 +49,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+.legend {
+  margin-left: 20px;
+}
+</style>
