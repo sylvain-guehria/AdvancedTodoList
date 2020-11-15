@@ -4,7 +4,7 @@
       <h1>Stay productive .!</h1>
     </hgroup>
 
-    <div class="form-structor">
+    <div class="form-structor" v-bind:style="{ 'background-image': 'url(' + image + ')' }">
       <div class="signup" :class="signupclass">
         <h2
           class="form-title font-fam"
@@ -145,7 +145,7 @@ export default class LoginModal extends Vue {
     firebase.setAuthChange();
   }
 
-  imageLink = require("../assets/images/btn_google.png");
+  image = require("../assets/images/testimg.jpeg");
 
   showTooltip: boolean;
 
@@ -320,7 +320,6 @@ export default class LoginModal extends Vue {
     background-repeat: no-repeat;
     background-position: left bottom;
     background-size: 500px;
-    background-image: url("/assets/images/testimg.jpeg");
   }
 
   .signup {
