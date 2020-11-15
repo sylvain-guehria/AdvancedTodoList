@@ -8,6 +8,7 @@ var coloredtodolist: Todo[] = [];
 var numberActiveTask = 0;
 var numberTotalTask = 0;
 var isLoading:boolean = true;
+var with_weekend: boolean = false;
 
 var currentTodo: Todo = {
   task: '',
@@ -30,12 +31,16 @@ const state: State = {
   numberActiveTask: numberActiveTask,
   numberTotalTask: numberTotalTask,
   isLoading: isLoading,
-  filtered_todo_list : filtered_todo_list
+  filtered_todo_list : filtered_todo_list,
+  with_weekend : with_weekend
 };
 
 const getters = {
   getIsLoading: (state: State) => {
     return state.isLoading;
+  },
+  getWithWeekEnd: (state: State) => {
+    return state.with_weekend;
   },
   getUser: (state: State) => {
     return state.user;
@@ -69,6 +74,9 @@ const getters = {
 const mutations = {
   setIsLoading(state: State, bool: boolean) {
     state.isLoading = bool;
+  },
+  setWithWeekEnd(state: State, bool: boolean) {
+    state.with_weekend = bool;
   },
   setTodoList (state: State, newList: Todo[]) {
     state.todolist = newList;

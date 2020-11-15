@@ -23,7 +23,8 @@ export interface State {
   currentTodo: Todo,
   numberActiveTask: number,
   numberTotalTask: number,
-  isLoading: boolean
+  isLoading: boolean,
+  with_weekend: boolean
 }
 
 export interface SubTask {

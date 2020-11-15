@@ -30,10 +30,10 @@
               <p>Settings</p>
             </sidebar-link>
           <md-menu-content>
-            <md-menu-item v-if="this.$store.getters.getWithWeekEnd" @click="setWeekEnd(false)">Remove week-end</md-menu-item>
-            <md-menu-item v-if="!this.$store.getters.getWithWeekEnd" @click="setWeekEnd(true)">Display week-end</md-menu-item>
-            <md-menu-item>set french</md-menu-item>
-            <md-menu-item>set english</md-menu-item>
+            <md-menu-item v-if="this.$store.getters.getWithWeekEnd" @click="setWeekEnd(false)"> <feather type="calendar"></feather>Remove week-end</md-menu-item>
+            <md-menu-item v-if="!this.$store.getters.getWithWeekEnd" @click="setWeekEnd(true)"> <feather type="calendar"></feather>Display week-end</md-menu-item>
+            <md-menu-item><feather type="flag"></feather>set french</md-menu-item>
+            <md-menu-item><feather type="flag"></feather>set english</md-menu-item>
           </md-menu-content>
         </md-menu>
 
