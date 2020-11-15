@@ -83,9 +83,7 @@
       </div>
 
       <div class="legend-list">
-        <feather type="arrow-up"></feather>
-        <feather type="arrow-down"></feather>
-        <p>click column title to sort</p>
+         <legend-bullet :planning="true"></legend-bullet>
       </div>
       <!-- drawers -->
 
@@ -104,6 +102,7 @@
         :isActive="showReadTask"
         @isActive="updateIsActiveReadTask"
       ></read-only-task-viewer>
+
     </div>
     <div class="spinner-rotate" v-show="isLoading"></div>
   </div>
@@ -114,6 +113,8 @@ import { SimpleTable } from "@/components";
 import FiltersDrawer from "../components/FiltersDrawer.vue";
 import EditTaskDrawer from "../components/modals/EditTaskDrawer.vue";
 import ReadOnlyTaskDrawer from "../components/modals/ReadOnlyTaskDrawer.vue";
+import LegendBulletVue from './LegendBullet.vue';
+import { bus } from '../main';
 
 export default {
   name: "TotoList",
@@ -122,6 +123,7 @@ export default {
     "filters-drawer": FiltersDrawer,
     "edit-task-drawer": EditTaskDrawer,
     "read-only-task-viewer": ReadOnlyTaskDrawer,
+    "legend-bullet": LegendBulletVue
   },
   data() {
     return {
@@ -139,6 +141,9 @@ export default {
     setTimeout(() => {
       this.isLoading = false;
     }, 0);
+  },
+   mounted (){
+    bus.$on('openDrawerEdit', this.showDrawerEditTask);
   },
   methods: {
     setDynamicTab(tab: string) {
@@ -184,12 +189,9 @@ export default {
 </script>
 <style scoped>
 .legend-list {
-  display: flex;
+  display: inline-block;
   position: absolute;
-  bottom: 220px;
+  bottom: 200px;
   left: 50px;
-}
-p {
-  margin-left: 10px;
 }
 </style>

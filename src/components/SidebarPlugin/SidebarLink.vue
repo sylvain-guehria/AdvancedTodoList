@@ -11,7 +11,7 @@
           <p>{{ link.name }}</p>
         </slot>
       </div>
-      <div class="triangle-left"></div>
+      <div :class="noTriangleLeft ? '' : 'triangle-left'"></div>
     </router-link>
   </li>
 </template>
@@ -36,6 +36,10 @@ export default {
     tag: {
       type: String,
       default: "router-link"
+    },
+    noTriangleLeft : {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
