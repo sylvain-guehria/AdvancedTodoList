@@ -32,8 +32,8 @@
           <md-menu-content>
             <md-menu-item v-if="this.$store.getters.getWithWeekEnd" @click="setWeekEnd(false)"> <feather type="calendar"></feather>Remove week-end</md-menu-item>
             <md-menu-item v-if="!this.$store.getters.getWithWeekEnd" @click="setWeekEnd(true)"> <feather type="calendar"></feather>Display week-end</md-menu-item>
-            <md-menu-item><feather type="flag"></feather>set french</md-menu-item>
-            <md-menu-item><feather type="flag"></feather>set english</md-menu-item>
+            <md-menu-item v-if="this.$store.getters.getCurrentLang !== 'fr'" @click="setCurrentLang('fr')" ><feather type="flag"></feather>set french</md-menu-item>
+            <md-menu-item v-if="this.$store.getters.getCurrentLang !== 'en'" @click="setCurrentLang('en')" ><feather type="flag"></feather>set english</md-menu-item>
           </md-menu-content>
         </md-menu>
 
@@ -79,6 +79,9 @@ export default {
     },
     setWeekEnd(bool: boolean){
         this.$store.commit('setWithWeekEnd', bool);
+    },
+    setCurrentLang(lang){
+        this.$store.commit('setCurrentLang', lang);
     },
     logout () {
     firebase.logout();

@@ -9,6 +9,7 @@ var numberActiveTask = 0;
 var numberTotalTask = 0;
 var isLoading:boolean = true;
 var with_weekend: boolean = false;
+var currentLang: string = 'en';
 
 var currentTodo: Todo = {
   task: '',
@@ -32,12 +33,16 @@ const state: State = {
   numberTotalTask: numberTotalTask,
   isLoading: isLoading,
   filtered_todo_list : filtered_todo_list,
-  with_weekend : with_weekend
+  with_weekend : with_weekend,
+  currentLang : currentLang
 };
 
 const getters = {
   getIsLoading: (state: State) => {
     return state.isLoading;
+  },
+  getCurrentLang: (state: State) => {
+    return state.currentLang;
   },
   getWithWeekEnd: (state: State) => {
     return state.with_weekend;
@@ -74,6 +79,9 @@ const getters = {
 const mutations = {
   setIsLoading(state: State, bool: boolean) {
     state.isLoading = bool;
+  },
+  setCurrentLang(state: State, lang: string) {
+    state.currentLang = lang;
   },
   setWithWeekEnd(state: State, bool: boolean) {
     state.with_weekend = bool;
