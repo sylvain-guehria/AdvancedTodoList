@@ -4,8 +4,8 @@
       <h1>Stay productive .!</h1>
     </hgroup>
 
-    <div class="form-structor" :style="{ backgroundImage: `url('${image}')` }">
-      <div class="signup" :class="signupclass">
+    <div class="form-structor">
+      <div class="signup" :style="{ 'backgroundImage': 'url(\'' + image.url + '\')' }">
         <h2
           class="form-title font-fam"
           @click="addEventListenerSignUp"
@@ -137,6 +137,9 @@ import ForgotPassForm from "./Forms/ForgotPassForm.vue";
   }
 })
 export default class LoginModal extends Vue {
+
+  image = { url : require('../assets/images/testimg.jpeg') }
+
   beforeCreate() {
     document.body.className = "login";
   }
@@ -144,8 +147,6 @@ export default class LoginModal extends Vue {
   mounted() {
     firebase.setAuthChange();
   }
-
-  image = "testimg.jpeg";
 
   showTooltip: boolean;
 
