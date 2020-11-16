@@ -5,7 +5,7 @@
     </hgroup>
 
     <div class="form-structor">
-      <div class="signup">
+      <div class="signup" :class="signupclass">
         <h2
           class="form-title font-fam"
           @click="addEventListenerSignUp"
@@ -318,7 +318,7 @@ export default class LoginModal extends Vue {
     background-repeat: no-repeat;
     background-position: left bottom;
     background-size: 500px;
-    background-image: url("'testimg.svg'");
+    background-image: url("https://i.pinimg.com/564x/a6/aa/a8/a6aaa82708f9d35a774c547083572f1d.jpg");
   }
 
   .signup {
