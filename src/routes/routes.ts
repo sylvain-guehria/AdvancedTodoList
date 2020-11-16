@@ -8,7 +8,7 @@ import FullContentLayout from "@/pages/Layout/FullContentLayout.vue";
 import TotoList from "@/pages/TotoList.vue";
 import Planning from "@/pages/Planning.vue";
 import Eisenhower from "@/pages/Eisenhower.vue"
-import Notifications from "@/pages/Notifications.vue";
+import Help from "@/pages/Help.vue";
 import Login from "@/pages/Login.vue";
 import Contactme from "@/pages/Contactme.vue";
 
@@ -89,7 +89,7 @@ let router = new Router({
         {
           path: "/app/help",
           name: "Help",
-          component: Notifications,
+          component: Help,
           meta: {
             breadcrumb: "Help"
           }

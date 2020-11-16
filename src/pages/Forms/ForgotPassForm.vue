@@ -67,23 +67,16 @@ export default class ForgotPassForm extends Vue {
   }
 
   checkResetForm(): void {
-     // eslint-disable-next-line no-console
-      console.log('check', this.email);
-
     const mailformat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordformat = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
     if (!this.email) {
-      // eslint-disable-next-line no-console
-      console.log('pas demail');
       this.errorMessage = "please, enter your email";
       this.hasError = true;
       return ;
     }
 
     if (!this.email.match(mailformat)) {
-      // eslint-disable-next-line no-console
-      console.log('email val');
       this.errorMessage = "Your email is not valid";
       this.hasError = true;
       return ;
@@ -92,8 +85,6 @@ export default class ForgotPassForm extends Vue {
     this.errorMessage = "";
 
     this.hasError = false;
-          // eslint-disable-next-line no-console
-      console.log('bout');
   }
 }
 </script>
