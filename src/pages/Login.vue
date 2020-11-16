@@ -5,7 +5,7 @@
     </hgroup>
 
     <div class="form-structor">
-      <div class="signup" :style="{ 'backgroundImage': 'url(\'' + image.url + '\')' }">
+      <div class="signup">
         <h2
           class="form-title font-fam"
           @click="addEventListenerSignUp"
@@ -137,9 +137,6 @@ import ForgotPassForm from "./Forms/ForgotPassForm.vue";
   }
 })
 export default class LoginModal extends Vue {
-
-  image = { url : require('../assets/images/testimg.jpeg') }
-
   beforeCreate() {
     document.body.className = "login";
   }
@@ -321,6 +318,7 @@ export default class LoginModal extends Vue {
     background-repeat: no-repeat;
     background-position: left bottom;
     background-size: 500px;
+    background-image: url("'testimg.svg'");
   }
 
   .signup {
