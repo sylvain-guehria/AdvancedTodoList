@@ -30,15 +30,15 @@
     </template>
     <div
       class="more-todos"
-      v-if="visibleTodos.length > 3"
+      v-if="todoFulllistOfDay.length > 3"
       @click="showMoreTodos = true"
     >
-      + {{ visibleTodos.length - 2 }} more
+      + {{ todoFulllistOfDay.length - 2 }} more (click here)
     </div>
     <modal :show="showMoreTodos" @show="showMoreTodos = $todo">
       <div slot="header">{{ dayOfMonth }}</div>
       <div slot="body">
-        <template v-for="todo in todolist">
+        <template v-for="todo in todoFulllistOfDay">
           <calendar-event
             :key="todo.id"
             :event="todo"
@@ -72,6 +72,7 @@ export default class DayBlock extends Vue {
 
   todolist: Todo[] = [];
   todolistOfDay: Todo[] = [];
+  todoFulllistOfDay: Todo[] = [];
 
   formats = {
     month: "MM",
@@ -137,7 +138,8 @@ export default class DayBlock extends Vue {
           return todo.deadline === string_date }
       );
     }
-    return this.todolistOfDay.length < 4
+    this.todoFulllistOfDay = [...this.todolistOfDay];
+    return this.todolistOfDay.length < 3
       ? this.todolistOfDay
       : this.todolistOfDay.slice(0, 2);
   }
@@ -188,6 +190,12 @@ export default class DayBlock extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.more-todos{
+  cursor: pointer;
+}
+</style>
 
 
 
