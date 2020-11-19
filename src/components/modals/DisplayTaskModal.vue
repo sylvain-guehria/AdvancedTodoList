@@ -193,7 +193,7 @@ h1 {
 .body{
   padding : 35px;
   overflow-y:scroll; 
-  max-height: 850px;
+  max-height: 900px;
 }
 
 .flex{
