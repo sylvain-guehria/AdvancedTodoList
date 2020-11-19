@@ -8,7 +8,7 @@ var coloredtodolist: Todo[] = [];
 var numberActiveTask = 0;
 var numberTotalTask = 0;
 var isLoading:boolean = true;
-var with_weekend: boolean = false;
+var with_weekend: boolean = true;
 var currentLang: string = 'en';
 
 var currentTodo: Todo = {

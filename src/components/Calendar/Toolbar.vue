@@ -1,11 +1,11 @@
 <template>
   <div class="md-layout-item md-size-100 flex-start calendar-toolbar">
-    <div class="menu-title">{{ month }}</div>
     <md-button class="md-icon-button md-just-icon" @click="prev()">
-      <feather type="chevron-left"></feather>
+      <feather type="arrow-left"></feather>
     </md-button>
+     <div class="menu">{{ month }}</div>
     <md-button class="md-icon-button md-just-icon" @click="next()">
-      <feather type="chevron-right"></feather>
+      <feather type="arrow-right"></feather>
     </md-button>
   </div>
 </template>
@@ -41,3 +41,15 @@ export default class Toolbar extends Vue {
   }
 }
 </script>
+<style scoped>
+.feather{
+  all :initial;
+  width: 35px !important;
+  height: 35px !important;
+
+}
+.menu{
+  font-family:  Times, 'Times New Roman', serif;
+  font-size: 30px ;
+}
+</style>
