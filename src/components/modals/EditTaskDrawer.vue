@@ -252,6 +252,7 @@ export default class EditTaskDrawer extends Vue {
         });
       });
 
+    this.userDoWantToLeave = true;
     this.toggleMenu();
     this.resteForm();
     this.$store.commit("resetCurrentTodo");
