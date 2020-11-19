@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div>
     <div class="header">
       <div class="go-edit">
         <div @click="showDrawerEditTask(event)">
@@ -101,7 +101,7 @@ export default class PCalendarEvent extends Vue {
   }
 
   closeModal(): void {
-      this.$emit("closeDialog");
+    this.$emit("closeDialog");
   }
 
   get bulletClass() {
@@ -191,7 +191,9 @@ h1 {
         }
 }
 .body{
-  padding : 35px
+  padding : 35px;
+  overflow-y:scroll; 
+  max-height: 850px;
 }
 
 .flex{
