@@ -25,7 +25,8 @@ export interface State {
   numberTotalTask: number,
   isLoading: boolean,
   with_weekend: boolean,
-  currentLang: string
+  currentLang: string,
+  rendAllListNumber: number
 }
 
 export interface SubTask {

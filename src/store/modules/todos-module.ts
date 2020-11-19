@@ -10,6 +10,7 @@ var numberTotalTask = 0;
 var isLoading:boolean = true;
 var with_weekend: boolean = true;
 var currentLang: string = 'en';
+var rendAllListNumber: number = 0;
 
 var currentTodo: Todo = {
   task: '',
@@ -34,10 +35,14 @@ const state: State = {
   isLoading: isLoading,
   filtered_todo_list : filtered_todo_list,
   with_weekend : with_weekend,
-  currentLang : currentLang
+  currentLang : currentLang,
+  rendAllListNumber : rendAllListNumber
 };
 
 const getters = {
+  getRendAllListNumber: (state: State) => {
+    return state.rendAllListNumber;
+  },
   getIsLoading: (state: State) => {
     return state.isLoading;
   },
@@ -91,6 +96,9 @@ const getters = {
 };
 
 const mutations = {
+  incRendAllListNumber(state: State) {
+    state.rendAllListNumber = state.rendAllListNumber + 1;
+  },
   setIsLoading(state: State, bool: boolean) {
     state.isLoading = bool;
   },
@@ -222,6 +230,7 @@ const actions = {
 
     payload.key = newTodoKey;
     commit('addNewTodo', payload);
+    commit('incRendAllListNumber');
   },
   editTodo ({ commit }: {commit: Function}, payload: Todo) {
 
@@ -233,6 +242,7 @@ const actions = {
       ...payload,
     });
     commit('editTodoByKey', payload);
+    commit('incRendAllListNumber');
   },
   setTodoDone ({ commit }: {commit: Function}, payload: Todo) {
     payload.isdone = !payload.isdone;
@@ -242,6 +252,7 @@ const actions = {
       isdone: payload.isdone
     });
     commit('editTodoByKey', payload);
+    commit('incRendAllListNumber');
   },
   setSubTaskDone ({ commit }: {commit: Function}, { todo, subtask}: { todo: Todo, subtask: SubTask} ) {
     subtask.isdone = !subtask.isdone;
@@ -250,11 +261,13 @@ const actions = {
       ...subtask,
       isdone: subtask.isdone
     });
+    //commit('incRendAllListNumber');
   },
   deleteTodo ({ commit }: {commit: Function}, key: string) {
     const { uid } = state.user.data;
     database.ref(`todos/${uid}/${key}`).remove();
     commit('removeTodoByKey', key);
+    commit('incRendAllListNumber');
   },
   fetchTodos ({ commit }: {commit: Function}, payload: string) {
     const uid: string = payload;
@@ -275,6 +288,7 @@ const actions = {
     }).then(() => {
       commit('setTodoList', listoftodos);
       commit('setIsLoading', false);
+      commit('incRendAllListNumber');
     }
     );
   }

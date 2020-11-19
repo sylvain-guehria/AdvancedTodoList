@@ -61,7 +61,7 @@
           <div class="mb">
             <sub-tasks-viewer
               @onSubmitSubTasks="setSubTasks"
-              :subtasksreceived="this.formData.description"
+              :subtasksreceived="[...this.formData.description]"
             ></sub-tasks-viewer>
           </div>
 
@@ -182,7 +182,7 @@ export default class EditTaskDrawer extends Vue {
   isThereACurrentTodo() {
     if (this.isActive) {
       this.userDoWantToLeave = false;
-      this.currentTodo = this.$store.getters.getCurrentTodo;
+      this.currentTodo = { ...this.$store.getters.getCurrentTodo };
       if (this.currentTodo && this.currentTodo.key) {
         this.formData = { ...this.currentTodo };
         this.selectedDate = new Date(this.currentTodo.deadline);

@@ -41,7 +41,7 @@
             }"
           >
             <simple-table
-              :key="this.$store.getters.getNumberActiveTask"
+              :key="this.$store.getters.getRendAllListNumber"
               :todolist="this.$store.getters.getActiveTodoList"
               @editTaskEvent="showDrawerEditTask"
               @showReadOnlyTaskDrawer="showReadOnlyTaskDrawer"
@@ -56,7 +56,7 @@
             }"
           >
             <simple-table
-              :key="this.$store.getters.getNumberTotalTask"
+              :key="this.$store.getters.getRendAllListNumber"
               :todolist="this.$store.getters.getTodoList"
               @editTaskEvent="showDrawerEditTask"
               @showReadOnlyTaskDrawer="showReadOnlyTaskDrawer"
@@ -74,7 +74,7 @@
             }"
           >
             <simple-table
-              :key="this.$store.getters.getNumberFilteredTask"
+              :key="this.$store.getters.getRendAllListNumber"
               :todolist="this.$store.getters.getFilteredTodoList"
             ></simple-table>
           </md-tab>

@@ -299,6 +299,7 @@ export default class FiltersDrawer extends Vue {
 
     this.$emit("activeFilterTab", "tab-posts");
     this.$store.commit("setFilteredTodoList", this.todolist);
+    this.$store.commit("incRendAllListNumber");
   }
 
   reset_filter(): void {

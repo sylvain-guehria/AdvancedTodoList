@@ -46,8 +46,6 @@ export default class ReadOnlySubTask extends Vue {
   setSubtTaskDone(subtask: SubTask): void {
     let todo = this.localTodo;
     this.$store.dispatch("setSubTaskDone", { todo, subtask });
-
-
   }
 }
 </script>
