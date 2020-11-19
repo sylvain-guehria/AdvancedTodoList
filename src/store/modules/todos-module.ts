@@ -68,6 +68,20 @@ const getters = {
   getNumberTotalTask: (state: State) => {
     return state.todolist.length;
   },
+  getNumberTotalSubTask: (state: State) => {
+    let numberSubTask = 0;
+    state.todolist.forEach(function (todo) {
+     if(todo.description) {numberSubTask = numberSubTask + todo.description.length;}
+  });
+    return numberSubTask;
+  },
+  getNumberTotalSubTaskOfTodo: (state: State, key: string) => {
+    let numberSubTask = 0;
+    state.todolist.forEach(function (todo) {
+     if(todo.key === key && todo.description) { numberSubTask = todo.description.length}
+  });
+    return numberSubTask;
+  },
   getNumberFilteredTask: (state: State) => {
     return state.filtered_todo_list.length;
   },

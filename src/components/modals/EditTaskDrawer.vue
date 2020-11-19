@@ -11,8 +11,8 @@
           <div class="md-layout-item md-size-100">
             <h1 v-if="this.formData.key">Edit a task</h1>
             <h1 v-if="!this.formData.key">Add a task</h1>
-        
-            <md-button class="md-tertiary" @click="resteForm">
+
+            <md-button class="md-tertiary" @click="resetStepOne">
               <feather type="trash-2"></feather>Reset
             </md-button>
           </div>
@@ -58,16 +58,58 @@
             </md-field>
           </div>
 
-          <sub-tasks-viewer
-            @onSubmitSubTasks="setSubTasks"
-            :subtasksreceived="this.formData.description"
-          ></sub-tasks-viewer>
+          <div class="mb">
+            <sub-tasks-viewer
+              @onSubmitSubTasks="setSubTasks"
+              :subtasksreceived="this.formData.description"
+            ></sub-tasks-viewer>
+          </div>
 
           <md-button class="md-tertiary" @click="actionTodo">
             <feather type="save"></feather>Save
           </md-button>
         </div>
       </div>
+    </div>
+
+    <!-- modal confirm reset -->
+    <div>
+      <md-dialog :md-active.sync="confirmModalactive">
+        <md-dialog-title>Do you want to reset the form?</md-dialog-title>
+
+        <md-dialog-content>
+          <p>You cannot go back if you press 'Yes'</p>
+          <p v-if="isEditionMode">
+            The modifications will not be taken in account as long as you don't
+            click save
+          </p>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-tertiary" @click="onCancel">Cancel</md-button>
+          <md-button class="md-tertiary" @click="onConfirm">Yes</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+    </div>
+
+    <!-- modal confirm leave -->
+    <div>
+      <md-dialog :md-active.sync="confirmModalLeaveactive">
+        <md-dialog-title>Do you want to leave without saving?</md-dialog-title>
+
+        <md-dialog-content>
+          <p>You will loose non saved data if you press 'Yes'</p>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-tertiary" @click="onCancelLeave"
+            >Cancel</md-button
+          >
+          <md-button class="md-tertiary" @click="leavingDrawerEdit"
+            >Yes</md-button
+          >
+        </md-dialog-actions>
+      </md-dialog>
     </div>
   </md-drawer>
 </template>
@@ -83,8 +125,8 @@ import { bus } from "../../main";
 @Component({
   components: {
     "input-text": InputText,
-    "sub-tasks-viewer": SubtaskViewer
-  }
+    "sub-tasks-viewer": SubtaskViewer,
+  },
 })
 export default class EditTaskDrawer extends Vue {
   @Prop() isActive!: boolean;
@@ -94,6 +136,36 @@ export default class EditTaskDrawer extends Vue {
   selectedDate: Date = new Date();
   currentTodo: Todo;
   isEditionMode: boolean = false;
+  confirmModalactive: boolean = false;
+  confirmModalLeaveactive: boolean = false;
+  userDoWantToLeave: boolean = false;
+
+  resetStepOne() {
+    this.confirmModalactive = true;
+  }
+
+  onConfirm() {
+    this.confirmModalactive = false;
+    this.resteForm();
+  }
+  onCancel() {
+    this.confirmModalactive = false;
+  }
+
+  onCancelLeave() {
+    this.localIsActive = true;
+    this.confirmModalLeaveactive = false;
+    this.userDoWantToLeave = false;
+  }
+
+  leavingDrawerEdit() {
+    this.resteForm();
+    this.$store.commit("resetCurrentTodo");
+    bus.$emit("resetSubTasks");
+    this.userDoWantToLeave = true;
+    this.localIsActive = false;
+    this.confirmModalLeaveactive = false;
+  }
 
   get localIsActive(): boolean {
     return this.isActive;
@@ -108,16 +180,19 @@ export default class EditTaskDrawer extends Vue {
 
   @Watch("isActive", { immediate: false })
   isThereACurrentTodo() {
-    this.currentTodo = this.$store.getters.getCurrentTodo;
-    if (this.currentTodo && this.currentTodo.key) {
-      this.formData = { ...this.currentTodo };
-      this.selectedDate = new Date(this.currentTodo.deadline);
+    if (this.isActive) {
+      this.userDoWantToLeave = false;
+      this.currentTodo = this.$store.getters.getCurrentTodo;
+      if (this.currentTodo && this.currentTodo.key) {
+        this.formData = { ...this.currentTodo };
+        this.selectedDate = new Date(this.currentTodo.deadline);
+        this.isEditionMode = true;
+      }
     }
 
-    if (!this.isActive) {
-      this.resteForm();
-      this.$store.commit("resetCurrentTodo");
-      bus.$emit("resetSubTasks");
+    if (!this.isActive && !this.userDoWantToLeave) {
+      this.localIsActive = true;
+      this.confirmModalLeaveactive = true;
     }
   }
 
@@ -128,7 +203,7 @@ export default class EditTaskDrawer extends Vue {
     importance: 0,
     description: [],
     creationDate: new Date().toISOString().substr(0, 10),
-    isdone: false
+    isdone: false,
   };
 
   dateHelper: string = "";
@@ -143,18 +218,17 @@ export default class EditTaskDrawer extends Vue {
     this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
     this.formData.deadline = this.dateHelper;
 
-    if(!this.formData.task){
-       this.$toasted.show("Your task must have a title", {
-            icon: "warning",
-            theme: "bubble",
-            position: "top-right",
-            duration: 5000
-          });
-          return '';
+    if (!this.formData.task) {
+      this.$toasted.show("Your task must have a title", {
+        icon: "warning",
+        theme: "bubble",
+        position: "top-right",
+        duration: 5000,
+      });
+      return "";
     }
 
-
-    let todo: Todo = {...this.formData};
+    let todo: Todo = { ...this.formData };
 
     let action: string = todo.key ? "editTodo" : "createTodo";
     let msg: string = todo.key ? "Task updated" : "Task created";
@@ -162,20 +236,20 @@ export default class EditTaskDrawer extends Vue {
     this.$store
       .dispatch(action, todo)
       .then(() => {
-         this.$toasted.show(msg + " , it is now in your list", {
-            icon: "create",
-            theme: "bubble",
-            position: "bottom-right",
-            duration: 5000
-          });
+        this.$toasted.show(msg + " , it is now in your list", {
+          icon: "create",
+          theme: "bubble",
+          position: "bottom-right",
+          duration: 5000,
+        });
       })
       .catch((error: Error) => {
         this.$toasted.show("Cannot create task", {
-            icon: "error_outline",
-            theme: "bubble",
-            position: "bottom-right",
-            duration: 5000
-          });
+          icon: "error_outline",
+          theme: "bubble",
+          position: "bottom-right",
+          duration: 5000,
+        });
       });
 
     this.toggleMenu();
@@ -197,7 +271,7 @@ export default class EditTaskDrawer extends Vue {
       importance: 0,
       description: [],
       creationDate: new Date().toISOString().substr(0, 10),
-      isdone: false
+      isdone: false,
     };
     bus.$emit("resetSubTasks");
     this.selectedDate = new Date();

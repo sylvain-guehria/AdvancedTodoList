@@ -30,7 +30,7 @@
     </template>
     <div
       class="more-todos"
-      v-if="todoFulllistOfDay.length > 3"
+      v-if="todoFulllistOfDay.length > 2"
       @click="showMoreTodos = true"
     >
       + {{ todoFulllistOfDay.length - 2 }} more (click here)

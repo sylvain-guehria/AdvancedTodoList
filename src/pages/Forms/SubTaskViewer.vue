@@ -148,8 +148,9 @@ export default class SubTaskViewer extends Vue {
   width: 95%;
   position: absolute;
   left : 15px;
-  margin-top : 100px
-
+  margin-top : 100px;
+  margin-bottom: 20px
+ 
 }
 
 .testt{

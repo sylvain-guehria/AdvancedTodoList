@@ -10,7 +10,7 @@
         <div class="filters-summary">
           <div class="md-layout-item md-size-100">
             <h1>Manage filters</h1>
-            <md-button class="md-tertiary" @click="reset_filter">
+            <md-button class="md-tertiary" @click="resetStepOne()">
               <feather type="trash-2"></feather>Reset
             </md-button>
           </div>
@@ -141,6 +141,23 @@
         </div>
       </div>
     </div>
+
+    <!-- modal confirm reset -->
+    <div>
+      <md-dialog :md-active.sync="confirmModalactive">
+        <md-dialog-title>Do you want to reset all filter?</md-dialog-title>
+
+        <md-dialog-content>
+          <p>You cannot go back if you press 'Yes'</p>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-tertiary" @click="onCancel">Cancel</md-button>
+          <md-button class="md-tertiary" @click="onConfirm">Yes</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+    </div>
+    
   </md-drawer>
 </template>
 <script lang="ts">
@@ -159,6 +176,7 @@ export default class FiltersDrawer extends Vue {
   list = ["done", "not done", "any"];
   filtersNb: number = 0;
   todolist: Todo[] = [];
+  confirmModalactive: boolean = false;
 
   selectedFilters: Array<string> = [];
   buffer: number = 0;
@@ -173,6 +191,18 @@ export default class FiltersDrawer extends Vue {
     max_importance: null,
     min_importance: null,
   };
+
+  resetStepOne() {
+    this.confirmModalactive = true;
+  }
+
+  onConfirm() {
+    this.confirmModalactive = false;
+    this.reset_filter();
+  }
+  onCancel() {
+    this.confirmModalactive = false;
+  }
 
   mounted() {
     this.todolist = [...this.$store.getters.getTodoList];
@@ -194,7 +224,6 @@ export default class FiltersDrawer extends Vue {
 
   @Watch("filter_data", { immediate: false, deep: true })
   changeFilters(val) {
-
     if (
       !val.selectedDateCreateBefore &&
       !val.selectedDateCreateAfter &&
@@ -268,7 +297,7 @@ export default class FiltersDrawer extends Vue {
       );
     }
 
-    this.$emit('activeFilterTab', 'tab-posts');
+    this.$emit("activeFilterTab", "tab-posts");
     this.$store.commit("setFilteredTodoList", this.todolist);
   }
 
@@ -285,7 +314,7 @@ export default class FiltersDrawer extends Vue {
     };
     this.$store.commit("setFilteredTodoList", []);
     this.todolist = [];
-    this.$emit('activeFilterTab', 'tab-home');
+    this.$emit("activeFilterTab", "tab-home");
   }
 
   get min_importance_mirror(): number {
@@ -344,5 +373,9 @@ export default class FiltersDrawer extends Vue {
 .mirror {
   transform: scaleX(-1); /* Standard */
   filter: FlipH; /* IE 6/7/8 */
+}
+
+p {
+  font-size: 17px;
 }
 </style>
