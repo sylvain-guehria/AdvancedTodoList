@@ -5,7 +5,9 @@
   >
     <div class="event-info" @click="showDetail = true">
       <div class="bullet" :class="bulletClass"></div>
-      <div class="event-text">{{ Title }} &nbsp; ({{getNumberSubTaskActive()}})</div>
+      <div class="event-text">
+        {{ Title }} &nbsp; ({{ getNumberSubTaskActive() }})
+      </div>
     </div>
     <modal
       :show="showDetail"
@@ -20,7 +22,7 @@
         </div>
         <div class="md-layout-item md-size-100 header-title">
           <h1>
-            {{ event.task }} 
+            {{ event.task }}
           </h1>
           <div class="horizontal-separator"></div>
         </div>
@@ -91,14 +93,14 @@ import Modal from "@/components/Modal.vue";
 import SubTaskViewer from "@/pages/Forms/SubTaskViewer.vue";
 import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue";
 import { myFunctions } from "../../helpers/helperfunction";
-import { bus } from '../../main';
+import { bus } from "../../main";
 
 @Component({
   components: {
     modal: Modal,
     "sub-tasks-viewer": SubTaskViewer,
     "sub-task-readonly": ReadOnlySubTask,
-  }
+  },
 })
 export default class PCalendarEvent extends Vue {
   @Prop() days!: Array<any>;
@@ -108,7 +110,7 @@ export default class PCalendarEvent extends Vue {
   showDrawerEditTask(payload): void {
     if (payload) {
       this.showDetail = false;
-      bus.$emit('openDrawerEdit', payload);
+      bus.$emit("openDrawerEdit", payload);
     }
   }
 
@@ -118,9 +120,11 @@ export default class PCalendarEvent extends Vue {
     return this.event.task;
   }
 
-  getNumberSubTaskActive() : number{
-      return this.event.description ? this.event.description.filter(subtask => !subtask.isdone).length : 0
-    }
+  getNumberSubTaskActive(): number {
+    return this.event.description
+      ? this.event.description.filter((subtask) => !subtask.isdone).length
+      : 0;
+  }
 
   get bulletClass() {
     const index = this.giveColorTodo();
@@ -130,7 +134,12 @@ export default class PCalendarEvent extends Vue {
 
   get displayModalLeft() {
     const day = new Date(this.event.deadline).getDay();
-    return day === 4 || day === 5;
+
+    if (!this.$store.getters.getWithWeekEnd) {
+      return day === 4 || day === 5;
+    } else {
+      return day === 6 || day === 7;
+    }
   }
 
   giveColorTodo(): number {
@@ -197,7 +206,7 @@ h1 {
   cursor: pointer;
 }
 
-.md-layout-item{
+.md-layout-item {
   font-family: initial;
   font-size: 19px !important;
   margin-top: 10px;
