@@ -61,11 +61,12 @@
           <div class="mb">
             <sub-tasks-viewer
               @onSubmitSubTasks="setSubTasks"
+              @changeSubtaskInput="changeSubtaskInput"
               :subtasksreceived="[...this.formData.description]"
             ></sub-tasks-viewer>
           </div>
 
-          <md-button class="md-tertiary" @click="actionTodo">
+          <md-button class="md-tertiary" @click="checkBeforeSave">
             <feather type="save"></feather>Save
           </md-button>
         </div>
@@ -111,6 +112,27 @@
         </md-dialog-actions>
       </md-dialog>
     </div>
+
+     <!-- modal warning subtask in progress -->
+    <div>
+      <md-dialog :md-active.sync="subtaskInProgressModal">
+        <md-dialog-title>Carfull, there is a subtask in progress</md-dialog-title>
+
+        <md-dialog-content>
+          <p>You will loose this subtask if you save without adding it.</p>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+          <md-button class="md-tertiary" @click="subtaskInProgressModal = false"
+            >Cancel</md-button
+          >
+          <md-button class="md-tertiary" @click="actionTodo"
+            >Save anyway</md-button
+          >
+        </md-dialog-actions>
+      </md-dialog>
+    </div>
+
   </md-drawer>
 </template>
 
@@ -139,6 +161,8 @@ export default class EditTaskDrawer extends Vue {
   confirmModalactive: boolean = false;
   confirmModalLeaveactive: boolean = false;
   userDoWantToLeave: boolean = false;
+  isThereASubtaskInProgress: boolean = false;
+  subtaskInProgressModal: boolean = false;
 
   resetStepOne() {
     this.confirmModalactive = true;
@@ -196,6 +220,10 @@ export default class EditTaskDrawer extends Vue {
     }
   }
 
+  changeSubtaskInput(hasSubTaskInProgress: boolean){
+    this.isThereASubtaskInProgress = hasSubTaskInProgress;
+  }
+
   formData: Todo = {
     key: "",
     task: "",
@@ -214,7 +242,18 @@ export default class EditTaskDrawer extends Vue {
 
   subTasks: SubTask[] = [];
 
+  checkBeforeSave(){
+    if(!this.isThereASubtaskInProgress){
+      this.actionTodo();
+    }else{
+        this.subtaskInProgressModal = true;
+    }
+  }
+
   actionTodo() {
+
+    this.subtaskInProgressModal = false;
+
     this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
     this.formData.deadline = this.dateHelper;
 

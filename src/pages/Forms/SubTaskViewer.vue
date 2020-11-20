@@ -1,16 +1,19 @@
 <template>
   <div>
-    <div class="md-layout-item md-small-size-100 md-size-100" v-show="!readOnlyLocal" >
+    <div
+      class="md-layout-item md-small-size-100 md-size-100"
+      v-show="!readOnlyLocal"
+    >
       <label> <feather type="list"></feather>Subtask </label>
       <input-text
-       :disabled="readOnlyLocal"
+        :disabled="readOnlyLocal"
         type="text"
         initialvalue="Your subtask"
         :vmodel="subTaskInput"
         @vmodel="subTaskInput = $event"
       ></input-text>
       <div class="subtask-button" v-show="!readOnlyLocal">
-        <md-button class="md-tertiary" @click="addSubTask" >
+        <md-button class="md-tertiary" @click="addSubTask">
           <feather type="plus"></feather>Add subtask
         </md-button>
       </div>
@@ -22,30 +25,30 @@
       </div>
       <!-- table -->
       <div class="my-table">
-      <md-table v-model="subtasks">
-        <md-table-row slot="md-table-row" slot-scope="{ item }">
-          <md-table-cell md-label="Sub-task" class="testt"
-            ><span
-              class="label"
-              :contenteditable="!readOnlyLocal"
-              :class="{ completed: item.isdone }"
-              @keydown.enter="updateSubTask($event, item)"
-              @blur="updateSubTask($event, item)"
-              >{{ item.label }}</span
-            ></md-table-cell
-          >
-          <md-table-cell md-label="Done">
-            <md-checkbox
-             :disabled="readOnlyLocal"
-              v-model="item.isdone"
-              @click="completeSubTask(item)"
-            ></md-checkbox
-          ></md-table-cell>
-          <md-table-cell md-label="Delete" v-if="!readOnlyLocal">
-            <td @click="removeSubTask(item)"><md-icon>close</md-icon></td>
-          </md-table-cell>
-        </md-table-row>
-      </md-table>
+        <md-table v-model="subtasks">
+          <md-table-row slot="md-table-row" slot-scope="{ item }">
+            <md-table-cell md-label="Sub-task" class="testt"
+              ><span
+                class="label"
+                :contenteditable="!readOnlyLocal"
+                :class="{ completed: item.isdone }"
+                @keydown.enter="updateSubTask($event, item)"
+                @blur="updateSubTask($event, item)"
+                >{{ item.label }}</span
+              ></md-table-cell
+            >
+            <md-table-cell md-label="Done">
+              <md-checkbox
+                :disabled="readOnlyLocal"
+                v-model="item.isdone"
+                @click="completeSubTask(item)"
+              ></md-checkbox
+            ></md-table-cell>
+            <md-table-cell md-label="Delete" v-if="!readOnlyLocal">
+              <td @click="removeSubTask(item)"><md-icon>close</md-icon></td>
+            </md-table-cell>
+          </md-table-row>
+        </md-table>
       </div>
       <!-- fin table -->
     </div>
@@ -57,44 +60,54 @@ import { SubTask, HTMLElementEvent, Todo } from "@/models/types";
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import InputText from "../../components/Form/InputText.vue";
 
-import {bus} from '../../main';
-
+import { bus } from "../../main";
 
 @Component({
   components: {
-    "input-text": InputText
-  }
+    "input-text": InputText,
+  },
 })
 export default class SubTaskViewer extends Vue {
-
   @Prop() subtasksreceived: SubTask[];
-  @Prop() readonly: boolean ;
+  @Prop() readonly: boolean;
   subTaskInput: string = "";
-  subtasks: SubTask[]= [];
+  subtasks: SubTask[] = [];
   hasError: boolean = false;
 
-  readOnlyLocal: boolean =false;
+  readOnlyLocal: boolean = false;
 
   currentTodo: Todo = {
     task: "",
     creationDate: new Date().toISOString().substr(0, 10),
     description: [],
-    isdone: false
+    isdone: false,
   };
+
+  @Watch("subTaskInput", { immediate: false })
+  changeSubtaskInput() {
+    //if input, user can't leave the form without warning dialog
+    if (this.subTaskInput) {
+      this.$emit("changeSubtaskInput", true);
+    }else{
+      this.$emit("changeSubtaskInput", false);
+    }
+  }
 
   @Watch("subtasksreceived", { immediate: true })
   changeSubtasks() {
-    if(this.subtasksreceived) {this.subtasks = [...this.subtasksreceived];}
+    if (this.subtasksreceived) {
+      this.subtasks = [...this.subtasksreceived];
+    }
   }
 
-  mounted(){
-    bus.$on('resetSubTasks', this.resetSubTasks);
+  mounted() {
+    bus.$on("resetSubTasks", this.resetSubTasks);
     this.readOnlyLocal = this.readonly;
   }
 
   resetSubTasks(): void {
-      this.subtasks = [];
-      this.subTaskInput = '';
+    this.subtasks = [];
+    this.subTaskInput = "";
   }
 
   addSubTask() {
@@ -108,7 +121,7 @@ export default class SubTaskViewer extends Vue {
     this.subtasks.push({
       order: this.subtasks ? this.subtasks.length : 0,
       label: this.subTaskInput,
-      isdone: false
+      isdone: false,
     });
 
     this.subTaskInput = "";
@@ -143,17 +156,15 @@ export default class SubTaskViewer extends Vue {
 </script>
 
 <style scoped>
-
-.my-table{
+.my-table {
   width: 95%;
   position: absolute;
-  left : 15px;
-  margin-top : 100px;
-  margin-bottom: 20px
- 
+  left: 15px;
+  margin-top: 100px;
+  margin-bottom: 20px;
 }
 
-.testt{
+.testt {
   width: 100%;
   padding: 5px;
 }

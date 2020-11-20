@@ -194,9 +194,6 @@ export default {
         return "";
       }
 
-      // eslint-disable-next-line no-console
-      console.log("all check");
-
       this.$toasted.show("Email send ! =)", {
         icon: "error-outline",
         theme: "bubble",
