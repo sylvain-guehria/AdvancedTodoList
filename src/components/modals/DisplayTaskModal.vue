@@ -19,55 +19,62 @@
       </div>
     </div>
     <div class="body">
-      <div class="md-layout-item md-size-100 duo-data-block no-padding">
-        <div class="md-layout-item md-size-100 icon-list-item flex">
-          <feather type="calendar"></feather>
-          <div class="list-item-text">
-            Creation date : {{ event.creationDate }}
+      <vue-custom-scrollbar
+        class="scroll-area"
+        :settings="settings"
+      >
+        <div class="md-layout-item md-size-100 duo-data-block no-padding">
+          <div class="md-layout-item md-size-100 icon-list-item flex">
+            <feather type="calendar"></feather>
+            <div class="list-item-text">
+              Creation date : {{ event.creationDate }}
+            </div>
           </div>
-        </div>
-        <div class="md-layout-item md-size-100 icon-list-item flex">
-          <feather type="calendar"></feather>
-          <div class="list-item-text">Deadline : {{ event.deadline }}</div>
-        </div>
-        <div class="md-layout-item md-size-100 icon-list-item flex">
-          <feather type="alert-octagon"></feather>
-          <div class="list-item-text">Importance : {{ event.importance }}</div>
-        </div>
-        <div class="md-layout-item md-size-100 icon-list-item flex">
-          <feather type="folder"></feather>
-          <div class="list-item-text">
-            {{ event.isdone ? "finished" : "In progress" }}
+          <div class="md-layout-item md-size-100 icon-list-item flex">
+            <feather type="calendar"></feather>
+            <div class="list-item-text">Deadline : {{ event.deadline }}</div>
           </div>
-          <div class="bullet" :class="bulletClass"></div>
-        </div>
-        <div class="md-layout-item md-size-100 icon-list-item flex">
-          <feather type="eye"></feather>
+          <div class="md-layout-item md-size-100 icon-list-item flex">
+            <feather type="alert-octagon"></feather>
+            <div class="list-item-text">
+              Importance : {{ event.importance }}
+            </div>
+          </div>
+          <div class="md-layout-item md-size-100 icon-list-item flex">
+            <feather type="folder"></feather>
+            <div class="list-item-text">
+              {{ event.isdone ? "finished" : "In progress" }}
+            </div>
+            <div class="bullet" :class="bulletClass"></div>
+          </div>
+          <div class="md-layout-item md-size-100 icon-list-item flex">
+            <feather type="eye"></feather>
+            <div
+              class="list-item-text"
+              :class="event.numberdaysleft <= 0 ? 'red-text' : 'green-text'"
+            >
+              Number Days Left : {{ event.numberdaysleft }}
+            </div>
+          </div>
+          <div class="md-layout-item md-size-100 icon-list-item flex">
+            <feather type="list"></feather
+            >{{
+              event.description && event.description.length > 0
+                ? "Subtasks"
+                : "No subtask"
+            }}
+          </div>
           <div
-            class="list-item-text"
-            :class="event.numberdaysleft <= 0 ? 'red-text' : 'green-text'"
+            class="md-layout-item md-size-100 icon-list-item"
+            v-if="event.description && event.description.length > 0"
           >
-            Number Days Left : {{ event.numberdaysleft }}
+            <sub-task-readonly
+              :subtasksreceived="event.description"
+              :todo="event"
+            ></sub-task-readonly>
           </div>
         </div>
-        <div class="md-layout-item md-size-100 icon-list-item flex">
-          <feather type="list"></feather
-          >{{
-            event.description && event.description.length > 0
-              ? "Subtasks"
-              : "No subtask"
-          }}
-        </div>
-        <div
-          class="md-layout-item md-size-100 icon-list-item flex"
-          v-if="event.description && event.description.length > 0"
-        >
-          <sub-task-readonly
-            :subtasksreceived="event.description"
-            :todo="event"
-          ></sub-task-readonly>
-        </div>
-      </div>
+      </vue-custom-scrollbar>
     </div>
   </div>
 </template>
@@ -81,17 +88,26 @@ import SubTaskViewer from "@/pages/Forms/SubTaskViewer.vue";
 import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue";
 import { myFunctions } from "../../helpers/helperfunction";
 import { bus } from "../../main";
+import vueCustomScrollbar from "vue-custom-scrollbar";
+import "vue-custom-scrollbar/dist/vueScrollbar.css";
 
 @Component({
   components: {
     "sub-tasks-viewer": SubTaskViewer,
     "sub-task-readonly": ReadOnlySubTask,
+    "vue-custom-scrollbar": vueCustomScrollbar,
   },
 })
 export default class PCalendarEvent extends Vue {
   @Prop() days!: Array<any>;
   @Prop() calendar!: Calendar<any, any>;
   @Prop() event!: any;
+
+  settings = {
+    suppressScrollY: false,
+    suppressScrollX: false,
+    wheelPropagation: false
+  };
 
   showDrawerEditTask(payload): void {
     if (payload) {
@@ -101,7 +117,7 @@ export default class PCalendarEvent extends Vue {
   }
 
   closeModal(): void {
-      this.$emit("closeDialog");
+    this.$emit("closeDialog");
   }
 
   get bulletClass() {
@@ -178,8 +194,8 @@ h1 {
   left: 10px;
   cursor: pointer;
   i {
-          color: #a5a7a9;
-        }
+    color: #a5a7a9;
+  }
 }
 .go-close {
   position: absolute;
@@ -187,39 +203,46 @@ h1 {
   right: 10px;
   cursor: pointer;
   i {
-          color: #a5a7a9;
-        }
+    color: #a5a7a9;
+  }
 }
-.body{
-  padding : 35px
+.body {
+  padding: 35px;
 }
 
-.flex{
+.flex {
   display: flex;
   margin-bottom: 15px;
   font-family: initial;
   font-size: 19px;
 }
 
- .icon-list-item {
-        display: flex;
+.icon-list-item {
+  display: flex;
 
-        i {
-          color: #1d72b2;
-          margin-right: 20px;
-        }
+  i {
+    color: #1d72b2;
+    margin-right: 20px;
+  }
 
-        .list-item-text {
-          text-align: left;
-          &.description {
-            width: 100%;
-          }
-        }
+  .list-item-text {
+    text-align: left;
+    &.description {
+      width: 100%;
+    }
+  }
 
-        .bullet {
-          margin-top: 5px;
-          margin-left: 10px;
-        }
-      }
+  .bullet {
+    margin-top: 5px;
+    margin-left: 10px;
+  }
+}
 
+.scroll-area {
+  position: relative;
+  margin: auto;
+  padding-right: 50px;
+  max-width: 1200px;
+  max-height: 700px;
+}
 </style>
