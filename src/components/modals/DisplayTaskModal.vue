@@ -243,6 +243,6 @@ h1 {
   margin: auto;
   padding-right: 50px;
   max-width: 1200px;
-  max-height: 700px;
+  max-height: 500px;
 }
 </style>
