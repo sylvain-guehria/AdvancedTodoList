@@ -24,6 +24,11 @@
         slot-scope="{ item }"
         @click="DisplayModalTask(item)"
       >
+        <md-table-cell md-sort-by="order" md-label="Order"> 
+          <p>{{
+          item.order
+        }}</p></md-table-cell>
+
         <md-table-cell md-sort-by="task" md-label="Task Title"
           ><div class="color-flex">
             <div class="bullet" :class="bulletClass(item)"></div>

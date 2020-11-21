@@ -113,10 +113,12 @@
       </md-dialog>
     </div>
 
-     <!-- modal warning subtask in progress -->
+    <!-- modal warning subtask in progress -->
     <div>
       <md-dialog :md-active.sync="subtaskInProgressModal">
-        <md-dialog-title>Carfull, there is a subtask in progress</md-dialog-title>
+        <md-dialog-title
+          >Carfull, there is a subtask in progress</md-dialog-title
+        >
 
         <md-dialog-content>
           <p>You will loose this subtask if you save without adding it.</p>
@@ -132,7 +134,6 @@
         </md-dialog-actions>
       </md-dialog>
     </div>
-
   </md-drawer>
 </template>
 
@@ -141,6 +142,7 @@ import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import { Todo, SubTask } from "../../models/types";
 import InputText from "../../components/Form/InputText.vue";
 import SubtaskViewer from "../../pages/Forms/SubTaskViewer.vue";
+import lodash from "lodash";
 
 import { bus } from "../../main";
 
@@ -163,6 +165,12 @@ export default class EditTaskDrawer extends Vue {
   userDoWantToLeave: boolean = false;
   isThereASubtaskInProgress: boolean = false;
   subtaskInProgressModal: boolean = false;
+
+  todolist: Todo[] = [];
+
+  mounted() {
+    this.todolist = this.$store.getters.getTodoList;
+  }
 
   resetStepOne() {
     this.confirmModalactive = true;
@@ -220,7 +228,7 @@ export default class EditTaskDrawer extends Vue {
     }
   }
 
-  changeSubtaskInput(hasSubTaskInProgress: boolean){
+  changeSubtaskInput(hasSubTaskInProgress: boolean) {
     this.isThereASubtaskInProgress = hasSubTaskInProgress;
   }
 
@@ -242,16 +250,15 @@ export default class EditTaskDrawer extends Vue {
 
   subTasks: SubTask[] = [];
 
-  checkBeforeSave(){
-    if(!this.isThereASubtaskInProgress){
+  checkBeforeSave() {
+    if (!this.isThereASubtaskInProgress) {
       this.actionTodo();
-    }else{
-        this.subtaskInProgressModal = true;
+    } else {
+      this.subtaskInProgressModal = true;
     }
   }
 
   actionTodo() {
-
     this.subtaskInProgressModal = false;
 
     this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
@@ -271,6 +278,10 @@ export default class EditTaskDrawer extends Vue {
 
     let action: string = todo.key ? "editTodo" : "createTodo";
     let msg: string = todo.key ? "Task updated" : "Task created";
+
+    // find highest order and add 1
+    let higher_order = lodash.maxBy(this.todolist, 'order').order + 1;
+    todo.order = higher_order ? higher_order : 0;
 
     this.$store
       .dispatch(action, todo)

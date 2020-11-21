@@ -8,6 +8,7 @@ export interface Todo {
   isdone: boolean;
   numberdaysleft?: number;
   urgency?: number;
+  order?: number;
 }
 
 export interface User {

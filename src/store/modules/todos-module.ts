@@ -1,6 +1,7 @@
 import { Todo, User, State, SubTask } from '../../models/types';
 import { database } from '../../firebase/firebase';
 import lodash from 'lodash';
+import store from '..';
 
 var todolist: Todo[] = [];
 var filtered_todo_list: Todo[] = [];
@@ -281,7 +282,9 @@ const actions = {
           importance: childSnapshot.val().importance,
           description: childSnapshot.val().description,
           creationDate: childSnapshot.val().creationDate,
-          isdone: childSnapshot.val().isdone
+          isdone: childSnapshot.val().isdone,
+          order: childSnapshot.val().order
+
         };
         listoftodos.push(currentTodo);
       });
