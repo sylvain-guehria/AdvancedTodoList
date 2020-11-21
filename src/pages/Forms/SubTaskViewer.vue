@@ -97,12 +97,7 @@ export default class SubTaskViewer extends Vue {
   @Watch("subtasksreceived", { immediate: true })
   changeSubtasks() {
     if (this.subtasksreceived && this.subtasksreceived[0]) {
-       // eslint-disable-next-line no-console
-      console.log('receivede', this.subtasksreceived);
       this.subtasks = [...this.subtasksreceived];
-    }else{
-       // eslint-disable-next-line no-console
-      console.log('riena display');
     }
   }
 

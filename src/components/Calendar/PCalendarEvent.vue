@@ -3,13 +3,33 @@
     class="calendar-event"
     :class="{ selected: showDetail, 'display-modal-left': displayModalLeft }"
   >
-    <div class="event-info" @click="showDetail = true">
+    <div class="event-info" @click="DisplayModalTask">
       <div class="bullet" :class="bulletClass"></div>
       <div class="event-text">
         {{ Title }} &nbsp; ({{ getNumberSubTaskActive() }})
       </div>
     </div>
-    <modal
+
+
+
+    <!-- modal display task -->
+    <div>
+      <md-dialog
+        :md-active.sync="showDetail"
+        :show="showDetail"
+        @show="showDetail = $event"
+      >
+        <display-task-modal
+          :key="event ? event.id : null"
+          :event="event ? event : null"
+          @closeDialog="showDetail = false"
+        ></display-task-modal>
+      </md-dialog>
+    </div>
+
+
+
+    <!-- <modal
       :show="showDetail"
       @show="showDetail = $event"
       class="event-detail-modal"
@@ -80,7 +100,7 @@
           </div>
         </div>
       </div>
-    </modal>
+    </modal> -->
   </div>
 </template>
 
@@ -94,12 +114,16 @@ import SubTaskViewer from "@/pages/Forms/SubTaskViewer.vue";
 import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue";
 import { myFunctions } from "../../helpers/helperfunction";
 import { bus } from "../../main";
+import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
+import { Todo } from '@/models/types';
+
 
 @Component({
   components: {
     modal: Modal,
     "sub-tasks-viewer": SubTaskViewer,
     "sub-task-readonly": ReadOnlySubTask,
+    "display-task-modal": DisplayTaskModal
   },
 })
 export default class PCalendarEvent extends Vue {
@@ -113,6 +137,10 @@ export default class PCalendarEvent extends Vue {
       bus.$emit("openDrawerEdit", payload);
     }
   }
+
+  DisplayModalTask(): void {
+      this.showDetail = true;
+    }
 
   showDetail: boolean = false;
 
