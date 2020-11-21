@@ -19,13 +19,13 @@
       </div>
     </div>
 
-    <div v-if="subtasks && subtasks.length > 0">
+    <div>
       <div>
         <feather type="corner-right-down"></feather>
       </div>
       <!-- table -->
       <div class="my-table">
-        <md-table v-model="subtasks">
+        <md-table v-model="subtasks" v-if="subtasks && subtasks[0]">
           <md-table-row slot="md-table-row" slot-scope="{ item }">
             <md-table-cell md-label="Sub-task" class="testt"
               ><span
@@ -73,6 +73,7 @@ export default class SubTaskViewer extends Vue {
   subTaskInput: string = "";
   subtasks: SubTask[] = [];
   hasError: boolean = false;
+  renderTable: boolean = false;
 
   readOnlyLocal: boolean = false;
 
@@ -95,14 +96,20 @@ export default class SubTaskViewer extends Vue {
 
   @Watch("subtasksreceived", { immediate: true })
   changeSubtasks() {
-    if (this.subtasksreceived) {
+    if (this.subtasksreceived && this.subtasksreceived[0]) {
+       // eslint-disable-next-line no-console
+      console.log('receivede', this.subtasksreceived);
       this.subtasks = [...this.subtasksreceived];
+    }else{
+       // eslint-disable-next-line no-console
+      console.log('riena display');
     }
   }
 
   mounted() {
     bus.$on("resetSubTasks", this.resetSubTasks);
     this.readOnlyLocal = this.readonly;
+    this.renderTable = false;
   }
 
   resetSubTasks(): void {
