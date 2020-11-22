@@ -22,6 +22,7 @@ export const bus = new Vue();
 Vue.use(VueToasted, {
   iconPack : 'material' 
 });
+Vue.use(require('vue-moment'));
 
 Vue.use(VModal);
 Vue.use(Notifications);

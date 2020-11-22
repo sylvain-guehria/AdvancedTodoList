@@ -56,6 +56,7 @@
                 v-model="selectedDate"
               ></datepicker>
             </md-field>
+            <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
           </div>
 
           <div class="mb">
@@ -157,7 +158,7 @@ export default class EditTaskDrawer extends Vue {
 
   filtersNb: number = 0;
   list = [];
-  selectedDate: Date = new Date();
+  selectedDate: Date = null;
   currentTodo: Todo;
   isEditionMode: boolean = false;
   confirmModalactive: boolean = false;
@@ -165,6 +166,7 @@ export default class EditTaskDrawer extends Vue {
   userDoWantToLeave: boolean = false;
   isThereASubtaskInProgress: boolean = false;
   subtaskInProgressModal: boolean = false;
+  noDeadLine: boolean = false;
 
   todolist: Todo[] = [];
 
@@ -217,7 +219,12 @@ export default class EditTaskDrawer extends Vue {
       this.currentTodo = { ...this.$store.getters.getCurrentTodo };
       if (this.currentTodo && this.currentTodo.key) {
         this.formData = { ...this.currentTodo };
-        this.selectedDate = new Date(this.currentTodo.deadline);
+        if (this.currentTodo.deadline) {
+          this.selectedDate = new Date(this.currentTodo.deadline);
+           this.noDeadLine = false;
+        }else{
+          this.noDeadLine = true;
+        }
         this.isEditionMode = true;
       }
     }
@@ -235,8 +242,8 @@ export default class EditTaskDrawer extends Vue {
   formData: Todo = {
     key: "",
     task: "",
-    deadline: new Date().toISOString().substr(0, 10),
-    importance: 0,
+    deadline: null,
+    importance: null,
     description: [],
     creationDate: new Date().toISOString().substr(0, 10),
     isdone: false,
@@ -261,8 +268,10 @@ export default class EditTaskDrawer extends Vue {
   actionTodo() {
     this.subtaskInProgressModal = false;
 
-    this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
-    this.formData.deadline = this.dateHelper;
+    if (this.selectedDate) {
+      this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
+      this.formData.deadline = this.dateHelper;
+    }
 
     if (!this.formData.task) {
       this.$toasted.show("Your task must have a title", {
@@ -293,6 +302,16 @@ export default class EditTaskDrawer extends Vue {
       }
 
       todo.order = higher_order;
+    }
+
+    //unable no importance :
+    if (todo.importance === 0) {
+      todo.importance = null;
+    }
+
+    //unable no deadline :
+    if (this.noDeadLine) {
+      todo.deadline = null;
     }
 
     this.$store

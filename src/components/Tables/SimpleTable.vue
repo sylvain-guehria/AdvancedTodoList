@@ -48,24 +48,26 @@
             <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
           </div>
         </md-table-cell>
-        <md-table-cell md-sort-by="deadline" md-label="Deadline" v-if="getSettings('deadline')">
+        <md-table-cell md-sort-by="deadline" md-label="Deadline" v-if="getSettings('deadline')"  width="200px">
           <p @click="DisplayModalTask(item)">
             {{ item.deadline }}
           </p></md-table-cell
         >
-        <md-table-cell md-sort-by="creationDate" md-label="Creation date" v-if="getSettings('creationDate')">
-          <p @click="DisplayModalTask(item)">
-            {{ item.creationDate }}
-          </p></md-table-cell
-        >
-        <md-table-cell
-          md-sort-by="numberdaysleft"
-          md-label="Number days left"
-          width="50px"
+
+         <md-table-cell
+          md-label="Finish Time"
+          width="200px"
           v-if="getSettings('numberdaysleft')"
         >
           <p @click="DisplayModalTask(item)">{{ item.numberdaysleft }}</p>
         </md-table-cell>
+
+        <md-table-cell md-sort-by="creationDate"  width="200px" md-label="Creation date" v-if="getSettings('creationDate')">
+          <p @click="DisplayModalTask(item)">
+            {{ item.creationDate }}
+          </p></md-table-cell
+        >
+       
         <md-table-cell
           md-sort-by="importance"
           md-label="Importance (/100)"

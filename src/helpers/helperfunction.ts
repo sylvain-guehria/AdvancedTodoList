@@ -1,12 +1,10 @@
+import moment from 'moment';
 
 export const myFunctions = {
 
-  getdaysleft (deadlineS: string): number{
-    const deadline = new Date(deadlineS);
-    const DiffTime: number = deadline.getTime() - new Date().getTime();
-
-    const diffTimeString: string = (DiffTime / (1000 * 3600 * 24)).toFixed(1);
-    return parseFloat(diffTimeString);
+  getdaysleft (deadlineS: string): string{
+    if (!deadlineS){return ''}
+    return moment(deadlineS).fromNow();
   },
 
   formatDate (dateS: string): string {

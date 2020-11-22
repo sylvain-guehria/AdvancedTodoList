@@ -246,4 +246,7 @@ h1 {
  margin: 0 auto; 
  text-align: left !important
 }
+.content{
+  min-width: 1200px;
+}
 </style>
