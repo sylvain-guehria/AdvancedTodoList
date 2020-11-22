@@ -85,11 +85,15 @@
       <div class="legend-list">
          <legend-bullet :planning="true"></legend-bullet>
       </div>
+      <div class="column">
+         <colum-to-hide></colum-to-hide>
+      </div>
       <!-- drawers -->
 
       <edit-task-drawer
         :isActive="showAddTask"
         @isActive="updateIsActiveAddTask"
+        :key="this.$store.getters.getRendAllListNumber"
       ></edit-task-drawer>
 
       <filters-drawer
@@ -115,6 +119,7 @@ import EditTaskDrawer from "../components/modals/EditTaskDrawer.vue";
 import ReadOnlyTaskDrawer from "../components/modals/ReadOnlyTaskDrawer.vue";
 import LegendBulletVue from './LegendBullet.vue';
 import { bus } from '../main';
+import ColumToHideVue from './ColumToHide.vue';
 
 export default {
   name: "TotoList",
@@ -123,7 +128,8 @@ export default {
     "filters-drawer": FiltersDrawer,
     "edit-task-drawer": EditTaskDrawer,
     "read-only-task-viewer": ReadOnlyTaskDrawer,
-    "legend-bullet": LegendBulletVue
+    "legend-bullet": LegendBulletVue,
+    "colum-to-hide": ColumToHideVue
   },
   data() {
     return {
@@ -193,5 +199,11 @@ export default {
   position: absolute;
   bottom: 200px;
   left: 50px;
+}
+.column {
+  display: inline-block;
+  position: absolute;
+  bottom: 200px;
+  left: 250px;
 }
 </style>

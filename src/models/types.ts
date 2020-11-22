@@ -8,6 +8,7 @@ export interface Todo {
   isdone: boolean;
   numberdaysleft?: number;
   urgency?: number;
+  order?: number;
 }
 
 export interface User {
@@ -26,7 +27,22 @@ export interface State {
   isLoading: boolean,
   with_weekend: boolean,
   currentLang: string,
-  rendAllListNumber: number
+  rendAllListNumber: number,
+  settings: Settings
+}
+
+export interface Settings {
+  langage : string,
+  with_weekend : boolean,
+  hidden_column : {
+    order : boolean,
+    task : boolean,
+    deadline : boolean,
+    creationDate : boolean,
+    numberdaysleft : boolean,
+    importance : boolean,
+    isdone : boolean,
+  }
 }
 
 export interface SubTask {

@@ -9,6 +9,7 @@
     <edit-task-drawer
       :isActive="showAddTask"
       @isActive="updateIsActiveAddTask"
+      :key="this.$store.getters.getRendAllListNumber"
     ></edit-task-drawer>
 
   </div>

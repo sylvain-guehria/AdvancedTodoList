@@ -83,11 +83,11 @@ export default class DayBlock extends Vue {
   created() {
     this.todolist = [...this.$store.getters.getTodoList];
 
-    if (this.todolist) {
-      this.todolist.forEach((todo: Todo) => {
-        todo.numberdaysleft = this.getdaysleft(todo.deadline);
-      });
-    }
+    // if (this.todolist) {
+    //   this.todolist.forEach((todo: Todo) => {
+    //     todo.numberdaysleft = this.getdaysleft(todo.deadline);
+    //   });
+    // }
   }
 
   showMoreTodos: boolean = false;

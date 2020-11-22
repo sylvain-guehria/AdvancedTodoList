@@ -56,6 +56,7 @@
                 v-model="selectedDate"
               ></datepicker>
             </md-field>
+            <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
           </div>
 
           <div class="mb">
@@ -113,10 +114,12 @@
       </md-dialog>
     </div>
 
-     <!-- modal warning subtask in progress -->
+    <!-- modal warning subtask in progress -->
     <div>
       <md-dialog :md-active.sync="subtaskInProgressModal">
-        <md-dialog-title>Carfull, there is a subtask in progress</md-dialog-title>
+        <md-dialog-title
+          >Carfull, there is a subtask in progress</md-dialog-title
+        >
 
         <md-dialog-content>
           <p>You will loose this subtask if you save without adding it.</p>
@@ -132,7 +135,6 @@
         </md-dialog-actions>
       </md-dialog>
     </div>
-
   </md-drawer>
 </template>
 
@@ -141,6 +143,7 @@ import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import { Todo, SubTask } from "../../models/types";
 import InputText from "../../components/Form/InputText.vue";
 import SubtaskViewer from "../../pages/Forms/SubTaskViewer.vue";
+import lodash from "lodash";
 
 import { bus } from "../../main";
 
@@ -155,7 +158,7 @@ export default class EditTaskDrawer extends Vue {
 
   filtersNb: number = 0;
   list = [];
-  selectedDate: Date = new Date();
+  selectedDate: Date = null;
   currentTodo: Todo;
   isEditionMode: boolean = false;
   confirmModalactive: boolean = false;
@@ -163,6 +166,13 @@ export default class EditTaskDrawer extends Vue {
   userDoWantToLeave: boolean = false;
   isThereASubtaskInProgress: boolean = false;
   subtaskInProgressModal: boolean = false;
+  noDeadLine: boolean = false;
+
+  todolist: Todo[] = [];
+
+  mounted() {
+    this.todolist = this.$store.getters.getTodoList;
+  }
 
   resetStepOne() {
     this.confirmModalactive = true;
@@ -209,7 +219,12 @@ export default class EditTaskDrawer extends Vue {
       this.currentTodo = { ...this.$store.getters.getCurrentTodo };
       if (this.currentTodo && this.currentTodo.key) {
         this.formData = { ...this.currentTodo };
-        this.selectedDate = new Date(this.currentTodo.deadline);
+        if (this.currentTodo.deadline) {
+          this.selectedDate = new Date(this.currentTodo.deadline);
+           this.noDeadLine = false;
+        }else{
+          this.noDeadLine = true;
+        }
         this.isEditionMode = true;
       }
     }
@@ -220,15 +235,15 @@ export default class EditTaskDrawer extends Vue {
     }
   }
 
-  changeSubtaskInput(hasSubTaskInProgress: boolean){
+  changeSubtaskInput(hasSubTaskInProgress: boolean) {
     this.isThereASubtaskInProgress = hasSubTaskInProgress;
   }
 
   formData: Todo = {
     key: "",
     task: "",
-    deadline: new Date().toISOString().substr(0, 10),
-    importance: 0,
+    deadline: null,
+    importance: null,
     description: [],
     creationDate: new Date().toISOString().substr(0, 10),
     isdone: false,
@@ -242,20 +257,21 @@ export default class EditTaskDrawer extends Vue {
 
   subTasks: SubTask[] = [];
 
-  checkBeforeSave(){
-    if(!this.isThereASubtaskInProgress){
+  checkBeforeSave() {
+    if (!this.isThereASubtaskInProgress) {
       this.actionTodo();
-    }else{
-        this.subtaskInProgressModal = true;
+    } else {
+      this.subtaskInProgressModal = true;
     }
   }
 
   actionTodo() {
-
     this.subtaskInProgressModal = false;
 
-    this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
-    this.formData.deadline = this.dateHelper;
+    if (this.selectedDate) {
+      this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
+      this.formData.deadline = this.dateHelper;
+    }
 
     if (!this.formData.task) {
       this.$toasted.show("Your task must have a title", {
@@ -271,6 +287,32 @@ export default class EditTaskDrawer extends Vue {
 
     let action: string = todo.key ? "editTodo" : "createTodo";
     let msg: string = todo.key ? "Task updated" : "Task created";
+
+    if (action === "createTodo") {
+      // find highest order and add 1
+      let higher_order: number;
+      let todo_with_max_order: Todo;
+
+      todo_with_max_order = lodash.maxBy(this.todolist, "order");
+
+      if (todo_with_max_order) {
+        higher_order = todo_with_max_order.order + 1;
+      } else {
+        higher_order = 1;
+      }
+
+      todo.order = higher_order;
+    }
+
+    //unable no importance :
+    if (todo.importance === 0) {
+      todo.importance = null;
+    }
+
+    //unable no deadline :
+    if (this.noDeadLine) {
+      todo.deadline = null;
+    }
 
     this.$store
       .dispatch(action, todo)
