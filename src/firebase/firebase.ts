@@ -77,7 +77,6 @@ export default {
     });
   },
   loginEmail(email: string, password: string): Promise<{}> {
-    // eslint-disable-next-line no-console
     return new Promise((resolve, reject) => {
       firebase
         .default.auth()

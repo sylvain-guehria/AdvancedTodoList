@@ -279,9 +279,21 @@ export default class EditTaskDrawer extends Vue {
     let action: string = todo.key ? "editTodo" : "createTodo";
     let msg: string = todo.key ? "Task updated" : "Task created";
 
-    // find highest order and add 1
-    let higher_order = lodash.maxBy(this.todolist, 'order').order + 1;
-    todo.order = higher_order ? higher_order : 0;
+    if (action === "createTodo") {
+      // find highest order and add 1
+      let higher_order: number;
+      let todo_with_max_order: Todo;
+
+      todo_with_max_order = lodash.maxBy(this.todolist, "order");
+
+      if (todo_with_max_order) {
+        higher_order = todo_with_max_order.order + 1;
+      } else {
+        higher_order = 1;
+      }
+
+      todo.order = higher_order;
+    }
 
     this.$store
       .dispatch(action, todo)

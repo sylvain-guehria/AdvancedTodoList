@@ -19,19 +19,26 @@
         md-description="Create a Task with the button above and it will show up here."
       ></md-empty-state>
 
-      <md-table-row
-        slot="md-table-row"
-        slot-scope="{ item }"
-      >
+      <md-table-row slot="md-table-row" slot-scope="{ item, index }">
         <md-table-cell md-sort-by="order" md-label="Order" width="20px">
           <div class="row">
             <div class="block">
-           <div class="chevron-order">
-           <feather type="chevron-up" class="chevron-up" @click="orderUp(item)"></feather
-            ><feather type="chevron-down" class="chevron-down" @click="orderDown(item)"></feather>
-           </div>
-           </div>
-            <div class="block margin-left"> <p>{{ item.order }}</p></div>
+              <div class="chevron-order">
+                <feather
+                  type="chevron-up"
+                  class="chevron-up"
+                  @click="orderUp(item, index)"
+                ></feather
+                ><feather
+                  type="chevron-down"
+                  class="chevron-down"
+                  @click="orderDown(item)"
+                ></feather>
+              </div>
+            </div>
+            <div class="block margin-left" @click="DisplayModalTask(item)">
+              <p>{{ item.order }}</p>
+            </div>
           </div>
         </md-table-cell>
 
@@ -42,18 +49,34 @@
           </div>
         </md-table-cell>
         <md-table-cell md-sort-by="deadline" md-label="Deadline">
-          <p @click="DisplayModalTask(item)">{{ item.deadline }}</p></md-table-cell
+          <p @click="DisplayModalTask(item)">
+            {{ item.deadline }}
+          </p></md-table-cell
         >
         <md-table-cell md-sort-by="creationDate" md-label="Creation date">
-          <p @click="DisplayModalTask(item)">{{ item.creationDate }}</p></md-table-cell
+          <p @click="DisplayModalTask(item)">
+            {{ item.creationDate }}
+          </p></md-table-cell
         >
-        <md-table-cell md-sort-by="numberdaysleft" md-label="Number days left" width="50px">
+        <md-table-cell
+          md-sort-by="numberdaysleft"
+          md-label="Number days left"
+          width="50px"
+        >
           <p @click="DisplayModalTask(item)">{{ item.numberdaysleft }}</p>
         </md-table-cell>
-        <md-table-cell md-sort-by="importance" md-label="Importance (/100)" width="50px">
+        <md-table-cell
+          md-sort-by="importance"
+          md-label="Importance (/100)"
+          width="50px"
+        >
           <p @click="DisplayModalTask(item)">{{ item.importance }}</p>
         </md-table-cell>
-        <md-table-cell md-label="done / not done" class="last-column" width="50px">
+        <md-table-cell
+          md-label="done / not done"
+          class="last-column"
+          width="50px"
+        >
           <feather type="check" v-if="item.isdone"></feather>
           <feather type="x-circle" v-if="!item.isdone"></feather>
         </md-table-cell>
@@ -118,6 +141,7 @@ import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from "../../helpers/helperfunction";
 import { Todo } from "../../models/types";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
+import lodash from "lodash";
 
 export default {
   name: "simple-table",
@@ -132,16 +156,51 @@ export default {
     },
   },
   methods: {
-    orderUp(){
-        // eslint-disable-next-line no-console
-      console.log('order up');
-      this.showDialog = false;
+    orderUp(item: Todo): void {
+      let max_order = lodash.maxBy(this.todolist, "order").order;
+      let keyItemToUpOrder = item.key;
 
+      if (!item.order) {
+        max_order = max_order +1
+        this.$store.dispatch("setOrderMax", { keyItemToUpOrder, max_order });
+      }
+
+      let todo_with_order_to_down = lodash.find(this.todolist, function (o) {
+        return o.order === item.order + 1;
+      });
+
+      if (
+        !todo_with_order_to_down ||
+        !item.order ||
+        (max_order && item.order >= max_order)
+      ) {
+        return;
+      }
+
+      let keytodoOrderDown = todo_with_order_to_down.key;
+
+      this.$store.dispatch("setOrderUpTodo", keyItemToUpOrder);
+      this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
     },
-    orderDown(){
-        // eslint-disable-next-line no-console
-      console.log('order down');
-      this.showDialog = false;
+    orderDown(item: Todo): void {
+      let min_order = lodash.minBy(this.todolist, "order").order;
+      let todo_with_order_to_up = lodash.find(this.todolist, function (o) {
+        return o.order === item.order - 1;
+      });
+
+      if (
+        !todo_with_order_to_up ||
+        !item.order ||
+        (min_order && item.order <= min_order)
+      ) {
+        return;
+      }
+
+      let keytodoOrderDown = item.key;
+      let keyItemToUpOrder = todo_with_order_to_up.key;
+
+      this.$store.dispatch("setOrderUpTodo", keyItemToUpOrder);
+      this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
     },
     getNumberSubTaskActive(item): number {
       return item.description
@@ -212,19 +271,19 @@ export default {
           return 1;
         }
         // orange/jaune tasks : 50 >= importance > 75
-        if ( 50 <= item.importance && item.importance < 75 ) {
+        if (50 <= item.importance && item.importance < 75) {
           return 2;
         }
         // blue task : 25 >= importance > 50
-        if ( 25 <= item.importance && item.importance < 50 ) {
+        if (25 <= item.importance && item.importance < 50) {
           return 3;
         }
         // green  task : 0 >= importance > 25
-        if ( 0 <= item.importance && item.importance < 25 ) {
+        if (0 <= item.importance && item.importance < 25) {
           return 0;
         }
       }
-      return ;
+      return;
     },
   },
   created() {
@@ -276,15 +335,17 @@ p {
   flex-direction: row;
   justify-content: center;
   position: absolute;
-   margin: auto;
-  top: 0; left: 0; bottom: 0; 
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
 }
 .block {
   justify-content: center;
   width: 30px;
   margin: auto;
 }
-.margin-left{
+.margin-left {
   margin-left: 20px;
 }
 </style>
