@@ -161,8 +161,10 @@ export default {
       let keyItemToUpOrder = item.key;
 
       if (!item.order) {
+        //varibale name here are just to use action and mutaion with same variable name
         max_order = max_order +1
-        this.$store.dispatch("setOrderMax", { keyItemToUpOrder, max_order });
+        this.$store.dispatch("setOrder", { keyItemToUpOrder, max_order });
+        return;
       }
 
       let todo_with_order_to_down = lodash.find(this.todolist, function (o) {
@@ -170,10 +172,10 @@ export default {
       });
 
       if (
-        !todo_with_order_to_down ||
-        !item.order ||
-        (max_order && item.order >= max_order)
+        !todo_with_order_to_down
       ) {
+        max_order = item.order + 1;
+        this.$store.dispatch("setOrder", { keyItemToUpOrder, max_order });
         return;
       }
 
@@ -189,10 +191,12 @@ export default {
       });
 
       if (
-        !todo_with_order_to_up ||
-        !item.order ||
-        (min_order && item.order <= min_order)
+        !todo_with_order_to_up
       ) {
+        //varibale name here are just to use action and mutaion with same variable name
+        let max_order = item.order - 1;
+        let keyItemToUpOrder = item.key;
+        this.$store.dispatch("setOrder", { keyItemToUpOrder, max_order });
         return;
       }
 

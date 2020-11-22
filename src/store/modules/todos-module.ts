@@ -180,7 +180,7 @@ const mutations = {
     });
     if (state.todolist[index]) { state.todolist[index].order = state.todolist[index].order - 1 || 0; }
   },
-  setOrderMax(state: State, { keyItemToUpOrder, max_order }: { keyItemToUpOrder: string, max_order: number }){
+  setOrder(state: State, { keyItemToUpOrder, max_order }: { keyItemToUpOrder: string, max_order: number }){
      // eslint-disable-next-line no-console
      console.log('her', keyItemToUpOrder, max_order)
 
@@ -291,14 +291,14 @@ const actions = {
 
     commit('downOrderTodo', keytodoOrderDown);
   },
-  setOrderMax({ commit }: { commit: Function }, { keyItemToUpOrder, max_order }: { keyItemToUpOrder: string, max_order: number }) {
+  setOrder({ commit }: { commit: Function }, { keyItemToUpOrder, max_order }: { keyItemToUpOrder: string, max_order: number }) {
     const { uid } = state.user.data;
 
     database.ref(`todos/${uid}/${keyItemToUpOrder}/order`).transaction(function (order) {
       return max_order;
     });
 
-    commit('setOrderMax', { keyItemToUpOrder, max_order });
+    commit('setOrder', { keyItemToUpOrder, max_order });
 
   }
 
