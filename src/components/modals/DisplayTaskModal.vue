@@ -131,41 +131,28 @@ export default class PCalendarEvent extends Vue {
     return day === 4 || day === 5;
   }
 
-  giveColorTodo(): number {
-    if (this.event && this.event.deadline) {
-      // red Task : important and urgent ok
-      if (
-        myFunctions.getdaysleft(this.event.deadline) < 2 &&
-        this.event.importance >= 50
-      ) {
-        return 1;
+   giveColorTodo(): number {
+     let item = this.event;
+      if (item && item.importance) {
+        // red Task : importance >= 75
+        if (item.importance >= 75) {
+          return 1;
+        }
+        // orange/jaune tasks : 50 >= importance > 75
+        if ( 50 <= item.importance && item.importance < 75 ) {
+          return 2;
+        }
+        // blue task : 25 >= importance > 50
+        if ( 25 <= item.importance && item.importance < 50 ) {
+          return 3;
+        }
+        // green  task : 0 >= importance > 25
+        if ( 0 <= item.importance && item.importance < 25 ) {
+          return 0;
+        }
       }
-      // orange/jaune tasks : important, not urgent
-      if (
-        myFunctions.getdaysleft(this.event.deadline) >= 2 &&
-        this.event.importance >= 50
-      ) {
-        return 2;
-      }
-      // blue task : urgent but not important
-      if (
-        myFunctions.getdaysleft(this.event.deadline) < 2 &&
-        this.event.importance < 50
-      ) {
-        return 3;
-      }
-      // green  task : not urgent and not important ok
-      if (
-        myFunctions.getdaysleft(this.event.deadline) >= 2 &&
-        this.event.importance < 50
-      ) {
-        return 0;
-      }
-      if (this.event) {
-        return 4;
-      }
+      return ;
     }
-  }
 }
 </script>
 

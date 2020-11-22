@@ -14,20 +14,11 @@
         <div>
           <div class="legend">
             <div class="legend-2">
-              <div class="bullet bullet2"></div>
-              <p>Task Important and Urgent</p>
-            </div>
-            <div class="legend-2">
-              <div class="bullet bullet3"></div>
-              <p>Task Important, Not Urgent</p>
-            </div>
-            <div class="legend-2">
-              <div class="bullet bullet4"></div>
-              <p>Task Urgent, Not Important</p>
-            </div>
-            <div class="legend-2">
               <div class="bullet bullet1"></div>
-              <p>Task Not Urgent, Not Important</p>
+              <div class="bullet bullet4"></div>
+              <div class="bullet bullet3"></div>
+              <div class="bullet bullet2"></div>
+              <p>Importance</p>
             </div>
             <div class="legend-2">
               <feather type="check"></feather>

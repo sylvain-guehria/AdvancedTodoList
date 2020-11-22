@@ -206,27 +206,25 @@ export default {
       return classes[index];
     },
     giveColorTodo(item): number {
-      if (item && item.deadline) {
-        // red Task : important and urgent ok
-        if (this.getdaysleft(item.deadline) < 2 && item.importance >= 50) {
+      if (item && item.importance) {
+        // red Task : importance >= 75
+        if (item.importance >= 75) {
           return 1;
         }
-        // orange/jaune tasks : important, not urgent
-        if (this.getdaysleft(item.deadline) >= 2 && item.importance >= 50) {
+        // orange/jaune tasks : 50 >= importance > 75
+        if ( 50 <= item.importance && item.importance < 75 ) {
           return 2;
         }
-        // blue task : urgent but not important
-        if (this.getdaysleft(item.deadline) < 2 && item.importance < 50) {
+        // blue task : 25 >= importance > 50
+        if ( 25 <= item.importance && item.importance < 50 ) {
           return 3;
         }
-        // green  task : not urgent and not important ok
-        if (this.getdaysleft(item.deadline) >= 2 && item.importance < 50) {
+        // green  task : 0 >= importance > 25
+        if ( 0 <= item.importance && item.importance < 25 ) {
           return 0;
         }
-        if (item) {
-          return 4;
-        }
       }
+      return ;
     },
   },
   created() {
