@@ -165,7 +165,8 @@ export default {
       return this.$store.getters.getSettings.hidden_column[column]
     },
     orderUp(item: Todo): void {
-      let max_order = lodash.maxBy(this.todolist, "order").order;
+      let max_order_todo: Todo = lodash.maxBy(this.todolist, "order");
+      let max_order = max_order_todo ? max_order_todo.order : 0;
       let keyItemToUpOrder = item.key;
 
       if (!item.order) {
@@ -193,7 +194,8 @@ export default {
       this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
     },
     orderDown(item: Todo): void {
-      let min_order = lodash.minBy(this.todolist, "order").order;
+      let min_order_todo = lodash.minBy(this.todolist, "order");
+      let min_order = min_order_todo ? min_order_todo.order : 0;
       let todo_with_order_to_up = lodash.find(this.todolist, function (o) {
         return o.order === item.order - 1;
       });
