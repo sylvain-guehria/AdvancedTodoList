@@ -22,34 +22,38 @@
       <md-table-row
         slot="md-table-row"
         slot-scope="{ item }"
-        @click="DisplayModalTask(item)"
       >
-        <md-table-cell md-sort-by="order" md-label="Order"> 
-          <p>{{
-          item.order
-        }}</p></md-table-cell>
-
-        <md-table-cell md-sort-by="task" md-label="Task Title"
-          ><div class="color-flex">
-            <div class="bullet" :class="bulletClass(item)"></div>
-            <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }}) </p>
+        <md-table-cell md-sort-by="order" md-label="Order" width="20px">
+          <div class="row">
+            <div class="block">
+           <div class="chevron-order">
+           <feather type="chevron-up" class="chevron-up" @click="orderUp(item)"></feather
+            ><feather type="chevron-down" class="chevron-down" @click="orderDown(item)"></feather>
+           </div>
+           </div>
+            <div class="block margin-left"> <p>{{ item.order }}</p></div>
           </div>
         </md-table-cell>
-        <md-table-cell md-sort-by="deadline" md-label="Deadline"> 
-          <p>{{
-          item.deadline
-        }}</p></md-table-cell>
+
+        <md-table-cell md-sort-by="task" md-label="Task Title"
+          ><div class="flex" @click="DisplayModalTask(item)">
+            <div class="bullet" :class="bulletClass(item)"></div>
+            <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
+          </div>
+        </md-table-cell>
+        <md-table-cell md-sort-by="deadline" md-label="Deadline">
+          <p @click="DisplayModalTask(item)">{{ item.deadline }}</p></md-table-cell
+        >
         <md-table-cell md-sort-by="creationDate" md-label="Creation date">
-          <p>{{
-          item.creationDate
-        }}</p></md-table-cell>
-        <md-table-cell md-sort-by="numberdaysleft" md-label="Number days left">
-          <p>{{ item.numberdaysleft }}</p>
+          <p @click="DisplayModalTask(item)">{{ item.creationDate }}</p></md-table-cell
+        >
+        <md-table-cell md-sort-by="numberdaysleft" md-label="Number days left" width="50px">
+          <p @click="DisplayModalTask(item)">{{ item.numberdaysleft }}</p>
         </md-table-cell>
-        <md-table-cell md-sort-by="importance" md-label="Importance (/100)">
-          <p>{{ item.importance }}</p>
+        <md-table-cell md-sort-by="importance" md-label="Importance (/100)" width="50px">
+          <p @click="DisplayModalTask(item)">{{ item.importance }}</p>
         </md-table-cell>
-        <md-table-cell md-label="done / not done" class="last-column">
+        <md-table-cell md-label="done / not done" class="last-column" width="50px">
           <feather type="check" v-if="item.isdone"></feather>
           <feather type="x-circle" v-if="!item.isdone"></feather>
         </md-table-cell>
@@ -128,6 +132,17 @@ export default {
     },
   },
   methods: {
+    orderUp(){
+        // eslint-disable-next-line no-console
+      console.log('order up');
+      this.showDialog = false;
+
+    },
+    orderDown(){
+        // eslint-disable-next-line no-console
+      console.log('order down');
+      this.showDialog = false;
+    },
     getNumberSubTaskActive(item): number {
       return item.description
         ? item.description.filter((subtask) => !subtask.isdone).length
@@ -238,7 +253,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.color-flex {
+.flex {
+  display: flex !important ;
+}
+.flex-align {
   display: flex;
 }
 .bullet {
@@ -246,8 +264,29 @@ export default {
   margin-top: 3px;
 }
 
-p{
-  font-size : 19px !important;
+p {
+  font-size: 19px !important;
   font-family: initial;
+}
+.chevron-order {
+  display: block !important;
+  width: 20px;
+}
+.row {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: absolute;
+   margin: auto;
+  top: 0; left: 0; bottom: 0; 
+}
+.block {
+  justify-content: center;
+  width: 30px;
+  margin: auto;
+}
+.margin-left{
+  margin-left: 20px;
 }
 </style>
