@@ -26,14 +26,14 @@ export default class EisenhowerChart extends Vue {
   todoBluelist: Todo[] = [];
   todoGreenlist: Todo[] = [];
 
-  getdaysleft = myFunctions.getdaysleft;
+  getNumberdaysleft = myFunctions.getNumberdaysleft;
 
   created() {
     this.todolist = [...this.$store.getters.getTodoList];
 
     if (this.todolist) {
       this.todolist.forEach((todo: Todo) => {
-        todo.numberdaysleft = this.getdaysleft(todo.deadline);
+        todo.numberdaysleft = this.getNumberdaysleft(todo.deadline);
         if (todo.numberdaysleft >= 0) {
           todo.urgency = (10 - todo.numberdaysleft) * 10;
         } else {
@@ -52,22 +52,22 @@ export default class EisenhowerChart extends Vue {
   fillUpColoredTodoList(): void {
     this.todoRedlist = this.todolist.filter(
       (todo) =>
-        myFunctions.getdaysleft(todo.deadline) < 2 && todo.importance >= 50
+        myFunctions.getNumberdaysleft(todo.deadline) < 2 && todo.importance >= 50
     );
 
     this.todoOrangelist = this.todolist.filter(
       (todo) =>
-        myFunctions.getdaysleft(todo.deadline) >= 2 && todo.importance >= 50
+        myFunctions.getNumberdaysleft(todo.deadline) >= 2 && todo.importance >= 50
     );
 
     this.todoBluelist = this.todolist.filter(
       (todo) =>
-        myFunctions.getdaysleft(todo.deadline) < 2 && todo.importance < 50
+        myFunctions.getNumberdaysleft(todo.deadline) < 2 && todo.importance < 50
     );
 
     this.todoGreenlist = this.todolist.filter(
       (todo) =>
-        myFunctions.getdaysleft(todo.deadline) >= 2 && todo.importance < 50
+        myFunctions.getNumberdaysleft(todo.deadline) >= 2 && todo.importance < 50
     );
   }
 
