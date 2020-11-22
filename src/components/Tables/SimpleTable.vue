@@ -20,7 +20,7 @@
       ></md-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item, index }">
-        <md-table-cell md-sort-by="order" md-label="Order" width="20px">
+        <md-table-cell md-sort-by="order" md-label="Order" width="20px" v-if="getSettings('order')">
           <div class="row">
             <div class="block">
               <div class="chevron-order">
@@ -42,18 +42,18 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell md-sort-by="task" md-label="Task Title"
+        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')"
           ><div class="flex" @click="DisplayModalTask(item)">
             <div class="bullet" :class="bulletClass(item)"></div>
             <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
           </div>
         </md-table-cell>
-        <md-table-cell md-sort-by="deadline" md-label="Deadline">
+        <md-table-cell md-sort-by="deadline" md-label="Deadline" v-if="getSettings('deadline')">
           <p @click="DisplayModalTask(item)">
             {{ item.deadline }}
           </p></md-table-cell
         >
-        <md-table-cell md-sort-by="creationDate" md-label="Creation date">
+        <md-table-cell md-sort-by="creationDate" md-label="Creation date" v-if="getSettings('creationDate')">
           <p @click="DisplayModalTask(item)">
             {{ item.creationDate }}
           </p></md-table-cell
@@ -62,6 +62,7 @@
           md-sort-by="numberdaysleft"
           md-label="Number days left"
           width="50px"
+          v-if="getSettings('numberdaysleft')"
         >
           <p @click="DisplayModalTask(item)">{{ item.numberdaysleft }}</p>
         </md-table-cell>
@@ -69,6 +70,7 @@
           md-sort-by="importance"
           md-label="Importance (/100)"
           width="50px"
+          v-if="getSettings('importance')"
         >
           <p @click="DisplayModalTask(item)">{{ item.importance }}</p>
         </md-table-cell>
@@ -76,6 +78,7 @@
           md-label="done / not done"
           class="last-column"
           width="50px"
+          v-if="getSettings('isdone')"
         >
           <feather type="check" v-if="item.isdone"></feather>
           <feather type="x-circle" v-if="!item.isdone"></feather>
@@ -156,6 +159,9 @@ export default {
     },
   },
   methods: {
+    getSettings(column){
+      return this.$store.getters.getSettings.hidden_column[column]
+    },
     orderUp(item: Todo): void {
       let max_order = lodash.maxBy(this.todolist, "order").order;
       let keyItemToUpOrder = item.key;

@@ -19,50 +19,59 @@
       </div>
     </div>
     <div class="body">
-      <vue-custom-scrollbar
-        class="scroll-area"
-        :settings="settings"
-      >
-        <div class="md-layout-item md-size-100 duo-data-block no-padding">
-          <div class="md-layout-item md-size-100 icon-list-item flex">
-            <feather type="calendar"></feather>
-            <div class="list-item-text">
-              Creation date : {{ event.creationDate }}
+      <vue-custom-scrollbar class="scroll-area" :settings="settings">
+        <div class="md-layout-item md-size-100 duo-data-block no-padding flex">
+
+          <div class="in-block">
+            <div class="md-size-100 icon-list-item flex">
+              <feather type="calendar"></feather>
+              <div class="list-item-text">
+                Creation date : {{ event.creationDate }}
+              </div>
+            </div>
+
+            <div class="md-size-100 icon-list-item flex">
+              <feather type="calendar"></feather>
+              <div class="list-item-text">Deadline : {{ event.deadline }}</div>
             </div>
           </div>
-          <div class="md-layout-item md-size-100 icon-list-item flex">
-            <feather type="calendar"></feather>
-            <div class="list-item-text">Deadline : {{ event.deadline }}</div>
-          </div>
-          <div class="md-layout-item md-size-100 icon-list-item flex">
-            <feather type="alert-octagon"></feather>
-            <div class="list-item-text">
-              Importance : {{ event.importance }}
+
+          <div class="in-block">
+            <div class="md-size-100 icon-list-item flex">
+              <feather type="alert-octagon"></feather>
+              <div class="list-item-text">
+                Importance : {{ event.importance }}
+              </div>
+            </div>
+
+            <div class="md-size-100 icon-list-item flex">
+              <feather type="folder"></feather>
+              <div class="list-item-text">
+                {{ event.isdone ? "finished" : "In progress" }}
+              </div>
+              <div class="bullet" :class="bulletClass"></div>
             </div>
           </div>
-          <div class="md-layout-item md-size-100 icon-list-item flex">
-            <feather type="folder"></feather>
-            <div class="list-item-text">
-              {{ event.isdone ? "finished" : "In progress" }}
+
+          <div class="in-block">
+            <div class="md-size-100 icon-list-item flex">
+              <feather type="eye"></feather>
+              <div
+                class="list-item-text"
+                :class="event.numberdaysleft <= 0 ? 'red-text' : 'green-text'"
+              >
+                Number Days Left : {{ event.numberdaysleft }}
+              </div>
             </div>
-            <div class="bullet" :class="bulletClass"></div>
-          </div>
-          <div class="md-layout-item md-size-100 icon-list-item flex">
-            <feather type="eye"></feather>
-            <div
-              class="list-item-text"
-              :class="event.numberdaysleft <= 0 ? 'red-text' : 'green-text'"
-            >
-              Number Days Left : {{ event.numberdaysleft }}
+
+            <div class="md-size-100 icon-list-item flex">
+              <feather type="list"></feather
+              >{{
+                event.description && event.description.length > 0
+                  ? "Subtasks"
+                  : "No subtask"
+              }}
             </div>
-          </div>
-          <div class="md-layout-item md-size-100 icon-list-item flex">
-            <feather type="list"></feather
-            >{{
-              event.description && event.description.length > 0
-                ? "Subtasks"
-                : "No subtask"
-            }}
           </div>
           <div
             class="md-layout-item md-size-100 icon-list-item"
@@ -106,7 +115,7 @@ export default class PCalendarEvent extends Vue {
   settings = {
     suppressScrollY: false,
     suppressScrollX: false,
-    wheelPropagation: false
+    wheelPropagation: false,
   };
 
   showDrawerEditTask(payload): void {
@@ -131,28 +140,28 @@ export default class PCalendarEvent extends Vue {
     return day === 4 || day === 5;
   }
 
-   giveColorTodo(): number {
-     let item = this.event;
-      if (item && item.importance) {
-        // red Task : importance >= 75
-        if (item.importance >= 75) {
-          return 1;
-        }
-        // orange/jaune tasks : 50 >= importance > 75
-        if ( 50 <= item.importance && item.importance < 75 ) {
-          return 2;
-        }
-        // blue task : 25 >= importance > 50
-        if ( 25 <= item.importance && item.importance < 50 ) {
-          return 3;
-        }
-        // green  task : 0 >= importance > 25
-        if ( 0 <= item.importance && item.importance < 25 ) {
-          return 0;
-        }
+  giveColorTodo(): number {
+    let item = this.event;
+    if (item && item.importance) {
+      // red Task : importance >= 75
+      if (item.importance >= 75) {
+        return 1;
       }
-      return ;
+      // orange/jaune tasks : 50 >= importance > 75
+      if (50 <= item.importance && item.importance < 75) {
+        return 2;
+      }
+      // blue task : 25 >= importance > 50
+      if (25 <= item.importance && item.importance < 50) {
+        return 3;
+      }
+      // green  task : 0 >= importance > 25
+      if (0 <= item.importance && item.importance < 25) {
+        return 0;
+      }
     }
+    return;
+  }
 }
 </script>
 
@@ -230,6 +239,11 @@ h1 {
   margin: auto;
   padding-right: 50px;
   max-width: 1200px;
-  max-height: 500px;
+  max-height: 700px;
+}
+.in-block{
+ width: 33%;
+ margin: 0 auto; 
+ text-align: left !important
 }
 </style>

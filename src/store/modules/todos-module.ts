@@ -1,4 +1,4 @@
-import { Todo, User, State, SubTask } from '../../models/types';
+import { Todo, User, State, SubTask, Settings } from '../../models/types';
 import { database } from '../../firebase/firebase';
 import lodash from 'lodash';
 import store from '..';
@@ -24,6 +24,20 @@ var user: User = {
   data: {}
 };
 
+var settings: Settings = {
+  langage : 'en',
+  with_weekend : true,
+  hidden_column : {
+    order : true,
+    task : true,
+    deadline : true,
+    creationDate : true,
+    numberdaysleft : true,
+    importance : true,
+    isdone : true,
+  }
+}
+
 var currentSortingMode = '';
 
 const state: State = {
@@ -37,10 +51,14 @@ const state: State = {
   filtered_todo_list: filtered_todo_list,
   with_weekend: with_weekend,
   currentLang: currentLang,
-  rendAllListNumber: rendAllListNumber
+  rendAllListNumber: rendAllListNumber,
+  settings : settings
 };
 
 const getters = {
+  getSettings: (state: State) => {
+    return state.settings;
+  },
   getRendAllListNumber: (state: State) => {
     return state.rendAllListNumber;
   },
@@ -97,6 +115,12 @@ const getters = {
 };
 
 const mutations = {
+  setSettings(state: State, settings: Settings) {
+    state.settings = settings;
+  },
+  hideColumn(state: State, setting: string){
+    state.settings.hidden_column[setting] = !state.settings.hidden_column[setting]; 
+  },
   incRendAllListNumber(state: State) {
     state.rendAllListNumber = state.rendAllListNumber + 1;
   },
@@ -181,9 +205,6 @@ const mutations = {
     if (state.todolist[index]) { state.todolist[index].order = state.todolist[index].order - 1 || 0; }
   },
   setOrder(state: State, { keyItemToUpOrder, max_order }: { keyItemToUpOrder: string, max_order: number }){
-     // eslint-disable-next-line no-console
-     console.log('her', keyItemToUpOrder, max_order)
-
     var index = state.todolist.findIndex(function (o) {
       return o.key === keyItemToUpOrder;
     });
