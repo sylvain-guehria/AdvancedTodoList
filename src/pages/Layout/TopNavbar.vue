@@ -4,16 +4,16 @@
       <div class="md-toolbar-section-start">
         <breadcrumbs></breadcrumbs>
       </div>
-       {{ firstName() }}
+        <div>{{ new Date().toLocaleDateString() }} &nbsp;</div> <div  class="nav-date"> | </div> {{ firstName() }}
        <div class="namelogo" >
           <img :src="'../logo.svg'" alt />
         </div>
     </div>
-    <div class="md-toolbar-row title">
+    <!-- <div class="md-toolbar-row title">
       <div class="md-toolbar-section-start">
         <h1>{{ $route.name }}</h1>
       </div>
-    </div>
+    </div> -->
   </md-toolbar>
 </template>
 
@@ -52,5 +52,9 @@ export default class TopNavbar extends Vue {
 .namelogo{
     width: 30px;
     margin : 10px;
+  }
+  .nav-date{
+    margin-left: 50px;
+    margin-right: 50px;
   }
 </style>

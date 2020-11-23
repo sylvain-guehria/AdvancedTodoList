@@ -1,5 +1,5 @@
 <template>
-  <div class="content no-padding-top planning-calendar">
+  <div class="content no-padding-top planning-calendar" >
     <div class="md-layout">
       <planning-calendar :key="this.showAddTask"/>
        <div class="legend"><legend-bullet :planning="true"></legend-bullet></div>

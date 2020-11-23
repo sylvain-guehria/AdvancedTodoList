@@ -1,30 +1,15 @@
 <template>
   <div class="content">
     <div class="md-layout">
-      <div class="md-layout-item md-size-100">
-        <div class="table-tools">
+      <div class="md-layout-item md-size-100" style="margin-top: 20px">
+        <div class="action-button">
+         <md-button class="md-tertiary" @click="showDrawerAddTask">
+          <feather type="plus"></feather>Add a task
+        </md-button>
           <md-button class="md-tertiary" @click="showFilters = true">
             <feather type="filter"></feather>Filter
           </md-button>
-        </div>
-      </div>
-      <div class="md-layout-item md-size-50 padding-20 text-align-left">
-        <div class="menu-title">
-          <p class="title">
-            {{ new Date().toLocaleDateString() }}
-          </p>
-        </div>
-      </div>
-      <div class="md-layout-item md-size-50 padding-20 text-align-right">
-        <!-- <p class="subtitle">Start of project phase 2019/12/06</p> -->
-      </div>
-      <div class="md-layout-item md-size-50 padding-20 text-align-right">
-        <!-- button for drawer add task -->
-        <md-button class="md-tertiary" @click="showDrawerAddTask">
-          <feather type="plus"></feather>Add a task
-        </md-button>
-      </div>
-      <div class="md-layout-item md-size-100" style="margin-top: 70px">
+           </div>
         <md-tabs :md-active-tab="dynamic_tab">
           <template slot="md-tab" slot-scope="{ tab }">
             <feather class="md-tab-icon" :type="tab.icon"></feather>
@@ -205,5 +190,8 @@ export default {
   position: absolute;
   bottom: 200px;
   left: 250px;
+}
+.action-button{
+  text-align: right;
 }
 </style>

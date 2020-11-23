@@ -50,6 +50,7 @@ export interface SubTask {
   label: string;
   isdone: boolean;
   order?: number;
+  description?: string
 }
 
 export type HTMLElementEvent<T extends HTMLElement> = Event & {
