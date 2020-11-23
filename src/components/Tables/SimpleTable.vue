@@ -20,7 +20,12 @@
       ></md-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item, index }">
-        <md-table-cell md-sort-by="order" md-label="Order" width="20px" v-if="getSettings('order')">
+        <md-table-cell
+          md-sort-by="order"
+          md-label="Order"
+          width="20px"
+          v-if="getSettings('order')"
+        >
           <div class="row">
             <div class="block">
               <div class="chevron-order">
@@ -42,19 +47,27 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')"
+        <md-table-cell
+          md-sort-by="task"
+          md-label="Task Title"
+          v-if="getSettings('task')"
           ><div class="flex" @click="DisplayModalTask(item)">
             <div class="bullet" :class="bulletClass(item)"></div>
             <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
           </div>
         </md-table-cell>
-        <md-table-cell md-sort-by="deadline" md-label="Deadline" v-if="getSettings('deadline')"  width="200px">
+        <md-table-cell
+          md-sort-by="deadline"
+          md-label="Deadline"
+          v-if="getSettings('deadline')"
+          width="200px"
+        >
           <p @click="DisplayModalTask(item)">
             {{ item.deadline }}
           </p></md-table-cell
         >
 
-         <md-table-cell
+        <md-table-cell
           md-label="Finish Time"
           width="200px"
           v-if="getSettings('numberdaysleft')"
@@ -62,12 +75,17 @@
           <p @click="DisplayModalTask(item)">{{ item.numberdaysleft }}</p>
         </md-table-cell>
 
-        <md-table-cell md-sort-by="creationDate"  width="200px" md-label="Creation date" v-if="getSettings('creationDate')">
+        <md-table-cell
+          md-sort-by="creationDate"
+          width="200px"
+          md-label="Creation date"
+          v-if="getSettings('creationDate')"
+        >
           <p @click="DisplayModalTask(item)">
             {{ item.creationDate }}
           </p></md-table-cell
         >
-       
+
         <md-table-cell
           md-sort-by="importance"
           md-label="Importance (/100)"
@@ -100,7 +118,7 @@
                 <feather type="edit" class="md-icon"></feather>
                 <span>Edit task</span>
               </md-menu-item>
-              <md-menu-item @click="deleteTodo(item.key)">
+              <md-menu-item @click="deleteTodo(item.key, item.order)">
                 <feather type="delete" class="md-icon"></feather>
                 <span>Delete task</span>
               </md-menu-item>
@@ -161,17 +179,25 @@ export default {
     },
   },
   methods: {
-    getSettings(column){
-      return this.$store.getters.getSettings.hidden_column[column]
+    getSettings(column) {
+      return this.$store.getters.getSettings.hidden_column[column];
     },
     orderUp(item: Todo): void {
-      let max_order_todo: Todo = lodash.maxBy(this.todolist, "order");
+      let max_order_todo: Todo = lodash.maxBy(this.paginatedTodos, "order");
+
+      // eslint-disable-next-line no-console
+      console.log(max_order_todo.order, item.order);
+
+      if (max_order_todo && item && max_order_todo.order === item.order) {
+        return;
+      }
+
       let max_order = max_order_todo ? max_order_todo.order : 0;
       let keyItemToUpOrder = item.key;
 
       if (!item.order) {
         //varibale name here are just to use action and mutaion with same variable name
-        max_order = max_order +1
+        max_order = max_order + 1;
         this.$store.dispatch("setOrder", { keyItemToUpOrder, max_order });
         return;
       }
@@ -180,9 +206,7 @@ export default {
         return o.order === item.order + 1;
       });
 
-      if (
-        !todo_with_order_to_down
-      ) {
+      if (!todo_with_order_to_down) {
         max_order = item.order + 1;
         this.$store.dispatch("setOrder", { keyItemToUpOrder, max_order });
         return;
@@ -194,15 +218,16 @@ export default {
       this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
     },
     orderDown(item: Todo): void {
+      if (item.order && item.order === 0) {
+        return;
+      }
       let min_order_todo = lodash.minBy(this.todolist, "order");
       let min_order = min_order_todo ? min_order_todo.order : 0;
       let todo_with_order_to_up = lodash.find(this.todolist, function (o) {
         return o.order === item.order - 1;
       });
 
-      if (
-        !todo_with_order_to_up
-      ) {
+      if (!todo_with_order_to_up) {
         //varibale name here are just to use action and mutaion with same variable name
         let max_order = item.order - 1;
         let keyItemToUpOrder = item.key;
@@ -221,7 +246,8 @@ export default {
         ? item.description.filter((subtask) => !subtask.isdone).length
         : 0;
     },
-    deleteTodo(key: string): void {
+    deleteTodo(key: string, order: number): void {
+      let vm = this;
       this.$store
         .dispatch("deleteTodo", key)
         .then(() => {
@@ -240,6 +266,15 @@ export default {
             duration: 5000,
           });
         });
+      //down order poof todos with order > to the one deleted
+      this.paginatedTodos.forEach(function (todo) {
+        if (todo.order > order) {
+          vm.downOrderNoCOndition(todo.key);
+        }
+      });
+    },
+    downOrderNoCOndition(key: string) {
+      this.$store.dispatch("setOrderDownTodo", key);
     },
     editTodo(key: string): void {
       this.$emit("editTaskEvent", { key: key });
