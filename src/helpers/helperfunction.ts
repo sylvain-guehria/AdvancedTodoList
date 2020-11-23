@@ -3,6 +3,10 @@ import moment from 'moment';
 export const myFunctions = {
 
   getdaysleft (deadlineS: string): string{
+
+    if( deadlineS === new Date().toISOString().substring(0, 10)){
+      return 'today'
+    }
     if (!deadlineS){return ''}
     return moment(deadlineS).fromNow();
   },
