@@ -27,16 +27,26 @@
       <div class="my-table">
         <md-table v-model="subtasks" v-if="subtasks && subtasks[0]">
           <md-table-row slot="md-table-row" slot-scope="{ item }">
-            <md-table-cell md-label="Sub-task" class="testt"
-              ><span
+            <md-table-cell md-label="Sub-task" class="testt">
+              <span
                 class="label"
                 :contenteditable="!readOnlyLocal"
                 :class="{ completed: item.isdone }"
                 @keydown.enter="updateSubTask($event, item)"
                 @blur="updateSubTask($event, item)"
-                >{{ item.label }}</span
-              ></md-table-cell
-            >
+                >{{ item.label }}
+                </span>
+              </md-table-cell>
+                  <!-- <md-table-cell md-label="Description">
+              <span
+                class="label"
+                :contenteditable="!readOnlyLocal"
+                :class="{ completed: item.isdone }"
+                @keydown.enter="updateSubTask($event, item)"
+                @blur="updateSubTask($event, item)"
+                >{{ item.description }}
+                </span>
+              </md-table-cell> -->
             <md-table-cell md-label="Done">
               <md-checkbox
                 :disabled="readOnlyLocal"
@@ -71,18 +81,12 @@ export default class SubTaskViewer extends Vue {
   @Prop() subtasksreceived: SubTask[];
   @Prop() readonly: boolean;
   subTaskInput: string = "";
+  subTaskInputDescription: string = "";
   subtasks: SubTask[] = [];
   hasError: boolean = false;
   renderTable: boolean = false;
 
   readOnlyLocal: boolean = false;
-
-  currentTodo: Todo = {
-    task: "",
-    creationDate: new Date().toISOString().substr(0, 10),
-    description: [],
-    isdone: false,
-  };
 
   @Watch("subTaskInput", { immediate: false })
   changeSubtaskInput() {
@@ -124,6 +128,7 @@ export default class SubTaskViewer extends Vue {
       order: this.subtasks ? this.subtasks.length : 0,
       label: this.subTaskInput,
       isdone: false,
+      description: this.subTaskInputDescription
     });
 
     this.subTaskInput = "";
@@ -136,7 +141,7 @@ export default class SubTaskViewer extends Vue {
       subtask.label = e.target.innerText;
       e.target.blur();
     }
-    this.$emit("onSubmitSubTasks", this.subtasks);
+    //this.$emit("onSubmitSubTasks", this.subtasks);
   }
 
   completeSubTask(subtask: SubTask) {
@@ -185,6 +190,5 @@ export default class SubTaskViewer extends Vue {
 
 .completed {
   font-style: oblique;
-  text-shadow: grey 1px 0 10px;
 }
 </style>

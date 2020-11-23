@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout-item md-size-100">
+  <div class="md-layout-item md-size-100" style="margin-top: 20px">
     <toolbar :calendar="calendar" @monthChange="monthChanged($event)" />
     <weeks-view
       :calendar="calendar"
