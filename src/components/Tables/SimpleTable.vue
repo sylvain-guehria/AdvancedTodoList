@@ -27,22 +27,24 @@
           v-if="getSettings('order')"
         >
           <div class="row">
-            <div class="block">
-              <div class="chevron-order">
-                <feather
-                  type="chevron-up"
-                  class="chevron-up"
-                  @click="orderUp(item, index)"
-                ></feather
-                ><feather
-                  type="chevron-down"
-                  class="chevron-down"
-                  @click="orderDown(item)"
-                ></feather>
-              </div>
+            <div class="chevron-order">
+              <feather
+                type="chevron-left"
+                @click="orderDown(item)"
+                v-longclick="() => orderDown(item, index)"
+              ></feather>
             </div>
-            <div class="block margin-left" @click="DisplayModalTask(item)">
-              <p>{{ item.order }}</p>
+            <div class="block margin-left">
+              <p>
+                {{ item.order }}
+              </p>
+            </div>
+            <div class="chevron-order">
+              <feather
+                v-longclick="() => orderUp(item, index)"
+                type="chevron-right"
+                @click="orderUp(item, index)"
+              ></feather>
             </div>
           </div>
         </md-table-cell>
@@ -162,7 +164,7 @@
 <script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from "../../helpers/helperfunction";
-import { Todo } from "../../models/types";
+import { Todo, HTMLElementEvent } from "../../models/types";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
 
@@ -184,9 +186,6 @@ export default {
     },
     orderUp(item: Todo): void {
       let max_order_todo: Todo = lodash.maxBy(this.paginatedTodos, "order");
-
-      // eslint-disable-next-line no-console
-      console.log(max_order_todo.order, item.order);
 
       if (max_order_todo && item && max_order_todo.order === item.order) {
         return;
@@ -218,7 +217,7 @@ export default {
       this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
     },
     orderDown(item: Todo): void {
-      if (item.order && item.order === 0) {
+      if (item.order && item.order <= 1) {
         return;
       }
       let min_order_todo = lodash.minBy(this.todolist, "order");
@@ -375,8 +374,8 @@ p {
   font-family: initial;
 }
 .chevron-order {
-  display: block !important;
   width: 20px;
+  margin: auto;
 }
 .row {
   width: 80%;

@@ -5,6 +5,7 @@ import Notifications from 'vue-notification';
 import router from "./routes/routes";
 import store from './store/';
 import VueToasted from 'vue-toasted';
+import { longClickDirective } from 'vue-long-click'
 
 
 // Plugins
@@ -32,6 +33,9 @@ Vue.use(GlobalDirectives);
 Vue.use(VueApexCharts)
 
 Vue.component('apexchart', VueApexCharts)
+
+const longClickInstance = longClickDirective({delay: 400, interval: 50})
+Vue.directive('longclick', longClickInstance)
 
 
 /* eslint-disable no-new */
