@@ -1,4 +1,4 @@
-import { Todo, User, State, SubTask, Settings } from '../../models/types';
+import { Todo, User, State, SubTask, Settings, drawer } from '../../models/types';
 import { database } from '../../firebase/firebase';
 import lodash from 'lodash';
 import store from '..';
@@ -26,6 +26,7 @@ var user: User = {
 
 var settings: Settings = {
   langage : 'en',
+  drawersOpened : [],
   with_weekend : true,
   hidden_column : {
     order : true,
@@ -52,7 +53,7 @@ const state: State = {
   with_weekend: with_weekend,
   currentLang: currentLang,
   rendAllListNumber: rendAllListNumber,
-  settings : settings
+  settings : settings,
 };
 
 const getters = {
@@ -117,6 +118,9 @@ const getters = {
 const mutations = {
   setSettings(state: State, settings: Settings) {
     state.settings = settings;
+  },
+  setDrawersSettings(state: State, drawersOpened: drawer[]) {
+    state.settings.drawersOpened = drawersOpened;
   },
   hideColumn(state: State, setting: string){
     state.settings.hidden_column[setting] = !state.settings.hidden_column[setting]; 
@@ -242,6 +246,8 @@ const actions = {
     commit('incRendAllListNumber');
   },
   setTodoDone({ commit }: { commit: Function }, payload: Todo) {
+    Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
+
     payload.isdone = !payload.isdone;
     const { uid } = state.user.data;
     database.ref(`todos/${uid}/${payload.key}`).set({
@@ -252,6 +258,8 @@ const actions = {
     commit('incRendAllListNumber');
   },
   setSubTaskDone({ commit }: { commit: Function }, { todo, subtask }: { todo: Todo, subtask: SubTask }) {
+    Object.keys(subtask).forEach((key) => (subtask[key] == null) && delete subtask[key]);
+
     subtask.isdone = !subtask.isdone;
     const { uid } = state.user.data;
     database.ref(`todos/${uid}/${todo.key}/description/${subtask.order}`).set({
