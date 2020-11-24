@@ -7,7 +7,9 @@
       <sidebar-link to="/app/todos">
         <feather type="trending-up"></feather>
         <p>Todo list</p>
-        <div class="menu-badge">{{ this.$store.getters.getNumberActiveTask}}</div>
+        <div class="menu-badge">
+          {{ this.$store.getters.getNumberActiveTask }}
+        </div>
       </sidebar-link>
       <sidebar-link to="/app/planning">
         <feather type="calendar"></feather>
@@ -25,30 +27,43 @@
         </sidebar-link>
 
         <md-menu md-direction="top-start">
-            <sidebar-link to="" md-menu-trigger :noTriangleLeft="true">
-              <feather type="settings"></feather>
-              <p>Settings</p>
-            </sidebar-link>
+          <sidebar-link to="" md-menu-trigger :noTriangleLeft="true">
+            <feather type="settings"></feather>
+            <p>Settings</p>
+          </sidebar-link>
           <md-menu-content>
-            <md-menu-item v-if="this.$store.getters.getWithWeekEnd" @click="setWeekEnd(false)"> <feather type="calendar"></feather>Remove week-end</md-menu-item>
-            <md-menu-item v-if="!this.$store.getters.getWithWeekEnd" @click="setWeekEnd(true)"> <feather type="calendar"></feather>Display week-end</md-menu-item>
-            <md-menu-item v-if="this.$store.getters.getCurrentLang !== 'fr'" @click="setCurrentLang('fr')" ><feather type="flag"></feather>set language french</md-menu-item>
-            <md-menu-item v-if="this.$store.getters.getCurrentLang !== 'en'" @click="setCurrentLang('en')" ><feather type="flag"></feather>set language english</md-menu-item>
+            <md-menu-item
+              v-if="this.$store.getters.getWithWeekEnd"
+              @click="setWeekEnd(false)"
+            >
+              <feather type="calendar"></feather>Remove week-end</md-menu-item
+            >
+            <md-menu-item
+              v-if="!this.$store.getters.getWithWeekEnd"
+              @click="setWeekEnd(true)"
+            >
+              <feather type="calendar"></feather>Display week-end</md-menu-item
+            >
+            <md-menu-item
+              v-if="this.$store.getters.getLangage !== 'fr'"
+              @click="setCurrentLang('fr')"
+              ><feather type="flag"></feather>set language french</md-menu-item
+            >
+            <md-menu-item
+              v-if="this.$store.getters.getLangage !== 'en'"
+              @click="setCurrentLang('en')"
+              ><feather type="flag"></feather>set language english</md-menu-item
+            >
           </md-menu-content>
         </md-menu>
 
-        <!-- <sidebar-link to="/login">
-          <feather type="settings"></feather>
-          <p>Settings</p>
-        </sidebar-link> -->
-        <div  @click="logout" >
-        <sidebar-link to='/' :noTriangleLeft="true">
-          <feather type="log-out"></feather>
-          <p>Log-out</p>
-        </sidebar-link>
+        <div @click="logout">
+          <sidebar-link to="/" :noTriangleLeft="true">
+            <feather type="log-out"></feather>
+            <p>Log-out</p>
+          </sidebar-link>
+        </div>
       </div>
-      </div>
-
     </side-bar>
 
     <div class="main-panel">
@@ -61,35 +76,45 @@
 <script lang='ts'>
 import TopNavbar from "./TopNavbar.vue";
 import DashboardContent from "./Content.vue";
-import firebase from '../../firebase/firebase';
+import firebase from "../../firebase/firebase";
 
 export default {
-  beforeCreate: function() {
+  beforeCreate: function () {
     document.body.className = "";
   },
   data() {
     return {
       isNavMini: false,
-      countertasknotdone: 0
+      countertasknotdone: 0,
     };
   },
   methods: {
     updateIsNavMini(value) {
       this.isNavMini = value;
     },
-    setWeekEnd(bool: boolean){
-        this.$store.commit('setWithWeekEnd', bool);
+    setWeekEnd(bool: boolean) {
+      let payload = {
+        label: "with_weekend",
+        value: bool,
+      };
+      this.$store.dispatch("saveSetting", payload);
+      this.$store.commit('setWithWeekEnd', bool);
     },
-    setCurrentLang(lang){
-        this.$store.commit('setCurrentLang', lang);
+    setCurrentLang(lang) {
+       let payload = {
+        label: "langage",
+        value: lang,
+      };
+      this.$store.dispatch("saveSetting", payload);
+      this.$store.commit("setLangage", lang);
     },
-    logout () {
-    firebase.logout();
-  }
+    logout() {
+      firebase.logout();
+    },
   },
   components: {
     TopNavbar,
-    DashboardContent
-  }
+    DashboardContent,
+  },
 };
 </script>

@@ -109,11 +109,13 @@ export default {
         user.loggedIn = true;
         user.data = userfb;
         const uid: string = userfb.uid;
-        store.dispatch('fetchTodos', uid);
+        store.dispatch('fetchTodos', uid)
+        store.dispatch('fetchSettings', uid);
       } else {
         user.loggedIn = false;
         user.data = {};
         store.commit('setTodoList', []);
+        store.commit('setSettings', {});
       }
       store.commit('setUser', user);
     });

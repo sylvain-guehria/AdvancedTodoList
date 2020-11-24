@@ -4,70 +4,121 @@
       md-size="auto"
       md-direction="bottom-start"
       :md-active.sync="toggleCard"
-      :mdCloseOnClick="false" :mdCloseOnSelect="false"
+      :mdCloseOnClick="false"
+      :mdCloseOnSelect="false"
     >
       <md-button class="md-tertiary" md-menu-trigger>
         <feather type="eye-off"></feather>
         Hide Columns
       </md-button>
 
-      <md-menu-content >
+      <md-menu-content>
         <div>
           <div class="legend">
             <div class="legend-2">
               <p>Order</p>
-             <div class="feathers"> 
-              <feather type="check" v-if="this.$store.getters.getSettings.hidden_column.order" @click="setSettings('order')"></feather>
-              <feather type="x-circle" v-if="!this.$store.getters.getSettings.hidden_column.order" @click="setSettings('order')"></feather>
-            </div>
+              <div class="feathers">
+                <feather
+                  type="check"
+                  v-if="hiddenColumn ? hiddenColumn.order : false"
+                  @click="setSettings('order')"
+                ></feather>
+                <feather
+                  type="x-circle"
+                  v-if="hiddenColumn? !hiddenColumn.order : false"
+                  @click="setSettings('order')"
+                ></feather>
+              </div>
             </div>
             <div class="legend-2">
               <p>Task title</p>
-             <div class="feathers"> 
-
-              <feather type="check" v-if="this.$store.getters.getSettings.hidden_column.task" @click="setSettings('task')"></feather>
-              <feather type="x-circle" v-if="!this.$store.getters.getSettings.hidden_column.task" @click="setSettings('task')"></feather>
-            </div>
+              <div class="feathers">
+                <feather
+                  type="check"
+                  v-if="hiddenColumn? hiddenColumn.task : false"
+                  @click="setSettings('task')"
+                ></feather>
+                <feather
+                  type="x-circle"
+                  v-if="hiddenColumn? !hiddenColumn.task : false"
+                  @click="setSettings('task')"
+                ></feather>
+              </div>
             </div>
             <div class="legend-2">
               <p>Deadline</p>
-             <div class="feathers"> 
-
-              <feather type="check" v-if="this.$store.getters.getSettings.hidden_column.deadline" @click="setSettings('deadline')"></feather>
-              <feather type="x-circle" v-if="!this.$store.getters.getSettings.hidden_column.deadline" @click="setSettings('deadline')"></feather>
-            </div>
+              <div class="feathers">
+                <feather
+                  type="check"
+                  v-if="hiddenColumn ? hiddenColumn.deadline : false"
+                  @click="setSettings('deadline')"
+                ></feather>
+                <feather
+                  type="x-circle"
+                  v-if="hiddenColumn ? !hiddenColumn.deadline : false"
+                  @click="setSettings('deadline')"
+                ></feather>
+              </div>
             </div>
             <div class="legend-2">
               <p>Creation Date</p>
-             <div class="feathers"> 
-
-              <feather type="check" v-if="this.$store.getters.getSettings.hidden_column.creationDate" @click="setSettings('creationDate')"></feather>
-              <feather type="x-circle" v-if="!this.$store.getters.getSettings.hidden_column.creationDate" @click="setSettings('creationDate')"></feather>
-            </div>
+              <div class="feathers">
+                <feather
+                  type="check"
+                  v-if="hiddenColumn ? hiddenColumn.creationDate : false"
+                  @click="setSettings('creationDate')"
+                ></feather>
+                <feather
+                  type="x-circle"
+                  v-if="hiddenColumn ? !hiddenColumn.creationDate : false"
+                  @click="setSettings('creationDate')"
+                ></feather>
+              </div>
             </div>
             <div class="legend-2">
               <p>Nb days left</p>
-             <div class="feathers"> 
-
-              <feather type="check" v-if="this.$store.getters.getSettings.hidden_column.numberdaysleft" @click="setSettings('numberdaysleft')"></feather>
-              <feather type="x-circle" v-if="!this.$store.getters.getSettings.hidden_column.numberdaysleft" @click="setSettings('numberdaysleft')"></feather>
+              <div class="feathers">
+                <feather
+                  type="check"
+                  v-if="hiddenColumn ? hiddenColumn.numberdaysleft : false"
+                  @click="setSettings('numberdaysleft')"
+                ></feather>
+                <feather
+                  type="x-circle"
+                  v-if="hiddenColumn ? !hiddenColumn.numberdaysleft : false"
+                  @click="setSettings('numberdaysleft')"
+                ></feather>
+              </div>
             </div>
-            </div>
-             <div class="legend-2">
+            <div class="legend-2">
               <p>Importance</p>
-             <div class="feathers"> 
-
-              <feather type="check" v-if="this.$store.getters.getSettings.hidden_column.importance" @click="setSettings('importance')"></feather>
-              <feather type="x-circle" v-if="!this.$store.getters.getSettings.hidden_column.importance" @click="setSettings('importance')"></feather>
+              <div class="feathers">
+                <feather
+                  type="check"
+                  v-if="hiddenColumn ? hiddenColumn.importance : false"
+                  @click="setSettings('importance')"
+                ></feather>
+                <feather
+                  type="x-circle"
+                  v-if="hiddenColumn ? !hiddenColumn.importance : false"
+                  @click="setSettings('importance')"
+                ></feather>
+              </div>
             </div>
-            </div>
-             <div class="legend-2">
+            <div class="legend-2">
               <p>Done/Not Done</p>
-             <div class="feathers"> 
-
-              <feather type="check" v-if="this.$store.getters.getSettings.hidden_column.isdone" @click="setSettings('isdone')"></feather>
-              <feather type="x-circle" v-if="!this.$store.getters.getSettings.hidden_column.isdone" @click="setSettings('isdone')"></feather>
-            </div>
+              <div class="feathers">
+                <feather
+                  type="check"
+                  v-if="hiddenColumn ? hiddenColumn.isdone : false"
+                  @click="setSettings('isdone')"
+                ></feather>
+                <feather
+                  type="x-circle"
+                  v-if="hiddenColumn ? !hiddenColumn.isdone : false"
+                  @click="setSettings('isdone')"
+                ></feather>
+              </div>
             </div>
           </div>
         </div>
@@ -84,14 +135,31 @@ export default {
       toggleCard: false,
     };
   },
+  computed: {
+    hiddenColumn() {
+      let settings = this.$store.getters.getSettings;
+      let columns;
+      if (settings) {
+        columns = settings.hidden_column;
+      }
+      return columns;
+    },
+  },
   methods: {
     toggle() {
       this.toggleCard = !this.toggleCard;
     },
-    setSettings(setting){
-      this.$store.commit('hideColumn', setting);
-      //this.$store.commit('incRendAllListNumber');
-    }
+    setSettings(setting) {
+      this.$store.commit("hideColumn", setting);
+      let columns = this.$store.getters.getSettings.hidden_column;
+
+      let payload = {
+        label: "hidden_column",
+        value: columns,
+      };
+
+      this.$store.dispatch("saveSetting", payload);
+    },
   },
 };
 </script>
@@ -117,14 +185,8 @@ p {
   margin-top: 25px;
 }
 
-p {
-
-}
 .feathers {
   position: absolute;
   right: 7px;
 }
-
-
-
 </style>

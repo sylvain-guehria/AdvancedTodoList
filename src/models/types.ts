@@ -25,8 +25,6 @@ export interface State {
   numberActiveTask: number,
   numberTotalTask: number,
   isLoading: boolean,
-  with_weekend: boolean,
-  currentLang: string,
   rendAllListNumber: number,
   settings: Settings
 }
@@ -34,7 +32,7 @@ export interface State {
 export interface Settings {
   langage : string,
   with_weekend : boolean,
-  drawersOpened : drawer[]
+  drawersOpened : drawer[],
   hidden_column : {
     order : boolean,
     task : boolean,

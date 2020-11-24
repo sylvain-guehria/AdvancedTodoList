@@ -218,8 +218,11 @@ export default {
 
      this.$store.commit('setDrawersSettings', this.drawersOpenedArray)
     },
-    getSettings(column) {
-      return this.$store.getters.getSettings.hidden_column[column];
+    getSettings(columnLabel) {
+      let colums = this.$store.getters.getSettings;
+      let colum
+      if (colums) { colum = colums.hidden_column[columnLabel]}
+      return colum;
     },
     orderUp(item: Todo): void {
       let max_order_todo: Todo = lodash.maxBy(this.paginatedTodos, "order");
@@ -375,7 +378,7 @@ export default {
     this.todos = this.todolist;
     this.paginatedTodos = [...this.todos];
 
-    this.drawersOpenedArray = [...this.$store.getters.getSettings.drawersOpened];
+    //this.drawersOpenedArray = [...this.$store.getters.getSettings.drawersOpened];
 
     if (this.paginatedTodos) {
       this.paginatedTodos.forEach((todo: Todo) => {

@@ -9,8 +9,6 @@ var coloredtodolist: Todo[] = [];
 var numberActiveTask = 0;
 var numberTotalTask = 0;
 var isLoading: boolean = true;
-var with_weekend: boolean = true;
-var currentLang: string = 'en';
 var rendAllListNumber: number = 0;
 
 var currentTodo: Todo = {
@@ -25,17 +23,17 @@ var user: User = {
 };
 
 var settings: Settings = {
-  langage : 'en',
-  drawersOpened : [],
-  with_weekend : true,
-  hidden_column : {
-    order : true,
-    task : true,
-    deadline : true,
-    creationDate : true,
-    numberdaysleft : true,
-    importance : true,
-    isdone : true,
+  langage: 'en',
+  drawersOpened: [],
+  with_weekend: true,
+  hidden_column: {
+    order: true,
+    task: true,
+    deadline: true,
+    creationDate: true,
+    numberdaysleft: true,
+    importance: true,
+    isdone: true,
   }
 }
 
@@ -50,15 +48,13 @@ const state: State = {
   numberTotalTask: numberTotalTask,
   isLoading: isLoading,
   filtered_todo_list: filtered_todo_list,
-  with_weekend: with_weekend,
-  currentLang: currentLang,
   rendAllListNumber: rendAllListNumber,
-  settings : settings,
+  settings: settings,
 };
 
 const getters = {
   getSettings: (state: State) => {
-    return state.settings;
+    if (state) return state.settings;
   },
   getRendAllListNumber: (state: State) => {
     return state.rendAllListNumber;
@@ -66,11 +62,11 @@ const getters = {
   getIsLoading: (state: State) => {
     return state.isLoading;
   },
-  getCurrentLang: (state: State) => {
-    return state.currentLang;
+  getLangage: (state: State) => {
+    if (state.settings) return state.settings.langage;
   },
   getWithWeekEnd: (state: State) => {
-    return state.with_weekend;
+    if (state.settings) return state.settings.with_weekend;
   },
   getUser: (state: State) => {
     return state.user;
@@ -112,7 +108,10 @@ const getters = {
   },
   getNumberActiveTask: (state: State) => {
     return state.todolist.filter(todo => !todo.isdone).length;
-  }
+  },
+  getColumnHidden: (state: State) => {
+    if (state.settings) return state.settings.hidden_column;
+  },
 };
 
 const mutations = {
@@ -122,8 +121,8 @@ const mutations = {
   setDrawersSettings(state: State, drawersOpened: drawer[]) {
     state.settings.drawersOpened = drawersOpened;
   },
-  hideColumn(state: State, setting: string){
-    state.settings.hidden_column[setting] = !state.settings.hidden_column[setting]; 
+  hideColumn(state: State, setting: string) {
+    state.settings.hidden_column[setting] = !state.settings.hidden_column[setting];
   },
   incRendAllListNumber(state: State) {
     state.rendAllListNumber = state.rendAllListNumber + 1;
@@ -131,11 +130,11 @@ const mutations = {
   setIsLoading(state: State, bool: boolean) {
     state.isLoading = bool;
   },
-  setCurrentLang(state: State, lang: string) {
-    state.currentLang = lang;
+  setLangage(state: State, lang: string) {
+    state.settings.langage = lang;
   },
   setWithWeekEnd(state: State, bool: boolean) {
-    state.with_weekend = bool;
+    state.settings.with_weekend = bool;
   },
   setTodoList(state: State, newList: Todo[]) {
     state.todolist = newList;
@@ -208,11 +207,11 @@ const mutations = {
     });
     if (state.todolist[index]) { state.todolist[index].order = state.todolist[index].order - 1 || 0; }
   },
-  setOrder(state: State, { keyItemToUpOrder, max_order }: { keyItemToUpOrder: string, max_order: number }){
+  setOrder(state: State, { keyItemToUpOrder, max_order }: { keyItemToUpOrder: string, max_order: number }) {
     var index = state.todolist.findIndex(function (o) {
       return o.key === keyItemToUpOrder;
     });
-    if(state.todolist[index]) { state.todolist[index].order = max_order }
+    if (state.todolist[index]) { state.todolist[index].order = max_order }
   },
 };
 
@@ -277,28 +276,33 @@ const actions = {
   fetchTodos({ commit }: { commit: Function }, payload: string) {
     const uid: string = payload;
     var listoftodos: Todo[] = [];
-    database.ref(`todos/${uid}`).once('value', (snapshot) => {
-      snapshot.forEach(function (childSnapshot) {
-        const currentTodo: Todo = {
-          key: childSnapshot.key || '',
-          task: childSnapshot.val().task,
-          deadline: childSnapshot.val().deadline,
-          importance: childSnapshot.val().importance,
-          description: childSnapshot.val().description,
-          creationDate: childSnapshot.val().creationDate,
-          isdone: childSnapshot.val().isdone,
-          order: childSnapshot.val().order
 
-        };
-        listoftodos.push(currentTodo);
+    var promise = new Promise((resolve, reject) => {
+      database.ref(`todos/${uid}`).once('value', (snapshot) => {
+        snapshot.forEach(function (childSnapshot) {
+          const currentTodo: Todo = {
+            key: childSnapshot.key || '',
+            task: childSnapshot.val().task,
+            deadline: childSnapshot.val().deadline,
+            importance: childSnapshot.val().importance,
+            description: childSnapshot.val().description,
+            creationDate: childSnapshot.val().creationDate,
+            isdone: childSnapshot.val().isdone,
+            order: childSnapshot.val().order
+
+          };
+          listoftodos.push(currentTodo);
+        });
+      }).then(() => {
+        commit('setTodoList', listoftodos);
+        commit('setIsLoading', false);
+        commit('incRendAllListNumber');
+        resolve();
       });
-    }).then(() => {
-      commit('setTodoList', listoftodos);
-      commit('setIsLoading', false);
-      commit('incRendAllListNumber');
-    }
-    );
+    });
+    return promise;
   },
+
   setOrderUpTodo({ commit }: { commit: Function }, keytodoOrderPlus: { keytodoOrderPlus: string }) {
 
     const { uid } = state.user.data;
@@ -328,8 +332,30 @@ const actions = {
     });
 
     commit('setOrder', { keyItemToUpOrder, max_order });
+  },
+  saveSetting({ commit }: { commit: Function }, payload) {
 
-  }
+    Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
+
+    const { uid } = state.user.data;
+
+    database.ref(`settings/${uid}`).update({
+      [payload.label]: payload.value
+    });
+  },
+  fetchSettings({ commit }: { commit: Function }, payload: string) {
+    const uid: string = payload;
+    let settings = {};
+
+    database.ref(`settings/${uid}`).once('value', (snapshot) => {
+       // eslint-disable-next-line no-console
+      console.log(snapshot.val());
+      settings = snapshot.val();
+    }).then(() => {
+      if(settings)commit('setSettings', settings);
+    }
+    );
+  },
 
 };
 
