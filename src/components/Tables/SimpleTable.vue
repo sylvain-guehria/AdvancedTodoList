@@ -74,7 +74,7 @@
           md-sort-by="deadline"
           md-label="Deadline"
           v-if="getSettings('deadline')"
-          width="200px"
+          width="100px"
         >
           <p @click="DisplayModalTask(item)">
             {{ item.deadline }}
@@ -83,7 +83,7 @@
 
         <md-table-cell
           md-label="Finish Time"
-          width="200px"
+          width="100px"
           v-if="getSettings('numberdaysleft')"
         >
           <p @click="DisplayModalTask(item)">{{ item.numberdaysleft }}</p>
@@ -91,7 +91,7 @@
 
         <md-table-cell
           md-sort-by="creationDate"
-          width="200px"
+          width="100px"
           md-label="Creation date"
           v-if="getSettings('creationDate')"
         >
@@ -102,14 +102,14 @@
 
         <md-table-cell
           md-sort-by="importance"
-          md-label="Importance (/100)"
+          md-label="Imp/100"
           width="50px"
           v-if="getSettings('importance')"
         >
           <p @click="DisplayModalTask(item)">{{ item.importance }}</p>
         </md-table-cell>
         <md-table-cell
-          md-label="done / not done"
+          md-label="done?"
           class="last-column"
           width="50px"
           v-if="getSettings('isdone')"

@@ -348,11 +348,11 @@ const actions = {
     let settings = {};
 
     database.ref(`settings/${uid}`).once('value', (snapshot) => {
-       // eslint-disable-next-line no-console
+      // eslint-disable-next-line no-console
       console.log(snapshot.val());
       settings = snapshot.val();
     }).then(() => {
-      if(settings)commit('setSettings', settings);
+      if (settings) commit('setSettings', settings);
     }
     );
   },
