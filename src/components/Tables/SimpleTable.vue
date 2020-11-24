@@ -23,7 +23,7 @@
         <md-table-cell
           md-sort-by="order"
           md-label="Order"
-          width="20px"
+          width="50px"
           v-if="getSettings('order')"
         >
           <div class="row">
@@ -421,7 +421,6 @@ p {
   margin: auto;
 }
 .row {
-  width: 80%;
   display: flex;
   flex-direction: row;
   justify-content: center;
