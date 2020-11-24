@@ -34,6 +34,7 @@ export interface State {
 export interface Settings {
   langage : string,
   with_weekend : boolean,
+  drawersOpened : drawer[]
   hidden_column : {
     order : boolean,
     task : boolean,
@@ -44,6 +45,12 @@ export interface Settings {
     isdone : boolean,
   }
 }
+
+export interface drawer {
+  index?: number,
+  open : boolean,
+  key: string
+} 
 
 export interface SubTask {
   key?: string ;

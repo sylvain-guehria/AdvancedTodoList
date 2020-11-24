@@ -19,7 +19,7 @@
         md-description="Create a Task with the button above and it will show up here."
       ></md-empty-state>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item, index }">
+      <md-table-row slot="md-table-row" slot-scope="{ item}">
         <md-table-cell
           md-sort-by="order"
           md-label="Order"
@@ -31,7 +31,7 @@
               <feather
                 type="chevron-left"
                 @click="orderDown(item)"
-                v-longclick="() => orderDown(item, index)"
+                v-longclick="() => orderDown(item)"
               ></feather>
             </div>
             <div class="block margin-left">
@@ -41,9 +41,9 @@
             </div>
             <div class="chevron-order">
               <feather
-                v-longclick="() => orderUp(item, index)"
+                v-longclick="() => orderUp(item)"
                 type="chevron-right"
-                @click="orderUp(item, index)"
+                @click="orderUp(item)"
               ></feather>
             </div>
           </div>
@@ -53,9 +53,21 @@
           md-sort-by="task"
           md-label="Task Title"
           v-if="getSettings('task')"
-          ><div class="flex" @click="DisplayModalTask(item)">
+          ><div class="flex">
+            <feather
+              v-if="!includeKey(item.key)"
+              type="chevron-right"
+              @click="togleSubtasks(item.key)"
+            ></feather>
+            <feather
+              type="chevron-down"
+              @click="unTogleSubtasks(item.key)"
+              v-if="includeKey(item.key)"
+            ></feather>
             <div class="bullet" :class="bulletClass(item)"></div>
-            <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
+            <div @click="DisplayModalTask(item)">
+              <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
+            </div>
           </div>
         </md-table-cell>
         <md-table-cell
@@ -164,7 +176,7 @@
 <script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from "../../helpers/helperfunction";
-import { Todo, HTMLElementEvent } from "../../models/types";
+import { Todo, HTMLElementEvent, drawer } from "../../models/types";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
 
@@ -181,6 +193,31 @@ export default {
     },
   },
   methods: {
+    includeKey(key) {
+       let keyInList: number = this.drawersOpenedArray.findIndex(drawer => drawer.key === key);
+       if(keyInList === -1){
+         return false;
+       }else{
+         return true;
+       }
+    },
+
+    togleSubtasks(key) {
+      let drawer: drawer = {
+        key : key,
+        open: true
+      }
+      this.drawersOpenedArray.unshift(drawer)
+        
+      this.$store.commit('setDrawersSettings', this.drawersOpenedArray)
+    },
+
+    unTogleSubtasks(key) {
+     let indexInList: number = this.drawersOpenedArray.findIndex(drawer => drawer.key === key);
+     if(indexInList != -1) this.drawersOpenedArray.splice(indexInList, 1);
+
+     this.$store.commit('setDrawersSettings', this.drawersOpenedArray)
+    },
     getSettings(column) {
       return this.$store.getters.getSettings.hidden_column[column];
     },
@@ -338,6 +375,8 @@ export default {
     this.todos = this.todolist;
     this.paginatedTodos = [...this.todos];
 
+    this.drawersOpenedArray = [...this.$store.getters.getSettings.drawersOpened];
+
     if (this.paginatedTodos) {
       this.paginatedTodos.forEach((todo: Todo) => {
         todo.numberdaysleft = this.getdaysleft(todo.deadline);
@@ -352,6 +391,7 @@ export default {
       getdaysleft: myFunctions.getdaysleft,
       item: {},
       showDialog: false,
+      drawersOpenedArray: [],
     };
   },
 };
@@ -366,7 +406,7 @@ export default {
 }
 .bullet {
   margin-right: 10px;
-  margin-top: 3px;
+  margin-top: 6px;
 }
 
 p {
