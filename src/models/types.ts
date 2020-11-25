@@ -56,6 +56,10 @@ export interface SubTask {
   isdone: boolean;
   order?: number;
   description?: string
+  deadline? : boolean,
+  creationDate? : boolean,
+  numberdaysleft? : boolean,
+  importance : boolean,
 }
 
 export type HTMLElementEvent<T extends HTMLElement> = Event & {

@@ -59,13 +59,13 @@
             <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
           </div>
 
-          <div class="mb">
+          <!-- <div class="mb">
             <sub-tasks-viewer
               @onSubmitSubTasks="setSubTasks"
               @changeSubtaskInput="changeSubtaskInput"
               :subtasksreceived="[...this.formData.description]"
             ></sub-tasks-viewer>
-          </div>
+          </div> -->
 
           <md-button class="md-tertiary" @click="checkBeforeSave">
             <feather type="save"></feather>Save

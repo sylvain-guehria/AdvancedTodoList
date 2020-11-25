@@ -24,7 +24,7 @@
                   @click="setSettings('order')"
                 ></feather>
                 <feather
-                  type="x-circle"
+                  type="x"
                   v-if="hiddenColumn? !hiddenColumn.order : false"
                   @click="setSettings('order')"
                 ></feather>
@@ -39,7 +39,7 @@
                   @click="setSettings('task')"
                 ></feather>
                 <feather
-                  type="x-circle"
+                  type="x"
                   v-if="hiddenColumn? !hiddenColumn.task : false"
                   @click="setSettings('task')"
                 ></feather>
@@ -54,7 +54,7 @@
                   @click="setSettings('deadline')"
                 ></feather>
                 <feather
-                  type="x-circle"
+                  type="x"
                   v-if="hiddenColumn ? !hiddenColumn.deadline : false"
                   @click="setSettings('deadline')"
                 ></feather>
@@ -69,7 +69,7 @@
                   @click="setSettings('creationDate')"
                 ></feather>
                 <feather
-                  type="x-circle"
+                  type="x"
                   v-if="hiddenColumn ? !hiddenColumn.creationDate : false"
                   @click="setSettings('creationDate')"
                 ></feather>
@@ -84,7 +84,7 @@
                   @click="setSettings('numberdaysleft')"
                 ></feather>
                 <feather
-                  type="x-circle"
+                  type="x"
                   v-if="hiddenColumn ? !hiddenColumn.numberdaysleft : false"
                   @click="setSettings('numberdaysleft')"
                 ></feather>
@@ -99,7 +99,7 @@
                   @click="setSettings('importance')"
                 ></feather>
                 <feather
-                  type="x-circle"
+                  type="x"
                   v-if="hiddenColumn ? !hiddenColumn.importance : false"
                   @click="setSettings('importance')"
                 ></feather>
@@ -114,7 +114,7 @@
                   @click="setSettings('isdone')"
                 ></feather>
                 <feather
-                  type="x-circle"
+                  type="x"
                   v-if="hiddenColumn ? !hiddenColumn.isdone : false"
                   @click="setSettings('isdone')"
                 ></feather>

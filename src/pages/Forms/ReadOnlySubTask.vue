@@ -9,7 +9,7 @@
         >
         <md-table-cell md-label="Done*">
           <feather type="check" v-if="item.isdone"></feather>
-          <feather type="x-circle" v-if="!item.isdone"></feather>
+          <feather type="x" v-if="!item.isdone"></feather>
         </md-table-cell>
       </md-table-row>
     </md-table><br>
