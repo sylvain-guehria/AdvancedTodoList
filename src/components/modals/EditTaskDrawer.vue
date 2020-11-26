@@ -59,13 +59,13 @@
             <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
           </div>
 
-          <!-- <div class="mb">
+           <!-- <div class="mb">
             <sub-tasks-viewer
               @onSubmitSubTasks="setSubTasks"
               @changeSubtaskInput="changeSubtaskInput"
-              :subtasksreceived="[...this.formData.description]"
+              :subtasksreceived="[...this.formData.subtasks]"
             ></sub-tasks-viewer>
-          </div> -->
+          </div>  -->
 
           <md-button class="md-tertiary" @click="checkBeforeSave">
             <feather type="save"></feather>Save
@@ -244,7 +244,7 @@ export default class EditTaskDrawer extends Vue {
     task: "",
     deadline: null,
     importance: null,
-    description: [],
+    subtasks: [],
     creationDate: new Date().toISOString().substr(0, 10),
     isdone: false,
   };
@@ -342,7 +342,7 @@ export default class EditTaskDrawer extends Vue {
   }
 
   setSubTasks(subtasks: SubTask[]) {
-    this.formData.description = [...subtasks];
+    this.formData.subtasks = [...subtasks];
   }
 
   resteForm() {
@@ -351,7 +351,7 @@ export default class EditTaskDrawer extends Vue {
       task: "",
       deadline: "",
       importance: 0,
-      description: [],
+      subtasks: [],
       creationDate: new Date().toISOString().substr(0, 10),
       isdone: false,
     };

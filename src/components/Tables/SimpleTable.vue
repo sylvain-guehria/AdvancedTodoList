@@ -16,7 +16,7 @@
         md-rounded
         md-icon="done"
         md-label="Nothing to do!"
-        md-description="Create a Task with the button above and it will show up here."
+        md-subtasks="Create a Task with the button above and it will show up here."
       ></md-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
@@ -71,33 +71,9 @@
           </div>
 
           <!-- start subtable -->
-
-          <div v-if="includeKey(item.key)" @click="unTogleSubtasks(item.key)">
-            <md-table class="table-custom"  v-if="item.description && item.description.length">
-              <md-table-row>
-                <md-table-head>Order</md-table-head>
-                <md-table-head>Label</md-table-head>
-                <md-table-head>Description</md-table-head>
-                <md-table-head>Deadline</md-table-head>
-                 <md-table-head>Done</md-table-head>
-              </md-table-row>
-
-              <md-table-row
-                v-for="(subtask, index) in item.description"
-                :key="index"
-              >
-                <md-table-head>{{ subtask.order }}</md-table-head>
-                <md-table-head>{{ subtask.label }}</md-table-head>
-                <md-table-head>{{ subtask.description }}</md-table-head>
-                <md-table-head>{{ subtask.deadline }}</md-table-head>
-                <md-table-head
-                  ><feather type="check" v-if="subtask.isdone"></feather>
-                  <feather type="x" v-if="!subtask.isdone"></feather
-                ></md-table-head>
-              </md-table-row>
-            </md-table>
+          <div v-if="includeKey(item.key)">
+            <simple-table-lvl1 :item="item"></simple-table-lvl1>
           </div>
-
           <!-- end subtable -->
         </md-table-cell>
         <md-table-cell
@@ -209,12 +185,14 @@ import { myFunctions } from "../../helpers/helperfunction";
 import { Todo, HTMLElementEvent, drawer } from "../../models/types";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
+import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
 
 export default {
   name: "simple-table",
   components: {
     "table-pagination": TablePaginationVue,
     "display-task-modal": DisplayTaskModal,
+    "simple-table-lvl1": SimpleTableLvl1,
   },
   props: ["todolist"],
   computed: {
@@ -317,8 +295,8 @@ export default {
       this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
     },
     getNumberSubTaskActive(item): number {
-      return item.description
-        ? item.description.filter((subtask) => !subtask.isdone).length
+      return item.subtasks && item.subtasks.length >0 
+        ? item.subtasks.filter((subtask) => !subtask.isdone).length
         : 0;
     },
     deleteTodo(key: string, order: number): void {
@@ -437,7 +415,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.p-padding{
+.p-padding {
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -486,7 +464,7 @@ p {
   width : 20px;
 } */
 
-md-table-head{
+md-table-head {
   font-size: 15px;
 }
 </style>
