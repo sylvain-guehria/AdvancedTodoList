@@ -37,14 +37,14 @@
                 >{{ item.label }}
                 </span>
               </md-table-cell>
-                  <!-- <md-table-cell md-label="Description">
+                  <!-- <md-table-cell md-label="subtasks">
               <span
                 class="label"
                 :contenteditable="!readOnlyLocal"
                 :class="{ completed: item.isdone }"
                 @keydown.enter="updateSubTask($event, item)"
                 @blur="updateSubTask($event, item)"
-                >{{ item.description }}
+                >{{ item.subtasks }}
                 </span>
               </md-table-cell> -->
             <md-table-cell md-label="Done">
@@ -81,7 +81,7 @@ export default class SubTaskViewer extends Vue {
   @Prop() subtasksreceived: SubTask[];
   @Prop() readonly: boolean;
   subTaskInput: string = "";
-  subTaskInputDescription: string = "";
+  subTaskInputsubtasks: string = "";
   subtasks: SubTask[] = [];
   hasError: boolean = false;
   renderTable: boolean = false;
@@ -127,8 +127,7 @@ export default class SubTaskViewer extends Vue {
     this.subtasks.push({
       order: this.subtasks ? this.subtasks.length : 0,
       label: this.subTaskInput,
-      isdone: false,
-      description: this.subTaskInputDescription
+      isdone: false
     });
 
     this.subTaskInput = "";

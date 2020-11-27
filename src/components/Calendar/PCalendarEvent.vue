@@ -84,17 +84,17 @@
           <div class="md-layout-item md-size-100 icon-list-item">
             <feather type="list"></feather
             >{{
-              event.description && event.description.length > 0
+              event.subtasks && event.subtasks.length > 0
                 ? "Subtasks"
                 : "No subtask"
             }}
           </div>
           <div
             class="md-layout-item md-size-100 icon-list-item"
-            v-if="event.description && event.description.length > 0"
+            v-if="event.subtasks && event.subtasks.length > 0"
           >
             <sub-task-readonly
-              :subtasksreceived="event.description"
+              :subtasksreceived="event.subtasks"
               :todo="event"
             ></sub-task-readonly>
           </div>
@@ -149,8 +149,8 @@ export default class PCalendarEvent extends Vue {
   }
 
   getNumberSubTaskActive(): number {
-    return this.event.description
-      ? this.event.description.filter((subtask) => !subtask.isdone).length
+    return this.event.subtasks
+      ? this.event.subtasks.filter((subtask) => !subtask.isdone).length
       : 0;
   }
 

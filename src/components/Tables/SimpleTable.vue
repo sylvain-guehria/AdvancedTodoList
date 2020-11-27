@@ -16,10 +16,10 @@
         md-rounded
         md-icon="done"
         md-label="Nothing to do!"
-        md-description="Create a Task with the button above and it will show up here."
+        md-subtasks="Create a Task with the button above and it will show up here."
       ></md-empty-state>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item}">
+      <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell
           md-sort-by="order"
           md-label="Order"
@@ -53,7 +53,7 @@
           md-sort-by="task"
           md-label="Task Title"
           v-if="getSettings('task')"
-          ><div class="flex">
+          ><div class="flex p-padding">
             <feather
               v-if="!includeKey(item.key)"
               type="chevron-right"
@@ -69,6 +69,12 @@
               <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
             </div>
           </div>
+
+          <!-- start subtable -->
+          <div v-if="includeKey(item.key)">
+            <simple-table-lvl1 :item="item"></simple-table-lvl1>
+          </div>
+          <!-- end subtable -->
         </md-table-cell>
         <md-table-cell
           md-sort-by="deadline"
@@ -115,9 +121,9 @@
           v-if="getSettings('isdone')"
         >
           <feather type="check" v-if="item.isdone"></feather>
-          <feather type="x-circle" v-if="!item.isdone"></feather>
+          <feather type="x" v-if="!item.isdone"></feather>
         </md-table-cell>
-        <md-table-cell md-fixed-header class="more-column right-arrow">
+        <md-table-cell md-fixed-header class="more-column" width="50px">
           <md-menu
             md-size="medium"
             :md-offset-x="-175"
@@ -179,12 +185,14 @@ import { myFunctions } from "../../helpers/helperfunction";
 import { Todo, HTMLElementEvent, drawer } from "../../models/types";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
+import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
 
 export default {
   name: "simple-table",
   components: {
     "table-pagination": TablePaginationVue,
     "display-task-modal": DisplayTaskModal,
+    "simple-table-lvl1": SimpleTableLvl1,
   },
   props: ["todolist"],
   computed: {
@@ -194,34 +202,40 @@ export default {
   },
   methods: {
     includeKey(key) {
-       let keyInList: number = this.drawersOpenedArray.findIndex(drawer => drawer.key === key);
-       if(keyInList === -1){
-         return false;
-       }else{
-         return true;
-       }
+      let keyInList: number = this.drawersOpenedArray.findIndex(
+        (drawer) => drawer.key === key
+      );
+      if (keyInList === -1) {
+        return false;
+      } else {
+        return true;
+      }
     },
 
     togleSubtasks(key) {
       let drawer: drawer = {
-        key : key,
-        open: true
-      }
-      this.drawersOpenedArray.unshift(drawer)
-        
-      this.$store.commit('setDrawersSettings', this.drawersOpenedArray)
+        key: key,
+        open: true,
+      };
+      this.drawersOpenedArray.unshift(drawer);
+
+      this.$store.commit("setDrawersSettings", this.drawersOpenedArray);
     },
 
     unTogleSubtasks(key) {
-     let indexInList: number = this.drawersOpenedArray.findIndex(drawer => drawer.key === key);
-     if(indexInList != -1) this.drawersOpenedArray.splice(indexInList, 1);
+      let indexInList: number = this.drawersOpenedArray.findIndex(
+        (drawer) => drawer.key === key
+      );
+      if (indexInList != -1) this.drawersOpenedArray.splice(indexInList, 1);
 
-     this.$store.commit('setDrawersSettings', this.drawersOpenedArray)
+      this.$store.commit("setDrawersSettings", this.drawersOpenedArray);
     },
     getSettings(columnLabel) {
       let colums = this.$store.getters.getSettings;
-      let colum
-      if (colums) { colum = colums.hidden_column[columnLabel]}
+      let colum;
+      if (colums) {
+        colum = colums.hidden_column[columnLabel];
+      }
       return colum;
     },
     orderUp(item: Todo): void {
@@ -281,8 +295,8 @@ export default {
       this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
     },
     getNumberSubTaskActive(item): number {
-      return item.description
-        ? item.description.filter((subtask) => !subtask.isdone).length
+      return item.subtasks && item.subtasks.length >0 
+        ? item.subtasks.filter((subtask) => !subtask.isdone).length
         : 0;
     },
     deleteTodo(key: string, order: number): void {
@@ -400,7 +414,11 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+.p-padding {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .flex {
   display: flex !important ;
 }
@@ -437,5 +455,16 @@ p {
 }
 .margin-left {
   margin-left: 20px;
+}
+/* .more-column{
+  flex-direction: row;
+  justify-content: center;
+  position: absolute;
+  right: 10px;
+  width : 20px;
+} */
+
+md-table-head {
+  font-size: 15px;
 }
 </style>

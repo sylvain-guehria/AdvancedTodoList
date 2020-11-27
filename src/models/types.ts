@@ -3,12 +3,13 @@ export interface Todo {
   task: string;
   deadline?: string;
   importance?: number;
-  description?: SubTask[];
+  subtasks?: SubTask[];
   creationDate: string;
   isdone: boolean;
   numberdaysleft?: number;
   urgency?: number;
   order?: number;
+  tags?: string[];
 }
 
 export interface User {
@@ -55,7 +56,13 @@ export interface SubTask {
   label: string;
   isdone: boolean;
   order?: number;
-  description?: string
+  detail?: string
+  deadline? : string,
+  creationDate? : string,
+  numberdaysleft? : boolean,
+  importance? : number,
+  tags? : string[],
+  motherKey?: string
 }
 
 export type HTMLElementEvent<T extends HTMLElement> = Event & {

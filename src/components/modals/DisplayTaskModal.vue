@@ -32,7 +32,7 @@
 
             <div class="md-size-100 icon-list-item flex">
               <feather type="calendar"></feather>
-              <div class="list-item-text">Deadline : {{ event.deadline }}</div>
+              <div class="list-item-text">Deadline : {{ event.deadline ? event.deadline : 'none'  }}</div>
             </div>
           </div>
 
@@ -40,7 +40,7 @@
             <div class="md-size-100 icon-list-item flex">
               <feather type="alert-octagon"></feather>
               <div class="list-item-text">
-                Importance : {{ event.importance }}
+                Importance : {{ event.importance ?  event.importance: 'none' }}
               </div>
             </div>
 
@@ -58,7 +58,6 @@
               <feather type="eye"></feather>
               <div
                 class="list-item-text"
-                :class="event.numberdaysleft <= 0 ? 'red-text' : 'green-text'"
               >
                 Number Days Left : {{ event.numberdaysleft }}
               </div>
@@ -67,18 +66,19 @@
             <div class="md-size-100 icon-list-item flex">
               <feather type="list"></feather
               >{{
-                event.description && event.description.length > 0
+                event.subtasks && event.subtasks.length > 0
                   ? "Subtasks"
                   : "No subtask"
               }}
             </div>
           </div>
+
           <div
             class="md-layout-item md-size-100 icon-list-item"
-            v-if="event.description && event.description.length > 0"
+            v-if="event.subtasks && event.subtasks.length > 0"
           >
             <sub-task-readonly
-              :subtasksreceived="event.description"
+              :subtasksreceived="event.subtasks"
               :todo="event"
             ></sub-task-readonly>
           </div>
@@ -133,11 +133,6 @@ export default class PCalendarEvent extends Vue {
     const index = this.giveColorTodo();
     const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
     return classes[index];
-  }
-
-  displayModalLeft() {
-    const day = new Date(this.event.deadline).getDay();
-    return day === 4 || day === 5;
   }
 
   giveColorTodo(): number {
@@ -210,7 +205,7 @@ h1 {
   display: flex;
   margin-bottom: 15px;
   font-family: initial;
-  font-size: 19px;
+  font-size: 16px;
 }
 
 .icon-list-item {
@@ -223,7 +218,7 @@ h1 {
 
   .list-item-text {
     text-align: left;
-    &.description {
+    &.subtasks {
       width: 100%;
     }
   }

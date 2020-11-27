@@ -70,11 +70,11 @@
           </div>
           <!-- <sub-tasks-viewer
             :readonly="true"
-            :subtasksreceived="this.formData.description"
+            :subtasksreceived="this.formData.subtasks"
           ></sub-tasks-viewer> -->
-          <div class="readonly-subtasks" v-if="this.formData.description">
+          <div class="readonly-subtasks" v-if="this.formData.subtasks">
             <read-only-task-viewer
-              :subtasksreceived="this.formData.description"
+              :subtasksreceived="this.formData.subtasks"
               :todo="this.formData"
             >
             </read-only-task-viewer>
@@ -140,7 +140,7 @@ export default class ReadOnlyTaskDrawer extends Vue {
     task: "",
     deadline: new Date().toISOString().substr(0, 10),
     importance: 0,
-    description: [],
+    subtasks: [],
     creationDate: new Date().toISOString().substr(0, 10),
     isdone: false
   };
@@ -159,7 +159,7 @@ export default class ReadOnlyTaskDrawer extends Vue {
       task: "",
       deadline: "",
       importance: 0,
-      description: [],
+      subtasks: [],
       creationDate: new Date().toISOString().substr(0, 10),
       isdone: false
     };
