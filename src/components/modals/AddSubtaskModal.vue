@@ -27,6 +27,15 @@
           ></input-text>
         </div>
 
+          <div class="md-layout-item md-small-size-100 md-size-100">
+          <label> <feather type="align-center"></feather>Subtask Order </label>
+          <input-text
+            type="number"
+            :vmodel="formData.order"
+            @vmodel="formData.order = $event"
+          ></input-text>
+        </div>
+
         <div class="md-layout-item md-small-size-100 md-size-100 imp-input">
           <label>
             <feather type="alert-octagon"></feather>Importance of the task
@@ -53,6 +62,17 @@
             ></datepicker>
           </md-field>
           <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
+        </div><br>
+
+        <div class="md-layout-item md-small-size-100 md-size-100">
+          <label> <feather type="pen-tool"></feather>Details subtask </label>
+          <input-text
+            type="textarea"
+            :maxlength="200"
+            initialvalue="Your label"
+            :vmodel="formData.detail"
+            @vmodel="formData.detail = $event"
+          ></input-text>
         </div>
 
         <md-button class="md-tertiary" @click="addSubtask">
@@ -204,4 +224,5 @@ export default class AddSubTaskModal extends Vue {
   top: 0px;
   right: 0px;
 }
+
 </style>

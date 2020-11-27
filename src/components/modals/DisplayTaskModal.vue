@@ -72,6 +72,7 @@
               }}
             </div>
           </div>
+
           <div
             class="md-layout-item md-size-100 icon-list-item"
             v-if="event.subtasks && event.subtasks.length > 0"
@@ -204,7 +205,7 @@ h1 {
   display: flex;
   margin-bottom: 15px;
   font-family: initial;
-  font-size: 19px;
+  font-size: 16px;
 }
 
 .icon-list-item {

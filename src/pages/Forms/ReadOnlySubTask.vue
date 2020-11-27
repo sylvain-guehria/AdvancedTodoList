@@ -57,10 +57,10 @@ export default class ReadOnlySubTask extends Vue {
 }
 
 .label {
-  font-size: 16px;
+  font-size: 15px;
   max-width: 140px;
   word-break: break-word;
-  font-size: 19px
+  font-size: 16px
 }
 
 .my-table {
@@ -70,6 +70,6 @@ export default class ReadOnlySubTask extends Vue {
 
 p{
   color: dimgrey;
-  font-size: 15px;
+  font-size: 14px;
 }
 </style>

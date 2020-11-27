@@ -2,24 +2,25 @@
   <div>
     <md-table class="table-custom">
       <md-table-row v-if="item.subtasks && item.subtasks.length">
-        <md-table-head>Order</md-table-head>
+        <md-table-head  width="50px">Order</md-table-head>
         <md-table-head>Label</md-table-head>
         <md-table-head>Details</md-table-head>
         <md-table-head>Deadline</md-table-head>
         <md-table-head>Importance</md-table-head>
         <md-table-head>Done</md-table-head>
+        <md-table-head></md-table-head>
       </md-table-row>
 
       <md-table-row v-for="(subtask, index) in item.subtasks" :key="index">
-        <md-table-head>{{ subtask.order }}</md-table-head>
+        <md-table-head  width="50px">{{ subtask.order }}</md-table-head>
         <md-table-head>{{ subtask.label }}</md-table-head>
         <md-table-head>{{ subtask.detail }}</md-table-head>
         <md-table-head>{{ subtask.deadline }}</md-table-head>
         <md-table-head>{{ subtask.importance }}</md-table-head>
 
         <md-table-head
-          ><feather type="check" v-if="subtask.isdone"></feather>
-          <feather type="x" v-if="!subtask.isdone"></feather>
+          ><feather type="check" v-if="subtask.isdone"  @click="setSubTaskState(subtask.key, item.key, false)"></feather>
+          <feather type="x" v-if="!subtask.isdone"  @click="setSubTaskState(subtask.key, item.key, true)"></feather>
         </md-table-head>
 
         <md-table-head width="50px">
@@ -32,7 +33,7 @@
           <feather
             type="delete"
             class="md-icon"
-            @click="deleteSubtask(subtask.key)"
+            @click="deleteSubtask(subtask.key, item.key)"
           ></feather>
         </md-table-head>
       </md-table-row>
@@ -45,10 +46,11 @@
         ></md-table-head>
         <md-table-head></md-table-head>
         <md-table-head></md-table-head>
+        <md-table-head></md-table-head>
       </md-table-row>
     </md-table>
 
-    <md-dialog :md-active.sync="showDialogAddSubtask">
+    <md-dialog :md-active.sync="showDialogAddSubtask" >
       <add-subtask-modal
         @closeAddSubtaskModal="closeAddSubtaskModal"
         :motherKey="getMotherKey()"
@@ -78,6 +80,10 @@ export default class SimpleTableLvl1 extends Vue {
 
   motherKey: string = "";
 
+  setSubTaskState(subtaskKey, motherKey, isDone){
+    this.$store.dispatch("setSubTaskState", {subtaskKey, motherKey, isDone} )
+  }
+
   getSubtaskToEdit(){
     return this.subtaskToEdit;
   }
@@ -99,13 +105,37 @@ export default class SimpleTableLvl1 extends Vue {
     this.showDialogAddSubtask = true;
   }
 
-  editSubtask(subtask, key) {
-    this.motherKey = key;
+  editSubtask(subtask: SubTask, todoKey: string) {
+    this.motherKey = todoKey;
     this.subtaskToEdit = subtask;
     this.showDialogAddSubtask = true;
   }
 
-  deleteSubtask(key) {}
+  deleteSubtask(subtaskKey: string, todoKey: string) {
+      let keys = {
+        subtaskKey,
+        todoKey
+      }
+      let vm = this;
+      this.$store
+        .dispatch("deleteSubtask", keys)
+        .then(() => {
+          this.$toasted.show("Subtask deleted, it is no longer in your list", {
+            icon: "delete_outline",
+            theme: "bubble",
+            position: "bottom-right",
+            duration: 5000,
+          });
+        })
+        .catch((error: Error) => {
+          this.$toasted.show("Cannot deleted Subtask", {
+            icon: "error_outline",
+            theme: "bubble",
+            position: "bottom-right",
+            duration: 5000,
+          });
+        });
+  }
 }
 </script>
 

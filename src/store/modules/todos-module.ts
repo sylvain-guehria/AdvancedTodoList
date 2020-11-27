@@ -212,7 +212,36 @@ const mutations = {
         state.todolist[index].subtasks.splice(index_child, 0, subtask);
       }
     }
+  },
+  setSubTaskState(state: State,  { subtaskKey, motherKey, isDone} :  { subtaskKey : string, motherKey: string, isDone: boolean}) {
+    var index = state.todolist.findIndex(function (o) {
+      return o.key === motherKey;
+    });
 
+    if (index !== -1) {
+      var index_child = state.todolist[index].subtasks.findIndex(function (o) {
+        return o.key === subtaskKey;
+      });
+
+      if (index_child !== -1) {
+        state.todolist[index].subtasks[index_child].isdone = isDone;
+      }
+    }
+  },
+  removeSubtaskByKey(state: State, { subtaskKey, todoKey }) {
+    var index = state.todolist.findIndex(function (o) {
+      return o.key === todoKey;
+    });
+
+    if (index !== -1) {
+      var index_child = state.todolist[index].subtasks.findIndex(function (o) {
+        return o.key === subtaskKey;
+      });
+
+      if (index_child !== -1) {
+        state.todolist[index].subtasks.splice(index_child, 1);
+      }
+    }
   },
   sortBy(state: State, attribut: string) {
     if (currentSortingMode === 'desc' || currentSortingMode === '') {
@@ -332,13 +361,24 @@ const actions = {
       ...subtask,
       isdone: subtask.isdone
     });
-    //commit('incRendAllListNumber');
+  },
+  setSubTaskState({ commit }: { commit: Function }, { subtaskKey, motherKey, isDone}: { subtaskKey: string, motherKey: string, isDone: boolean }) {
+    const { uid } = state.user.data;
+    database.ref(`todos/${uid}/${motherKey}/subtasks/${subtaskKey}`).update({
+      isdone: isDone
+    });
+    commit('setSubTaskState', { subtaskKey, motherKey, isDone});
   },
   deleteTodo({ commit }: { commit: Function }, key: string) {
     const { uid } = state.user.data;
     database.ref(`todos/${uid}/${key}`).remove();
     commit('removeTodoByKey', key);
     commit('incRendAllListNumber');
+  },
+  deleteSubtask({ commit }: { commit: Function }, { subtaskKey, todoKey }: { subtaskKey: string, todoKey: string }) {
+    const { uid } = state.user.data;
+    database.ref(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}`).remove();
+    commit('removeSubtaskByKey', { subtaskKey, todoKey });
   },
   fetchTodos({ commit }: { commit: Function }, payload: string) {
     const uid: string = payload;
