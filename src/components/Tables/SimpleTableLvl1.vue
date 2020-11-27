@@ -16,10 +16,25 @@
         <md-table-head>{{ subtask.detail }}</md-table-head>
         <md-table-head>{{ subtask.deadline }}</md-table-head>
         <md-table-head>{{ subtask.importance }}</md-table-head>
+
         <md-table-head
           ><feather type="check" v-if="subtask.isdone"></feather>
-          <feather type="x" v-if="!subtask.isdone"></feather
-        ></md-table-head>
+          <feather type="x" v-if="!subtask.isdone"></feather>
+        </md-table-head>
+
+        <md-table-head width="50px">
+          <feather
+            type="edit"
+            class="md-icon"
+            @click="editSubtask(subtask, item.key)"
+          ></feather>
+
+          <feather
+            type="delete"
+            class="md-icon"
+            @click="deleteSubtask(subtask.key)"
+          ></feather>
+        </md-table-head>
       </md-table-row>
       <md-table-row>
         <md-table-head></md-table-head>
@@ -37,12 +52,13 @@
       <add-subtask-modal
         @closeAddSubtaskModal="closeAddSubtaskModal"
         :motherKey="getMotherKey()"
+        :subtask="getSubtaskToEdit()"
       ></add-subtask-modal>
     </md-dialog>
   </div>
 </template>
 <script lang='ts'>
-import { Todo } from "@/models/types";
+import { SubTask, Todo } from "@/models/types";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 
@@ -55,20 +71,41 @@ export default class SimpleTableLvl1 extends Vue {
   @Prop() item: Todo;
   showDialogAddSubtask: boolean = false;
 
-  motherKey :string = '';
+  subtaskToEdit: SubTask = {
+    label: "",
+    isdone: false,
+  };
+
+  motherKey: string = "";
+
+  getSubtaskToEdit(){
+    return this.subtaskToEdit;
+  }
 
   closeAddSubtaskModal() {
     this.showDialogAddSubtask = false;
+    this.subtaskToEdit = {
+      label: "",
+      isdone: false,
+    };
   }
 
-  getMotherKey(){
-    return this.motherKey; 
+  getMotherKey() {
+    return this.motherKey;
   }
 
   addSubtaskModal(key) {
     this.motherKey = key;
     this.showDialogAddSubtask = true;
   }
+
+  editSubtask(subtask, key) {
+    this.motherKey = key;
+    this.subtaskToEdit = subtask;
+    this.showDialogAddSubtask = true;
+  }
+
+  deleteSubtask(key) {}
 }
 </script>
 

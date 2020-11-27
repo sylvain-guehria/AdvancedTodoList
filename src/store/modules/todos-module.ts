@@ -166,16 +166,16 @@ const mutations = {
   },
   addNewTodo: (state: State, todo: Todo) => state.todolist.unshift(todo),
 
-  addNewSubtaskTodo:(state: State, subtask: SubTask) => {
+  addNewSubtaskTodo: (state: State, subtask: SubTask) => {
     let motherKey = subtask.motherKey;
     delete subtask.motherKey;
 
-     for (var i in state.todolist) {
-     if (state.todolist[i].key == motherKey) {
-      state.todolist[i].subtasks.unshift(subtask);
+    for (var i in state.todolist) {
+      if (state.todolist[i].key == motherKey) {
+        state.todolist[i].subtasks.unshift(subtask);
         break;
-     }
-   }
+      }
+    }
   },
 
   removeTodo: (state: State, key: string) => {
@@ -196,6 +196,23 @@ const mutations = {
       state.todolist.splice(index, 1);
       state.todolist.splice(index, 0, todo);
     }
+  },
+  editSubtaskTodoByKey(state: State, subtask: SubTask) {
+    var index = state.todolist.findIndex(function (o) {
+      return o.key === subtask.motherKey;
+    });
+
+    if (index !== -1) {
+      var index_child = state.todolist[index].subtasks.findIndex(function (o) {
+        return o.key === subtask.key;
+      });
+
+      if (index_child !== -1) {
+        state.todolist[index].subtasks.splice(index_child, 1);
+        state.todolist[index].subtasks.splice(index_child, 0, subtask);
+      }
+    }
+
   },
   sortBy(state: State, attribut: string) {
     if (currentSortingMode === 'desc' || currentSortingMode === '') {
@@ -245,7 +262,7 @@ const actions = {
     commit('addNewTodo', payload);
     commit('incRendAllListNumber');
   },
-  createSubtask({ commit }: { commit: Function },  subtask : SubTask ) {
+  createSubtask({ commit }: { commit: Function }, subtask: SubTask) {
 
     let motherkey = subtask.motherKey;
     delete subtask.motherKey;
@@ -276,6 +293,23 @@ const actions = {
     });
     commit('editTodoByKey', payload);
     commit('incRendAllListNumber');
+  },
+  editSubtask({ commit }: { commit: Function }, subtask: SubTask) {
+
+    let motherkey = subtask.motherKey;
+    delete subtask.motherKey;
+
+    Object.keys(subtask).forEach((key) => (subtask[key] == null) && delete subtask[key]);
+
+    const { uid } = state.user.data;
+
+    database.ref(`todos/${uid}/${motherkey}/subtasks/${subtask.key}`).set({
+      ...subtask
+    });
+    subtask.motherKey = motherkey;
+
+    commit('editSubtaskTodoByKey', subtask);
+    //commit('incRendAllListNumber');
   },
   setTodoDone({ commit }: { commit: Function }, payload: Todo) {
     Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
@@ -309,21 +343,31 @@ const actions = {
   fetchTodos({ commit }: { commit: Function }, payload: string) {
     const uid: string = payload;
     var listoftodos: Todo[] = [];
+    var listsubtasks: SubTask[] = [];
 
     var promise = new Promise((resolve, reject) => {
+
       database.ref(`todos/${uid}`).once('value', (snapshot) => {
         snapshot.forEach(function (childSnapshot) {
           const currentTodo: Todo = {
+
             key: childSnapshot.key || '',
             task: childSnapshot.val().task,
             deadline: childSnapshot.val().deadline,
             importance: childSnapshot.val().importance,
-            subtasks: childSnapshot.val().subtasks,
             creationDate: childSnapshot.val().creationDate,
             isdone: childSnapshot.val().isdone,
-            order: childSnapshot.val().order
+            order: childSnapshot.val().order,
+          }
 
-          };
+          let listsubtasks = Object.entries(childSnapshot.val().subtasks).reduce((acc, [key, subtask]) => {
+            subtask['key'] = key;
+            acc.push(subtask);
+            return acc;
+          }, []);
+
+          currentTodo.subtasks = listsubtasks;
+          listsubtasks = [];
           listoftodos.push(currentTodo);
         });
       }).then(() => {
@@ -333,6 +377,7 @@ const actions = {
         resolve();
       });
     });
+
     return promise;
   },
 

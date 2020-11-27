@@ -79,16 +79,23 @@ import lodash from "lodash";
 export default class AddSubTaskModal extends Vue {
   selectedDate: Date = null;
   dateHelper: string = "";
-  noDeadLine: boolean = true;
+  noDeadLine: boolean = false;
 
-  @Prop()motherKey: string;
+  @Prop() motherKey: string;
+  @Prop() subtask: SubTask;
 
   closeModal() {
     this.$emit("closeAddSubtaskModal");
   }
 
-  addSubtask() {
+  @Watch("subtask", { immediate: true })
+  changeSubtask() {
+    if (this.subtask.key) {
+      this.formData = { ...this.subtask };
+    }
+  }
 
+  addSubtask() {
     if (this.selectedDate) {
       this.dateHelper = this.selectedDate.toISOString().substr(0, 10);
       this.formData.deadline = this.dateHelper;
@@ -118,10 +125,13 @@ export default class AddSubTaskModal extends Vue {
 
     subtask.motherKey = this.motherKey;
 
- this.$store
-      .dispatch('createSubtask',subtask )
+    let action: string = subtask.key ? "editSubtask" : "createSubtask";
+    let msg: string = subtask.key ? "Subtask updated" : "Subtask created";
+
+    this.$store
+      .dispatch(action, subtask)
       .then(() => {
-        this.$toasted.show("subtask added", {
+        this.$toasted.show(msg + " , it is now in your list", {
           icon: "create",
           theme: "bubble",
           position: "bottom-right",
@@ -138,7 +148,6 @@ export default class AddSubTaskModal extends Vue {
         });
         this.closeModal();
       });
-
   }
 
   formData: SubTask = {
@@ -190,8 +199,7 @@ export default class AddSubTaskModal extends Vue {
   margin: 20px;
 }
 
- 
-.close-right{
+.close-right {
   position: absolute;
   top: 0px;
   right: 0px;
