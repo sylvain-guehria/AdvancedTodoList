@@ -26,81 +26,6 @@
         ></display-task-modal>
       </md-dialog>
     </div>
-
-
-
-    <!-- <modal
-      :show="showDetail"
-      @show="showDetail = $event"
-      class="event-detail-modal"
-    >
-      <div slot="header">
-        <div class="go-edit">
-          <div @click="showDrawerEditTask(event)">
-            <feather type="edit"></feather>
-          </div>
-        </div>
-        <div class="md-layout-item md-size-100 header-title">
-          <h1>
-            {{ event.task }}
-          </h1>
-          <div class="horizontal-separator"></div>
-        </div>
-      </div>
-      <div slot="body">
-        <div class="md-layout-item md-size-100 duo-data-block no-padding">
-          <div class="md-layout-item md-size-100 icon-list-item">
-            <feather type="calendar"></feather>
-            <div class="list-item-text">
-              Creation date : {{ event.creationDate }}
-            </div>
-          </div>
-          <div class="md-layout-item md-size-100 icon-list-item">
-            <feather type="calendar"></feather>
-            <div class="list-item-text">Deadline : {{ event.deadline }}</div>
-          </div>
-          <div class="md-layout-item md-size-100 icon-list-item">
-            <feather type="alert-octagon"></feather>
-            <div class="list-item-text">
-              Importance : {{ event.importance }}
-            </div>
-          </div>
-          <div class="md-layout-item md-size-100 icon-list-item">
-            <feather type="folder"></feather>
-            <div class="list-item-text">
-              {{ event.isdone ? "finished" : "In progress" }}
-            </div>
-            <div class="bullet" :class="bulletClass"></div>
-          </div>
-          <div class="md-layout-item md-size-100 icon-list-item">
-            <feather type="eye"></feather>
-            <div
-              class="list-item-text"
-              :class="event.numberdaysleft <= 0 ? 'red-text' : 'green-text'"
-            >
-              Number Days Left : {{ event.numberdaysleft }}
-            </div>
-          </div>
-          <div class="md-layout-item md-size-100 icon-list-item">
-            <feather type="list"></feather
-            >{{
-              event.subtasks && event.subtasks.length > 0
-                ? "Subtasks"
-                : "No subtask"
-            }}
-          </div>
-          <div
-            class="md-layout-item md-size-100 icon-list-item"
-            v-if="event.subtasks && event.subtasks.length > 0"
-          >
-            <sub-task-readonly
-              :subtasksreceived="event.subtasks"
-              :todo="event"
-            ></sub-task-readonly>
-          </div>
-        </div>
-      </div>
-    </modal> -->
   </div>
 </template>
 
@@ -156,7 +81,7 @@ export default class PCalendarEvent extends Vue {
 
   get bulletClass() {
     const index = this.giveColorTodo();
-    const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
+    const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5", "bullet6"];
     return classes[index];
   }
 
@@ -190,7 +115,8 @@ export default class PCalendarEvent extends Vue {
           return 0;
         }
       }
-      return ;
+      //no color
+      return 5;
     }
 }
 </script>
