@@ -1,5 +1,5 @@
-import { Todo, User, State, SubTask, Settings, drawer } from '../../models/types';
-import { database } from '../../firebase/firebase';
+import { Todo, User, State, SubTask, Settings, drawer } from "@/common/models/types";
+import { database } from '../../apis/firebase/firebase';
 import lodash from 'lodash';
 import store from '..';
 
@@ -213,7 +213,7 @@ const mutations = {
       }
     }
   },
-  setSubTaskState(state: State,  { subtaskKey, motherKey, isDone} :  { subtaskKey : string, motherKey: string, isDone: boolean}) {
+  setSubTaskState(state: State, { subtaskKey, motherKey, isDone }: { subtaskKey: string, motherKey: string, isDone: boolean }) {
     var index = state.todolist.findIndex(function (o) {
       return o.key === motherKey;
     });
@@ -362,12 +362,12 @@ const actions = {
       isdone: subtask.isdone
     });
   },
-  setSubTaskState({ commit }: { commit: Function }, { subtaskKey, motherKey, isDone}: { subtaskKey: string, motherKey: string, isDone: boolean }) {
+  setSubTaskState({ commit }: { commit: Function }, { subtaskKey, motherKey, isDone }: { subtaskKey: string, motherKey: string, isDone: boolean }) {
     const { uid } = state.user.data;
     database.ref(`todos/${uid}/${motherKey}/subtasks/${subtaskKey}`).update({
       isdone: isDone
     });
-    commit('setSubTaskState', { subtaskKey, motherKey, isDone});
+    commit('setSubTaskState', { subtaskKey, motherKey, isDone });
   },
   deleteTodo({ commit }: { commit: Function }, key: string) {
     const { uid } = state.user.data;
@@ -399,14 +399,15 @@ const actions = {
             isdone: childSnapshot.val().isdone,
             order: childSnapshot.val().order,
           }
+          if (childSnapshot.val().subtasks) {
+            let listsubtasks = Object.entries(childSnapshot.val().subtasks).reduce((acc, [key, subtask]) => {
+              subtask['key'] = key;
+              acc.push(subtask);
+              return acc;
+            }, []);
+            currentTodo.subtasks = listsubtasks;
+          }
 
-          let listsubtasks = Object.entries(childSnapshot.val().subtasks).reduce((acc, [key, subtask]) => {
-            subtask['key'] = key;
-            acc.push(subtask);
-            return acc;
-          }, []);
-
-          currentTodo.subtasks = listsubtasks;
           listsubtasks = [];
           listoftodos.push(currentTodo);
         });

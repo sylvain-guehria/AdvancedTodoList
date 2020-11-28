@@ -9,10 +9,10 @@ import { longClickDirective } from 'vue-long-click'
 
 
 // Plugins
-import GlobalDirectives from "./globalDirectives";
+import GlobalDirectives from "@/common/directives/globalDirectives";
 
 // MaterialDashboard plugin
-import MaterialDashboard from "./material-dashboard";
+import MaterialDashboard from "@/common/modules/material-dashboard";
 
 //chart
 import VueApexCharts from 'vue-apexcharts'

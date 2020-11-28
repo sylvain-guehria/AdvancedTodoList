@@ -93,17 +93,17 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import { Calendar, Weekday } from "dayspan";
 import DayBlock from "./DayBlock.vue";
 import moment from "moment";
-import SubTaskViewer from "@/pages/Forms/SubTaskViewer.vue";
-import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue";
-import { myFunctions } from "../../helpers/helperfunction";
-import { bus } from "../../main";
+import SubTaskViewer from "@/components/forms/SubTaskViewer.vue";
+import ReadOnlySubTaskTable from "@/components/tables/ReadOnlySubTaskTable.vue";
+import { myFunctions } from "@/common/helpers/helperfunction";
+import { bus } from "@/main";
 import vueCustomScrollbar from "vue-custom-scrollbar";
 import "vue-custom-scrollbar/dist/vueScrollbar.css";
 
 @Component({
   components: {
     "sub-tasks-viewer": SubTaskViewer,
-    "sub-task-readonly": ReadOnlySubTask,
+    "sub-task-readonly": ReadOnlySubTaskTable,
     "vue-custom-scrollbar": vueCustomScrollbar,
   },
 })

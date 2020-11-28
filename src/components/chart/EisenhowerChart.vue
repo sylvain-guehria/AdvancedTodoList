@@ -11,9 +11,9 @@
   </div>
 </template>
 <script lang="ts">
-import { Todo } from "@/models/types";
+import { Todo } from "@/common/models/types";
 import { Component, Vue, Prop, PropSync } from "vue-property-decorator";
-import { myFunctions } from "../../helpers/helperfunction";
+import { myFunctions } from "@/common/helpers/helperfunction";
 
 @Component({
   components: {},
