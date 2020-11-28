@@ -34,6 +34,7 @@ export interface Settings {
   langage : string,
   with_weekend : boolean,
   drawersOpened : drawer[],
+  loading: boolean,
   hidden_column : {
     order : boolean,
     task : boolean,

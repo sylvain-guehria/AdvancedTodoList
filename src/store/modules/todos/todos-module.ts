@@ -1,7 +1,6 @@
-import { Todo, User, State, SubTask, Settings, drawer } from "@/common/models/types";
-import { database } from '../../apis/firebase/firebase';
+import { Todo, User, State, SubTask } from "@/common/models/types";
+import { database } from '@/apis/firebase/firebase';
 import lodash from 'lodash';
-import store from '..';
 
 var todolist: Todo[] = [];
 var filtered_todo_list: Todo[] = [];
@@ -22,24 +21,9 @@ var user: User = {
   data: {}
 };
 
-var settings: Settings = {
-  langage: 'en',
-  drawersOpened: [],
-  with_weekend: true,
-  hidden_column: {
-    order: true,
-    task: true,
-    deadline: true,
-    creationDate: true,
-    numberdaysleft: true,
-    importance: true,
-    isdone: true,
-  }
-}
-
 var currentSortingMode = '';
 
-const state: State = {
+const state = {
   todolist: todolist,
   coloredtodolist: coloredtodolist,
   user: user,
@@ -49,27 +33,14 @@ const state: State = {
   isLoading: isLoading,
   filtered_todo_list: filtered_todo_list,
   rendAllListNumber: rendAllListNumber,
-  settings: settings,
 };
 
 const getters = {
-  getSettings: (state: State) => {
-    if (state) return state.settings;
-  },
   getRendAllListNumber: (state: State) => {
     return state.rendAllListNumber;
   },
   getIsLoading: (state: State) => {
     return state.isLoading;
-  },
-  getLangage: (state: State) => {
-    if (state.settings) return state.settings.langage;
-  },
-  getWithWeekEnd: (state: State) => {
-    if (state.settings) return state.settings.with_weekend;
-  },
-  getUser: (state: State) => {
-    return state.user;
   },
   getTodoList: (state: State) => {
     return state.todolist;
@@ -109,32 +80,14 @@ const getters = {
   getNumberActiveTask: (state: State) => {
     return state.todolist.filter(todo => !todo.isdone).length;
   },
-  getColumnHidden: (state: State) => {
-    if (state.settings) return state.settings.hidden_column;
-  },
 };
 
 const mutations = {
-  setSettings(state: State, settings: Settings) {
-    state.settings = settings;
-  },
-  setDrawersSettings(state: State, drawersOpened: drawer[]) {
-    state.settings.drawersOpened = drawersOpened;
-  },
-  hideColumn(state: State, setting: string) {
-    state.settings.hidden_column[setting] = !state.settings.hidden_column[setting];
-  },
   incRendAllListNumber(state: State) {
     state.rendAllListNumber = state.rendAllListNumber + 1;
   },
   setIsLoading(state: State, bool: boolean) {
     state.isLoading = bool;
-  },
-  setLangage(state: State, lang: string) {
-    state.settings.langage = lang;
-  },
-  setWithWeekEnd(state: State, bool: boolean) {
-    state.settings.with_weekend = bool;
   },
   setTodoList(state: State, newList: Todo[]) {
     state.todolist = newList;
@@ -144,9 +97,6 @@ const mutations = {
   },
   setColoredTodoList(state: State, newList: Todo[]) {
     state.coloredtodolist = newList;
-  },
-  setUser(state: State, user: User) {
-    state.user = user;
   },
   setCurrentTodo(state: State, key: string) {
     const todofinded = state.todolist.find(obj => {
@@ -452,28 +402,6 @@ const actions = {
 
     commit('setOrder', { keyItemToUpOrder, max_order });
   },
-  saveSetting({ commit }: { commit: Function }, payload) {
-
-    Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
-
-    const { uid } = state.user.data;
-
-    database.ref(`settings/${uid}`).update({
-      [payload.label]: payload.value
-    });
-  },
-  fetchSettings({ commit }: { commit: Function }, payload: string) {
-    const uid: string = payload;
-    let settings = {};
-
-    database.ref(`settings/${uid}`).once('value', (snapshot) => {
-      settings = snapshot.val();
-    }).then(() => {
-      if (settings) commit('setSettings', settings);
-    }
-    );
-  },
-
 };
 
 export default {

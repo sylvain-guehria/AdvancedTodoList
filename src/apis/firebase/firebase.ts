@@ -3,7 +3,16 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/database';
 import Vue from 'vue';
-import store from '../../store/index';
+import store from '@/store/index';
+
+//vuex
+import { MutationTypes as settingMutationType } from "@/store/modules/settings/mutations";
+import { ActionTypes as settingActionType } from "@/store/modules/settings/actions";
+
+import { MutationTypes as userType } from "@/store/modules/user/mutations";
+
+import { StoreModule } from "@/store/store-module";
+
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -22,7 +31,9 @@ const firebaseApp = firebase.default.initializeApp(firebaseConfig);
 export const fs = firebaseApp.firestore();
 export const database = firebaseApp.database();
 
+
 export default {
+
   auth: firebase.default.auth(),
   loginGoogle() {
     const provider = new firebase.default.auth.GoogleAuthProvider();
@@ -105,19 +116,24 @@ export default {
       data: {}
     };
     firebase.default.auth().onAuthStateChanged(userfb => {
+
       if (userfb) {
         user.loggedIn = true;
         user.data = userfb;
         const uid: string = userfb.uid;
+
         store.dispatch('fetchTodos', uid)
-        store.dispatch('fetchSettings', uid);
+
+        //store.dispatch('fetchSettings', uid);
+        store.dispatch(settingActionType.FETCH_SETTINGS, { namespace: StoreModule.Settings })
+
       } else {
         user.loggedIn = false;
         user.data = {};
         store.commit('setTodoList', []);
-        store.commit('setSettings', {});
+        store.commit(settingMutationType.SET_SETTINGS, {});
       }
-      store.commit('setUser', user);
+      store.commit(userType.SET_USER, user)
     });
   }
 };
