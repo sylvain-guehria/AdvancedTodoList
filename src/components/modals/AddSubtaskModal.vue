@@ -86,9 +86,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
-import { Todo, SubTask } from "../../models/types";
-import InputText from "../../components/Form/InputText.vue";
-import SubtaskViewer from "../../pages/Forms/SubTaskViewer.vue";
+import { Todo, SubTask } from "@/common/models/types";
+import InputText from "@/common/componentslib/InputText.vue";
+import SubtaskViewer from "@/components/forms/SubTaskViewer.vue";
 import lodash from "lodash";
 
 @Component({

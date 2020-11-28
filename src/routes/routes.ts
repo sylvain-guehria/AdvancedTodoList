@@ -2,17 +2,17 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
-import FullContentLayout from "@/pages/Layout/FullContentLayout.vue";
+import DashboardLayout from "@/views/Layout/DashboardLayout.vue";
+import FullContentLayout from "@/views/Layout/FullContentLayout.vue";
 
-import TotoList from "@/pages/TotoList.vue";
-import Planning from "@/pages/Planning.vue";
-import Eisenhower from "@/pages/Eisenhower.vue"
-import Help from "@/pages/Help.vue";
-import Login from "@/pages/Login.vue";
-import Contactme from "@/pages/Contactme.vue";
+import TotoList from "@/views/pages/TotoList.vue";
+import Eisenhower from "@/views/pages/Eisenhower.vue"
+import Help from "@/views/pages/Help.vue";
+import Login from "@/views/pages/Login.vue";
+import Contactme from "@/components/forms/Contactme.vue";
+import Planning from "@/views/pages/Planning.vue";
 
-import firebase from '../firebase/firebase';
+import firebase from '@/apis/firebase/firebase';
 
 
 

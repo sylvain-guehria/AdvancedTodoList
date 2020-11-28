@@ -1,4 +1,4 @@
 // Tables
-import SimpleTable from "./Tables/SimpleTable.vue";
+import SimpleTable from "@/components/tables/SimpleTable.vue";
 
 export { SimpleTable };
