@@ -98,7 +98,7 @@
 </template>
 
 <script  lang="ts">
-import { SimpleTable } from "@/components";
+import SimpleTable from "@/components/tables/SimpleTable.vue";
 import FiltersDrawer from "@/components/forms/FiltersDrawer.vue";
 import EditTaskDrawer from "@/components/forms/EditTaskDrawer.vue";
 import ReadOnlyTaskDrawer from "@/components/forms/ReadOnlyTaskDrawer.vue";

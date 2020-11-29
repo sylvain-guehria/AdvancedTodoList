@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import PlanningCalendar from "@/components/calendar/PlanningCalendar";
+import PlanningCalendar from "@/components/calendar/PlanningCalendar.vue";
 import LegendBulletVue from "@/components/menus/LegendBullet.vue";
 import EditTaskDrawer from "@/components/forms/EditTaskDrawer.vue";
 

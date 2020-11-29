@@ -1,7 +1,7 @@
 <template>
   <div class="my-table">
     <md-table v-model="subtasks">
-      <md-table-row slot="md-table-row" slot-scope="{ item }" @click="setSubtTaskDone(item)">
+      <md-table-row slot="md-table-row" slot-scope="{ item }" @click="setSubTaskDoneUndone(item)">
         <md-table-cell md-label="Sub-task" class="testt"
           ><span class="label" :class="{ completed: item.isdone }">{{
             item.label
@@ -43,9 +43,11 @@ export default class ReadOnlySubTaskTable extends Vue {
     }
   }
 
-  setSubtTaskDone(subtask: SubTask): void {
-    let todo = this.localTodo;
-    this.$store.dispatch("setSubTaskDone", { todo, subtask });
+  setSubTaskDoneUndone(subtask: SubTask): void {
+    let subtaskKey = subtask.key;
+    let motherKey = this.todo.key;
+    let isDone = !subtask.isdone;
+    this.$store.dispatch("setSubTaskState", { subtaskKey, motherKey, isDone });
   }
 }
 </script>

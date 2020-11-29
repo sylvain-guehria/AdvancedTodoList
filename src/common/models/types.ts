@@ -12,28 +12,26 @@ export interface Todo {
   tags?: string[];
 }
 
-export interface User {
-  loggedIn: boolean;
-  data: Record<string, any>;
-}
-
-export interface State {
-  todolist: Todo[];
-  filtered_todo_list: Todo[];
-  coloredtodolist: Todo[];
-  user: User;
+export interface Todos {
+  todolist: Todo[],
+  filtered_todo_list: Todo[],
   currentTodo: Todo,
   numberActiveTask: number,
   numberTotalTask: number,
   isLoading: boolean,
   rendAllListNumber: number,
-  settings: Settings
+}
+
+export interface User {
+  loggedIn: boolean;
+  data: Record<string, any>;
 }
 
 export interface Settings {
   langage : string,
   with_weekend : boolean,
   drawersOpened : drawer[],
+  loading: boolean,
   hidden_column : {
     order : boolean,
     task : boolean,
@@ -63,6 +61,10 @@ export interface SubTask {
   importance? : number,
   tags? : string[],
   motherKey?: string
+}
+
+export interface SubTasks {
+  
 }
 
 export type HTMLElementEvent<T extends HTMLElement> = Event & {
