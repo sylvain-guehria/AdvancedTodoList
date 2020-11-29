@@ -7,7 +7,7 @@
   </div>
 </template>
 <script lang="ts">
-import LegendBulletVue from "@/pages/LegendBullet.vue";
+import LegendBulletVue from "@/components/menus/LegendBullet.vue";
 import { Component, Vue, Prop, PropSync } from "vue-property-decorator";
 
 @Component({

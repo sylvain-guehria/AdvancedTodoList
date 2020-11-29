@@ -22,65 +22,28 @@
       <vue-custom-scrollbar class="scroll-area" :settings="settings">
         <div class="md-layout-item md-size-100 duo-data-block no-padding flex">
 
-          <div class="in-block">
-            <div class="md-size-100 icon-list-item flex">
-              <feather type="calendar"></feather>
-              <div class="list-item-text">
-                Creation date : {{ event.creationDate }}
-              </div>
+            <div class="tabs">
+        <filter-tab :activeTab.sync="activeTab">
+          <template v-slot:tab-header>
+            <div class="tabs-filters-button">
+              Meta data todo 
+              <feather type="chevron-up" class="chevron-up"></feather
+              ><feather type="chevron-down" class="chevron-down"></feather>
             </div>
+          </template>
+          <template v-slot:tab-content>
+            <meta-data-todo :event="event"></meta-data-todo>
+          </template>
+        </filter-tab>
+    </div>
 
-            <div class="md-size-100 icon-list-item flex">
-              <feather type="calendar"></feather>
-              <div class="list-item-text">Deadline : {{ event.deadline }}</div>
-            </div>
-          </div>
-
-          <div class="in-block">
-            <div class="md-size-100 icon-list-item flex">
-              <feather type="alert-octagon"></feather>
-              <div class="list-item-text">
-                Importance : {{ event.importance }}
-              </div>
-            </div>
-
-            <div class="md-size-100 icon-list-item flex">
-              <feather type="folder"></feather>
-              <div class="list-item-text">
-                {{ event.isdone ? "finished" : "In progress" }}
-              </div>
-              <div class="bullet" :class="bulletClass"></div>
-            </div>
-          </div>
-
-          <div class="in-block">
-            <div class="md-size-100 icon-list-item flex">
-              <feather type="eye"></feather>
-              <div
-                class="list-item-text"
-                :class="event.numberdaysleft <= 0 ? 'red-text' : 'green-text'"
-              >
-                Number Days Left : {{ event.numberdaysleft }}
-              </div>
-            </div>
-
-            <div class="md-size-100 icon-list-item flex">
-              <feather type="list"></feather
-              >{{
-                event.description && event.description.length > 0
-                  ? "Subtasks"
-                  : "No subtask"
-              }}
-            </div>
-          </div>
           <div
-            class="md-layout-item md-size-100 icon-list-item"
-            v-if="event.description && event.description.length > 0"
+            class="md-layout-item table-border"
+            v-if="event.subtasks && event.subtasks.length > 0"
           >
-            <sub-task-readonly
-              :subtasksreceived="event.description"
-              :todo="event"
-            ></sub-task-readonly>
+            <div class="light-horizontal-separator"></div>
+             <simple-table-lvl1 :item="event"></simple-table-lvl1>
+             
           </div>
         </div>
       </vue-custom-scrollbar>
@@ -93,24 +56,31 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import { Calendar, Weekday } from "dayspan";
 import DayBlock from "./DayBlock.vue";
 import moment from "moment";
-import SubTaskViewer from "@/pages/Forms/SubTaskViewer.vue";
-import ReadOnlySubTask from "../../pages/Forms/ReadOnlySubTask.vue";
-import { myFunctions } from "../../helpers/helperfunction";
-import { bus } from "../../main";
+import SubTaskViewer from "@/components/forms/SubTaskViewer.vue";
+import ReadOnlySubTaskTable from "@/components/tables/ReadOnlySubTaskTable.vue";
+import { myFunctions } from "@/common/helpers/helperfunction";
+import { bus } from "@/main";
 import vueCustomScrollbar from "vue-custom-scrollbar";
 import "vue-custom-scrollbar/dist/vueScrollbar.css";
+import SimpleTableLvl1 from "../tables/SimpleTableLvl1.vue";
+import FilterTab from "@/common/componentslib/FilterTab.vue";
+import MetaDataTodo from "./MetaDataTodo.vue";
 
 @Component({
   components: {
     "sub-tasks-viewer": SubTaskViewer,
-    "sub-task-readonly": ReadOnlySubTask,
+    "sub-task-readonly": ReadOnlySubTaskTable,
     "vue-custom-scrollbar": vueCustomScrollbar,
+     "simple-table-lvl1": SimpleTableLvl1,
+      "filter-tab": FilterTab,
+      "meta-data-todo" : MetaDataTodo
   },
 })
 export default class PCalendarEvent extends Vue {
   @Prop() days!: Array<any>;
   @Prop() calendar!: Calendar<any, any>;
   @Prop() event!: any;
+  activeTab: string = "";
 
   settings = {
     suppressScrollY: false,
@@ -129,39 +99,6 @@ export default class PCalendarEvent extends Vue {
     this.$emit("closeDialog");
   }
 
-  get bulletClass() {
-    const index = this.giveColorTodo();
-    const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
-    return classes[index];
-  }
-
-  displayModalLeft() {
-    const day = new Date(this.event.deadline).getDay();
-    return day === 4 || day === 5;
-  }
-
-  giveColorTodo(): number {
-    let item = this.event;
-    if (item && item.importance) {
-      // red Task : importance >= 75
-      if (item.importance >= 75) {
-        return 1;
-      }
-      // orange/jaune tasks : 50 >= importance > 75
-      if (50 <= item.importance && item.importance < 75) {
-        return 2;
-      }
-      // blue task : 25 >= importance > 50
-      if (25 <= item.importance && item.importance < 50) {
-        return 3;
-      }
-      // green  task : 0 >= importance > 25
-      if (0 <= item.importance && item.importance < 25) {
-        return 0;
-      }
-    }
-    return;
-  }
 }
 </script>
 
@@ -210,7 +147,7 @@ h1 {
   display: flex;
   margin-bottom: 15px;
   font-family: initial;
-  font-size: 19px;
+  font-size: 16px;
 }
 
 .icon-list-item {
@@ -223,7 +160,7 @@ h1 {
 
   .list-item-text {
     text-align: left;
-    &.description {
+    &.subtasks {
       width: 100%;
     }
   }

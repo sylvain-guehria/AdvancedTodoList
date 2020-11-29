@@ -258,8 +258,9 @@
     background-color: $main-cta;
   }
   &.bullet6 {
-    border-color: $bullet4;
-    background-color: $bullet4;
+    border-color:$black;
+    background-color:$white;
+    border : solid $text-dark 1px
   }
 }
 
@@ -294,7 +295,7 @@
 
         .list-item-text {
           text-align: left;
-          &.description {
+          &.subtasks {
             width: 100%;
           }
         }
