@@ -91,6 +91,10 @@ import InputText from "@/common/componentslib/InputText.vue";
 import SubtaskViewer from "@/components/forms/SubTaskViewer.vue";
 import lodash from "lodash";
 
+//SUBTASK
+import { ActionTypes as subtasksActionsType } from '@/store/modules/subtasks/actions';
+import { MutationTypes as subtasksMutationType } from '@/store/modules/subtasks/mutations';
+
 @Component({
   components: {
     "input-text": InputText,
@@ -145,8 +149,11 @@ export default class AddSubTaskModal extends Vue {
 
     subtask.motherKey = this.motherKey;
 
-    let action: string = subtask.key ? "editSubtask" : "createSubtask";
+    let action: string = subtask.key ? subtasksActionsType.EDITSUBTASK : subtasksActionsType.CREATESUBTASK;
     let msg: string = subtask.key ? "Subtask updated" : "Subtask created";
+
+     // eslint-disable-next-line no-console
+      console.log(subtask);
 
     this.$store
       .dispatch(action, subtask)

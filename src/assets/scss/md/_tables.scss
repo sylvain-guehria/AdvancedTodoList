@@ -24,7 +24,7 @@ table {
 }
 
 .md-table-cell {
-  padding-left: 50px;
+  padding-left: 30px;
   text-align: left;
 }
 
@@ -34,10 +34,12 @@ table {
   table {
     border: $table-default-border;
     border-radius: 0 10px 10px 10px;
+ 
     table{
-      border : none
+      border : none;
+      border-left: dotted 1px #a0a2a4;
     }
-  }
+}
   .md-table-content,
   &.md-content {
     background-color: transparent;
@@ -70,9 +72,9 @@ table {
       td {
         border: none;
         &.more-column {
-          //border-left: $table-default-border;
+          border-left: $table-default-border;
           padding: 0;
-          width: 70px;
+          width: 50px;
 
           .md-button {
             min-width: 70px;
@@ -85,8 +87,7 @@ table {
       }
       &:hover:not(.md-header-row) .md-table-cell,
       &.active:not(.md-header-row) .md-table-cell {
-        background-color: $lines;
-        cursor: pointer;
+        background-color: white;
       }
     }
   }

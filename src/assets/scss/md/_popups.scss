@@ -81,6 +81,12 @@
     padding : 20px;
     padding-top: 1px;
 
+    table{
+      border : none;
+      //border-top: solid 1px #a0a2a4;
+    }
+
+
     .md-dialog-title {
       @extend .h1;
       text-align: center;

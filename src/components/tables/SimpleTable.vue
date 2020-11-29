@@ -29,6 +29,7 @@
           <div class="row">
             <div class="chevron-order">
               <feather
+              class="hover-click"
                 type="chevron-left"
                 @click="orderDown(item)"
                 v-longclick="() => orderDown(item)"
@@ -41,6 +42,7 @@
             </div>
             <div class="chevron-order">
               <feather
+               class="hover-click"
                 v-longclick="() => orderUp(item)"
                 type="chevron-right"
                 @click="orderUp(item)"
@@ -53,14 +55,16 @@
           md-sort-by="task"
           md-label="Task Title"
           v-if="getSettings('task')"
-          ><div class="flex p-padding">
+          ><div class="flex p-padding hover-click"  @click.self="DisplayModalTask(item)" >
             <feather
               size="15px"
+               class="hover-click"
               v-if="!includeKey(item.key)"
               type="plus"
               @click="togleSubtasks(item.key)"
             ></feather>
             <feather
+             class="hover-click"
               size="15px"
               type="minus"
               @click="unTogleSubtasks(item.key)"
@@ -73,7 +77,7 @@
           </div>
 
           <!-- start subtable -->
-          <div v-if="includeKey(item.key)">
+          <div v-if="includeKey(item.key)" class="subtable">
             <simple-table-lvl1 :item="item"></simple-table-lvl1>
           </div>
           <!-- end subtable -->
@@ -82,12 +86,12 @@
           md-sort-by="deadline"
           md-label="Deadline"
           v-if="getSettings('deadline')"
-          width="100px"
+          width="130px"
         >
           <p @click="DisplayModalTask(item)">
             {{ item.deadline }}
-          </p></md-table-cell
-        >
+          </p>
+          </md-table-cell>
 
         <md-table-cell
           md-label="Finish Time"
@@ -417,6 +421,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.hover-click{
+  cursor: pointer;
+}
 .p-padding {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -457,13 +464,7 @@ p {
   width: 30px;
   margin: auto;
 }
-/* .more-column{
-  flex-direction: row;
-  justify-content: center;
-  position: absolute;
-  right: 10px;
-  width : 20px;
-} */
-
-
+.subtable{
+  margin-left:5px;
+}
 </style>
