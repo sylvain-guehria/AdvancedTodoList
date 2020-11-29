@@ -34,6 +34,9 @@ table {
   table {
     border: $table-default-border;
     border-radius: 0 10px 10px 10px;
+    table{
+      border : none
+    }
   }
   .md-table-content,
   &.md-content {

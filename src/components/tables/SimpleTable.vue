@@ -34,7 +34,7 @@
                 v-longclick="() => orderDown(item)"
               ></feather>
             </div>
-            <div class="block margin-left">
+            <div class="block">
               <p>
                 {{ item.order }}
               </p>
@@ -55,18 +55,20 @@
           v-if="getSettings('task')"
           ><div class="flex p-padding">
             <feather
+              size="15px"
               v-if="!includeKey(item.key)"
-              type="chevron-right"
+              type="plus"
               @click="togleSubtasks(item.key)"
             ></feather>
             <feather
-              type="chevron-down"
+              size="15px"
+              type="minus"
               @click="unTogleSubtasks(item.key)"
               v-if="includeKey(item.key)"
             ></feather>
-            <div class="bullet" :class="bulletClass(item)"></div>
-            <div @click="DisplayModalTask(item)">
+            <div @click="DisplayModalTask(item)" class="flex">
               <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
+              <div class="bullet" :class="bulletClass(item)"></div>
             </div>
           </div>
 
@@ -295,7 +297,7 @@ export default {
       this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
     },
     getNumberSubTaskActive(item): number {
-      return item.subtasks && item.subtasks.length >0 
+      return item.subtasks && item.subtasks.length > 0
         ? item.subtasks.filter((subtask) => !subtask.isdone).length
         : 0;
     },
@@ -433,6 +435,8 @@ export default {
 p {
   font-size: 19px !important;
   font-family: initial;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .chevron-order {
   width: 20px;
@@ -445,16 +449,13 @@ p {
   position: absolute;
   margin: auto;
   top: 0;
-  left: 0;
+  left: 25px;
   bottom: 0;
 }
 .block {
   justify-content: center;
   width: 30px;
   margin: auto;
-}
-.margin-left {
-  margin-left: 20px;
 }
 /* .more-column{
   flex-direction: row;
@@ -464,7 +465,5 @@ p {
   width : 20px;
 } */
 
-md-table-head {
-  font-size: 15px;
-}
+
 </style>

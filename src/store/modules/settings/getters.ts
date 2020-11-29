@@ -15,4 +15,7 @@ export const gettersSettings : GetterTree<Settings, RootState> = {
   getColumnHidden: (stateSetting: Settings) => {
     if (stateSetting) return stateSetting.hidden_column;
   },
+  getNumberColumnHidden: (stateSetting: Settings) => {
+    //if (stateSetting) return stateSetting.hidden_column;
+  },
 };
