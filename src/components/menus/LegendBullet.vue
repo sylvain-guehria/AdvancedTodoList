@@ -34,6 +34,10 @@
               <feather type="arrow-down"></feather>
               <p>click column title to sort</p>
             </div>
+            <div class="legend-sorting">
+            <feather type="plus-circle">
+              </feather><p>click to add subtask</p>
+          </div>
           </div>
         </div>
       </md-menu-content>

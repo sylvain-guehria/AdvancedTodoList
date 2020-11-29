@@ -136,8 +136,8 @@ export default {
         user.data = {};
         store.commit(todosMutationType.SETTODOLIST, []);
         store.commit(settingMutationType.SET_SETTINGS, {});
+        store.commit(userType.SET_USER, {})
       }
-      store.commit(userType.SET_USER, user)
     });
   }
 };

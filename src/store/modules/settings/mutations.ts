@@ -13,7 +13,10 @@ export enum MutationTypes {
 
 export const mutationsSettings: MutationTree<Settings> = {
     [MutationTypes.SET_SETTINGS](state, setting: Settings) {
-        state = setting;
+        state.hidden_column = setting.hidden_column
+        state.drawersOpened = setting.drawersOpened;
+        state.langage = setting.langage;
+        state.with_weekend = setting.with_weekend;
       },
     [MutationTypes.SET_LOADING](state, status: boolean) {
         state.loading = status;

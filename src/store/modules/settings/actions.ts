@@ -3,6 +3,9 @@ import { MutationTypes } from "./mutations";
 import { Settings } from "@/common/models/types";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
+import store from '@/store/index'; 
+import { MutationTypes as todosMutationType } from '@/store/modules/todos/mutations';
+
 
 
 export enum ActionTypes {
@@ -22,7 +25,7 @@ export const actionsSettings : ActionTree<Settings, RootState> = {
 
         Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
     
-        const { uid } = payload.uid;
+        const { uid } = store.getters.getUser.data;
     
 
         context.commit(MutationTypes.SET_LOADING, true);
@@ -37,9 +40,9 @@ export const actionsSettings : ActionTree<Settings, RootState> = {
       },
 
     //   FETCH SETTINGS
-      async [ActionTypes.FETCH_SETTINGS](context, payload: string): Promise<void> {
+      async [ActionTypes.FETCH_SETTINGS](context): Promise<void> {
         
-        const uid: string = payload;
+        const { uid } = store.getters.getUser.data;
         let settings: Settings;
 
         context.commit(MutationTypes.SET_LOADING, true);
@@ -47,7 +50,9 @@ export const actionsSettings : ActionTree<Settings, RootState> = {
           await database.ref(`settings/${uid}`).once('value', (snapshot) => {
             settings = snapshot.val();
           }).then(() => {
-            if (settings)  context.commit(MutationTypes.SET_SETTINGS, settings);
+            if (settings)  {
+              context.commit(MutationTypes.SET_SETTINGS, settings);
+            }
             context.commit(MutationTypes.SET_LOADING, false);
           });
         } catch (error) {

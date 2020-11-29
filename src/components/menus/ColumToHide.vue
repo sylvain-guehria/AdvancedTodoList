@@ -76,7 +76,7 @@
               </div>
             </div>
             <div class="legend-2">
-              <p>Nb days left</p>
+              <p>Finish Time</p>
               <div class="feathers">
                 <feather
                   type="check"
@@ -128,6 +128,9 @@
 </template>
 
 <script>
+import { ActionTypes as settingsActionsType } from '@/store/modules/settings/actions';
+import { MutationTypes as settingsMutationType } from '@/store/modules/settings/mutations';
+
 export default {
   components: {},
   data() {
@@ -150,7 +153,7 @@ export default {
       this.toggleCard = !this.toggleCard;
     },
     setSettings(setting) {
-      this.$store.commit("hideColumn", setting);
+      this.$store.commit(settingsMutationType.HIDECOLUMN, setting);
       let columns = this.$store.getters.getSettings.hidden_column;
 
       let payload = {
@@ -158,7 +161,7 @@ export default {
         value: columns,
       };
 
-      this.$store.dispatch("saveSetting", payload);
+      this.$store.dispatch(settingsActionsType.SAVE_SETTINGS, payload);
     },
   },
 };
