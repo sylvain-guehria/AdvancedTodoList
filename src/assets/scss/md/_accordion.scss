@@ -1,5 +1,5 @@
 .accordion {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 
   .accordion-btn {
     @extend .animation-transition-fast;
@@ -51,6 +51,8 @@
   .accordion-btn {
     @extend .h2;
     background-color: #f3f7fb;
+  font-size: 14px;
+
   }
 
   .panel {
