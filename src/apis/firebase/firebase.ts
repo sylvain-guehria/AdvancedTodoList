@@ -126,6 +126,8 @@ export default {
         user.data = userfb;
         const uid: string = userfb.uid;
 
+        store.commit(userType.SET_USER, user)
+
         store.dispatch(todosActionsType.FETCH_TODOS, uid)
         store.dispatch(settingActionType.FETCH_SETTINGS)
 

@@ -8,6 +8,7 @@ export enum MutationTypes {
 
 export const mutationsUser: MutationTree<User> = {
     [MutationTypes.SET_USER](state, user: User) {
-        state = user;
+        state.loggedIn = user.loggedIn
+        state.data = user.data;
       },
 }

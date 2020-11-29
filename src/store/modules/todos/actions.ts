@@ -96,10 +96,12 @@ export const actionsTodos : ActionTree<Todos, RootState> = {
 
       //SET TODO DONE
       async [ActionTypes.SETTODODONE](context, payload: Todo): Promise<void>{
+
         Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
     
         payload.isdone = !payload.isdone;
         const { uid } = store.getters.getUser.data;
+
         await database.ref(`todos/${uid}/${payload.key}`).set({
           ...payload,
           isdone: payload.isdone
