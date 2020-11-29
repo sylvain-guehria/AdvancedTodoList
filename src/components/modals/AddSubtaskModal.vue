@@ -67,7 +67,7 @@
         <div class="md-layout-item md-small-size-100 md-size-100">
           <label> <feather type="pen-tool"></feather>Details subtask </label>
           <input-text
-            type="textarea"
+            type="text"
             :maxlength="200"
             initialvalue="Your label"
             :vmodel="formData.detail"
@@ -230,6 +230,11 @@ export default class AddSubTaskModal extends Vue {
   position: absolute;
   top: 0px;
   right: 0px;
+}
+.drawer-wrapper{
+  height: 1400px;
+  width: 400px;
+padding-bottom: 15px
 }
 
 </style>
