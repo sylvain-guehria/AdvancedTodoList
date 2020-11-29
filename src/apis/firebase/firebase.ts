@@ -6,12 +6,16 @@ import Vue from 'vue';
 import store from '@/store/index';
 
 //vuex
+//settings
 import { MutationTypes as settingMutationType } from "@/store/modules/settings/mutations";
 import { ActionTypes as settingActionType } from "@/store/modules/settings/actions";
 
+//user
 import { MutationTypes as userType } from "@/store/modules/user/mutations";
 
-import { StoreModule } from "@/store/store-module";
+//todos
+import { ActionTypes as todosActionsType } from '@/store/modules/todos/actions';
+import { MutationTypes as todosMutationType } from '@/store/modules/todos/mutations';
 
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -122,15 +126,13 @@ export default {
         user.data = userfb;
         const uid: string = userfb.uid;
 
-        store.dispatch('fetchTodos', uid)
-
-        //store.dispatch('fetchSettings', uid);
-        store.dispatch(settingActionType.FETCH_SETTINGS, { namespace: StoreModule.Settings })
+        store.dispatch(todosActionsType.FETCH_TODOS, uid)
+        store.dispatch(settingActionType.FETCH_SETTINGS)
 
       } else {
         user.loggedIn = false;
         user.data = {};
-        store.commit('setTodoList', []);
+        store.commit(todosMutationType.SETTODOLIST, []);
         store.commit(settingMutationType.SET_SETTINGS, {});
       }
       store.commit(userType.SET_USER, user)

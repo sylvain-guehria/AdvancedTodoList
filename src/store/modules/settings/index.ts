@@ -9,7 +9,6 @@ import { Settings } from "@/common/models/types"
 const namespaced: boolean = true;
 
 export const settings: Module<Settings, RootState> = {
-  namespaced,
   state : stateSettings,
   actions : actionsSettings,
   mutations : mutationsSettings,

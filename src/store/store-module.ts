@@ -1,4 +1,6 @@
 export enum StoreModule {
   Settings = "settings",
-  User = "user"
+  User = "user",
+  Todos = "todos",
+  Subtask = "subtask"
 }

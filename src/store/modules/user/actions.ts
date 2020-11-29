@@ -6,15 +6,15 @@ import { ActionTree } from "vuex";
 
 
 export enum ActionTypes {
-  FETCH_USER = "fetchSettings",
-  SAVE_USER = "saveSettings",
+  FETCH_USER = "fetchUser",
+  SAVE_USER = "saveUser",
 }
 
 
 // for API, often async
 export const actionsUser: ActionTree<User, RootState> = {
 
-  //SAVE SETTINGS
+  //FETCH USER
   async [ActionTypes.FETCH_USER](
     context,
     payload
