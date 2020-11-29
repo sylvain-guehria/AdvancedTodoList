@@ -17,33 +17,28 @@
         </h1>
         <div class="horizontal-separator"></div>
       </div>
+      <div class="accordion-margin">
+        <accordion
+          :isActive="isForm1Active"
+          @isActive="isForm1Active = $event"
+          title="Metadata Todo"
+          class="transparent"
+        >
+          <div class="md-layout-item md-size-100 data-block">
+            <meta-data-todo :event="event"></meta-data-todo>
+          </div>
+        </accordion>
+      </div>
     </div>
     <div class="body">
       <vue-custom-scrollbar class="scroll-area" :settings="settings">
-        <div class="md-layout-item md-size-100 duo-data-block no-padding flex">
-
-            <div class="tabs">
-        <filter-tab :activeTab.sync="activeTab">
-          <template v-slot:tab-header>
-            <div class="tabs-filters-button">
-              Meta data todo 
-              <feather type="chevron-up" class="chevron-up"></feather
-              ><feather type="chevron-down" class="chevron-down"></feather>
-            </div>
-          </template>
-          <template v-slot:tab-content>
-            <meta-data-todo :event="event"></meta-data-todo>
-          </template>
-        </filter-tab>
-    </div>
-
+        <div class="md-layout-item md-size-100 duo-data-block no-padding">
           <div
             class="md-layout-item table-border"
             v-if="event.subtasks && event.subtasks.length > 0"
           >
             <div class="light-horizontal-separator"></div>
-             <simple-table-lvl1 :item="event"></simple-table-lvl1>
-             
+            <simple-table-lvl1 :item="event"></simple-table-lvl1>
           </div>
         </div>
       </vue-custom-scrollbar>
@@ -65,22 +60,23 @@ import "vue-custom-scrollbar/dist/vueScrollbar.css";
 import SimpleTableLvl1 from "../tables/SimpleTableLvl1.vue";
 import FilterTab from "@/common/componentslib/FilterTab.vue";
 import MetaDataTodo from "./MetaDataTodo.vue";
+import Accordion from "@/common/componentslib/Accordion.vue";
 
 @Component({
   components: {
     "sub-tasks-viewer": SubTaskViewer,
     "sub-task-readonly": ReadOnlySubTaskTable,
     "vue-custom-scrollbar": vueCustomScrollbar,
-     "simple-table-lvl1": SimpleTableLvl1,
-      "filter-tab": FilterTab,
-      "meta-data-todo" : MetaDataTodo
+    "simple-table-lvl1": SimpleTableLvl1,
+    "meta-data-todo": MetaDataTodo,
+    accordion: Accordion,
   },
 })
 export default class PCalendarEvent extends Vue {
   @Prop() days!: Array<any>;
   @Prop() calendar!: Calendar<any, any>;
   @Prop() event!: any;
-  activeTab: string = "";
+  isForm1Active: boolean = false;
 
   settings = {
     suppressScrollY: false,
@@ -98,7 +94,6 @@ export default class PCalendarEvent extends Vue {
   closeModal(): void {
     this.$emit("closeDialog");
   }
-
 }
 </script>
 
@@ -178,12 +173,16 @@ h1 {
   max-width: 1200px;
   max-height: 700px;
 }
-.in-block{
- width: 33%;
- margin: 0 auto; 
- text-align: left !important
+.in-block {
+  width: 33%;
+  margin: 0 auto;
+  text-align: left !important;
 }
-.content{
+.content {
   min-width: 1200px;
+}
+.accordion-margin{
+  margin-left:30px;
+
 }
 </style>
