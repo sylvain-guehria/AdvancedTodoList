@@ -21,7 +21,7 @@
             <p>{{ subtask.label }}</p>
           </div></md-table-cell
         >
-        <md-table-cell width="250px"
+        <md-table-cell width="350px"
           ><p class="detail">{{ subtask.detail }}</p></md-table-cell
         >
         <md-table-head width="50px">{{ subtask.deadline }}</md-table-head>
