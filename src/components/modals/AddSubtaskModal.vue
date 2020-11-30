@@ -20,7 +20,7 @@
           <label> <feather type="pen-tool"></feather>Subtask Label </label>
           <input-text
             type="text"
-            :maxlength="200"
+            :maxlength="30"
             initialvalue="Your label"
             :vmodel="formData.label"
             @vmodel="formData.label = $event"

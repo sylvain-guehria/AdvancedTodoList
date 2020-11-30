@@ -31,7 +31,6 @@
       </div>
     </div>
     <div class="body">
-      <vue-custom-scrollbar class="scroll-area" :settings="settings">
         <div class="md-layout-item md-size-100 duo-data-block no-padding">
           <div
             class="md-layout-item table-border"
@@ -41,7 +40,6 @@
             <simple-table-lvl1 :item="event"></simple-table-lvl1>
           </div>
         </div>
-      </vue-custom-scrollbar>
     </div>
   </div>
 </template>
@@ -66,7 +64,6 @@ import Accordion from "@/common/componentslib/Accordion.vue";
   components: {
     "sub-tasks-viewer": SubTaskViewer,
     "sub-task-readonly": ReadOnlySubTaskTable,
-    "vue-custom-scrollbar": vueCustomScrollbar,
     "simple-table-lvl1": SimpleTableLvl1,
     "meta-data-todo": MetaDataTodo,
     accordion: Accordion,
@@ -77,12 +74,6 @@ export default class PCalendarEvent extends Vue {
   @Prop() calendar!: Calendar<any, any>;
   @Prop() event!: any;
   isForm1Active: boolean = false;
-
-  settings = {
-    suppressScrollY: false,
-    suppressScrollX: false,
-    wheelPropagation: false,
-  };
 
   showDrawerEditTask(payload): void {
     if (payload) {
