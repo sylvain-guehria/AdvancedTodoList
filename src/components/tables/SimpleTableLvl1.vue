@@ -22,7 +22,7 @@
           </div></md-table-cell
         >
         <md-table-cell width="250px"
-          ><p>{{ subtask.detail }}</p></md-table-cell
+          ><p class="detail">{{ subtask.detail }}</p></md-table-cell
         >
         <md-table-head width="50px">{{ subtask.deadline }}</md-table-head>
         <md-table-head width="50px">{{ subtask.importance }}</md-table-head>
@@ -165,12 +165,21 @@ export default class SimpleTableLvl1 extends Vue {
 }
    .label {
       position: absolute;
-      left: 15px;
+      left: 0px;
+      top: 7px;
+    }
+    .detail{
+       position: absolute;
+      left: 0px;
       top: 7px;
     }
 table {
   table {
- 
+   .label {
+      position: absolute;
+      left: 15px;
+      top: 7px;
+    }
     .dot {
       width: 6px;
       height: 6px;
