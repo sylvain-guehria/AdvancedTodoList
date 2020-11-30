@@ -32,12 +32,15 @@
             {{ subtask.detail || "..." }}
           </p></md-table-cell
         >
-        <md-table-head width="50px"
-          >{{ subtask.deadline ? subtask.deadline : "" }}
-          <feather 
-          v-if="!subtask.deadline" 
-          type="calendar"
-          @click="showdatepickerDialog = true"
+        <md-table-head width="50px" class="hover-click">
+          <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
+            {{ dateOfItem(subtask.key) ? dateOfItem(subtask.key) : "" }}
+          </p>
+          <feather
+          size="20px"
+            v-if="!subtask.deadline"
+            type="calendar"
+            @click="showDatepickerDialog(subtask.key)"
           ></feather>
         </md-table-head>
         <md-table-head width="50px">
@@ -105,14 +108,13 @@
       ></add-subtask-modal>
     </md-dialog>
 
-     <md-dialog
-      :md-active.sync="showdatepickerDialog"
-      >
-      <md-dialog-title>
-        Choose a date
-        </md-dialog-title>
+    <md-dialog :md-active.sync="showdatepickerDialog">
+      <md-button class="md-icon-button simple" @click="closeDialog()">
+        <md-icon>close</md-icon>
+      </md-button>
+      <md-dialog-title> Choose a date </md-dialog-title>
       <md-dialog-content>
-     <div class="md-layout-item md-small-size-100 md-size-100">
+        <div class="md-layout-item md-small-size-100 md-size-100">
           <label> <feather type="calendar"></feather>Deadline </label>
           <md-field>
             <datepicker
@@ -120,12 +122,12 @@
               v-model="selectedDate"
             ></datepicker>
           </md-field>
-        </div><br>
+        </div>
+        <br />
       </md-dialog-content>
-          <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
-     </md-dialog>
-
-
+      <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
+      <md-button class="md-tertiary" @click="editDateSubtask"> Save </md-button>
+    </md-dialog>
   </div>
 </template>
 <script lang='ts'>
@@ -147,13 +149,14 @@ export default class SimpleTableLvl1 extends Vue {
   showDialogAddSubtask: boolean = false;
   numberInput: number = 0;
   noDeadLine: boolean = false;
+  currentKey: string = "";
 
   subtaskToEdit: SubTask = {
     label: "",
     isdone: false,
   };
 
-  selectedDate: Date = new Date();
+  selectedDate: Date = null;
   showdatepickerDialog: boolean = false;
 
   //EDIT SUBTASK
@@ -169,6 +172,61 @@ export default class SimpleTableLvl1 extends Vue {
         value,
       });
     }
+  }
+
+  dateOfItem(key) {
+      let motherKey = this.item.key;
+
+      var index = this.$store.getters.getTodoList.findIndex(function (o) {
+
+         return o.key === motherKey;
+      });
+
+      if (index !== -1 && this.$store.getters.getTodoList[index].subtasks) {
+        var index_child = this.$store.getters.getTodoList[
+          index
+        ].subtasks.findIndex(function (o) {
+          return o.key === key;
+        });
+
+        if (
+          index_child !== -1 &&
+          this.$store.getters.getTodoList[index].subtasks[index_child]
+        ) {
+          return this.$store.getters.getTodoList[index].subtasks[index_child]
+            .deadline;
+        }
+    }
+  }
+
+  editDateSubtask() {
+    if (!this.noDeadLine && this.selectedDate) {
+      let value = this.selectedDate.toISOString().substr(0, 10);
+      let motherKey = this.item.key;
+      let key = this.currentKey;
+      let attribute = "deadline";
+      this.$store.dispatch(subtasksActionsType.EDITATTRIBUTESUBTASK, {
+        motherKey,
+        key,
+        attribute,
+        value,
+      });
+    }
+    this.showdatepickerDialog = false;
+  }
+
+  showDatepickerDialog(key: string, deadline: string) {
+      this.currentKey = key;
+    if (deadline) {
+      this.selectedDate = new Date(deadline);
+    }
+    this.showdatepickerDialog = true;
+  }
+
+  closeDialog() {
+    this.currentKey = "";
+    this.selectedDate = null;
+    this.showdatepickerDialog = false;
   }
 
   onChangeNumber(
