@@ -8,7 +8,7 @@
         <md-table-head width="50px">Deadline</md-table-head>
         <md-table-head width="50px">Importance</md-table-head>
         <md-table-head width="50px">Done</md-table-head>
-        <md-table-head width="50px"></md-table-head>
+        <md-table-head width="50px">Delete/Edit</md-table-head>
       </md-table-row>
 
       <md-table-row v-for="(subtask, index) in item.subtasks" :key="index">
@@ -98,12 +98,14 @@ export default class SimpleTableLvl1 extends Vue {
 
   addSubtaskModal(todoKey: string) {
     this.motherKey = todoKey;
+
     this.showDialogAddSubtask = true;
   }
 
   editSubtask(subtask: SubTask, todoKey: string) {
     this.motherKey = todoKey;
     this.subtaskToEdit = subtask;
+
     this.showDialogAddSubtask = true;
   }
 

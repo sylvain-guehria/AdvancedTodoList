@@ -14,7 +14,7 @@
             @vmodel="username = $event"
           ></input-text>
         </div>
-        <div class="md-layout-item md-small-size-100 md-size-50">
+        <div class="md-layout-item md-small-size-100 md-size-100">
           <label class="mandatory">
             <feather type="mail"></feather>Email
           </label>
@@ -26,7 +26,7 @@
             :errorMessage="errorEmail"
           ></input-text>
         </div>
-        <div class="md-layout-item md-small-size-100 md-size-50">
+        <div class="md-layout-item md-small-size-100 md-size-100">
           <label> <feather type="phone"></feather>Phone </label>
           <input-text
             type="text"
