@@ -152,9 +152,6 @@ export default class AddSubTaskModal extends Vue {
     let action: string = subtask.key ? subtasksActionsType.EDITSUBTASK : subtasksActionsType.CREATESUBTASK;
     let msg: string = subtask.key ? "Subtask updated" : "Subtask created";
 
-     // eslint-disable-next-line no-console
-      console.log(subtask);
-
     this.$store
       .dispatch(action, subtask)
       .then(() => {

@@ -31,7 +31,7 @@ export const actionsSubtasks : ActionTree<SubTasks, RootState> = {
     if (!newSubtaskKey) { return }
 
     await database.ref(`todos/${uid}/${motherkey}/subtasks/${newSubtaskKey}`).set({
-      ...subtask
+      subtask
     });
     subtask.key = newSubtaskKey;
     subtask.motherKey = motherkey;
