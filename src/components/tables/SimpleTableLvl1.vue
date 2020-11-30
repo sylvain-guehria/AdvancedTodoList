@@ -4,7 +4,7 @@
       <md-table-row v-if="item.subtasks && item.subtasks.length">
         <md-table-head width="40px"></md-table-head>
         <md-table-head width="150px">Label</md-table-head>
-        <md-table-head width="250px">Details</md-table-head>
+        <md-table-head width="350px">Details</md-table-head>
         <md-table-head width="50px">Deadline</md-table-head>
         <md-table-head width="50px">Importance</md-table-head>
         <md-table-head width="50px">Order</md-table-head>
@@ -18,15 +18,44 @@
           <div class="reliure"></div>
           <div class="dot"></div>
           <div class="label">
-            <p>{{ subtask.label }}</p>
+            <p contenteditable @input="onChange($event, subtask.key, 'label')">
+              {{ subtask.label || "..." }}
+            </p>
           </div></md-table-cell
         >
         <md-table-cell width="350px"
-          ><p class="detail">{{ subtask.detail }}</p></md-table-cell
+          ><p
+            class="detail"
+            contenteditable
+            @input="onChange($event, subtask.key, 'detail')"
+          >
+            {{ subtask.detail || "..." }}
+          </p></md-table-cell
         >
-        <md-table-head width="50px">{{ subtask.deadline }}</md-table-head>
-        <md-table-head width="50px">{{ subtask.importance }}</md-table-head>
-        <md-table-head width="50px">{{ subtask.order }}</md-table-head>
+        <md-table-head width="50px"
+          >{{ subtask.deadline ? subtask.deadline : "" }}
+          <feather 
+          v-if="!subtask.deadline" 
+          type="calendar"
+          @click="showdatepickerDialog = true"
+          ></feather>
+        </md-table-head>
+        <md-table-head width="50px">
+          <p
+            contenteditable
+            @input="onChangeNumber($event, subtask.key, 'importance')"
+          >
+            {{ subtask.importance || "..." }}
+          </p>
+        </md-table-head>
+        <md-table-head width="50px">
+          <p
+            contenteditable
+            @input="onChangeNumber($event, subtask.key, 'order')"
+          >
+            {{ subtask.order || "..." }}
+          </p></md-table-head
+        >
 
         <md-table-head width="50px"
           ><feather
@@ -75,12 +104,38 @@
         :subtask="getSubtaskToEdit()"
       ></add-subtask-modal>
     </md-dialog>
+
+     <md-dialog
+      :md-active.sync="showdatepickerDialog"
+      >
+      <md-dialog-title>
+        Choose a date
+        </md-dialog-title>
+      <md-dialog-content>
+     <div class="md-layout-item md-small-size-100 md-size-100">
+          <label> <feather type="calendar"></feather>Deadline </label>
+          <md-field>
+            <datepicker
+              placeholder="YYYY/MM/DD"
+              v-model="selectedDate"
+            ></datepicker>
+          </md-field>
+        </div><br>
+      </md-dialog-content>
+          <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
+     </md-dialog>
+
+
   </div>
 </template>
 <script lang='ts'>
-import { SubTask, Todo } from "@/common/models/types";
+import { SubTask, Todo, HTMLElementEvent } from "@/common/models/types";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
+
+// Subtasks
+import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
+import { MutationTypes as subtasksMutationType } from "@/store/modules/subtasks/mutations";
 
 @Component({
   components: {
@@ -90,16 +145,64 @@ import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 export default class SimpleTableLvl1 extends Vue {
   @Prop() item: Todo;
   showDialogAddSubtask: boolean = false;
+  numberInput: number = 0;
+  noDeadLine: boolean = false;
 
   subtaskToEdit: SubTask = {
     label: "",
     isdone: false,
   };
 
+  selectedDate: Date = new Date();
+  showdatepickerDialog: boolean = false;
+
+  //EDIT SUBTASK
+  onChange(e: HTMLElementEvent<HTMLTextAreaElement>, key: string, attribute) {
+    e.preventDefault();
+    if (e && e.target) {
+      let motherKey = this.item.key;
+      let value = e.target.innerText;
+      this.$store.dispatch(subtasksActionsType.EDITATTRIBUTESUBTASK, {
+        motherKey,
+        key,
+        attribute,
+        value,
+      });
+    }
+  }
+
+  onChangeNumber(
+    e: HTMLElementEvent<HTMLTextAreaElement>,
+    key: string,
+    attribute
+  ) {
+    e.preventDefault();
+    if (e && e.target && e.target.innerText) {
+      let number = parseInt(e.target.innerText, 10);
+      let motherKey = this.item.key;
+
+      //eslint-disable-next-line no-console
+      console.log("number", number);
+      if (number) {
+        let value = e.target.innerText;
+        this.$store.dispatch(subtasksActionsType.EDITATTRIBUTESUBTASK, {
+          motherKey,
+          key,
+          attribute,
+          value,
+        });
+      }
+    }
+  }
+
   motherKey: string = "";
 
   setSubTaskState(subtaskKey, motherKey, isDone) {
-    this.$store.dispatch("setSubTaskState", { subtaskKey, motherKey, isDone });
+    this.$store.dispatch(subtasksActionsType.SETSUBTASKSTATE, {
+      subtaskKey,
+      motherKey,
+      isDone,
+    });
   }
 
   getSubtaskToEdit() {
@@ -118,12 +221,14 @@ export default class SimpleTableLvl1 extends Vue {
     return this.motherKey;
   }
 
+  // OPEN MODAL ADD
   addSubtaskModal(todoKey: string) {
     this.motherKey = todoKey;
 
     this.showDialogAddSubtask = true;
   }
 
+  //OPEN MODAL EDIT
   editSubtask(subtask: SubTask, todoKey: string) {
     this.motherKey = todoKey;
     this.subtaskToEdit = subtask;
@@ -163,19 +268,19 @@ export default class SimpleTableLvl1 extends Vue {
 .hover-click {
   cursor: pointer;
 }
-   .label {
-      position: absolute;
-      left: 0px;
-      top: 7px;
-    }
-    .detail{
-       position: absolute;
-      left: 0px;
-      top: 7px;
-    }
+.label {
+  position: absolute;
+  left: 0px;
+  top: 7px;
+}
+.detail {
+  position: absolute;
+  left: 0px;
+  top: 7px;
+}
 table {
   table {
-   .label {
+    .label {
       position: absolute;
       left: 15px;
       top: 7px;

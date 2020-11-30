@@ -20,7 +20,8 @@ import {
   MdTabs,
   MdRipple,
   MdRadio,
-  MdEmptyState
+  MdEmptyState,
+  MdDialogPrompt
 } from "vue-material/dist/components";
 
 Vue.use(MdField);
@@ -44,6 +45,8 @@ Vue.use(MdTabs);
 Vue.use(MdRipple);
 Vue.use(MdRadio);
 Vue.use(MdEmptyState);
+Vue.use(MdDialogPrompt);
+
 
 export class MaterialModule {
   constructor() {}
