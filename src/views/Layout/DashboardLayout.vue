@@ -84,7 +84,7 @@ export default {
   },
   data() {
     return {
-      isNavMini: false,
+      isNavMini: true,
       countertasknotdone: 0,
     };
   },
