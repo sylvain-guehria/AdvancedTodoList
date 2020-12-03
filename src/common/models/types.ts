@@ -1,5 +1,5 @@
 export interface Todo {
-  key?: string ;
+  key?: string;
   task: string;
   deadline?: string;
   importance?: number;
@@ -28,43 +28,54 @@ export interface User {
 }
 
 export interface Settings {
-  langage : string,
-  with_weekend : boolean,
-  drawersOpened : drawer[],
+  langage: string,
+  with_weekend: boolean,
+  drawersOpened: drawer[],
   loading: boolean,
-  hidden_column : {
-    order : boolean,
-    task : boolean,
-    deadline : boolean,
-    creationDate : boolean,
-    numberdaysleft : boolean,
-    importance : boolean,
-    isdone : boolean,
+  hidden_column: {
+    order: boolean,
+    task: boolean,
+    deadline: boolean,
+    creationDate: boolean,
+    numberdaysleft: boolean,
+    importance: boolean,
+    isdone: boolean,
+  },
+  hidden_column_subtasks: {
+    order: boolean,
+    label: boolean,
+    deadline: boolean,
+    creationDate: boolean,
+    numberdaysleft: boolean,
+    importance: boolean,
+    isdone: boolean,
+    actions: boolean,
+    details: boolean
   }
 }
 
 export interface drawer {
   index?: number,
-  open : boolean,
+  open: boolean,
   key: string
-} 
+}
 
 export interface SubTask {
-  key?: string ;
+  key?: string;
   label: string;
   isdone: boolean;
   order?: number;
   detail?: string
-  deadline? : string,
-  creationDate? : string,
-  numberdaysleft? : boolean,
-  importance? : number,
-  tags? : string[],
+  deadline?: string,
+  creationDate?: string,
+  numberdaysleft?: boolean,
+  importance?: number,
+  tags?: string[],
   motherKey?: string
 }
 
 export interface SubTasks {
-  
+
 }
 
 export type HTMLElementEvent<T extends HTMLElement> = Event & {

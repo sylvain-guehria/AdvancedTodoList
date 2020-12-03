@@ -3,18 +3,18 @@
     <md-table class="table-custom no-border">
       <md-table-row v-if="item.subtasks && item.subtasks.length">
         <md-table-head width="40px"></md-table-head>
-        <md-table-head width="150px">Label</md-table-head>
-        <md-table-head width="350px">Details</md-table-head>
-        <md-table-head width="50px">Deadline</md-table-head>
-        <md-table-head width="50px">Importance</md-table-head>
-        <md-table-head width="50px">Order</md-table-head>
-        <md-table-head width="50px">Done</md-table-head>
-        <md-table-head width="50px">Delete/Edit</md-table-head>
+        <md-table-head width="350px" v-if="getSettings('label')">Label</md-table-head>
+        <md-table-head width="250px" v-if="getSettings('details')">Details</md-table-head>
+        <md-table-head width="50px" v-if="getSettings('deadline')">Deadline</md-table-head>
+        <md-table-head width="50px" v-if="getSettings('importance')">Importance</md-table-head>
+        <md-table-head width="50px" v-if="getSettings('order')">Order</md-table-head>
+        <md-table-head width="50px" v-if="getSettings('isdone')">Done</md-table-head>
+        <md-table-head width="50px" v-if="getSettings('actions')">Delete/Edit</md-table-head>
       </md-table-row>
 
       <md-table-row v-for="(subtask, index) in item.subtasks" :key="index">
         <md-table-cell width="40px"></md-table-cell>
-        <md-table-cell width="150px">
+        <md-table-cell width="350px" v-if="getSettings('label')">
           <div class="reliure"></div>
           <div class="dot"></div>
           <div class="label">
@@ -23,7 +23,7 @@
             </p>
           </div></md-table-cell
         >
-        <md-table-cell width="350px"
+        <md-table-cell width="250px" v-if="getSettings('details')"
           ><p
             class="detail"
             contenteditable
@@ -32,7 +32,7 @@
             {{ subtask.detail || "..." }}
           </p></md-table-cell
         >
-        <md-table-head width="50px" class="hover-click">
+        <md-table-head width="50px" v-if="getSettings('deadline')" class="hover-click">
           <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
             {{ dateOfItem(subtask.key) ? dateOfItem(subtask.key) : "" }}
           </p>
@@ -43,7 +43,7 @@
             @click="showDatepickerDialog(subtask.key)"
           ></feather>
         </md-table-head>
-        <md-table-head width="50px">
+        <md-table-head width="50px" v-if="getSettings('importance')">
           <p
             contenteditable
             @input="onChangeNumber($event, subtask.key, 'importance')"
@@ -51,7 +51,7 @@
             {{ subtask.importance || "..." }}
           </p>
         </md-table-head>
-        <md-table-head width="50px">
+        <md-table-head width="50px" v-if="getSettings('order')">
           <p
             contenteditable
             @input="onChangeNumber($event, subtask.key, 'order')"
@@ -60,7 +60,7 @@
           </p></md-table-head
         >
 
-        <md-table-head width="50px"
+        <md-table-head width="50px" v-if="getSettings('isdone')"
           ><feather
             type="check"
             class="hover-click"
@@ -75,7 +75,7 @@
           ></feather>
         </md-table-head>
 
-        <md-table-head width="50px">
+        <md-table-head width="50px" v-if="getSettings('actions')">
           <feather
             type="edit"
             class="md-icon hover-click"
@@ -158,6 +158,15 @@ export default class SimpleTableLvl1 extends Vue {
 
   selectedDate: Date = null;
   showdatepickerDialog: boolean = false;
+
+  getSettings(columnLabel) {
+      let colums = this.$store.getters.getSettings;
+      let colum;
+      if (colums) {
+        colum = colums.hidden_column_subtasks[columnLabel];
+      }
+      return colum;
+    }
 
   //EDIT SUBTASK
   onChange(e: HTMLElementEvent<HTMLTextAreaElement>, key: string, attribute) {
