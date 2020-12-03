@@ -73,6 +73,9 @@
       <div class="column">
          <colum-to-hide></colum-to-hide>
       </div>
+      <div class="column-subtask">
+         <colum-subtasks-to-hide></colum-subtasks-to-hide>
+      </div>
       <!-- drawers -->
 
       <edit-task-drawer
@@ -105,6 +108,7 @@ import ReadOnlyTaskDrawer from "@/components/forms/ReadOnlyTaskDrawer.vue";
 import LegendBulletVue from '@/components/menus/LegendBullet.vue';
 import { bus } from '@/main';
 import ColumToHideVue from '@/components/menus/ColumToHide.vue';
+import ColumnSubtasksToHideVue from '@/components/menus/ColumnSubtasksToHide.vue';
 
 export default {
   name: "TotoList",
@@ -114,7 +118,8 @@ export default {
     "edit-task-drawer": EditTaskDrawer,
     "read-only-task-viewer": ReadOnlyTaskDrawer,
     "legend-bullet": LegendBulletVue,
-    "colum-to-hide": ColumToHideVue
+    "colum-to-hide": ColumToHideVue,
+    "colum-subtasks-to-hide": ColumnSubtasksToHideVue
   },
   data() {
     return {
@@ -193,5 +198,11 @@ export default {
 }
 .action-button{
   text-align: right;
+}
+.column-subtask {
+  display: inline-block;
+  position: absolute;
+  bottom: 200px;
+  left: 450px;
 }
 </style>

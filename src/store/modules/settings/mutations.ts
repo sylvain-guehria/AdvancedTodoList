@@ -8,7 +8,8 @@ export enum MutationTypes {
     SET_WITH_WEEKEND = "setWithWeekEnd",
     SET_DRAWERS_SETTINGS = "setDrawersSettings",
     HIDECOLUMN = "hideColumn",
-    SET_SETTINGS = "setSettings"
+    SET_SETTINGS = "setSettings",
+    HIDECOLUMNSUBTASKS = "hideColumnSubtasks",
 }
 
 export const mutationsSettings: MutationTree<Settings> = {
@@ -30,7 +31,10 @@ export const mutationsSettings: MutationTree<Settings> = {
     [MutationTypes.SET_DRAWERS_SETTINGS](state, drawers: drawer[]) {
         state.drawersOpened = drawers;
     },
-    [MutationTypes.HIDECOLUMN](state, ths_hidden_column: string) {
-        state.hidden_column[ths_hidden_column] = !state.hidden_column[ths_hidden_column];
+    [MutationTypes.HIDECOLUMN](state, the_hidden_column: string) {
+        state.hidden_column[the_hidden_column] = !state.hidden_column[the_hidden_column];
+    },
+    [MutationTypes.HIDECOLUMNSUBTASKS](state, the_hidden_column: string) {
+        state.hidden_column_subtasks[the_hidden_column] = !state.hidden_column_subtasks[the_hidden_column];
     },
 }
