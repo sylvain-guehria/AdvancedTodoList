@@ -161,7 +161,7 @@
   </md-drawer>
 </template>
 <script lang="ts">
-import { Todo } from "@/common/models/types";
+import { Todo } from "@/common/models/types/types";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import InputText from "@/common/componentslib/InputText.vue";
 

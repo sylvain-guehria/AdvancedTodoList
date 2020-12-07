@@ -29,20 +29,20 @@
           <div class="row">
             <div class="chevron-order">
               <feather
-              class="hover-click"
+                class="hover-click"
                 type="chevron-left"
                 @click="orderDown(item)"
                 v-longclick="() => orderDown(item)"
               ></feather>
             </div>
-            <div class="block">
+            <div class="block-order">
               <p>
                 {{ item.order }}
               </p>
             </div>
             <div class="chevron-order">
               <feather
-               class="hover-click"
+                class="hover-click"
                 v-longclick="() => orderUp(item)"
                 type="chevron-right"
                 @click="orderUp(item)"
@@ -55,25 +55,38 @@
           md-sort-by="task"
           md-label="Task Title"
           v-if="getSettings('task')"
-          ><div class="flex p-padding hover-click"  @click.self="DisplayModalTask(item)" >
+          ><div
+            class="flex p-padding"
+            
+          >
+          <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
             <feather
               size="15px"
-               class="hover-click"
+              class="hover-click"
               v-if="!includeKey(item.key)"
               type="plus"
               @click="togleSubtasks(item.key)"
             ></feather>
             <feather
-             class="hover-click"
+              class="hover-click"
               size="15px"
               type="minus"
               @click="unTogleSubtasks(item.key)"
               v-if="includeKey(item.key)"
             ></feather>
-            <div @click="DisplayModalTask(item)" class="flex">
-              <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
-              <div class="bullet" :class="bulletClass(item)"></div>
+            <div class="block">
+              <input-contenteditable
+                v-model="item.task"
+                _is="p"
+                :maxlength="25"
+                placeholder="Type a title"
+                @input="onChangeInput"
+                @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
+              />
+              &nbsp;
             </div>
+            <p> ({{ getNumberSubTaskActive(item) }}) </p>
+              <div class="bullet" :class="bulletClass(item)"></div>
           </div>
 
           <!-- start subtable -->
@@ -88,17 +101,17 @@
           v-if="getSettings('deadline')"
           width="130px"
         >
-          <p @click="DisplayModalTask(item)">
+          <p >
             {{ item.deadline }}
           </p>
-          </md-table-cell>
+        </md-table-cell>
 
         <md-table-cell
           md-label="Finish Time"
           width="100px"
           v-if="getSettings('numberdaysleft')"
         >
-          <p @click="DisplayModalTask(item)">{{ item.numberdaysleft }}</p>
+          <p >{{ item.numberdaysleft }}</p>
         </md-table-cell>
 
         <md-table-cell
@@ -107,7 +120,7 @@
           md-label="Creation date"
           v-if="getSettings('creationDate')"
         >
-          <p @click="DisplayModalTask(item)">
+          <p >
             {{ item.creationDate }}
           </p></md-table-cell
         >
@@ -118,7 +131,7 @@
           width="50px"
           v-if="getSettings('importance')"
         >
-          <p @click="DisplayModalTask(item)">{{ item.importance }}</p>
+          <p >{{ item.importance }}</p>
         </md-table-cell>
         <md-table-cell
           md-label="done?"
@@ -129,6 +142,7 @@
           <feather type="check" v-if="item.isdone"></feather>
           <feather type="x" v-if="!item.isdone"></feather>
         </md-table-cell>
+
         <md-table-cell md-fixed-header class="more-column" width="50px">
           <md-menu
             md-size="medium"
@@ -188,10 +202,19 @@
 <script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
-import { Todo, HTMLElementEvent, drawer } from "@/common/models/types";
+import { Todo, HTMLElementEvent, drawer } from "@/common/models/types/types";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
 import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
+import { bus } from "@/main";
+import { BusEvent } from "@/common/models/enums/enum";
+import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
+
+//task
+import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
+import { MutationTypes as tasksMutationType } from "@/store/modules/todos/mutations";
+import { todoEnum } from "@/common/modules/todos/enumTodo";
+
 
 export default {
   name: "simple-table",
@@ -199,14 +222,31 @@ export default {
     "table-pagination": TablePaginationVue,
     "display-task-modal": DisplayTaskModal,
     "simple-table-lvl1": SimpleTableLvl1,
+    "input-contenteditable": InputContenteditable,
   },
-  props: ["todolist"],
+  props: ["todolist", "mainList"],
   computed: {
     isCompletelist: function () {
       return this.completelist;
     },
   },
   methods: {
+    setCurrentTodoEdited_key_attribue(key, attribute){
+      this.currentTodoKeyEdited = key;
+      this.currentAttributeEdited = attribute;
+    },
+    onChangeInput(text){
+
+      let todoKey =  this.currentTodoKeyEdited;
+      let attribute = this.currentAttributeEdited;
+      let value = text;
+
+       this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
+        todoKey,
+        attribute,
+        value,
+      });
+    },
     includeKey(key) {
       let keyInList: number = this.drawersOpenedArray.findIndex(
         (drawer) => drawer.key === key
@@ -308,7 +348,7 @@ export default {
     deleteTodo(key: string, order: number): void {
       let vm = this;
       this.$store
-        .dispatch("deleteTodo", key)
+        .dispatch(tasksActionsType.DELETETODO, key)
         .then(() => {
           this.$toasted.show("Task deleted, it is no longer in your list", {
             icon: "delete_outline",
@@ -331,6 +371,11 @@ export default {
           vm.downOrderNoCOndition(todo.key);
         }
       });
+
+      var index = this.paginatedTodos.findIndex(function (o) {
+        return o.key === key;
+      });
+      if (index !== -1) this.paginatedTodos.splice(index, 1);
     },
     downOrderNoCOndition(key: string) {
       this.$store.dispatch("setOrderDownTodo", key);
@@ -393,18 +438,62 @@ export default {
       }
       return;
     },
+    addEmptyTask() {
+      let higher_order: number;
+      let todo_with_max_order: Todo;
+
+      todo_with_max_order = lodash.maxBy(this.todolist, "order");
+
+      if (todo_with_max_order) {
+        higher_order = todo_with_max_order.order + 1;
+      } else {
+        higher_order = 1;
+      }
+
+      let emptyTodo: Todo = {
+        task: `your Task N°${higher_order}`,
+        isdone: false,
+        creationDate: new Date().toISOString().substr(0, 10),
+        order: higher_order,
+      };
+
+      this.$store
+        .dispatch(tasksActionsType.CREATETODO, emptyTodo)
+        .then(() => {
+          this.$toasted.show("Task added, it is now in your list", {
+            icon: "create",
+            theme: "bubble",
+            position: "bottom-right",
+            duration: 5000,
+          });
+        })
+        .catch((error: Error) => {
+          this.$toasted.show("Cannot create task", {
+            icon: "error_outline",
+            theme: "bubble",
+            position: "bottom-right",
+            duration: 5000,
+          });
+        });
+      this.paginatedTodos.push(emptyTodo);
+    },
   },
   created() {
     this.todos = this.todolist;
     this.paginatedTodos = [...this.todos];
-
-    //this.drawersOpenedArray = [...this.$store.getters.getSettings.drawersOpened];
 
     if (this.paginatedTodos) {
       this.paginatedTodos.forEach((todo: Todo) => {
         todo.numberdaysleft = this.getdaysleft(todo.deadline);
       });
     }
+
+    if (this.mainList) {
+      bus.$on(BusEvent.ADDEMPTYTASK, this.addEmptyTask);
+    }
+  },
+  beforeDestroy() {
+    bus.$off(BusEvent.ADDEMPTYTASK, this.addEmptyTask);
   },
   data() {
     return {
@@ -415,13 +504,17 @@ export default {
       item: {},
       showDialog: false,
       drawersOpenedArray: [],
+      placeholder: 'type your title',
+      currentTodoKeyEdited : '',
+      currentAttributeEdited : '',
+      todoTaskEnum : todoEnum.TASK
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.hover-click{
+.hover-click {
   cursor: pointer;
 }
 .p-padding {
@@ -429,7 +522,10 @@ export default {
   padding-bottom: 10px;
 }
 .flex {
-  display: flex !important ;
+  display: flex  ;
+}
+.block {
+  display: block !important ;
 }
 .flex-align {
   display: flex;
@@ -459,12 +555,12 @@ p {
   left: 25px;
   bottom: 0;
 }
-.block {
+.block-order {
   justify-content: center;
   width: 30px;
   margin: auto;
 }
-.subtable{
-  margin-left:5px;
+.subtable {
+  margin-left: 5px;
 }
 </style>

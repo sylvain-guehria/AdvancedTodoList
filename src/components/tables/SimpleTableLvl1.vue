@@ -6,32 +6,27 @@
         <md-table-head width="350px" v-if="getSettings('label')">Label</md-table-head>
         <md-table-head width="250px" v-if="getSettings('details')">Details</md-table-head>
         <md-table-head width="50px" v-if="getSettings('deadline')">Deadline</md-table-head>
-        <md-table-head width="50px" v-if="getSettings('importance')">Importance</md-table-head>
+        <md-table-head width="50px" v-if="getSettings('importance')">Imp</md-table-head>
         <md-table-head width="50px" v-if="getSettings('order')">Order</md-table-head>
         <md-table-head width="50px" v-if="getSettings('isdone')">Done</md-table-head>
         <md-table-head width="50px" v-if="getSettings('actions')">Delete/Edit</md-table-head>
       </md-table-row>
-
       <md-table-row v-for="(subtask, index) in item.subtasks" :key="index">
         <md-table-cell width="40px"></md-table-cell>
         <md-table-cell width="350px" v-if="getSettings('label')">
-          <div class="reliure"></div>
-          <div class="dot"></div>
-          <div class="label">
-            <p contenteditable @input="onChange($event, subtask.key, 'label')">
+          <div>
+            <p contenteditable @input="onChange($event, subtask.key, 'label')" :class="subtask.isdone? 'done' : ''">
               {{ subtask.label || "..." }}
             </p>
           </div></md-table-cell
         >
-        <md-table-cell width="250px" v-if="getSettings('details')"
-          ><p
-            class="detail"
-            contenteditable
-            @input="onChange($event, subtask.key, 'detail')"
-          >
-            {{ subtask.detail || "..." }}
-          </p></md-table-cell
-        >
+    
+          <md-table-cell width="250px" v-if="getSettings('details')">
+           <simple-table-lvl2 :subtask="subtask"  :motherKey="item.key" :key="getNumberDetailInSubtask(item.key, subtask.key)"/>
+          </md-table-cell>
+        
+
+
         <md-table-head width="50px" v-if="getSettings('deadline')" class="hover-click">
           <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
             {{ dateOfItem(subtask.key) ? dateOfItem(subtask.key) : "" }}
@@ -61,18 +56,12 @@
         >
 
         <md-table-head width="50px" v-if="getSettings('isdone')"
-          ><feather
-            type="check"
-            class="hover-click"
-            v-if="subtask.isdone"
-            @click="setSubTaskState(subtask.key, item.key, false)"
-          ></feather>
-          <feather
-            type="x"
-            class="hover-click"
-            v-if="!subtask.isdone"
-            @click="setSubTaskState(subtask.key, item.key, true)"
-          ></feather>
+          ><input
+          type="checkbox"
+          v-model="subtask.isdone"
+          @click="setSubTaskState(subtask.key, item.key, !subtask.isdone)"
+        />
+          
         </md-table-head>
 
         <md-table-head width="50px" v-if="getSettings('actions')">
@@ -131,17 +120,19 @@
   </div>
 </template>
 <script lang='ts'>
-import { SubTask, Todo, HTMLElementEvent } from "@/common/models/types";
+import { SubTask, Todo, HTMLElementEvent } from "@/common/models/types/types";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 
 // Subtasks
 import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
 import { MutationTypes as subtasksMutationType } from "@/store/modules/subtasks/mutations";
+import SimpleTableLvl2 from "./SimpleTableLvl2.vue";
 
 @Component({
   components: {
     "add-subtask-modal": AddSubtaskModal,
+    "simple-table-lvl2": SimpleTableLvl2,
   },
 })
 export default class SimpleTableLvl1 extends Vue {
@@ -167,6 +158,28 @@ export default class SimpleTableLvl1 extends Vue {
       }
       return colum;
     }
+
+   getNumberDetailInSubtask(motherKey, key){
+         var index =  this.$store.getters.getTodoList.findIndex(function (o) {
+            return o.key === motherKey;
+          });
+      
+          if (index !== -1 &&  this.$store.getters.getTodoList[index].subtasks) {
+            var index_child =  this.$store.getters.getTodoList[index].subtasks.findIndex(function (o) {
+              return o.key === key;
+            });
+      
+            if (index_child !== -1 
+            &&  this.$store.getters.getTodoList[index].subtasks[index_child]
+            && this.$store.getters.getTodoList[index].subtasks[index_child].details
+            ) {
+               return this.$store.getters.getTodoList[index].subtasks[index_child].length ;
+            }
+          }else{
+            return 0;
+          }
+
+   } 
 
   //EDIT SUBTASK
   onChange(e: HTMLElementEvent<HTMLTextAreaElement>, key: string, attribute) {
@@ -248,8 +261,6 @@ export default class SimpleTableLvl1 extends Vue {
       let number = parseInt(e.target.innerText, 10);
       let motherKey = this.item.key;
 
-      //eslint-disable-next-line no-console
-      console.log("number", number);
       if (number) {
         let value = e.target.innerText;
         this.$store.dispatch(subtasksActionsType.EDITATTRIBUTESUBTASK, {
@@ -332,45 +343,11 @@ export default class SimpleTableLvl1 extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.done{
+  text-decoration: line-through;
+}
 .hover-click {
   cursor: pointer;
 }
-.label {
-  position: absolute;
-  left: 0px;
-  top: 7px;
-}
-.detail {
-  position: absolute;
-  left: 0px;
-  top: 7px;
-}
-table {
-  table {
-    .label {
-      position: absolute;
-      left: 15px;
-      top: 7px;
-    }
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 100%;
-      border: solid grey 1px;
-      background-color: grey;
-      position: absolute;
-      left: 0px;
-      top: 15px;
-    }
-    .reliure {
-      border-left: dotted #a0a2a4 1px;
-      position: absolute;
-      left: 2px;
-      top: 24px;
 
-      width: 1px;
-      height: 47px;
-    }
-  }
-}
 </style>

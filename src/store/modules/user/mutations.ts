@@ -1,5 +1,5 @@
 import { MutationTree } from "vuex";
-import { User } from "@/common/models/types";
+import { User } from "@/common/models/types/types";
 
 
 export enum MutationTypes {

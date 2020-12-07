@@ -1,4 +1,4 @@
-import { User } from "@/common/models/types";
+import { User } from "@/common/models/types/types";
 
 export const initialState: User =  {
   loggedIn: false,

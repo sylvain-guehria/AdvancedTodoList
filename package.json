@@ -28,6 +28,7 @@
     "vue-feather": "^1.0.0",
     "vue-fusioncharts": "^3.0.4",
     "vue-github-buttons": "3.1.0",
+    "vue-input-contenteditable": "^1.0.1",
     "vue-js-modal": "^2.0.0-rc.6",
     "vue-long-click": "0.0.4",
     "vue-material": "^1.0.0-beta-11",

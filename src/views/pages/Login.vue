@@ -126,7 +126,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import "@/assets/css/loginstyle.css";
 import firebase from "@/apis/firebase/firebase";
-import { User } from "@/common/models/types";
+import { User } from "@/common/models/types/types";
 import Modal from "@/common/componentslib/Modal.vue";
 import ForgotPassForm from "@/components/forms/ForgotPassForm.vue";
 
