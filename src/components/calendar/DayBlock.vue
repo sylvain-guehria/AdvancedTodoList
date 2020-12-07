@@ -55,7 +55,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import { CalendarDay, Calendar, CalendarEvent, Functions as fn } from "dayspan";
 import PCalendarEvent from "./PCalendarEvent.vue";
 import Modal from "@/common/componentslib/Modal.vue";
-import { Todo } from "@/common/models/types";
+import { Todo } from "@/common/models/types/types";
 import { myFunctions } from "@/common/helpers/helperfunction";
 
 @Component({

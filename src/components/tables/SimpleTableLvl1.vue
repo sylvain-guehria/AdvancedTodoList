@@ -120,7 +120,7 @@
   </div>
 </template>
 <script lang='ts'>
-import { SubTask, Todo, HTMLElementEvent } from "@/common/models/types";
+import { SubTask, Todo, HTMLElementEvent } from "@/common/models/types/types";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 

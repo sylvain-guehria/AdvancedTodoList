@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { SubTask, HTMLElementEvent, Todo } from "@/common/models/types";
+import { SubTask, HTMLElementEvent, Todo } from "@/common/models/types/types";
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import InputText from "@/common/componentslib/InputText.vue";
 

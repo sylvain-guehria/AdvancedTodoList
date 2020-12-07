@@ -4,7 +4,7 @@ import { gettersSubtasks } from "./getters";
 import { mutationsSubtasks } from "./mutations";
 import { stateSubtasks } from "./state";
 import { RootState } from "../../state";
-import { SubTasks } from "@/common/models/types"
+import { SubTasks } from "@/common/models/types/types"
 
 const namespaced: boolean = true;
 

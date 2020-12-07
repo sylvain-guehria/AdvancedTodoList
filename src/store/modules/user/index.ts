@@ -4,7 +4,7 @@ import { gettersUser } from "./getters";
 import { mutationsUser } from "./mutations";
 import { stateUser } from "./state";
 import { RootState } from "../../state";
-import { User } from "@/common/models/types"
+import { User } from "@/common/models/types/types"
 
 
 export const user: Module<User, RootState> = {
