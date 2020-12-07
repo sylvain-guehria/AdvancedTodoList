@@ -196,6 +196,8 @@ import { Todo, HTMLElementEvent, drawer } from "@/common/models/types";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
 import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
+import { bus } from "@/main";
+import { BusEvent } from "@/common/models/enum";
 
 //task
 import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
@@ -208,7 +210,7 @@ export default {
     "display-task-modal": DisplayTaskModal,
     "simple-table-lvl1": SimpleTableLvl1,
   },
-  props: ["todolist"],
+  props: ["todolist", "mainList"],
   computed: {
     isCompletelist: function () {
       return this.completelist;
@@ -406,6 +408,45 @@ export default {
       }
       return;
     },
+    addEmptyTask() {
+      let higher_order: number;
+      let todo_with_max_order: Todo;
+
+      todo_with_max_order = lodash.maxBy(this.todolist, "order");
+
+      if (todo_with_max_order) {
+        higher_order = todo_with_max_order.order + 1;
+      } else {
+        higher_order = 1;
+      }
+
+      let emptyTodo: Todo = {
+        task: `your Task N°${higher_order}`,
+        isdone: false,
+        creationDate: new Date().toISOString().substr(0, 10),
+        order : higher_order
+      };
+
+      this.$store
+        .dispatch(tasksActionsType.CREATETODO, emptyTodo)
+        .then(() => {
+          this.$toasted.show("Task added, it is now in your list", {
+            icon: "create",
+            theme: "bubble",
+            position: "bottom-right",
+            duration: 5000,
+          });
+        })
+        .catch((error: Error) => {
+          this.$toasted.show("Cannot create task", {
+            icon: "error_outline",
+            theme: "bubble",
+            position: "bottom-right",
+            duration: 5000,
+          });
+        });
+      this.paginatedTodos.push(emptyTodo);
+    },
   },
   created() {
     this.todos = this.todolist;
@@ -416,6 +457,13 @@ export default {
         todo.numberdaysleft = this.getdaysleft(todo.deadline);
       });
     }
+
+    if (this.mainList) {
+      bus.$on(BusEvent.ADDEMPTYTASK, this.addEmptyTask);
+    }
+  },
+  beforeDestroy() {
+    bus.$off(BusEvent.ADDEMPTYTASK, this.addEmptyTask);
   },
   data() {
     return {
