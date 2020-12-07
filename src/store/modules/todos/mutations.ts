@@ -1,6 +1,6 @@
 import { MutationTree } from "vuex";
-import { Todos, Todo } from "@/common/models/types";
-
+import { Todos, Todo } from "@/common/models/types/types";
+import store from '@/store/index'; 
 
 export enum MutationTypes {
     SET_ISLOADING = "setIsLoading",
@@ -16,6 +16,7 @@ export enum MutationTypes {
     UPORDERTODO= "upOrderTodo",
     DOWNORDERTODO= "downOrderTodo",
     SETORDER= "setOrder",
+    EDITATTRIBUTETASK="EDITATTRIBUTETASK"
 }
 
 export const mutationsTodos: MutationTree<Todos> = {
@@ -31,6 +32,14 @@ export const mutationsTodos: MutationTree<Todos> = {
     [MutationTypes.SETFILTEREDTODOLIST](state, newList: Todo[]) {
         state.filtered_todo_list = newList;
     },
+    [MutationTypes.EDITATTRIBUTETASK](state,{ todoKey, attribute, value}: { todoKey: string, attribute: string, value }) {
+        var index = store.getters.getTodoList.findIndex(function (o) {
+            return o.key === todoKey;
+          });
+            if (index !== -1) {
+              store.getters.getTodoList[index][attribute] = value;
+            }
+        },
     [MutationTypes.SETCURRENTTODO](state, key: string) {
         const todofinded = state.todolist.find(obj => {
             return obj.key === key;

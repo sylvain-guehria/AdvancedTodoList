@@ -35,7 +35,7 @@
                 v-longclick="() => orderDown(item)"
               ></feather>
             </div>
-            <div class="block">
+            <div class="block-order">
               <p>
                 {{ item.order }}
               </p>
@@ -56,9 +56,10 @@
           md-label="Task Title"
           v-if="getSettings('task')"
           ><div
-            class="flex p-padding hover-click"
-            @click.self="DisplayModalTask(item)"
+            class="flex p-padding"
+            
           >
+          <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
             <feather
               size="15px"
               class="hover-click"
@@ -73,10 +74,19 @@
               @click="unTogleSubtasks(item.key)"
               v-if="includeKey(item.key)"
             ></feather>
-            <div @click="DisplayModalTask(item)" class="flex">
-              <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
-              <div class="bullet" :class="bulletClass(item)"></div>
+            <div class="block">
+              <input-contenteditable
+                v-model="item.task"
+                _is="p"
+                :maxlength="25"
+                placeholder="Type a title"
+                @input="onChangeInput"
+                @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
+              />
+              &nbsp;
             </div>
+            <p> ({{ getNumberSubTaskActive(item) }}) </p>
+              <div class="bullet" :class="bulletClass(item)"></div>
           </div>
 
           <!-- start subtable -->
@@ -91,7 +101,7 @@
           v-if="getSettings('deadline')"
           width="130px"
         >
-          <p @click="DisplayModalTask(item)">
+          <p >
             {{ item.deadline }}
           </p>
         </md-table-cell>
@@ -101,7 +111,7 @@
           width="100px"
           v-if="getSettings('numberdaysleft')"
         >
-          <p @click="DisplayModalTask(item)">{{ item.numberdaysleft }}</p>
+          <p >{{ item.numberdaysleft }}</p>
         </md-table-cell>
 
         <md-table-cell
@@ -110,7 +120,7 @@
           md-label="Creation date"
           v-if="getSettings('creationDate')"
         >
-          <p @click="DisplayModalTask(item)">
+          <p >
             {{ item.creationDate }}
           </p></md-table-cell
         >
@@ -121,7 +131,7 @@
           width="50px"
           v-if="getSettings('importance')"
         >
-          <p @click="DisplayModalTask(item)">{{ item.importance }}</p>
+          <p >{{ item.importance }}</p>
         </md-table-cell>
         <md-table-cell
           md-label="done?"
@@ -192,16 +202,19 @@
 <script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
-import { Todo, HTMLElementEvent, drawer } from "@/common/models/types";
+import { Todo, HTMLElementEvent, drawer } from "@/common/models/types/types";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
 import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
 import { bus } from "@/main";
-import { BusEvent } from "@/common/models/enum";
+import { BusEvent } from "@/common/models/enums/enum";
+import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
 
 //task
 import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
 import { MutationTypes as tasksMutationType } from "@/store/modules/todos/mutations";
+import { todoEnum } from "@/common/modules/todos/enumTodo";
+
 
 export default {
   name: "simple-table",
@@ -209,6 +222,7 @@ export default {
     "table-pagination": TablePaginationVue,
     "display-task-modal": DisplayTaskModal,
     "simple-table-lvl1": SimpleTableLvl1,
+    "input-contenteditable": InputContenteditable,
   },
   props: ["todolist", "mainList"],
   computed: {
@@ -217,6 +231,22 @@ export default {
     },
   },
   methods: {
+    setCurrentTodoEdited_key_attribue(key, attribute){
+      this.currentTodoKeyEdited = key;
+      this.currentAttributeEdited = attribute;
+    },
+    onChangeInput(text){
+
+      let todoKey =  this.currentTodoKeyEdited;
+      let attribute = this.currentAttributeEdited;
+      let value = text;
+
+       this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
+        todoKey,
+        attribute,
+        value,
+      });
+    },
     includeKey(key) {
       let keyInList: number = this.drawersOpenedArray.findIndex(
         (drawer) => drawer.key === key
@@ -424,7 +454,7 @@ export default {
         task: `your Task N°${higher_order}`,
         isdone: false,
         creationDate: new Date().toISOString().substr(0, 10),
-        order : higher_order
+        order: higher_order,
       };
 
       this.$store
@@ -474,6 +504,10 @@ export default {
       item: {},
       showDialog: false,
       drawersOpenedArray: [],
+      placeholder: 'type your title',
+      currentTodoKeyEdited : '',
+      currentAttributeEdited : '',
+      todoTaskEnum : todoEnum.TASK
     };
   },
 };
@@ -488,7 +522,10 @@ export default {
   padding-bottom: 10px;
 }
 .flex {
-  display: flex !important ;
+  display: flex  ;
+}
+.block {
+  display: block !important ;
 }
 .flex-align {
   display: flex;
@@ -518,7 +555,7 @@ p {
   left: 25px;
   bottom: 0;
 }
-.block {
+.block-order {
   justify-content: center;
   width: 30px;
   margin: auto;

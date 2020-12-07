@@ -1,6 +1,6 @@
 import { database } from '@/apis/firebase/firebase';
 import { MutationTypes } from "./mutations";
-import { Todos, Todo, SubTask } from "@/common/models/types";
+import { Todos, Todo, SubTask } from "@/common/models/types/types";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index'; 
@@ -13,9 +13,8 @@ export enum ActionTypes {
     DELETETODO = "deleteTodo",
     SETORDERUPTODO = "setOrderUpTodo",
     SETORDERDOWNTODO = "setOrderDownTodo",
-    SETORDER = "setOrder"
-
-
+    SETORDER = "setOrder",
+    EDITATTRIBUTETASK="editAttributeTask"
   }
   
 
@@ -50,6 +49,17 @@ export const actionsTodos : ActionTree<Todos, RootState> = {
       context.commit(MutationTypes.EDITTODOBYKEY, payload);
       context.commit(MutationTypes.INCRENDALLLISTNUMBER);
     },
+    // EDIT ONE ATTRIBUT TASK 
+  async [ActionTypes.EDITATTRIBUTETASK](context, { todoKey, attribute, value }: { todoKey: string, attribute: string, value }): Promise<void> {
+
+    const { uid } = store.getters.getUser.data;
+
+    await database.ref(`todos/${uid}/${todoKey}`).update({
+      [attribute]: value
+    });
+
+    context.commit(MutationTypes.EDITATTRIBUTETASK, {todoKey, attribute, value});
+  },
     //   FETCH TODOS
       async [ActionTypes.FETCH_TODOS](context, payload: string): Promise<void> {
 
