@@ -29,7 +29,7 @@
           <div class="row">
             <div class="chevron-order">
               <feather
-              class="hover-click"
+                class="hover-click"
                 type="chevron-left"
                 @click="orderDown(item)"
                 v-longclick="() => orderDown(item)"
@@ -42,7 +42,7 @@
             </div>
             <div class="chevron-order">
               <feather
-               class="hover-click"
+                class="hover-click"
                 v-longclick="() => orderUp(item)"
                 type="chevron-right"
                 @click="orderUp(item)"
@@ -55,16 +55,19 @@
           md-sort-by="task"
           md-label="Task Title"
           v-if="getSettings('task')"
-          ><div class="flex p-padding hover-click"  @click.self="DisplayModalTask(item)" >
+          ><div
+            class="flex p-padding hover-click"
+            @click.self="DisplayModalTask(item)"
+          >
             <feather
               size="15px"
-               class="hover-click"
+              class="hover-click"
               v-if="!includeKey(item.key)"
               type="plus"
               @click="togleSubtasks(item.key)"
             ></feather>
             <feather
-             class="hover-click"
+              class="hover-click"
               size="15px"
               type="minus"
               @click="unTogleSubtasks(item.key)"
@@ -91,7 +94,7 @@
           <p @click="DisplayModalTask(item)">
             {{ item.deadline }}
           </p>
-          </md-table-cell>
+        </md-table-cell>
 
         <md-table-cell
           md-label="Finish Time"
@@ -129,6 +132,7 @@
           <feather type="check" v-if="item.isdone"></feather>
           <feather type="x" v-if="!item.isdone"></feather>
         </md-table-cell>
+
         <md-table-cell md-fixed-header class="more-column" width="50px">
           <md-menu
             md-size="medium"
@@ -192,6 +196,10 @@ import { Todo, HTMLElementEvent, drawer } from "@/common/models/types";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
 import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
+
+//task
+import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
+import { MutationTypes as tasksMutationType } from "@/store/modules/todos/mutations";
 
 export default {
   name: "simple-table",
@@ -308,7 +316,7 @@ export default {
     deleteTodo(key: string, order: number): void {
       let vm = this;
       this.$store
-        .dispatch("deleteTodo", key)
+        .dispatch(tasksActionsType.DELETETODO, key)
         .then(() => {
           this.$toasted.show("Task deleted, it is no longer in your list", {
             icon: "delete_outline",
@@ -331,6 +339,11 @@ export default {
           vm.downOrderNoCOndition(todo.key);
         }
       });
+
+      var index = this.paginatedTodos.findIndex(function (o) {
+        return o.key === key;
+      });
+      if (index !== -1) this.paginatedTodos.splice(index, 1);
     },
     downOrderNoCOndition(key: string) {
       this.$store.dispatch("setOrderDownTodo", key);
@@ -398,8 +411,6 @@ export default {
     this.todos = this.todolist;
     this.paginatedTodos = [...this.todos];
 
-    //this.drawersOpenedArray = [...this.$store.getters.getSettings.drawersOpened];
-
     if (this.paginatedTodos) {
       this.paginatedTodos.forEach((todo: Todo) => {
         todo.numberdaysleft = this.getdaysleft(todo.deadline);
@@ -421,7 +432,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.hover-click{
+.hover-click {
   cursor: pointer;
 }
 .p-padding {
@@ -464,7 +475,7 @@ p {
   width: 30px;
   margin: auto;
 }
-.subtable{
-  margin-left:5px;
+.subtable {
+  margin-left: 5px;
 }
 </style>

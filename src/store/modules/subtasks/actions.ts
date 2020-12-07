@@ -11,7 +11,8 @@ export enum ActionTypes {
   SETSUBTASKSTATE = "setSubTaskState",
   DELETESUBTASK = "deleteSubtask",
   EDITATTRIBUTESUBTASK = "editAttributeSubtask",
-
+  SETSUBTASKDETAILSTATE = "setSubTaskDetailState",
+  EDITSUBTASKDETAIL = "editSubtaskDetail",
 }
 
 
@@ -39,9 +40,9 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
       subtask.motherKey = motherkey;
       context.commit(MutationTypes.addNewSubtaskTodo, subtask);
     }).catch((err) => {
-       // eslint-disable-next-line no-console
-       console.log(err);
-          })
+      // eslint-disable-next-line no-console
+      console.log(err);
+    })
   },
 
   // EDIT SUBTASK
@@ -68,7 +69,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
     const { uid } = store.getters.getUser.data;
 
     await database.ref(`todos/${uid}/${motherKey}/subtasks/${key}`).update({
-      [attribute] : value
+      [attribute]: value
     });
 
     context.commit(MutationTypes.editOneAttributSubtaskTodo, { motherKey, key, attribute, value });
@@ -91,5 +92,23 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
     context.commit(MutationTypes.removeSubtaskByKey, { subtaskKey, todoKey });
   },
 
+  // SET SUBTASK DETAIL STATE
+  async [ActionTypes.SETSUBTASKDETAILSTATE](context, { subtaskKey, motherKey, isdone, index }: { subtaskKey: string, motherKey: string, isdone: boolean, index: number }) {
+    const { uid } = store.getters.getUser.data;
+    await database.ref(`todos/${uid}/${motherKey}/subtasks/${subtaskKey}/details/${index}`).update({
+      isdone: isdone
+    });
+    context.commit(MutationTypes.setSubTaskState, { subtaskKey, motherKey, isdone });
+  },
+
+  // SET SUBTASK DETAIL STATE
+  async [ActionTypes.EDITSUBTASKDETAIL](context, { taskKey, subtaskKey, attribute, value, index }
+    : { taskKey: string, subtaskKey: string, attribute: string, value: string, index: number }) {
+    const { uid } = store.getters.getUser.data;
+    await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${index}`).update({
+      [attribute]: value
+    });
+    context.commit(MutationTypes.setSubTaskState, { subtaskKey, taskKey, });
+  },
 
 };

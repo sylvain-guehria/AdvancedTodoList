@@ -37,7 +37,11 @@ table {
  
     table{
       border : none;
-      border-left: dotted 1px #a0a2a4;
+
+      table{
+      border : none;
+      }
+
     }
 }
   .md-table-content,

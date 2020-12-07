@@ -36,7 +36,6 @@ export const actionsTodos : ActionTree<Todos, RootState> = {
   
       payload.key = newTodoKey;
       context.commit(MutationTypes.ADDNEWTODO, payload);
-      context.commit(MutationTypes.INCRENDALLLISTNUMBER);
     },
      //EDIT TODO
      async [ActionTypes.EDITTODO](context, payload: Todo): Promise<void>  {
@@ -107,7 +106,6 @@ export const actionsTodos : ActionTree<Todos, RootState> = {
           isdone: payload.isdone
         });
         context.commit(MutationTypes.EDITTODOBYKEY, payload);
-        context.commit(MutationTypes.INCRENDALLLISTNUMBER);
       },
 
       //DELETE TODO
@@ -115,7 +113,6 @@ export const actionsTodos : ActionTree<Todos, RootState> = {
         const { uid } = store.getters.getUser.data;
         database.ref(`todos/${uid}/${key}`).remove();
         context.commit(MutationTypes.REMOVETODOBYKEY, key);
-        context.commit(MutationTypes.INCRENDALLLISTNUMBER);
       },
 
       //UP ORDER TODO
