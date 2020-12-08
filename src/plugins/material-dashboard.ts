@@ -12,7 +12,7 @@ import "vue-select/src/scss/vue-select.scss";
 import Datepicker from "vuejs-datepicker";
 import VueBreadcrumbs from "vue-breadcrumbs";
 import TimeAgo from "vue2-timeago";
-import * as materialModule from "@/common/modules/materials";
+import * as materialModule from "./materials";
 
 // library auto imports
 import "es6-promise/auto";
