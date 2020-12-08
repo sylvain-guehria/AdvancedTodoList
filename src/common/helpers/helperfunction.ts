@@ -35,5 +35,47 @@ export const myFunctions = {
     if (index !== -1) {
       return store.getters.getTodoList[index].deadline;
     }
-  }
+  },
+  dateOfSubTask(motherKey, key) {
+    var index = store.getters.getTodoList.findIndex(function (o) {
+      return o.key === motherKey;
+    });
+
+    if (index !== -1 && store.getters.getTodoList[index].subtasks) {
+      var index_child = store.getters.getTodoList[
+        index
+      ].subtasks.findIndex(function (o) {
+        return o.key === key;
+      });
+
+      if (
+        index_child !== -1 &&
+        store.getters.getTodoList[index].subtasks[index_child]
+      ) {
+        return store.getters.getTodoList[index].subtasks[index_child]
+          .deadline;
+      }
+    }
+  },
+  giveColorTodo(item): number {
+    if (item && item.importance) {
+      // red Task : importance >= 75
+      if (item.importance >= 75) {
+        return 1;
+      }
+      // orange/jaune tasks : 50 >= importance > 75
+      if (50 <= item.importance && item.importance < 75) {
+        return 2;
+      }
+      // blue task : 25 >= importance > 50
+      if (25 <= item.importance && item.importance < 50) {
+        return 3;
+      }
+      // green  task : 0 >= importance > 25
+      if (0 <= item.importance && item.importance < 25) {
+        return 0;
+      }
+    }
+    return;
+  },
 };
