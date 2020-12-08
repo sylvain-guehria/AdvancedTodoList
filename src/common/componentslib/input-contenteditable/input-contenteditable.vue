@@ -6,7 +6,7 @@
     @input="onInput"
     ref="contenteditable"
     @keydown="$emit('keydown', $event)"
-    @keydown.enter="$emit('keyup',$event)"
+    @keydown.enter="$emit('keyup', $event)"
     @keypress="$emit('keypress', $event)"
     @blur="$emit('blur', $event)"
   />
@@ -45,30 +45,31 @@ export default {
     value() {
       if (this.value !== this.$refs.contenteditable.innerText) {
         this.$refs.contenteditable.textContent = this.value;
-      }
-       else {
+      } else {
         this.$refs.contenteditable.textContent = this.$refs.contenteditable.textContent;
       }
     },
   },
   methods: {
     async onInput(e) {
-
       let text = this.$refs.contenteditable.textContent;
 
-       //empeche le user d'inserer une lettre si input number 
+      //empeche le user d'inserer une lettre si input number
       if (text != null && this.type === "number" && !text.match(/^[0-9]+$/)) {
-      let textNoLetter = text.replace(/\D/g, '');
-      this.$refs.contenteditable.textContent = text.replace(/\D/g, '')
+        let textNoLetter = text.replace(/\D/g, "");
+        this.$refs.contenteditable.textContent = text.replace(/\D/g, "");
         this.$emit("input", textNoLetter);
         return;
-      } else {
+      } else if (
+        text != null &&
+        this.type === "number" &&
+        text.match(/^[0-9]+$/)
+      ) {
         this.$emit("input", text);
       }
 
       //enforce a maxlength
-       if (this.maxlength !== -1) {
-
+      if (this.maxlength !== -1) {
         let selection = window.getSelection();
         let { anchorNode, anchorOffset } = selection;
 
@@ -76,12 +77,8 @@ export default {
           text.length > this.maxlength ||
           (text != "" &&
             this.type === "number" &&
-            !(
-              isNumber(text) ||
-              (isString(text) && Boolean(text.trim()) && isFinite(text))
-            ))
+            !this.isReallyaNumber(text)) 
         ) {
-
           const textNodes = Array.from(this.$refs.contenteditable.childNodes);
           const realAnchorOffset =
             textNodes.length <= 1
@@ -118,15 +115,20 @@ export default {
       }
 
       this.$emit("giveTodoKey");
- 
-      //empeche le user d'inserer un espace seul 
-      if (text != null && text.trim().length == 0 ) {
-      this.$refs.contenteditable.textContent = null
+
+      //empeche le user d'inserer un espace seul
+      if (text != null && text.trim().length == 0) {
+        this.$refs.contenteditable.textContent = null;
         this.$emit("input", null);
       } else {
         this.$emit("input", text);
       }
-
+    },
+    isReallyaNumber(value) {
+      return (
+        isNumber(value) ||
+        (isString(value) && Boolean(value.trim()) && isFinite(value))
+      );
     },
   },
 };
