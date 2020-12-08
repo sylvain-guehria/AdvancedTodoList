@@ -55,11 +55,8 @@
           md-sort-by="task"
           md-label="Task Title"
           v-if="getSettings('task')"
-          ><div
-            class="flex p-padding"
-            
-          >
-          <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
+          ><div class="flex p-padding">
+            <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
             <feather
               size="15px"
               class="hover-click"
@@ -78,15 +75,18 @@
               <input-contenteditable
                 v-model="item.task"
                 _is="p"
-                :maxlength="25"
+                :maxlength="35"
                 placeholder="Type a title"
-                @input="onChangeInput"
-                @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
+                @giveTodoKey="
+                  setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)
+                "
+                @keyup.enter="onPressEnterOrBlur"
+                @blur="onPressEnterOrBlur"
               />
               &nbsp;
             </div>
-            <p> ({{ getNumberSubTaskActive(item) }}) </p>
-              <div class="bullet" :class="bulletClass(item)"></div>
+            <p>({{ getNumberSubTaskActive(item) }})</p>
+            <div class="bullet" :class="bulletClass(item)"></div>
           </div>
 
           <!-- start subtable -->
@@ -101,9 +101,18 @@
           v-if="getSettings('deadline')"
           width="130px"
         >
-          <p >
-            {{ item.deadline }}
+          <p
+            @click="showDatepickerDialog(item.key, item.deadline)"
+            v-if="item.deadline"
+          >
+            {{ dateOfTask(item.key) ? dateOfTask(item.key) : "" }}
           </p>
+          <feather
+            size="20px"
+            v-if="!item.deadline"
+            @click="showDatepickerDialog(item.key, null)"
+            type="calendar"
+          ></feather>
         </md-table-cell>
 
         <md-table-cell
@@ -111,7 +120,7 @@
           width="100px"
           v-if="getSettings('numberdaysleft')"
         >
-          <p >{{ item.numberdaysleft }}</p>
+          <p>{{ item.numberdaysleft }}</p>
         </md-table-cell>
 
         <md-table-cell
@@ -120,7 +129,7 @@
           md-label="Creation date"
           v-if="getSettings('creationDate')"
         >
-          <p >
+          <p>
             {{ item.creationDate }}
           </p></md-table-cell
         >
@@ -131,8 +140,20 @@
           width="50px"
           v-if="getSettings('importance')"
         >
-          <p >{{ item.importance }}</p>
+          <input-contenteditable
+            v-model="item.importance"
+            _is="p"
+            :maxlength="100"
+            type="number"
+            placeholder="none"
+            @giveTodoKey="
+              setCurrentTodoEdited_key_attribue(item.key, todoImpEnum)
+            "
+            @keydown.enter="onPressEnterOrBlur"
+            @blur="onPressEnterOrBlur"
+          />
         </md-table-cell>
+
         <md-table-cell
           md-label="done?"
           class="last-column"
@@ -195,6 +216,19 @@
           @closeDialog="showDialog = false"
         ></display-task-modal>
       </md-dialog>
+
+      <md-dialog
+        :md-active.sync="showDialogDate"
+        :show="showDialogDate"
+        @show="showDialogDate = $event"
+      >
+        <md-button class="md-icon-button simple" @click="closeDialogDate()">
+          <md-icon>close</md-icon>
+        </md-button>
+        <v-date-picker v-model="date" width="290" class="mt-4"></v-date-picker>
+        <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
+        <md-button class="md-tertiary" @click="editDateTask"> Save </md-button>
+      </md-dialog>
     </div>
   </div>
 </template>
@@ -215,7 +249,6 @@ import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
 import { MutationTypes as tasksMutationType } from "@/store/modules/todos/mutations";
 import { todoEnum } from "@/common/modules/todos/enumTodo";
 
-
 export default {
   name: "simple-table",
   components: {
@@ -230,18 +263,79 @@ export default {
       return this.completelist;
     },
   },
+  watch: {
+    showDialogDate: function () {
+      if (this.showDialogDate === false) {
+        this.currentKey = "";
+        this.date = "";
+        this.selectedDate = null;
+        this.noDeadLine = false;
+      }
+    },
+  },
   methods: {
-    setCurrentTodoEdited_key_attribue(key, attribute){
+    editDateTask() {
+      let value = this.date;
+      if (this.noDeadLine) {
+        value = "";
+      }
+      let todoKey = this.currentKey;
+      let attribute = "deadline";
+      this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
+        todoKey,
+        attribute,
+        value,
+      });
+      this.updatePaginationList(todoKey, attribute, value);
+      this.showDialogDate = false;
+    },
+    updatePaginationList(todoKey: string, attribute: string, value: string) {
+      var index = this.paginatedTodos.findIndex(function (o) {
+        return o.key === todoKey;
+      });
+      if (index !== -1) {
+        this.paginatedTodos[index][attribute] = value;
+        if (attribute === todoEnum.DEADLINE) {
+          this.paginatedTodos[index][
+            todoEnum.NUMBERDAYSLEFT
+          ] = this.getdaysleft(value);
+        }
+      }
+    },
+    showDatepickerDialog(key: string, deadline) {
+      this.currentKey = key;
+      if (deadline) {
+        this.date = deadline;
+      }
+      this.showDialogDate = true;
+    },
+    closeDialogDate() {
+      this.showDialogDate = false;
+    },
+    setCurrentTodoEdited_key_attribue(key, attribute) {
       this.currentTodoKeyEdited = key;
       this.currentAttributeEdited = attribute;
     },
-    onChangeInput(text){
+    onChangeInput(text) {
+      // eslint-disable-next-line no-console
+      console.log("le text ", text);
+    },
+    onPressEnterOrBlur(e) {
+      if (e.keyCode == 13) {
+        event.preventDefault();
+      }
+      if (!e.target.innerText) {
+        return;
+      }
 
-      let todoKey =  this.currentTodoKeyEdited;
+      let todoKey = this.currentTodoKeyEdited;
       let attribute = this.currentAttributeEdited;
-      let value = text;
+      let value = e.target.innerText;
+      if (value) {
+        value = value.trim();
+      }
 
-       this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
+      this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
         todoKey,
         attribute,
         value,
@@ -417,27 +511,6 @@ export default {
       const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
       return classes[index];
     },
-    giveColorTodo(item): number {
-      if (item && item.importance) {
-        // red Task : importance >= 75
-        if (item.importance >= 75) {
-          return 1;
-        }
-        // orange/jaune tasks : 50 >= importance > 75
-        if (50 <= item.importance && item.importance < 75) {
-          return 2;
-        }
-        // blue task : 25 >= importance > 50
-        if (25 <= item.importance && item.importance < 50) {
-          return 3;
-        }
-        // green  task : 0 >= importance > 25
-        if (0 <= item.importance && item.importance < 25) {
-          return 0;
-        }
-      }
-      return;
-    },
     addEmptyTask() {
       let higher_order: number;
       let todo_with_max_order: Todo;
@@ -475,18 +548,21 @@ export default {
             duration: 5000,
           });
         });
-      this.paginatedTodos.push(emptyTodo);
+      this.paginatedTodos.unshift(emptyTodo);
+    },
+    updateFinishTime() {
+      if (this.paginatedTodos && this.paginatedTodos.length > 0) {
+        this.paginatedTodos.forEach((todo: Todo) => {
+          todo.numberdaysleft = this.getdaysleft(todo.deadline);
+        });
+      }
     },
   },
   created() {
     this.todos = this.todolist;
     this.paginatedTodos = [...this.todos];
 
-    if (this.paginatedTodos) {
-      this.paginatedTodos.forEach((todo: Todo) => {
-        todo.numberdaysleft = this.getdaysleft(todo.deadline);
-      });
-    }
+    this.updateFinishTime();
 
     if (this.mainList) {
       bus.$on(BusEvent.ADDEMPTYTASK, this.addEmptyTask);
@@ -501,13 +577,22 @@ export default {
       todos: [],
       paginatedTodos: [],
       getdaysleft: myFunctions.getdaysleft,
+      dateOfTask: myFunctions.dateOfTask,
+      giveColorTodo: myFunctions.giveColorTodo,
       item: {},
       showDialog: false,
       drawersOpenedArray: [],
-      placeholder: 'type your title',
-      currentTodoKeyEdited : '',
-      currentAttributeEdited : '',
-      todoTaskEnum : todoEnum.TASK
+      placeholder: "type your title",
+      currentTodoKeyEdited: "",
+      currentAttributeEdited: "",
+      todoTaskEnum: todoEnum.TASK,
+      todoImpEnum: todoEnum.IMPORTANCE,
+      date: null,
+      modal: false,
+      showDialogDate: false,
+      noDeadLine: false,
+      currentKey: "",
+      selectedDate: null,
     };
   },
 };
@@ -522,7 +607,7 @@ export default {
   padding-bottom: 10px;
 }
 .flex {
-  display: flex  ;
+  display: flex;
 }
 .block {
   display: block !important ;
