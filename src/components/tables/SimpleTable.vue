@@ -78,10 +78,11 @@
               <input-contenteditable
                 v-model="item.task"
                 _is="p"
-                :maxlength="25"
+                :maxlength="35"
                 placeholder="Type a title"
-                @input="onChangeInput"
                 @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
+                @keyup.enter="onPressEnterOrBlur"
+                @blur="onPressEnterOrBlur"
               />
               &nbsp;
             </div>
@@ -236,10 +237,18 @@ export default {
       this.currentAttributeEdited = attribute;
     },
     onChangeInput(text){
+      // eslint-disable-next-line no-console
+      console.log('le text ',text);
+    },
+    onPressEnterOrBlur(e){
+      if(!e.target.innerText){
+        return;
+      }
 
       let todoKey =  this.currentTodoKeyEdited;
       let attribute = this.currentAttributeEdited;
-      let value = text;
+      let value = e.target.innerText;
+      if (value){value = value.trim()}
 
        this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
         todoKey,
@@ -475,7 +484,7 @@ export default {
             duration: 5000,
           });
         });
-      this.paginatedTodos.push(emptyTodo);
+      this.paginatedTodos.unshift(emptyTodo);
     },
   },
   created() {
