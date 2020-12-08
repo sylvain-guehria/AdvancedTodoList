@@ -132,8 +132,18 @@
           width="50px"
           v-if="getSettings('importance')"
         >
-          <p >{{ item.importance }}</p>
+        <input-contenteditable
+                v-model="item.importance"
+                _is="p"
+                :maxlength="100"
+                type="number"
+                placeholder="none"
+                @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoImpEnum)"
+                @keydown.enter="onPressEnterOrBlur"
+                @blur="onPressEnterOrBlur"
+              />
         </md-table-cell>
+
         <md-table-cell
           md-label="done?"
           class="last-column"
@@ -241,6 +251,9 @@ export default {
       console.log('le text ',text);
     },
     onPressEnterOrBlur(e){
+       if (e.keyCode == 13) {
+        event.preventDefault();
+    }
       if(!e.target.innerText){
         return;
       }
@@ -516,7 +529,8 @@ export default {
       placeholder: 'type your title',
       currentTodoKeyEdited : '',
       currentAttributeEdited : '',
-      todoTaskEnum : todoEnum.TASK
+      todoTaskEnum : todoEnum.TASK,
+      todoImpEnum : todoEnum.IMPORTANCE
     };
   },
 };
