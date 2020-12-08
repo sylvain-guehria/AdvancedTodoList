@@ -41,7 +41,7 @@
     position: relative;
     height: 45px;
     line-height: 45px;
-    opacity: 0;
+    opacity: 0.3;
     @extend .animation-transition-general;
     &:hover {
       opacity: 1;
@@ -51,7 +51,7 @@
   .hide-menu-btn {
     text-align: center;
     size: 10px;
-    color: $text-light;
+    color: $text-darker;
 
     &::before {
       transform: rotate(135deg);
@@ -62,7 +62,7 @@
   .show-menu-btn::before,
   .hide-menu-btn::before {
     content: "";
-    border: solid $text-light;
+    border: solid $text-darker;
     border-width: 0 2px 2px 0;
     display: inline-block;
     padding: 4px;

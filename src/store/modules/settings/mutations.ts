@@ -1,5 +1,5 @@
 import { MutationTree } from "vuex";
-import { drawer, Settings } from "@/common/models/types";
+import { drawer, Settings } from "@/common/models/types/types";
 
 
 export enum MutationTypes {

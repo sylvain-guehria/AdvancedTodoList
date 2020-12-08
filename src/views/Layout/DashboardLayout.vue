@@ -78,13 +78,16 @@ import TopNavbar from "./TopNavbar.vue";
 import DashboardContent from "./Content.vue";
 import firebase from "@/apis/firebase/firebase";
 
+import { ActionTypes as settingsActionType } from '@/store/modules/settings/actions';
+import { MutationTypes as settingsMutationType } from '@/store/modules/settings/mutations';
+
 export default {
   beforeCreate: function () {
     document.body.className = "";
   },
   data() {
     return {
-      isNavMini: false,
+      isNavMini: true,
       countertasknotdone: 0,
     };
   },
@@ -97,16 +100,16 @@ export default {
         label: "with_weekend",
         value: bool,
       };
-      this.$store.dispatch("saveSetting", payload);
-      this.$store.commit('setWithWeekEnd', bool);
+      this.$store.dispatch(settingsActionType.SAVE_SETTINGS, payload);
+      this.$store.commit(settingsMutationType.SET_WITH_WEEKEND, bool);
     },
     setCurrentLang(lang) {
        let payload = {
         label: "langage",
         value: lang,
       };
-      this.$store.dispatch("saveSetting", payload);
-      this.$store.commit("setLangage", lang);
+      this.$store.dispatch(settingsActionType.SAVE_SETTINGS, payload);
+      this.$store.commit(settingsMutationType.SET_LANGAGE, lang);
     },
     logout() {
       firebase.logout();

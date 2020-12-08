@@ -70,8 +70,8 @@
             type="text"
             :maxlength="200"
             initialvalue="Your label"
-            :vmodel="formData.detail"
-            @vmodel="formData.detail = $event"
+            :vmodel="formData.details"
+            @vmodel="formData.details = $event"
           ></input-text>
         </div>
 
@@ -86,7 +86,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
-import { Todo, SubTask } from "@/common/models/types";
+import { Todo, SubTask } from "@/common/models/types/types";
 import InputText from "@/common/componentslib/InputText.vue";
 import SubtaskViewer from "@/components/forms/SubTaskViewer.vue";
 import lodash from "lodash";
@@ -181,7 +181,7 @@ export default class AddSubTaskModal extends Vue {
     importance: null,
     creationDate: new Date().toISOString().substr(0, 10),
     isdone: false,
-    detail: "",
+    details: [],
   };
 
   resteForm() {
@@ -192,7 +192,7 @@ export default class AddSubTaskModal extends Vue {
       importance: null,
       creationDate: new Date().toISOString().substr(0, 10),
       isdone: false,
-      detail: "",
+      details: [],
     };
   }
 }

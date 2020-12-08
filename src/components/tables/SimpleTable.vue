@@ -29,20 +29,20 @@
           <div class="row">
             <div class="chevron-order">
               <feather
-              class="hover-click"
+                class="hover-click"
                 type="chevron-left"
                 @click="orderDown(item)"
                 v-longclick="() => orderDown(item)"
               ></feather>
             </div>
-            <div class="block">
+            <div class="block-order">
               <p>
                 {{ item.order }}
               </p>
             </div>
             <div class="chevron-order">
               <feather
-               class="hover-click"
+                class="hover-click"
                 v-longclick="() => orderUp(item)"
                 type="chevron-right"
                 @click="orderUp(item)"
@@ -55,25 +55,38 @@
           md-sort-by="task"
           md-label="Task Title"
           v-if="getSettings('task')"
-          ><div class="flex p-padding hover-click"  @click.self="DisplayModalTask(item)" >
+          ><div class="flex p-padding">
+            <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
             <feather
               size="15px"
-               class="hover-click"
+              class="hover-click"
               v-if="!includeKey(item.key)"
               type="plus"
               @click="togleSubtasks(item.key)"
             ></feather>
             <feather
-             class="hover-click"
+              class="hover-click"
               size="15px"
               type="minus"
               @click="unTogleSubtasks(item.key)"
               v-if="includeKey(item.key)"
             ></feather>
-            <div @click="DisplayModalTask(item)" class="flex">
-              <p>{{ item.task }} &nbsp; ({{ getNumberSubTaskActive(item) }})</p>
-              <div class="bullet" :class="bulletClass(item)"></div>
+            <div class="block">
+              <input-contenteditable
+                v-model="item.task"
+                _is="p"
+                :maxlength="35"
+                placeholder="Type a title"
+                @giveTodoKey="
+                  setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)
+                "
+                @keyup.enter="onPressEnterOrBlur"
+                @blur="onPressEnterOrBlur"
+              />
+              &nbsp;
             </div>
+            <p>({{ getNumberSubTaskActive(item) }})</p>
+            <div class="bullet" :class="bulletClass(item)"></div>
           </div>
 
           <!-- start subtable -->
@@ -88,17 +101,26 @@
           v-if="getSettings('deadline')"
           width="130px"
         >
-          <p @click="DisplayModalTask(item)">
-            {{ item.deadline }}
+          <p
+            @click="showDatepickerDialog(item.key, item.deadline)"
+            v-if="item.deadline"
+          >
+            {{ dateOfTask(item.key) ? dateOfTask(item.key) : "" }}
           </p>
-          </md-table-cell>
+          <feather
+            size="20px"
+            v-if="!item.deadline"
+            @click="showDatepickerDialog(item.key, null)"
+            type="calendar"
+          ></feather>
+        </md-table-cell>
 
         <md-table-cell
           md-label="Finish Time"
           width="100px"
           v-if="getSettings('numberdaysleft')"
         >
-          <p @click="DisplayModalTask(item)">{{ item.numberdaysleft }}</p>
+          <p>{{ item.numberdaysleft }}</p>
         </md-table-cell>
 
         <md-table-cell
@@ -107,7 +129,7 @@
           md-label="Creation date"
           v-if="getSettings('creationDate')"
         >
-          <p @click="DisplayModalTask(item)">
+          <p>
             {{ item.creationDate }}
           </p></md-table-cell
         >
@@ -118,8 +140,20 @@
           width="50px"
           v-if="getSettings('importance')"
         >
-          <p @click="DisplayModalTask(item)">{{ item.importance }}</p>
+          <input-contenteditable
+            v-model="item.importance"
+            _is="p"
+            :maxlength="100"
+            type="number"
+            placeholder="none"
+            @giveTodoKey="
+              setCurrentTodoEdited_key_attribue(item.key, todoImpEnum)
+            "
+            @keydown.enter="onPressEnterOrBlur"
+            @blur="onPressEnterOrBlur"
+          />
         </md-table-cell>
+
         <md-table-cell
           md-label="done?"
           class="last-column"
@@ -129,6 +163,7 @@
           <feather type="check" v-if="item.isdone"></feather>
           <feather type="x" v-if="!item.isdone"></feather>
         </md-table-cell>
+
         <md-table-cell md-fixed-header class="more-column" width="50px">
           <md-menu
             md-size="medium"
@@ -181,6 +216,19 @@
           @closeDialog="showDialog = false"
         ></display-task-modal>
       </md-dialog>
+
+      <md-dialog
+        :md-active.sync="showDialogDate"
+        :show="showDialogDate"
+        @show="showDialogDate = $event"
+      >
+        <md-button class="md-icon-button simple" @click="closeDialogDate()">
+          <md-icon>close</md-icon>
+        </md-button>
+        <v-date-picker v-model="date" width="290" class="mt-4"></v-date-picker>
+        <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
+        <md-button class="md-tertiary" @click="editDateTask"> Save </md-button>
+      </md-dialog>
     </div>
   </div>
 </template>
@@ -188,10 +236,18 @@
 <script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
-import { Todo, HTMLElementEvent, drawer } from "@/common/models/types";
+import { Todo, HTMLElementEvent, drawer } from "@/common/models/types/types";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
 import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
+import { bus } from "@/main";
+import { BusEvent } from "@/common/models/enums/enum";
+import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
+
+//task
+import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
+import { MutationTypes as tasksMutationType } from "@/store/modules/todos/mutations";
+import { todoEnum } from "@/common/modules/todos/enumTodo";
 
 export default {
   name: "simple-table",
@@ -199,14 +255,92 @@ export default {
     "table-pagination": TablePaginationVue,
     "display-task-modal": DisplayTaskModal,
     "simple-table-lvl1": SimpleTableLvl1,
+    "input-contenteditable": InputContenteditable,
   },
-  props: ["todolist"],
+  props: ["todolist", "mainList"],
   computed: {
     isCompletelist: function () {
       return this.completelist;
     },
   },
+  watch: {
+    showDialogDate: function () {
+      if (this.showDialogDate === false) {
+        this.currentKey = "";
+        this.date = "";
+        this.selectedDate = null;
+        this.noDeadLine = false;
+      }
+    },
+  },
   methods: {
+    editDateTask() {
+      let value = this.date;
+      if (this.noDeadLine) {
+        value = "";
+      }
+      let todoKey = this.currentKey;
+      let attribute = "deadline";
+      this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
+        todoKey,
+        attribute,
+        value,
+      });
+      this.updatePaginationList(todoKey, attribute, value);
+      this.showDialogDate = false;
+    },
+    updatePaginationList(todoKey: string, attribute: string, value: string) {
+      var index = this.paginatedTodos.findIndex(function (o) {
+        return o.key === todoKey;
+      });
+      if (index !== -1) {
+        this.paginatedTodos[index][attribute] = value;
+        if (attribute === todoEnum.DEADLINE) {
+          this.paginatedTodos[index][
+            todoEnum.NUMBERDAYSLEFT
+          ] = this.getdaysleft(value);
+        }
+      }
+    },
+    showDatepickerDialog(key: string, deadline) {
+      this.currentKey = key;
+      if (deadline) {
+        this.date = deadline;
+      }
+      this.showDialogDate = true;
+    },
+    closeDialogDate() {
+      this.showDialogDate = false;
+    },
+    setCurrentTodoEdited_key_attribue(key, attribute) {
+      this.currentTodoKeyEdited = key;
+      this.currentAttributeEdited = attribute;
+    },
+    onChangeInput(text) {
+      // eslint-disable-next-line no-console
+      console.log("le text ", text);
+    },
+    onPressEnterOrBlur(e) {
+      if (e.keyCode == 13) {
+        event.preventDefault();
+      }
+      if (!e.target.innerText) {
+        return;
+      }
+
+      let todoKey = this.currentTodoKeyEdited;
+      let attribute = this.currentAttributeEdited;
+      let value = e.target.innerText;
+      if (value) {
+        value = value.trim();
+      }
+
+      this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
+        todoKey,
+        attribute,
+        value,
+      });
+    },
     includeKey(key) {
       let keyInList: number = this.drawersOpenedArray.findIndex(
         (drawer) => drawer.key === key
@@ -308,7 +442,7 @@ export default {
     deleteTodo(key: string, order: number): void {
       let vm = this;
       this.$store
-        .dispatch("deleteTodo", key)
+        .dispatch(tasksActionsType.DELETETODO, key)
         .then(() => {
           this.$toasted.show("Task deleted, it is no longer in your list", {
             icon: "delete_outline",
@@ -331,6 +465,11 @@ export default {
           vm.downOrderNoCOndition(todo.key);
         }
       });
+
+      var index = this.paginatedTodos.findIndex(function (o) {
+        return o.key === key;
+      });
+      if (index !== -1) this.paginatedTodos.splice(index, 1);
     },
     downOrderNoCOndition(key: string) {
       this.$store.dispatch("setOrderDownTodo", key);
@@ -372,39 +511,65 @@ export default {
       const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
       return classes[index];
     },
-    giveColorTodo(item): number {
-      if (item && item.importance) {
-        // red Task : importance >= 75
-        if (item.importance >= 75) {
-          return 1;
-        }
-        // orange/jaune tasks : 50 >= importance > 75
-        if (50 <= item.importance && item.importance < 75) {
-          return 2;
-        }
-        // blue task : 25 >= importance > 50
-        if (25 <= item.importance && item.importance < 50) {
-          return 3;
-        }
-        // green  task : 0 >= importance > 25
-        if (0 <= item.importance && item.importance < 25) {
-          return 0;
-        }
+    addEmptyTask() {
+      let higher_order: number;
+      let todo_with_max_order: Todo;
+
+      todo_with_max_order = lodash.maxBy(this.todolist, "order");
+
+      if (todo_with_max_order) {
+        higher_order = todo_with_max_order.order + 1;
+      } else {
+        higher_order = 1;
       }
-      return;
+
+      let emptyTodo: Todo = {
+        task: `your Task N°${higher_order}`,
+        isdone: false,
+        creationDate: new Date().toISOString().substr(0, 10),
+        order: higher_order,
+      };
+
+      this.$store
+        .dispatch(tasksActionsType.CREATETODO, emptyTodo)
+        .then(() => {
+          this.$toasted.show("Task added, it is now in your list", {
+            icon: "create",
+            theme: "bubble",
+            position: "bottom-right",
+            duration: 5000,
+          });
+        })
+        .catch((error: Error) => {
+          this.$toasted.show("Cannot create task", {
+            icon: "error_outline",
+            theme: "bubble",
+            position: "bottom-right",
+            duration: 5000,
+          });
+        });
+      this.paginatedTodos.unshift(emptyTodo);
+    },
+    updateFinishTime() {
+      if (this.paginatedTodos && this.paginatedTodos.length > 0) {
+        this.paginatedTodos.forEach((todo: Todo) => {
+          todo.numberdaysleft = this.getdaysleft(todo.deadline);
+        });
+      }
     },
   },
   created() {
     this.todos = this.todolist;
     this.paginatedTodos = [...this.todos];
 
-    //this.drawersOpenedArray = [...this.$store.getters.getSettings.drawersOpened];
+    this.updateFinishTime();
 
-    if (this.paginatedTodos) {
-      this.paginatedTodos.forEach((todo: Todo) => {
-        todo.numberdaysleft = this.getdaysleft(todo.deadline);
-      });
+    if (this.mainList) {
+      bus.$on(BusEvent.ADDEMPTYTASK, this.addEmptyTask);
     }
+  },
+  beforeDestroy() {
+    bus.$off(BusEvent.ADDEMPTYTASK, this.addEmptyTask);
   },
   data() {
     return {
@@ -412,16 +577,29 @@ export default {
       todos: [],
       paginatedTodos: [],
       getdaysleft: myFunctions.getdaysleft,
+      dateOfTask: myFunctions.dateOfTask,
+      giveColorTodo: myFunctions.giveColorTodo,
       item: {},
       showDialog: false,
       drawersOpenedArray: [],
+      placeholder: "type your title",
+      currentTodoKeyEdited: "",
+      currentAttributeEdited: "",
+      todoTaskEnum: todoEnum.TASK,
+      todoImpEnum: todoEnum.IMPORTANCE,
+      date: null,
+      modal: false,
+      showDialogDate: false,
+      noDeadLine: false,
+      currentKey: "",
+      selectedDate: null,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.hover-click{
+.hover-click {
   cursor: pointer;
 }
 .p-padding {
@@ -429,7 +607,10 @@ export default {
   padding-bottom: 10px;
 }
 .flex {
-  display: flex !important ;
+  display: flex;
+}
+.block {
+  display: block !important ;
 }
 .flex-align {
   display: flex;
@@ -459,12 +640,12 @@ p {
   left: 25px;
   bottom: 0;
 }
-.block {
+.block-order {
   justify-content: center;
   width: 30px;
   margin: auto;
 }
-.subtable{
-  margin-left:5px;
+.subtable {
+  margin-left: 5px;
 }
 </style>

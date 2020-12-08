@@ -10,9 +10,10 @@ import { longClickDirective } from 'vue-long-click'
 
 // Plugins
 import GlobalDirectives from "@/common/directives/globalDirectives";
+import vuetify from '@/plugins/vuetify' 
 
 // MaterialDashboard plugin
-import MaterialDashboard from "@/common/modules/material-dashboard";
+import MaterialDashboard from "@/plugins/material-dashboard";
 
 //chart
 import VueApexCharts from 'vue-apexcharts'
@@ -44,6 +45,7 @@ new Vue({
   router,
   data: {},
   store,
+  vuetify,
   render: h => h(App)
 });
 
