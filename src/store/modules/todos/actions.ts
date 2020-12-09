@@ -91,6 +91,7 @@ export const actionsTodos : ActionTree<Todos, RootState> = {
               }
     
               listsubtasks = [];
+              if(!currentTodo.subtasks){currentTodo.subtasks=[]}
               listoftodos.push(currentTodo);
             });
           }).then(() => {
@@ -110,6 +111,8 @@ export const actionsTodos : ActionTree<Todos, RootState> = {
     
         payload.isdone = !payload.isdone;
         const { uid } = store.getters.getUser.data;
+
+        if(!payload.key){return}
 
         await database.ref(`todos/${uid}/${payload.key}`).set({
           ...payload,

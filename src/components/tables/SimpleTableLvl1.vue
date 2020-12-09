@@ -254,7 +254,7 @@ export default class SimpleTableLvl1 extends Vue {
     if (this.item && this.item.subtasks && this.item.subtasks.length > 0) {
       // this.item.subtasks.unshift(emptySubTask);
     } else {
-      // this.item.subtasks = [emptySubTask];
+      //this.item.subtasks = [emptySubTask];
     }
   }
 
