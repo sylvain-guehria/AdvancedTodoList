@@ -198,6 +198,7 @@ export default {
 .action-button {
   margin: auto 0;
   margin-left: 500px;
+  width: 100%;
 }
 .column-subtask {
   display: inline-block;
