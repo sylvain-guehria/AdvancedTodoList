@@ -2,6 +2,8 @@
   <div class="content">
     <div class="md-layout">
       <div class="md-layout-item md-size-100" style="margin-top: 20px">
+        <div class="flex">
+
         <div class="action-button">
           <md-button class="md-tertiary" @click="addEmptyTask">
             <feather type="plus"></feather>Add a task
@@ -10,6 +12,13 @@
             <feather type="filter"></feather>Filter
           </md-button>
         </div>
+        <div class="action-button">
+          <legend-bullet :planning="true"></legend-bullet>
+          <colum-to-hide></colum-to-hide>
+          <colum-subtasks-to-hide></colum-subtasks-to-hide>
+        </div>
+        </div>
+
         <md-tabs :md-active-tab="dynamic_tab">
           <template slot="md-tab" slot-scope="{ tab }">
             <feather class="md-tab-icon" :type="tab.icon"></feather>
@@ -68,15 +77,6 @@
         </md-tabs>
       </div>
 
-      <div class="legend-list">
-        <legend-bullet :planning="true"></legend-bullet>
-      </div>
-      <div class="column">
-        <colum-to-hide></colum-to-hide>
-      </div>
-      <div class="column-subtask">
-        <colum-subtasks-to-hide></colum-subtasks-to-hide>
-      </div>
       <!-- drawers -->
 
       <edit-task-drawer
@@ -100,7 +100,7 @@
   </div>
 </template>
 
-<script  lang="ts">
+<script lang="ts">
 import SimpleTable from "@/components/tables/SimpleTable.vue";
 import FiltersDrawer from "@/components/forms/FiltersDrawer.vue";
 import EditTaskDrawer from "@/components/forms/EditTaskDrawer.vue";
@@ -133,8 +133,7 @@ export default {
       dynamic_tab: "tab-home",
     };
   },
-  created() {
-  },
+  created() {},
   mounted() {
     bus.$on("openDrawerEdit", this.showDrawerEditTask);
   },
@@ -197,12 +196,16 @@ export default {
   left: 250px;
 }
 .action-button {
-  text-align: right;
+  margin: auto 0;
+  margin-left: 500px;
 }
 .column-subtask {
   display: inline-block;
   position: absolute;
   bottom: 200px;
   left: 450px;
+}
+.flex {
+  display: flex;
 }
 </style>

@@ -70,8 +70,8 @@ import {
   }
 })
 export default class TablePagination extends Vue {
-  @Prop({ default: 10 }) pageSize!: number;
-  @Prop({ default: () => [10,20, 50] }) mdPageOptions!: Array<number>;
+  @Prop({ default: 100 }) pageSize!: number;
+  @Prop({ default: () => [100, 200] }) mdPageOptions!: Array<number>;
   @Prop({ default: 1 }) pageIndex!: number;
   @Prop({ default: "Many" }) mdTotal!: string | number;
   @Prop({ default: "Items" }) itemsLabel!: string;

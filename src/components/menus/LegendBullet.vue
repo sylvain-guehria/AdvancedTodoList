@@ -1,5 +1,4 @@
 <template>
-  <div class="layout">
     <md-menu
       md-size="auto"
       md-direction="bottom-start"
@@ -42,7 +41,6 @@
         </div>
       </md-menu-content>
     </md-menu>
-  </div>
 </template>
 
 <script>
