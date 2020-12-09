@@ -6,12 +6,13 @@
           :class="detail.isdone ? 'done' : ''"
           v-model="detail.label"
           _is="p"
-          :maxlength="50"
+          :maxlength="200"
           type="text"
           placeholder="..."
           @giveTodoKey="setCurrentIndex_And_attribue(index, 'label')"
           @keydown.enter="onPressEnterOrBlur"
           @blur="onPressEnterOrBlur"
+          @click="setCurrentIndex(index)"
         />
       </md-table-cell>
       <md-table-cell
@@ -55,7 +56,7 @@ export default class SimpleTableLvl2 extends Vue {
   @Prop() subtask: SubTask;
   @Prop() motherKey: string;
   emptyDetail: Detail = {
-    label: "...",
+    label: "",
     isdone: false,
   };
 
@@ -63,12 +64,12 @@ export default class SimpleTableLvl2 extends Vue {
   currentAttributeEdited: string;
 
   setCurrentIndex_And_attribue(index, attribute) {
-        // eslint-disable-next-line no-console
-      console.log("le index ", index);
-       // eslint-disable-next-line no-console
-      console.log("le attribute ", attribute);
     this.currentIndex = index;
     this.currentAttributeEdited = attribute;
+  }
+
+  setCurrentIndex(index) {
+    this.currentIndex = index;
   }
 
   //EDIT Details
@@ -94,27 +95,35 @@ export default class SimpleTableLvl2 extends Vue {
     if (e.keyCode == 13) {
       event.preventDefault();
     }
-    if (!e.target.innerText) {
-      return;
-    }
 
     let taskKey = this.motherKey;
     let subtaskKey = this.subtask.key;
     let attribute = this.currentAttributeEdited;
     let index = this.currentIndex;
-    let value = e.target.innerText;
+    let value;
+    if (e.target.innerText) {
+      value = e.target.innerText;
+    }
 
     if (value) {
       value = value.trim();
     }
 
-    this.$store.dispatch(subtasksActionsType.EDITSUBTASKDETAIL, {
-      taskKey,
-      subtaskKey,
-      attribute,
-      value,
-      index,
-    });
+    if (value && value !== "") {
+      this.$store.dispatch(subtasksActionsType.EDITSUBTASKDETAIL, {
+        taskKey,
+        subtaskKey,
+        attribute,
+        value,
+        index,
+      });
+    } else if(value == "" || value == undefined) {
+      this.$store.dispatch(subtasksActionsType.DELETESUBTASKDETAIL, {
+        taskKey,
+        subtaskKey,
+        index,
+      });
+    }
   }
 
   onChangeCheckBox(index, isdone) {
@@ -124,7 +133,7 @@ export default class SimpleTableLvl2 extends Vue {
   createSubtasksDetail() {
     let subtask = { ...this.subtask };
     subtask.motherKey = this.motherKey;
-    if (subtask.details) {
+    if (subtask.details && subtask.details.length > 0) {
       subtask.details.push({ ...this.emptyDetail });
     } else {
       subtask.details = [{ ...this.emptyDetail }];

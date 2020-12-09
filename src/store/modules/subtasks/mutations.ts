@@ -8,7 +8,8 @@ export enum MutationTypes {
     editSubtaskTodoByKey = "editSubtaskTodoByKey",
     setSubTaskState = "setSubTaskState",
     removeSubtaskByKey = "removeSubtaskByKey",
-    editOneAttributSubtaskTodo = "editOneAttributSubtaskTodo"
+    editOneAttributSubtaskTodo = "editOneAttributSubtaskTodo",
+    deleteSubtaskDetail = "deleteSubtaskDetail"
 }
 
 export const mutationsSubtasks: MutationTree<SubTask> = {
@@ -23,8 +24,7 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
             if(store.getters.getTodoList[i].subtasks){
             store.getters.getTodoList[i].subtasks.unshift(subtask);
             }else{
-              store.getters.getTodoList[i].subtasks = [];
-              store.getters.getTodoList[i].subtasks.unshift(subtask);
+              store.getters.getTodoList[i].subtasks = [subtask];
             }
             break;
           }
@@ -96,6 +96,25 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
     
           if (index_child !== -1) {
             store.getters.getTodoList[index].subtasks.splice(index_child, 1);
+          }
+        }
+      },
+
+      //DELETE SUBTASK DETAIL
+      [MutationTypes.deleteSubtaskDetail](state,  {subtaskKey, taskKey, index}: {subtaskKey: string, taskKey: string, index: number}) {
+        var indexTodo = store.getters.getTodoList.findIndex(function (o) {
+          return o.key === taskKey;
+        });
+    
+        if (index !== -1) {
+          var index_child = store.getters.getTodoList[indexTodo].subtasks.findIndex(function (o) {
+            return o.key === subtaskKey;
+          });
+    
+          if (index_child !== -1
+            &&store.getters.getTodoList[indexTodo].subtasks[index_child].details
+            ) {
+            store.getters.getTodoList[indexTodo].subtasks[index_child].details.splice(index, 1);
           }
         }
       },
