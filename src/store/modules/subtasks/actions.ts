@@ -13,6 +13,7 @@ export enum ActionTypes {
   EDITATTRIBUTESUBTASK = "editAttributeSubtask",
   SETSUBTASKDETAILSTATE = "setSubTaskDetailState",
   EDITSUBTASKDETAIL = "editSubtaskDetail",
+  DELETESUBTASKDETAIL = "deleteSubtaskDetail",
 }
 
 
@@ -83,6 +84,13 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
       isdone: isDone
     });
     context.commit(MutationTypes.setSubTaskState, { subtaskKey, motherKey, isDone });
+  },
+
+  // DELETE SUBTASK DETAIL 
+  async [ActionTypes.DELETESUBTASKDETAIL](context, { subtaskKey, taskKey, index }: { subtaskKey: string, taskKey: string, index: number }) {
+    const { uid } = store.getters.getUser.data;
+    await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${index}`).remove();
+    context.commit(MutationTypes.deleteSubtaskDetail, { subtaskKey, taskKey, index });
   },
 
   // DELETE SUBTASK

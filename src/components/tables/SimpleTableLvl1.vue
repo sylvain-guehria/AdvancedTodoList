@@ -15,7 +15,7 @@
           >Delete/Edit</md-table-head
         >
       </md-table-row>
-      <md-table-row v-for="(subtask, index) in item.subtasks" :key="index">
+      <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
         <md-table-cell width="40px"></md-table-cell>
         <md-table-cell width="350px" v-if="getSettings('label')">
           <div>
@@ -166,6 +166,14 @@ export default class SimpleTableLvl1 extends Vue {
   currentSubtaskKeyEdited: "";
   currentAttributeEdited: "";
 
+  getNumberDetailInSubtask = myFunctions.getNumberDetailInSubtask;
+
+  getSubtaskItem() {
+    if (this.item && this.item.subtasks) {
+      return this.item.subtasks;
+    }
+  }
+
   subtaskToEdit: SubTask = {
     label: "",
     isdone: false,
@@ -242,11 +250,12 @@ export default class SimpleTableLvl1 extends Vue {
           duration: 5000,
         });
       });
-    // if (this.item && this.item.subtasks && this.item.subtasks.length > 0) {
-    //   this.item.subtasks.unshift(emptySubTask);
-    // } else {
-    //   this.item.subtasks = [emptySubTask];
-    // }
+
+    if (this.item && this.item.subtasks && this.item.subtasks.length > 0) {
+      // this.item.subtasks.unshift(emptySubTask);
+    } else {
+      // this.item.subtasks = [emptySubTask];
+    }
   }
 
   getSettings(columnLabel) {
@@ -256,30 +265,6 @@ export default class SimpleTableLvl1 extends Vue {
       colum = colums.hidden_column_subtasks[columnLabel];
     }
     return colum;
-  }
-
-  getNumberDetailInSubtask(motherKey, key) {
-    var index = this.$store.getters.getTodoList.findIndex(function (o) {
-      return o.key === motherKey;
-    });
-
-    if (index !== -1 && this.$store.getters.getTodoList[index].subtasks) {
-      var index_child = this.$store.getters.getTodoList[index].subtasks.findIndex(
-        function (o) {
-          return o.key === key;
-        }
-      );
-
-      if (
-        index_child !== -1 &&
-        this.$store.getters.getTodoList[index].subtasks[index_child] &&
-        this.$store.getters.getTodoList[index].subtasks[index_child].details
-      ) {
-        return this.$store.getters.getTodoList[index].subtasks[index_child].length;
-      }
-    } else {
-      return 0;
-    }
   }
 
   //EDIT SUBTASK

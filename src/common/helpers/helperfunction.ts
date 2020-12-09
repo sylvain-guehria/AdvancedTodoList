@@ -78,4 +78,28 @@ export const myFunctions = {
     }
     return;
   },
+  getNumberDetailInSubtask(todoKey, SubtasKey) {
+    if(!store.getters.getTodoList){return}
+    var index = store.getters.getTodoList.findIndex(function (o) {
+      return o.key === todoKey;
+    });
+
+    if (index !== -1 && store.getters.getTodoList[index].subtasks) {
+      var index_child = store.getters.getTodoList[index].subtasks.findIndex(
+        function (o) {
+          return o.key === SubtasKey;
+        }
+      );
+
+      if (
+        index_child !== -1 &&
+        store.getters.getTodoList[index].subtasks[index_child] &&
+        store.getters.getTodoList[index].subtasks[index_child].details
+      ) {
+        return store.getters.getTodoList[index].subtasks[index_child].length;
+      }
+    } else {
+      return 0;
+    }
+  }
 };
