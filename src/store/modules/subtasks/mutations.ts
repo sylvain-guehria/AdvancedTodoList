@@ -100,20 +100,20 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
         }
       },
 
-      //SET DON UNDONE OF A SUBTASK
+      //DELETE SUBTASK DETAIL
       [MutationTypes.deleteSubtaskDetail](state,  {subtaskKey, taskKey, index}: {subtaskKey: string, taskKey: string, index: number}) {
-        // var index = store.getters.getTodoList.findIndex(function (o) {
-        //   return o.key === motherKey;
-        // });
+        var indexTodo = store.getters.getTodoList.findIndex(function (o) {
+          return o.key === taskKey;
+        });
     
-        // if (index !== -1) {
-        //   var index_child = store.getters.getTodoList[index].subtasks.findIndex(function (o) {
-        //     return o.key === subtaskKey;
-        //   });
+        if (index !== -1) {
+          var index_child = store.getters.getTodoList[indexTodo].subtasks.findIndex(function (o) {
+            return o.key === subtaskKey;
+          });
     
-        //   if (index_child !== -1) {
-        //     store.getters.getTodoList[index].subtasks[index_child].isdone = isDone;
-        //   }
-        // }
+          if (index_child !== -1) {
+            store.getters.getTodoList[indexTodo].subtasks[index_child].details.splice(index, 1);
+          }
+        }
       },
 }

@@ -1,6 +1,6 @@
 <template>
   <md-table>
-    <md-table-row v-for="(detail, index) in getDetails" :key="index">
+    <md-table-row v-for="(detail, index) in subtask.details" :key="index">
       <md-table-cell>
         <input-contenteditable
           :class="detail.isdone ? 'done' : ''"
@@ -63,11 +63,6 @@ export default class SimpleTableLvl2 extends Vue {
   currentIndex: number;
   currentAttributeEdited: string;
 
-  getDetails(){
-    if(this.subtask){
-    return this.subtask.details}
-  }
-
   setCurrentIndex_And_attribue(index, attribute) {
     this.currentIndex = index;
     this.currentAttributeEdited = attribute;
@@ -106,7 +101,7 @@ export default class SimpleTableLvl2 extends Vue {
     let attribute = this.currentAttributeEdited;
     let index = this.currentIndex;
     let value;
-    if (!e.target.innerText) {
+    if (e.target.innerText) {
       value = e.target.innerText;
     }
 
@@ -115,8 +110,6 @@ export default class SimpleTableLvl2 extends Vue {
     }
 
     if (value && value !== "") {
-      // eslint-disable-next-line no-console
-      console.log("le je dois save ");
       this.$store.dispatch(subtasksActionsType.EDITSUBTASKDETAIL, {
         taskKey,
         subtaskKey,
@@ -124,24 +117,12 @@ export default class SimpleTableLvl2 extends Vue {
         value,
         index,
       });
-    } else {
-      // eslint-disable-next-line no-console
-      console.log("delete ",index);
+    } else if(value == "" || value == undefined) {
       this.$store.dispatch(subtasksActionsType.DELETESUBTASKDETAIL, {
         taskKey,
         subtaskKey,
         index,
       });
-      this.deleteDetailLocally(index);
-      //updated key tabele lvl2
-    }
-  }
-
-  deleteDetailLocally(index) {
-    // eslint-disable-next-line no-console
-    console.log("delete locally");
-    if (this.subtask && this.subtask.details && this.subtask.details.length > 0) {
-      this.subtask.details.slice(index, index + 1);
     }
   }
 
