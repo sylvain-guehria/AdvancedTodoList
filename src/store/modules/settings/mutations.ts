@@ -18,6 +18,7 @@ export const mutationsSettings: MutationTree<Settings> = {
         state.drawersOpened = setting.drawersOpened;
         state.langage = setting.langage;
         state.with_weekend = setting.with_weekend;
+        state.hidden_column_subtasks = setting.hidden_column_subtasks
       },
     [MutationTypes.SET_LOADING](state, status: boolean) {
         state.loading = status;
