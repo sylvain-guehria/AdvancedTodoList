@@ -1,11 +1,6 @@
 <template>
   <div class="flex-column">
-    <md-table
-      v-model="paginatedTodos"
-      md-sort="name"
-      md-sort-order="asc"
-      md-card
-    >
+    <md-table v-model="paginatedTodos" md-sort="name" md-sort-order="asc" md-card>
       <md-empty-state v-if="this.$store.getters.getIsLoading"
         ><div class="spinner-rotate"></div
       ></md-empty-state>
@@ -51,10 +46,7 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell
-          md-sort-by="task"
-          md-label="Task Title"
-          v-if="getSettings('task')"
+        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')"
           ><div class="flex p-padding">
             <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
             <feather
@@ -75,11 +67,9 @@
               <input-contenteditable
                 v-model="item.task"
                 _is="p"
-                :maxlength="35"
+                :maxlength="200"
                 placeholder="Type a title"
-                @giveTodoKey="
-                  setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)
-                "
+                @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
                 @keyup.enter="onPressEnterOrBlur"
                 @blur="onPressEnterOrBlur"
               />
@@ -91,7 +81,10 @@
 
           <!-- start subtable -->
           <div v-if="includeKey(item.key)" class="subtable">
-            <simple-table-lvl1 :item="item"></simple-table-lvl1>
+            <simple-table-lvl1
+              :item="item"
+              :key="getNumberSubtaskInTask(item.key)"
+            ></simple-table-lvl1>
           </div>
           <!-- end subtable -->
         </md-table-cell>
@@ -101,10 +94,7 @@
           v-if="getSettings('deadline')"
           width="130px"
         >
-          <p
-            @click="showDatepickerDialog(item.key, item.deadline)"
-            v-if="item.deadline"
-          >
+          <p @click="showDatepickerDialog(item.key, item.deadline)" v-if="item.deadline">
             {{ dateOfTask(item.key) ? dateOfTask(item.key) : "" }}
           </p>
           <feather
@@ -146,9 +136,7 @@
             :maxlength="100"
             type="number"
             placeholder="none"
-            @giveTodoKey="
-              setCurrentTodoEdited_key_attribue(item.key, todoImpEnum)
-            "
+            @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoImpEnum)"
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
           />
@@ -296,9 +284,7 @@ export default {
       if (index !== -1) {
         this.paginatedTodos[index][attribute] = value;
         if (attribute === todoEnum.DEADLINE) {
-          this.paginatedTodos[index][
-            todoEnum.NUMBERDAYSLEFT
-          ] = this.getdaysleft(value);
+          this.paginatedTodos[index][todoEnum.NUMBERDAYSLEFT] = this.getdaysleft(value);
         }
       }
     },
@@ -528,6 +514,7 @@ export default {
         isdone: false,
         creationDate: new Date().toISOString().substr(0, 10),
         order: higher_order,
+        subtasks: []
       };
 
       this.$store
@@ -548,7 +535,12 @@ export default {
             duration: 5000,
           });
         });
-      this.paginatedTodos.unshift(emptyTodo);
+
+      if (this.paginatedTodos && this.paginatedTodos.length > 0) {
+        this.paginatedTodos.unshift(emptyTodo);
+      } else {
+        this.paginatedTodos = [emptyTodo];
+      }
     },
     updateFinishTime() {
       if (this.paginatedTodos && this.paginatedTodos.length > 0) {
@@ -593,6 +585,7 @@ export default {
       noDeadLine: false,
       currentKey: "",
       selectedDate: null,
+      getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask
     };
   },
 };

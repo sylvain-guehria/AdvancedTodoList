@@ -9,6 +9,7 @@
     @keydown.enter="$emit('keyup', $event)"
     @keypress="$emit('keypress', $event)"
     @blur="$emit('blur', $event)"
+    @click="$emit('click')"
   />
 </template>
 
@@ -23,7 +24,9 @@ export default {
       default: "p",
     },
     placeholder: String,
-    value: String,
+    value: {
+      default: "",
+    },
     maxlength: {
       type: Number,
       default: -1,
