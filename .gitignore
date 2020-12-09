@@ -87,3 +87,5 @@ yarn-error.log*
 *.sw?
 
 .npmrc
+
+data.json

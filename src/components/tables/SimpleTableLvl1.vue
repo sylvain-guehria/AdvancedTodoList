@@ -3,24 +3,14 @@
     <md-table class="table-custom no-border">
       <md-table-row v-if="item.subtasks && item.subtasks.length">
         <md-table-head width="40px"></md-table-head>
-        <md-table-head width="350px" v-if="getSettings('label')"
-          >Label</md-table-head
-        >
-        <md-table-head width="250px" v-if="getSettings('details')"
-          >Details</md-table-head
-        >
+        <md-table-head width="350px" v-if="getSettings('label')">Label</md-table-head>
+        <md-table-head width="250px" v-if="getSettings('details')">Details</md-table-head>
         <md-table-head width="50px" v-if="getSettings('deadline')"
           >Deadline</md-table-head
         >
-        <md-table-head width="50px" v-if="getSettings('importance')"
-          >Imp</md-table-head
-        >
-        <md-table-head width="50px" v-if="getSettings('order')"
-          >Order</md-table-head
-        >
-        <md-table-head width="50px" v-if="getSettings('isdone')"
-          >Done</md-table-head
-        >
+        <md-table-head width="50px" v-if="getSettings('importance')">Imp</md-table-head>
+        <md-table-head width="50px" v-if="getSettings('order')">Order</md-table-head>
+        <md-table-head width="50px" v-if="getSettings('isdone')">Done</md-table-head>
         <md-table-head width="50px" v-if="getSettings('actions')"
           >Delete/Edit</md-table-head
         >
@@ -29,15 +19,17 @@
         <md-table-cell width="40px"></md-table-cell>
         <md-table-cell width="350px" v-if="getSettings('label')">
           <div>
-            <p
-              contenteditable
-              @input="onChange($event, subtask.key, 'label')"
-              :class="subtask.isdone ? 'done' : ''"
-            >
-              {{ subtask.label || "..." }}
-            </p>
-          </div></md-table-cell
-        >
+            <input-contenteditable
+              v-model="subtask.label"
+              _is="p"
+              :maxlength="50"
+              type="text"
+              placeholder="label"
+              @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'label')"
+              @keydown.enter="onPressEnterOrBlur"
+              @blur="onPressEnterOrBlur"
+            /></div
+        ></md-table-cell>
 
         <md-table-cell width="250px" v-if="getSettings('details')">
           <simple-table-lvl2
@@ -47,11 +39,7 @@
           />
         </md-table-cell>
 
-        <md-table-head
-          width="50px"
-          v-if="getSettings('deadline')"
-          class="hover-click"
-        >
+        <md-table-head width="50px" v-if="getSettings('deadline')" class="hover-click">
           <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
             {{
               dateOfSubTask(item.key, subtask.key)
@@ -67,21 +55,28 @@
           ></feather>
         </md-table-head>
         <md-table-head width="50px" v-if="getSettings('importance')">
-          <p
-            contenteditable
-            @input="onChangeNumber($event, subtask.key, 'importance')"
-          >
-            {{ subtask.importance || "..." }}
-          </p>
+          <input-contenteditable
+            v-model="subtask.importance"
+            _is="p"
+            :maxlength="100"
+            type="number"
+            placeholder="..."
+            @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'importance')"
+            @keydown.enter="onPressEnterOrBlur"
+            @blur="onPressEnterOrBlur"
+          />
         </md-table-head>
         <md-table-head width="50px" v-if="getSettings('order')">
-          <p
-            contenteditable
-            @input="onChangeNumber($event, subtask.key, 'order')"
-          >
-            {{ subtask.order || "..." }}
-          </p></md-table-head
-        >
+          <input-contenteditable
+            v-model="subtask.order"
+            _is="p"
+            :maxlength="100"
+            type="number"
+            placeholder="..."
+            @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'order')"
+            @keydown.enter="onPressEnterOrBlur"
+            @blur="onPressEnterOrBlur"
+        /></md-table-head>
 
         <md-table-head width="50px" v-if="getSettings('isdone')"
           ><input
@@ -138,7 +133,7 @@
     </md-dialog>
   </div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { SubTask, Todo, HTMLElementEvent, SubTasks } from "@/common/models/types/types";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
@@ -151,11 +146,13 @@ import { MutationTypes as subtasksMutationType } from "@/store/modules/subtasks/
 import SimpleTableLvl2 from "./SimpleTableLvl2.vue";
 
 import lodash from "lodash";
+import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
 
 @Component({
   components: {
     "add-subtask-modal": AddSubtaskModal,
     "simple-table-lvl2": SimpleTableLvl2,
+    "input-contenteditable": InputContenteditable,
   },
 })
 export default class SimpleTableLvl1 extends Vue {
@@ -166,6 +163,8 @@ export default class SimpleTableLvl1 extends Vue {
   currentKey: string = "";
   dateOfSubTask = myFunctions.dateOfSubTask;
   date = "";
+  currentSubtaskKeyEdited: "";
+  currentAttributeEdited: "";
 
   subtaskToEdit: SubTask = {
     label: "",
@@ -174,6 +173,36 @@ export default class SimpleTableLvl1 extends Vue {
 
   selectedDate: Date = null;
   showdatepickerDialog: boolean = false;
+
+  setCurrentSubtaskEdited_key_attribue(key, attribute) {
+    this.currentSubtaskKeyEdited = key;
+    this.currentAttributeEdited = attribute;
+  }
+
+  onPressEnterOrBlur(e) {
+    if (e.keyCode == 13) {
+      event.preventDefault();
+    }
+    if (!e.target.innerText) {
+      return;
+    }
+
+    let key = this.currentSubtaskKeyEdited;
+    let attribute = this.currentAttributeEdited;
+    let motherKey = this.item.key;
+    let value = e.target.innerText;
+
+    if (value) {
+      value = value.trim();
+    }
+
+    this.$store.dispatch(subtasksActionsType.EDITATTRIBUTESUBTASK, {
+      motherKey,
+      key,
+      attribute,
+      value,
+    });
+  }
 
   addEmptySubTask(key) {
     let higher_order: number;
@@ -235,19 +264,18 @@ export default class SimpleTableLvl1 extends Vue {
     });
 
     if (index !== -1 && this.$store.getters.getTodoList[index].subtasks) {
-      var index_child = this.$store.getters.getTodoList[
-        index
-      ].subtasks.findIndex(function (o) {
-        return o.key === key;
-      });
+      var index_child = this.$store.getters.getTodoList[index].subtasks.findIndex(
+        function (o) {
+          return o.key === key;
+        }
+      );
 
       if (
         index_child !== -1 &&
         this.$store.getters.getTodoList[index].subtasks[index_child] &&
         this.$store.getters.getTodoList[index].subtasks[index_child].details
       ) {
-        return this.$store.getters.getTodoList[index].subtasks[index_child]
-          .length;
+        return this.$store.getters.getTodoList[index].subtasks[index_child].length;
       }
     } else {
       return 0;
@@ -287,17 +315,16 @@ export default class SimpleTableLvl1 extends Vue {
     this.updateLocalSubtasksDate(key);
 
     this.showdatepickerDialog = false;
-
   }
 
-   updateLocalSubtasksDate(key) {
-      if (this.item.subtasks && this.item.subtasks.length > 0) {
-         var index = this.item.subtasks.findIndex(function (o) {
+  updateLocalSubtasksDate(key) {
+    if (this.item.subtasks && this.item.subtasks.length > 0) {
+      var index = this.item.subtasks.findIndex(function (o) {
         return o.key === key;
       });
       if (index !== -1) this.item.subtasks[index].deadline = this.date;
-      }
     }
+  }
 
   showDatepickerDialog(key: string, deadline: string) {
     this.currentKey = key;
@@ -321,11 +348,7 @@ export default class SimpleTableLvl1 extends Vue {
     this.showdatepickerDialog = false;
   }
 
-  onChangeNumber(
-    e: HTMLElementEvent<HTMLTextAreaElement>,
-    key: string,
-    attribute
-  ) {
+  onChangeNumber(e: HTMLElementEvent<HTMLTextAreaElement>, key: string, attribute) {
     e.preventDefault();
     if (e && e.target && e.target.innerText) {
       let number = parseInt(e.target.innerText, 10);
