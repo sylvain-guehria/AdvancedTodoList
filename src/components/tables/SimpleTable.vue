@@ -83,6 +83,7 @@
           <div v-if="includeKey(item.key)" class="subtable">
             <simple-table-lvl1
               :item="item"
+              :key="getNumberSubtaskInTask(item.key)"
             ></simple-table-lvl1>
           </div>
           <!-- end subtable -->
@@ -513,6 +514,7 @@ export default {
         isdone: false,
         creationDate: new Date().toISOString().substr(0, 10),
         order: higher_order,
+        subtasks: []
       };
 
       this.$store
@@ -583,6 +585,7 @@ export default {
       noDeadLine: false,
       currentKey: "",
       selectedDate: null,
+      getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask
     };
   },
 };

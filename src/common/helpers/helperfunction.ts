@@ -101,5 +101,21 @@ export const myFunctions = {
     } else {
       return 0;
     }
+  },
+  getNumberSubtaskInTask(todoKey) {
+    if(!store.getters.getTodoList){return}
+    var index = store.getters.getTodoList.findIndex(function (o) {
+      return o.key === todoKey;
+    });
+
+      if (
+        index !== -1 &&
+        store.getters.getTodoList[index] &&
+        store.getters.getTodoList[index].subtasks
+      ) {
+        return store.getters.getTodoList[index].subtasks.length;
+    } else {
+      return 0;
+    }
   }
 };

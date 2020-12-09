@@ -111,7 +111,9 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
             return o.key === subtaskKey;
           });
     
-          if (index_child !== -1) {
+          if (index_child !== -1
+            &&store.getters.getTodoList[indexTodo].subtasks[index_child].details
+            ) {
             store.getters.getTodoList[indexTodo].subtasks[index_child].details.splice(index, 1);
           }
         }
