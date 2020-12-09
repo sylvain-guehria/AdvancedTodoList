@@ -1,11 +1,19 @@
 <template>
   <md-table>
     <md-table-row v-for="(detail, index) in subtask.details" :key="index">
-      <md-table-cell
-        ><p contenteditable @input="onChange($event, index, 'label')" :class="detail.isdone? 'done' : '' ">
-          {{ detail.label || "..." }}
-        </p></md-table-cell
-      >
+      <md-table-cell>
+        <input-contenteditable
+          :class="detail.isdone ? 'done' : ''"
+          v-model="detail.label"
+          _is="p"
+          :maxlength="50"
+          type="text"
+          placeholder="..."
+          @giveTodoKey="setCurrentIndex_And_attribue(index, 'label')"
+          @keydown.enter="onPressEnterOrBlur"
+          @blur="onPressEnterOrBlur"
+        />
+      </md-table-cell>
       <md-table-cell
         ><input
           type="checkbox"
@@ -26,7 +34,8 @@
     </md-table-row>
   </md-table>
 </template>
-<script lang='ts'>
+
+<script lang="ts">
 import { SubTask, Todo, HTMLElementEvent, Detail } from "@/common/models/types/types";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
@@ -35,8 +44,12 @@ import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
 import { MutationTypes as subtasksMutationType } from "@/store/modules/subtasks/mutations";
 
+import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
+
 @Component({
-  components: {},
+  components: {
+    "input-contenteditable": InputContenteditable,
+  },
 })
 export default class SimpleTableLvl2 extends Vue {
   @Prop() subtask: SubTask;
@@ -46,6 +59,18 @@ export default class SimpleTableLvl2 extends Vue {
     isdone: false,
   };
 
+  currentIndex: number;
+  currentAttributeEdited: string;
+
+  setCurrentIndex_And_attribue(index, attribute) {
+        // eslint-disable-next-line no-console
+      console.log("le index ", index);
+       // eslint-disable-next-line no-console
+      console.log("le attribute ", attribute);
+    this.currentIndex = index;
+    this.currentAttributeEdited = attribute;
+  }
+
   //EDIT Details
   onChange(e: HTMLElementEvent<HTMLTextAreaElement>, index: number, attribute: string) {
     e.preventDefault();
@@ -54,15 +79,42 @@ export default class SimpleTableLvl2 extends Vue {
       let subtaskKey = this.subtask.key;
 
       let value = e.target.innerText;
-      
+
       this.$store.dispatch(subtasksActionsType.EDITSUBTASKDETAIL, {
         taskKey,
         subtaskKey,
         attribute,
         value,
-        index
+        index,
       });
     }
+  }
+
+  onPressEnterOrBlur(e) {
+    if (e.keyCode == 13) {
+      event.preventDefault();
+    }
+    if (!e.target.innerText) {
+      return;
+    }
+
+    let taskKey = this.motherKey;
+    let subtaskKey = this.subtask.key;
+    let attribute = this.currentAttributeEdited;
+    let index = this.currentIndex;
+    let value = e.target.innerText;
+
+    if (value) {
+      value = value.trim();
+    }
+
+    this.$store.dispatch(subtasksActionsType.EDITSUBTASKDETAIL, {
+      taskKey,
+      subtaskKey,
+      attribute,
+      value,
+      index,
+    });
   }
 
   onChangeCheckBox(index, isdone) {
@@ -122,12 +174,10 @@ export default class SimpleTableLvl2 extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.done{
+.done {
   text-decoration: line-through;
 }
 .hover-click {
   cursor: pointer;
 }
-
-
 </style>
