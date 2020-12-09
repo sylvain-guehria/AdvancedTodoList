@@ -22,7 +22,7 @@
             <input-contenteditable
               v-model="subtask.label"
               _is="p"
-              :maxlength="50"
+              :maxlength="250"
               type="text"
               placeholder="label"
               @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'label')"
@@ -70,7 +70,7 @@
           <input-contenteditable
             v-model="subtask.order"
             _is="p"
-            :maxlength="100"
+            :maxlength="1000"
             type="number"
             placeholder="..."
             @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'order')"

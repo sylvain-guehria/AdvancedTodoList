@@ -6,7 +6,7 @@
           :class="detail.isdone ? 'done' : ''"
           v-model="detail.label"
           _is="p"
-          :maxlength="50"
+          :maxlength="200"
           type="text"
           placeholder="..."
           @giveTodoKey="setCurrentIndex_And_attribue(index, 'label')"

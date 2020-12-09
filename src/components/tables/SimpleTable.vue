@@ -67,7 +67,7 @@
               <input-contenteditable
                 v-model="item.task"
                 _is="p"
-                :maxlength="35"
+                :maxlength="200"
                 placeholder="Type a title"
                 @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
                 @keyup.enter="onPressEnterOrBlur"
