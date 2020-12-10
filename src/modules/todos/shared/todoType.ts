@@ -1,4 +1,4 @@
-import { SubTask } from "../../subtasks/shared/types";
+import { SubTask } from "../../subtasks/shared/subtaskTypes";
 
 export interface Todo {
   key?: string;

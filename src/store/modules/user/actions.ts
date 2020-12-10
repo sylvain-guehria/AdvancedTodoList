@@ -1,6 +1,6 @@
 import { database } from '@/apis/firebase/firebase';
 import { MutationTypes } from "./mutations";
-import { User } from "@/common/models/types/types";
+import { User } from "@/common/models/types/index";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 

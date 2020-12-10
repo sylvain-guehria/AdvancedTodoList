@@ -11,7 +11,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Todo } from "@/common/models/types/types";
+import { Todo } from "@/common/models/types/index";
 import { Component, Vue, Prop, PropSync } from "vue-property-decorator";
 import { myFunctions } from "@/common/helpers/helperfunction";
 

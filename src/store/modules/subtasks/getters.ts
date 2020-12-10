@@ -1,4 +1,4 @@
-import { SubTasks } from "@/common/models/types/types";
+import { SubTasks } from "@/common/models/types/index";
 import { GetterTree } from "vuex";
 import { RootState } from "../../state";
 import store from '@/store/index'; 

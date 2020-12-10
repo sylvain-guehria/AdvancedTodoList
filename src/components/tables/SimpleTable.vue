@@ -224,12 +224,12 @@
 <script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
-import { Todo, HTMLElementEvent, drawer } from "@/common/models/types/types";
+import { Todo, HTMLElementEvent, Drawer } from "@/common/models/types/index";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
 import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
 import { bus } from "@/main";
-import { BusEvent } from "@/common/models/enums/enum";
+import { BusEventEnum } from "@/common/models/enums/enum";
 import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
 
 //task
@@ -339,7 +339,7 @@ export default {
     },
 
     togleSubtasks(key) {
-      let drawer: drawer = {
+      let drawer: Drawer = {
         key: key,
         open: true,
       };
@@ -557,11 +557,11 @@ export default {
     this.updateFinishTime();
 
     if (this.mainList) {
-      bus.$on(BusEvent.ADDEMPTYTASK, this.addEmptyTask);
+      bus.$on(BusEventEnum.ADDEMPTYTASK, this.addEmptyTask);
     }
   },
   beforeDestroy() {
-    bus.$off(BusEvent.ADDEMPTYTASK, this.addEmptyTask);
+    bus.$off(BusEventEnum.ADDEMPTYTASK, this.addEmptyTask);
   },
   data() {
     return {

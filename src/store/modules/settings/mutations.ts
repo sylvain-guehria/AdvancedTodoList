@@ -1,5 +1,5 @@
 import { MutationTree } from "vuex";
-import { drawer, Settings } from "@/common/models/types/types";
+import { Drawer, Settings } from "@/common/models/types/index";
 
 
 export enum MutationTypes {
@@ -29,7 +29,7 @@ export const mutationsSettings: MutationTree<Settings> = {
     [MutationTypes.SET_WITH_WEEKEND](state, bool: boolean) {
         state.with_weekend = bool;
     },
-    [MutationTypes.SET_DRAWERS_SETTINGS](state, drawers: drawer[]) {
+    [MutationTypes.SET_DRAWERS_SETTINGS](state, drawers: Drawer[]) {
         state.drawersOpened = drawers;
     },
     [MutationTypes.HIDECOLUMN](state, the_hidden_column: string) {

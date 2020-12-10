@@ -4,7 +4,7 @@ import { gettersTodos } from "./getters";
 import { mutationsTodos } from "./mutations";
 import { stateTodos } from "./state";
 import { RootState } from "../../state";
-import { Todos } from "@/common/models/types/types"
+import { Todos } from "@/common/models/types/index"
 
 
 export const todos: Module<Todos, RootState> = {

@@ -1,4 +1,4 @@
-import { Settings } from "@/common/models/types/types";
+import { Settings } from "@/common/models/types/index";
 
 export const initialState: Settings =  {
     langage: 'en',

@@ -134,7 +134,7 @@
   </div>
 </template>
 <script lang="ts">
-import { SubTask, Todo, HTMLElementEvent, SubTasks } from "@/common/models/types/types";
+import { SubTask, Todo, HTMLElementEvent, SubTasks } from "@/common/models/types/index";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
