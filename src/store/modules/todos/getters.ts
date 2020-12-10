@@ -1,4 +1,4 @@
-import { Todos } from "@/common/models/types/types";
+import { Todos } from "@/common/models/types/index";
 import { GetterTree } from "vuex";
 import { RootState } from "../../state";
 

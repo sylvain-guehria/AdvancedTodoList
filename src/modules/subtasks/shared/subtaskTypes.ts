@@ -1,4 +1,4 @@
-import { Detail } from '@/common/models/types/types'
+import { Detail } from '@/common/models/types/index'
 
 export interface SubTask {
   key?: string;

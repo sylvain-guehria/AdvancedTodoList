@@ -1,4 +1,4 @@
-import { Settings } from "@/common/models/types/types";
+import { Settings } from "@/common/models/types/index";
 import { GetterTree } from "vuex";
 import { RootState } from "../../state";
 

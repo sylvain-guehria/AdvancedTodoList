@@ -1,4 +1,4 @@
-import { SubTasks } from "@/common/models/types/types";
+import { SubTasks } from "@/common/models/types/index";
 
 export const initialState: SubTasks =  {
   }

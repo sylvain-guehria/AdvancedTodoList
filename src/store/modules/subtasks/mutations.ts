@@ -1,5 +1,5 @@
 import { MutationTree } from "vuex";
-import { SubTask } from "@/common/models/types/types";
+import { SubTask } from "@/common/models/types/index";
 import store from '@/store/index'; 
 
 

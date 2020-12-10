@@ -40,7 +40,7 @@ import ReadOnlySubTaskTable from "@/components/tables/ReadOnlySubTaskTable.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
 import { bus } from "@/main";
 import DisplayTaskModal from "@/components/modals/DisplayTaskModal.vue";
-import { Todo } from "@/common/models/types/types";
+import { Todo } from "@/common/models/types/index";
 
 
 @Component({

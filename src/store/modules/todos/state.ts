@@ -1,4 +1,4 @@
-import { Todos } from "@/common/models/types/types";
+import { Todos } from "@/common/models/types/index";
 
 export const initialState: Todos =  {
   todolist: [],
