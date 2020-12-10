@@ -56,7 +56,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     const { uid } = store.getters.getUser.data;
 
-    if(!motherkey || !subtask.key){return}
+    if (!motherkey || !subtask.key) { return }
 
     await database.ref(`todos/${uid}/${motherkey}/subtasks/${subtask.key}`).set({
       ...subtask
@@ -71,7 +71,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     const { uid } = store.getters.getUser.data;
 
-    if(!motherKey || !key){return}
+    if (!motherKey || !key) { return }
 
     await database.ref(`todos/${uid}/${motherKey}/subtasks/${key}`).update({
       [attribute]: value
@@ -84,7 +84,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   // SET SUBTASK STATE
   async [ActionTypes.SETSUBTASKSTATE](context, { subtaskKey, motherKey, isDone }: { subtaskKey: string, motherKey: string, isDone: boolean }) {
     const { uid } = store.getters.getUser.data;
-    if(!motherKey || !subtaskKey){return}
+    if (!motherKey || !subtaskKey) { return }
 
     await database.ref(`todos/${uid}/${motherKey}/subtasks/${subtaskKey}`).update({
       isdone: isDone
@@ -96,7 +96,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   async [ActionTypes.DELETESUBTASKDETAIL](context, { subtaskKey, taskKey, index }: { subtaskKey: string, taskKey: string, index: number }) {
     const { uid } = store.getters.getUser.data;
 
-    if(!taskKey || !subtaskKey || (!index && index != 0)){return}
+    if (!taskKey || !subtaskKey || (!index && index != 0)) { return }
 
     await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${index}`).remove();
     context.commit(MutationTypes.deleteSubtaskDetail, { subtaskKey, taskKey, index });
@@ -105,7 +105,10 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   // DELETE SUBTASK
   async [ActionTypes.DELETESUBTASK](context, { subtaskKey, todoKey }: { subtaskKey: string, todoKey: string }) {
     const { uid } = store.getters.getUser.data;
-    
+
+    if (!todoKey || !subtaskKey) { return }
+
+
     await database.ref(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}`).remove();
     context.commit(MutationTypes.removeSubtaskByKey, { subtaskKey, todoKey });
   },
@@ -113,6 +116,9 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   // SET SUBTASK DETAIL STATE
   async [ActionTypes.SETSUBTASKDETAILSTATE](context, { subtaskKey, motherKey, isdone, index }: { subtaskKey: string, motherKey: string, isdone: boolean, index: number }) {
     const { uid } = store.getters.getUser.data;
+
+    if (!motherKey || !subtaskKey || (!index && index != 0)) { return }
+
     await database.ref(`todos/${uid}/${motherKey}/subtasks/${subtaskKey}/details/${index}`).update({
       isdone: isdone
     });
@@ -123,6 +129,9 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   async [ActionTypes.EDITSUBTASKDETAIL](context, { taskKey, subtaskKey, attribute, value, index }
     : { taskKey: string, subtaskKey: string, attribute: string, value: string, index: number }) {
     const { uid } = store.getters.getUser.data;
+
+    if (!taskKey || !subtaskKey || (!index && index != 0)) { return }
+
     await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${index}`).update({
       [attribute]: value
     });
