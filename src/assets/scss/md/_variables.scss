@@ -358,7 +358,7 @@ $screen-desktop: $screen-md-min !default;
 
 // Large screen / wide desktop
 //** Deprecated `$screen-lg` as of v3.0.1
-$screen-lg: 1200px !default;
+$screen-lg: 992px !default;
 $screen-lg-min: $screen-lg !default;
 //** Deprecated `$screen-lg-desktop` as of v3.0.1
 $screen-lg-desktop: $screen-lg-min !default;
@@ -397,7 +397,7 @@ $container-desktop: (940px + $grid-gutter-width) !default;
 $container-md: $container-desktop !default;
 
 // Large screen / wide desktop
-$container-large-desktop: (1140px + $grid-gutter-width) !default;
+$container-large-desktop: (940px + $grid-gutter-width) !default;
 //** For `$screen-lg-min` and up.
 $container-lg: $container-large-desktop !default;
 
@@ -534,8 +534,8 @@ $jumbotron-padding: 30px !default;
 $jumbotron-color: inherit !default;
 $jumbotron-bg: $gray-lighter !default;
 $jumbotron-heading-color: inherit !default;
-$jumbotron-font-size: ceil(($font-size-base * 1.5)) !default;
-$jumbotron-heading-font-size: ceil(($font-size-base * 4.5)) !default;
+$jumbotron-font-size: ceil(($font-size-base * 1.3)) !default;
+$jumbotron-heading-font-size: ceil(($font-size-base * 4)) !default;
 
 //== Form states and alerts
 //
@@ -888,7 +888,7 @@ $headings-small-color: $gray-light !default;
 //** Blockquote small color
 $blockquote-small-color: $gray-light !default;
 //** Blockquote font size
-$blockquote-font-size: ($font-size-base * 1.25) !default;
+$blockquote-font-size: ($font-size-base ) !default;
 //** Blockquote border color
 $blockquote-border-color: $gray-lighter !default;
 //** Page header border color
@@ -933,8 +933,8 @@ $mdb-input-line-height-base: $line-height-base; //1.428571429 !default; // 20/14
 $mdb-input-line-height-computed: floor(
   ($mdb-input-font-size-base * $mdb-input-line-height-base)
 ) !default; // ~20px
-$mdb-input-line-height-large: 1.3333333 !default; // extra decimals for Win 8.1 Chrome
-$mdb-input-line-height-small: 1.5 !default;
+$mdb-input-line-height-large: 1 !default; // extra decimals for Win 8.1 Chrome
+$mdb-input-line-height-small: 1 !default;
 
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 $mdb-input-padding-base-vertical: 8px - 1px !default; // was 6.
