@@ -1,3 +1,5 @@
+import { Detail } from '@/common/models/types/types'
+
 export interface SubTask {
   key?: string;
   label: string;
@@ -10,9 +12,4 @@ export interface SubTask {
   importance?: number,
   tags?: string[],
   motherKey?: string
-}
-
-export interface Detail {
-  label: string;
-  isdone: boolean;
 }

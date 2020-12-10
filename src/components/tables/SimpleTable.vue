@@ -235,7 +235,7 @@ import InputContenteditable from "@/common/componentslib/input-contenteditable/i
 //task
 import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
 import { MutationTypes as tasksMutationType } from "@/store/modules/todos/mutations";
-import { todoEnum } from "@/common/modules/todos/enumTodo";
+import { todoEnum } from "@/modules/todos/shared/enumTodo";
 
 export default {
   name: "simple-table",
