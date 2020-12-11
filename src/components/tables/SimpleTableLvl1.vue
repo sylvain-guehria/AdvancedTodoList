@@ -134,7 +134,13 @@
   </div>
 </template>
 <script lang="ts">
-import { SubTask, Todo, HTMLElementEvent, SubTasks } from "@/common/models/types/index";
+import {
+  SubTask,
+  Todo,
+  HTMLElementEvent,
+  SubTasks,
+  Settings,
+} from "@/common/models/types/index";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
@@ -183,6 +189,11 @@ export default class SimpleTableLvl1 extends Vue {
   showdatepickerDialog: boolean = false;
 
   setCurrentSubtaskEdited_key_attribue(key, attribute) {
+      // eslint-disable-next-line no-console
+      console.log("key ", key);
+       // eslint-disable-next-line no-console
+      console.log("attribute ", attribute);
+
     this.currentSubtaskKeyEdited = key;
     this.currentAttributeEdited = attribute;
   }
@@ -258,11 +269,13 @@ export default class SimpleTableLvl1 extends Vue {
     }
   }
 
-  getSettings(columnLabel) {
-    let colums = this.$store.getters.getSettings;
-    let colum;
+  getSettings(columnLabel: string) {
+    let colums: Settings = this.$store.getters.getSettings;
+    let colum: boolean = true;
     if (colums && colums.hidden_column_subtasks) {
-      colum = colums.hidden_column_subtasks[columnLabel];
+      if (colums.hidden_column_subtasks[columnLabel]) {
+        colum = colums.hidden_column_subtasks[columnLabel];
+      }
     }
     return colum;
   }
