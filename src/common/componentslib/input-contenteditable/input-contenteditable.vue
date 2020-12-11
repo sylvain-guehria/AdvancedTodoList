@@ -8,7 +8,7 @@
     @keydown="$emit('keydown', $event)"
     @keydown.enter="$emit('keyup', $event)"
     @keypress="$emit('keypress', $event)"
-    @blur="$emit('blur', $event)"
+    @blur="blur($event)"
     @click="$emit('click')"
   />
 </template>
@@ -54,8 +54,14 @@ export default {
     },
   },
   methods: {
+    blur(e) {
+      this.$emit("giveTodoKey");
+      this.$emit("blur",e);
+    },
     async onInput(e) {
       let text = this.$refs.contenteditable.textContent;
+
+      this.$emit("giveTodoKey");
 
       //empeche le user d'inserer une lettre si input number
       if (text != null && this.type === "number" && !text.match(/^[0-9]+$/)) {
@@ -63,11 +69,7 @@ export default {
         this.$refs.contenteditable.textContent = text.replace(/\D/g, "");
         this.$emit("input", textNoLetter);
         return;
-      } else if (
-        text != null &&
-        this.type === "number" &&
-        text.match(/^[0-9]+$/)
-      ) {
+      } else if (text != null && this.type === "number" && text.match(/^[0-9]+$/)) {
         this.$emit("input", text);
       }
 
@@ -78,9 +80,7 @@ export default {
 
         if (
           text.length > this.maxlength ||
-          (text != "" &&
-            this.type === "number" &&
-            !this.isReallyaNumber(text)) 
+          (text != "" && this.type === "number" && !this.isReallyaNumber(text))
         ) {
           const textNodes = Array.from(this.$refs.contenteditable.childNodes);
           const realAnchorOffset =
@@ -99,25 +99,19 @@ export default {
           //Use either the lastText if exists, or the current text but trimmed
           const newTextToSet = this.lastText || text.slice(0, this.maxlength);
 
-          let newOffsetToSet =
-            realAnchorOffset - (text.length - newTextToSet.length);
+          let newOffsetToSet = realAnchorOffset - (text.length - newTextToSet.length);
           newOffsetToSet = Math.min(newOffsetToSet, this.maxlength); // Make sure not over maxlength
           //make a new text node (so don't use anchorNode for selection.collapse())
           this.$refs.contenteditable.textContent = newTextToSet;
 
           //Set selection using last valid offset
-          selection.collapse(
-            this.$refs.contenteditable.childNodes[0],
-            newOffsetToSet
-          );
+          selection.collapse(this.$refs.contenteditable.childNodes[0], newOffsetToSet);
           this.lastText = newTextToSet;
           return;
         } else {
           this.lastText = text;
         }
       }
-
-      this.$emit("giveTodoKey");
 
       //empeche le user d'inserer un espace seul
       if (text != null && text.trim().length == 0) {
@@ -129,8 +123,7 @@ export default {
     },
     isReallyaNumber(value) {
       return (
-        isNumber(value) ||
-        (isString(value) && Boolean(value.trim()) && isFinite(value))
+        isNumber(value) || (isString(value) && Boolean(value.trim()) && isFinite(value))
       );
     },
   },
