@@ -261,7 +261,7 @@ export default class SimpleTableLvl1 extends Vue {
   getSettings(columnLabel) {
     let colums = this.$store.getters.getSettings;
     let colum;
-    if (colums) {
+    if (colums && colums.hidden_column_subtasks) {
       colum = colums.hidden_column_subtasks[columnLabel];
     }
     return colum;
