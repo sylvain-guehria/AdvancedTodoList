@@ -189,11 +189,6 @@ export default class SimpleTableLvl1 extends Vue {
   showdatepickerDialog: boolean = false;
 
   setCurrentSubtaskEdited_key_attribue(key, attribute) {
-      // eslint-disable-next-line no-console
-      console.log("key ", key);
-       // eslint-disable-next-line no-console
-      console.log("attribute ", attribute);
-
     this.currentSubtaskKeyEdited = key;
     this.currentAttributeEdited = attribute;
   }
