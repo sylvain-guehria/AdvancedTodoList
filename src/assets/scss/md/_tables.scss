@@ -35,7 +35,7 @@ table {
   table {
     border: $table-default-border;
     border-radius: 0 10px 10px 10px;
-    font-size : 25px;
+    font-size : 24px;
     .md-table-cell {
       padding-top: 10px ;
     
@@ -54,6 +54,7 @@ table {
       
       }
       }
+      
 
     }
 }
@@ -74,8 +75,7 @@ table {
     }
     .md-table-head-label {
       font-size: $font-size-small;
-      font-weight: bold;
-      text-transform: uppercase;
+      font-weight: lighter;
     }
   }
   tbody {
@@ -101,18 +101,32 @@ table {
       border: none;
       td {
         border: none;
-        &.more-column {
-          border-left: $table-default-border;
-          padding: 0;
-          width: 50px;
-
-          .md-button {
-            min-width: 70px;
-            width: 70px;
-          }
+        &.column-20 {
+          width: 20px;
         }
-        &.last-column {
-          padding-right: 10px;
+        &.column-30 {
+          width: 30px;
+        }
+        &.column-40 {
+          width: 40px;
+        }
+        &.column-50 {
+          width: 50px;
+        }
+        &.column-60 {
+          width: 60px;
+        }
+        &.column-70 {
+          width: 70px;
+        }
+        &.column-80 {
+          width: 80px;
+        }
+        &.column-90 {
+          width: 90px;
+        }
+        &.column-100 {
+          width: 100px;
         }
       }
       &:hover:not(.md-header-row) .md-table-cell,

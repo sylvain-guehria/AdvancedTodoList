@@ -19,7 +19,13 @@
         slot-scope="{ item, index }"
         :class="index % 2 !== 0 ? 'other-color-row' : ''"
       >
-        <md-table-cell md-sort-by="order" md-label="Order" v-if="getSettings('order')">
+        <md-table-cell
+          md-numeric
+          md-sort-by="order"
+          md-label="Order"
+          v-if="getSettings('order')"
+          width="100px"
+        >
           <div class="row-order">
             <div class="chevron-order">
               <feather
@@ -30,9 +36,7 @@
                 v-longclick="() => orderDown(item)"
               ></feather>
             </div>
-              <p>
-                {{ item.order }}
-              </p>
+            {{ item.order }}
             <div class="chevron-order">
               <feather
                 class="hover-click"
@@ -48,24 +52,27 @@
         <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')"
           ><div class="flex">
             <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
-            <feather
-              size="15px"
-              class="hover-click"
-              v-if="!includeKey(item.key)"
-              type="plus"
-              @click="togleSubtasks(item.key)"
-            ></feather>
-            <feather
-              class="hover-click"
-              size="15px"
-              type="minus"
-              @click="unTogleSubtasks(item.key)"
-              v-if="includeKey(item.key)"
-            ></feather>
+            <div class="plus-minus">
+              <feather
+                size="15px"
+                class="hover-click"
+                v-if="!includeKey(item.key)"
+                type="plus"
+                @click="togleSubtasks(item.key)"
+              ></feather>
+              <feather
+                class="hover-click"
+                size="15px"
+                type="minus"
+                @click="unTogleSubtasks(item.key)"
+                v-if="includeKey(item.key)"
+              ></feather>
+            </div>
             <div class="block">
               <input-contenteditable
                 v-model="item.task"
                 _is="p"
+                class="task"
                 :maxlength="200"
                 placeholder="Type a title"
                 @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
@@ -89,30 +96,32 @@
         </md-table-cell>
         <md-table-cell
           md-sort-by="deadline"
-          md-label="Deadline"
           v-if="getSettings('deadline')"
+          class="column-90"
+          md-label="Deadline"
         >
           <p @click="showDatepickerDialog(item.key, item.deadline)" v-if="item.deadline">
             {{ dateOfTask(item.key) ? dateOfTask(item.key) : "" }}
           </p>
-            <div class="hover-click">
-          <feather
-            size="20px"
-            v-if="!item.deadline"
-            @click="showDatepickerDialog(item.key, null)"
-            type="calendar"
-          ></feather>
-            </div>
+          <div class="hover-click">
+            <feather
+              size="20px"
+              v-if="!item.deadline"
+              @click="showDatepickerDialog(item.key, null)"
+              type="calendar"
+            ></feather>
+          </div>
         </md-table-cell>
 
-        <md-table-cell md-label="Finish Time" v-if="getSettings('numberdaysleft')">
+        <md-table-cell v-if="getSettings('numberdaysleft')" class="column-50">
           <p>{{ item.numberdaysleft }}</p>
         </md-table-cell>
 
         <md-table-cell
           md-sort-by="creationDate"
-          md-label="Creation date"
           v-if="getSettings('creationDate')"
+          class="column-90"
+          md-label="Create"
         >
           <p>
             {{ item.creationDate }}
@@ -121,8 +130,8 @@
 
         <md-table-cell
           md-sort-by="importance"
-          md-label="Imp/100"
           v-if="getSettings('importance')"
+          class="column-30"
         >
           <input-contenteditable
             v-model="item.importance"
@@ -136,19 +145,25 @@
           />
         </md-table-cell>
 
-        <md-table-cell md-label="done?" v-if="getSettings('isdone')">
-          <div class="hover-click">
-            <feather @click="setTodoDone(item)" type="check" v-if="item.isdone"></feather>
-            <feather @click="setTodoDone(item)" type="x" v-if="!item.isdone"></feather>
-          </div>
-        </md-table-cell>
-
-        <md-table-cell md-label="actions">
+        <md-table-cell class="column-20">
           <div class="hover-click">
             <feather
-              size="20px"
+              size="15px"
               @click="deleteTodo(item.key, item.order)"
               type="delete"
+            ></feather>
+            &nbsp;
+            <feather
+              @click="setTodoDone(item)"
+              type="check"
+              v-if="item.isdone"
+              size="15px"
+            ></feather>
+            <feather
+              @click="setTodoDone(item)"
+              type="x"
+              v-if="!item.isdone"
+              size="15px"
             ></feather>
           </div>
         </md-table-cell>
@@ -588,6 +603,9 @@ p {
   width: 15px;
   margin: auto;
   padding-bottom: 5px;
+}
+.plus-minus {
+  padding-top: 2px;
 }
 .row-order {
   display: flex;

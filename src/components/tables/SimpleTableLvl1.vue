@@ -3,21 +3,22 @@
     <md-table class="table-custom no-border">
       <md-table-row v-if="item.subtasks && item.subtasks.length">
         <md-table-head ></md-table-head>
-        <md-table-head v-if="getSettings('label')">Label</md-table-head>
-        <md-table-head  v-if="getSettings('details')">Details</md-table-head>
-        <md-table-head v-if="getSettings('deadline')"
-          >Deadline</md-table-head
+        <md-table-cell v-if="getSettings('label')">Label</md-table-cell>
+        <md-table-cell  v-if="getSettings('details')">Details</md-table-cell>
+        <md-table-cell v-if="getSettings('deadline')"
+          >Deadline</md-table-cell
         >
-        <md-table-head v-if="getSettings('importance')">Imp</md-table-head>
-        <md-table-head v-if="getSettings('order')">Order</md-table-head>
-        <md-table-head v-if="getSettings('isdone')">Done</md-table-head>
-        <md-table-head v-if="getSettings('actions')"
-          >Delete/Edit</md-table-head
+        <md-table-cell v-if="getSettings('importance')">Imp</md-table-cell>
+        <md-table-cell v-if="getSettings('order')">Order</md-table-cell>
+        <md-table-cell v-if="getSettings('isdone')">Done</md-table-cell>
+        <md-table-cell v-if="getSettings('actions')"
+          >Delete/Edit</md-table-cell
         >
       </md-table-row>
-      <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
+      <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index" :class="index % 2 === 0 ? 'other-color-row' : ''">
         <md-table-cell ></md-table-cell>
-        <md-table-cell v-if="getSettings('label')">
+        <md-table-cell v-if="getSettings('label')"
+        >
           <div>
             <input-contenteditable
               v-model="subtask.label"
@@ -39,7 +40,7 @@
           />
         </md-table-cell>
 
-        <md-table-head v-if="getSettings('deadline')" class="hover-click">
+        <md-table-cell v-if="getSettings('deadline')" class="hover-click">
           <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
             {{
               dateOfSubTask(item.key, subtask.key)
@@ -48,13 +49,13 @@
             }}
           </p>
           <feather
-            size="20px"
+            size="15px"
             v-if="!subtask.deadline"
             type="calendar"
             @click="showDatepickerDialog(subtask.key)"
           ></feather>
-        </md-table-head>
-        <md-table-head v-if="getSettings('importance')">
+        </md-table-cell>
+        <md-table-cell v-if="getSettings('importance')">
           <input-contenteditable
             v-model="subtask.importance"
             _is="p"
@@ -65,8 +66,10 @@
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
           />
-        </md-table-head>
-        <md-table-head v-if="getSettings('order')">
+        </md-table-cell>
+        <md-table-cell v-if="getSettings('order')"
+         class="column-20"
+        >
           <input-contenteditable
             v-model="subtask.order"
             _is="p"
@@ -76,38 +79,40 @@
             @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'order')"
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
-        /></md-table-head>
+        /></md-table-cell>
 
-        <md-table-head v-if="getSettings('isdone')"
+        <md-table-cell v-if="getSettings('isdone')"
           ><input
             type="checkbox"
             v-model="subtask.isdone"
             @click="setSubTaskState(subtask.key, item.key, !subtask.isdone)"
           />
-        </md-table-head>
+        </md-table-cell>
 
-        <md-table-head v-if="getSettings('actions')">
+        <md-table-cell v-if="getSettings('actions')">
           <feather
             type="edit"
-            class="md-icon hover-click"
+             size="15px"
+            class=" hover-click"
             @click="editSubtask(subtask, item.key)"
           ></feather>
 
           <feather
             type="delete"
-            class="md-icon hover-click"
+             size="15px"
+            class=" hover-click"
             @click="deleteSubtask(subtask.key, item.key)"
           ></feather>
-        </md-table-head>
+        </md-table-cell>
       </md-table-row>
       <md-table-row>
-        <md-table-head colspan="6">
+        <md-table-cell colspan="6">
           <feather
             type="plus-circle"
             class="hover-click"
             @click="addEmptySubTask(item.key)"
           ></feather
-        ></md-table-head>
+        ></md-table-cell>
       </md-table-row>
     </md-table>
 
