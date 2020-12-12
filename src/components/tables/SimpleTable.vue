@@ -49,7 +49,10 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')"
+        <md-table-cell
+          md-sort-by="task"
+          md-label="Task Title"
+          v-if="getSettings('task')"
           ><div class="flex">
             <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
             <div class="plus-minus">
@@ -71,6 +74,7 @@
             <div class="block">
               <input-contenteditable
                 v-model="item.task"
+                :class="item.isdone ? 'done' : ''"
                 _is="p"
                 class="task"
                 :maxlength="200"
@@ -146,25 +150,14 @@
         </md-table-cell>
 
         <md-table-cell class="column-20">
-          <div class="hover-click">
-            <feather
-              size="15px"
-              @click="deleteTodo(item.key, item.order)"
-              type="delete"
-            ></feather>
-            &nbsp;
-            <feather
-              @click="setTodoDone(item)"
-              type="check"
-              v-if="item.isdone"
-              size="15px"
-            ></feather>
-            <feather
-              @click="setTodoDone(item)"
-              type="x"
-              v-if="!item.isdone"
-              size="15px"
-            ></feather>
+          <div class="hover-click flex">
+            <md-checkbox v-model="item.isdone" @click.stop="setTodoDone(item)">
+              <feather
+                size="25px"
+                @click.stop.prevent="activeDeleteTodo(item.key, item.order)"
+                type="delete"
+              ></feather
+            > </md-checkbox>
           </div>
         </md-table-cell>
       </md-table-row>
@@ -190,18 +183,41 @@
         ></display-task-modal>
       </md-dialog>
 
+      <!-- DATE PICKER -->
       <md-dialog
         :md-active.sync="showDialogDate"
         :show="showDialogDate"
         @show="showDialogDate = $event"
       >
-        <md-button class="md-icon-button simple" @click="closeDialogDate()">
-          <md-icon>close</md-icon>
-        </md-button>
-        <v-date-picker v-model="date" width="290" class="mt-4"></v-date-picker>
-        <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
-        <md-button class="md-tertiary" @click="editDateTask"> Save </md-button>
+        <div class="padding">
+          <md-button class="md-icon-button simple" @click="closeDialogDate">
+            <md-icon>close</md-icon>
+          </md-button>
+          <v-date-picker v-model="date"></v-date-picker>
+        </div>
+        <div class="padding">
+          <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
+          <md-button class="md-tertiary" @click="editDateTask"> Save </md-button>
+        </div>
       </md-dialog>
+
+      <!-- CONFIRM DELET DIALOG -->
+      <div>
+        <md-dialog :md-active.sync="deleteDialog">
+          <md-dialog-title>Delete task?</md-dialog-title>
+
+          <md-dialog-content>
+            You cannot go back if you press 'Yes'
+          </md-dialog-content>
+
+          <md-dialog-actions>
+            <md-button class="md-tertiary" @click="onCancelDialogDelete"
+              >Cancel</md-button
+            >
+            <md-button class="md-tertiary" @click="onConfirmDialogDelete">Yes</md-button>
+          </md-dialog-actions>
+        </md-dialog>
+      </div>
     </div>
   </div>
 </template>
@@ -245,8 +261,27 @@ export default {
         this.noDeadLine = false;
       }
     },
+    deleteDialog: function () {
+      if (this.deleteDialog === false) {
+        this.onCancelDialogDelete();
+      }
+    },
   },
   methods: {
+    activeDeleteTodo(key: string, order: number) {
+      this.deleteDialog = true;
+      this.currentKey = key;
+      this.currentOrder = order;
+    },
+    onCancelDialogDelete() {
+      this.currentKey = "";
+      this.currentOrder = null;
+      this.deleteDialog = false;
+    },
+    onConfirmDialogDelete() {
+      this.deleteTodo(this.currentKey, this.currentOrder);
+      this.deleteDialog = false;
+    },
     editDateTask() {
       let value = this.date;
       if (this.noDeadLine) {
@@ -569,8 +604,10 @@ export default {
       showDialogDate: false,
       noDeadLine: false,
       currentKey: "",
+      currentOrder: null,
       selectedDate: null,
       getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask,
+      deleteDialog: false,
     };
   },
 };
@@ -612,5 +649,11 @@ p {
 }
 .subtable {
   margin-left: 5px;
+}
+.done {
+  text-decoration: line-through;
+}
+.padding {
+  padding: 10px;
 }
 </style>
