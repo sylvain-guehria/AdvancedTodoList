@@ -23,9 +23,10 @@ table {
   }
 }
 
+//pour toute les table cell, et dessous par lvl de table 
 .md-table-cell {
-  padding-left: 30px;
   text-align: left;
+  vertical-align: top;
 }
 
 .md-table,
@@ -35,11 +36,23 @@ table {
     border: $table-default-border;
     border-radius: 0 10px 10px 10px;
     font-size : 25px;
+    .md-table-cell {
+      padding-top: 10px ;
+    
+    }
+
     table{
       border : none;
-
+      .md-table-cell {
+        padding-top: 0px ;
+      
+      }
       table{
       border : solid 1px grey;
+      .md-table-cell {
+        padding-top: 0px ;
+      
+      }
       }
 
     }
@@ -57,7 +70,6 @@ table {
 
     .md-table-head {
       border-bottom: $table-default-border;
-      padding-left: 25px;
       color: $text-dark !important;
     }
     .md-table-head-label {

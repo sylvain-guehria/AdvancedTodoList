@@ -30,11 +30,9 @@
                 v-longclick="() => orderDown(item)"
               ></feather>
             </div>
-            <div class="block-order">
               <p>
                 {{ item.order }}
               </p>
-            </div>
             <div class="chevron-order">
               <feather
                 class="hover-click"
@@ -48,7 +46,7 @@
         </md-table-cell>
 
         <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')"
-          ><div class="flex p-padding">
+          ><div class="flex">
             <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
             <feather
               size="15px"
@@ -567,10 +565,6 @@ export default {
 .hover-click {
   cursor: pointer;
 }
-.p-padding {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
 .flex {
   display: flex;
 }
@@ -597,11 +591,6 @@ p {
 }
 .row-order {
   display: flex;
-}
-.block-order {
-  justify-content: center;
-  width: 30px;
-  margin: auto;
 }
 .subtable {
   margin-left: 5px;
