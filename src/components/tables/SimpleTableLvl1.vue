@@ -1,14 +1,16 @@
 <template>
   <div>
     <md-table class="table-custom no-border">
-      <md-table-row
-        v-for="(subtask, index) in getSubtaskItem()"
-        :key="index"
-        :class="index % 2 !== 0 ? 'other-color-row' : ''"
-      >
-        <md-table-cell></md-table-cell>
+      <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
         <md-table-cell v-if="getSettings('label')">
-          <div>
+          <div class="flex">
+            <div class="checkme">
+              <input
+                type="checkbox"
+                v-model="subtask.isdone"
+                @click="setSubTaskState(subtask.key, item.key, !subtask.isdone)"
+              />
+            </div>
             <input-contenteditable
               v-model="subtask.label"
               :class="subtask.isdone ? 'done' : ''"
@@ -21,6 +23,7 @@
               @blur="onPressEnterOrBlur"
             />
           </div>
+
           <div class="details">
             <simple-table-lvl2
               :subtask="subtask"
@@ -67,24 +70,10 @@
             @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'order')"
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
-        /></md-table-cell>
-
-        <md-table-cell v-if="getSettings('isdone')"
-          ><input
-            type="checkbox"
-            v-model="subtask.isdone"
-            @click="setSubTaskState(subtask.key, item.key, !subtask.isdone)"
           />
         </md-table-cell>
 
         <md-table-cell v-if="getSettings('actions')">
-          <feather
-            type="edit"
-            size="15px"
-            class="hover-click"
-            @click="editSubtask(subtask, item.key)"
-          ></feather>
-
           <feather
             type="delete"
             size="15px"
@@ -440,5 +429,13 @@ export default class SimpleTableLvl1 extends Vue {
 }
 .details {
   margin-left: 50px;
+}
+.flex {
+  display: flex;
+}
+.checkme {
+  margin-left: 10px;
+  margin-top: 2px;
+  margin-right: 10px;
 }
 </style>

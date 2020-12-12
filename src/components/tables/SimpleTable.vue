@@ -23,6 +23,7 @@
           md-numeric
           md-sort-by="order"
           md-label="Order"
+          class="column-50"
           v-if="getSettings('order')"
           width="100px"
         >
@@ -71,22 +72,20 @@
                 v-if="includeKey(item.key)"
               ></feather>
             </div>
-            <div class="block">
               <input-contenteditable
                 v-model="item.task"
                 :class="item.isdone ? 'done' : ''"
                 _is="p"
                 class="task"
-                :maxlength="200"
+                :maxlength="250"
                 placeholder="Type a title"
                 @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
                 @keyup.enter="onPressEnterOrBlur"
                 @blur="onPressEnterOrBlur"
               />
-              &nbsp;
-            </div>
-            <p>({{ getNumberSubTaskActive(item) }})</p>
-            <div class="bullet" :class="bulletClass(item)"></div>
+               <div class="bullet" :class="bulletClass(item)"></div>
+           ({{ getNumberSubTaskActive(item) }})
+           
           </div>
 
           <!-- start subtable -->
@@ -98,6 +97,7 @@
           </div>
           <!-- end subtable -->
         </md-table-cell>
+
         <md-table-cell
           md-sort-by="deadline"
           v-if="getSettings('deadline')"
@@ -117,11 +117,7 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell v-if="getSettings('numberdaysleft')" class="column-50">
-          <p>{{ item.numberdaysleft }}</p>
-        </md-table-cell>
-
-        <md-table-cell
+           <md-table-cell
           md-sort-by="creationDate"
           v-if="getSettings('creationDate')"
           class="column-90"
@@ -132,6 +128,10 @@
           </p></md-table-cell
         >
 
+        <md-table-cell v-if="getSettings('numberdaysleft')" class="column-50">
+          <p>{{ item.numberdaysleft }}</p>
+        </md-table-cell>
+     
         <md-table-cell
           md-sort-by="importance"
           v-if="getSettings('importance')"
@@ -623,9 +623,6 @@ export default {
 .block {
   display: block !important ;
 }
-.flex-align {
-  display: flex;
-}
 .bullet {
   margin-right: 10px;
   margin-top: 4px;
@@ -648,7 +645,7 @@ p {
   display: flex;
 }
 .subtable {
-  margin-left: 5px;
+  margin-left: 60px;
 }
 .done {
   text-decoration: line-through;
