@@ -14,9 +14,9 @@
           </md-button>
         </div>
 
-          <legend-bullet :planning="true"></legend-bullet>
           <colum-to-hide></colum-to-hide>
           <colum-subtasks-to-hide></colum-subtasks-to-hide>
+          <legend-bullet :planning="true"></legend-bullet>
         </div>
         </div>
 

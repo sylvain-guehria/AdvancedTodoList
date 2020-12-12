@@ -2,25 +2,27 @@
   <md-table>
     <md-table-row v-for="(detail, index) in subtask.details" :key="index">
       <md-table-cell>
-        <input-contenteditable
-          :class="detail.isdone ? 'done' : ''"
-          v-model="detail.label"
-          _is="p"
-          :maxlength="200"
-          type="text"
-          placeholder="..."
-          @giveTodoKey="setCurrentIndex_And_attribue(index, 'label')"
-          @keydown.enter="onPressEnterOrBlur"
-          @blur="onPressEnterOrBlur"
-          @click="setCurrentIndex(index)"
-        />
-      </md-table-cell>
-      <md-table-cell
-        ><input
-          type="checkbox"
-          v-model="detail.isdone"
-          @click="onChangeCheckBox(index, !detail.isdone)"
-        />
+        <div class="flex">
+          <div class="checkme">
+            <input
+              type="checkbox"
+              v-model="detail.isdone"
+              @click="onChangeCheckBox(index, !detail.isdone)"
+            />
+          </div>
+          <input-contenteditable
+            :class="detail.isdone ? 'done' : ''"
+            v-model="detail.label"
+            _is="p"
+            :maxlength="250"
+            type="text"
+            placeholder="..."
+            @giveTodoKey="setCurrentIndex_And_attribue(index, 'label')"
+            @keydown.enter="onPressEnterOrBlur"
+            @blur="onPressEnterOrBlur"
+            @click="setCurrentIndex(index)"
+          />
+        </div>
       </md-table-cell>
     </md-table-row>
     <md-table-row>
@@ -117,7 +119,7 @@ export default class SimpleTableLvl2 extends Vue {
         value,
         index,
       });
-    } else if(value == "" || value == undefined) {
+    } else if (value == "" || value == undefined) {
       this.$store.dispatch(subtasksActionsType.DELETESUBTASKDETAIL, {
         taskKey,
         subtaskKey,
@@ -188,5 +190,13 @@ export default class SimpleTableLvl2 extends Vue {
 }
 .hover-click {
   cursor: pointer;
+}
+.flex {
+  display: flex;
+}
+.checkme {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 2px;
 }
 </style>

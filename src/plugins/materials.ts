@@ -21,10 +21,12 @@ import {
   MdRipple,
   MdRadio,
   MdEmptyState,
-  MdDialogPrompt
+  MdDialogPrompt,
+  MdDialogConfirm
 } from "vue-material/dist/components";
 
 Vue.use(MdField);
+Vue.use(MdDialogConfirm);
 Vue.use(MdButton);
 Vue.use(MdIcon);
 Vue.use(MdMenu);

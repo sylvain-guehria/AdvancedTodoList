@@ -14,28 +14,30 @@
         md-subtasks="Create a Task with the button above and it will show up here."
       ></md-empty-state>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
+      <md-table-row
+        slot="md-table-row"
+        slot-scope="{ item, index }"
+        :class="index % 2 !== 0 ? 'other-color-row' : ''"
+      >
         <md-table-cell
+          md-numeric
           md-sort-by="order"
           md-label="Order"
-          width="50px"
+          class="column-50"
           v-if="getSettings('order')"
+          width="100px"
         >
           <div class="row-order">
             <div class="chevron-order">
               <feather
                 class="hover-click"
                 type="chevron-left"
-                 size="20px"
+                size="20px"
                 @click="orderDown(item)"
                 v-longclick="() => orderDown(item)"
               ></feather>
             </div>
-            <div class="block-order">
-              <p>
-                {{ item.order }}
-              </p>
-            </div>
+            {{ item.order }}
             <div class="chevron-order">
               <feather
                 class="hover-click"
@@ -48,37 +50,42 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')"
-          ><div class="flex p-padding">
+        <md-table-cell
+          md-sort-by="task"
+          md-label="Task Title"
+          v-if="getSettings('task')"
+          ><div class="flex">
             <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
-            <feather
-              size="15px"
-              class="hover-click"
-              v-if="!includeKey(item.key)"
-              type="plus"
-              @click="togleSubtasks(item.key)"
-            ></feather>
-            <feather
-              class="hover-click"
-              size="15px"
-              type="minus"
-              @click="unTogleSubtasks(item.key)"
-              v-if="includeKey(item.key)"
-            ></feather>
-            <div class="block">
+            <div class="plus-minus">
+              <feather
+                size="15px"
+                class="hover-click"
+                v-if="!includeKey(item.key)"
+                type="plus"
+                @click="togleSubtasks(item.key)"
+              ></feather>
+              <feather
+                class="hover-click"
+                size="15px"
+                type="minus"
+                @click="unTogleSubtasks(item.key)"
+                v-if="includeKey(item.key)"
+              ></feather>
+            </div>
               <input-contenteditable
                 v-model="item.task"
+                :class="item.isdone ? 'done' : ''"
                 _is="p"
-                :maxlength="200"
+                class="task"
+                :maxlength="250"
                 placeholder="Type a title"
                 @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
                 @keyup.enter="onPressEnterOrBlur"
                 @blur="onPressEnterOrBlur"
               />
-              &nbsp;
-            </div>
-            <p>({{ getNumberSubTaskActive(item) }})</p>
-            <div class="bullet" :class="bulletClass(item)"></div>
+               <div class="bullet" :class="bulletClass(item)"></div>
+           ({{ getNumberSubTaskActive(item) }})
+           
           </div>
 
           <!-- start subtable -->
@@ -90,47 +97,45 @@
           </div>
           <!-- end subtable -->
         </md-table-cell>
+
         <md-table-cell
           md-sort-by="deadline"
-          md-label="Deadline"
           v-if="getSettings('deadline')"
-          width="130px"
+          class="column-90"
+          md-label="Deadline"
         >
           <p @click="showDatepickerDialog(item.key, item.deadline)" v-if="item.deadline">
             {{ dateOfTask(item.key) ? dateOfTask(item.key) : "" }}
           </p>
-          <feather
-            size="20px"
-            v-if="!item.deadline"
-            @click="showDatepickerDialog(item.key, null)"
-            type="calendar"
-          ></feather>
+          <div class="hover-click">
+            <feather
+              size="20px"
+              v-if="!item.deadline"
+              @click="showDatepickerDialog(item.key, null)"
+              type="calendar"
+            ></feather>
+          </div>
         </md-table-cell>
 
-        <md-table-cell
-          md-label="Finish Time"
-          width="100px"
-          v-if="getSettings('numberdaysleft')"
-        >
-          <p>{{ item.numberdaysleft }}</p>
-        </md-table-cell>
-
-        <md-table-cell
+           <md-table-cell
           md-sort-by="creationDate"
-          width="100px"
-          md-label="Creation date"
           v-if="getSettings('creationDate')"
+          class="column-90"
+          md-label="Create"
         >
           <p>
             {{ item.creationDate }}
           </p></md-table-cell
         >
 
+        <md-table-cell v-if="getSettings('numberdaysleft')" class="column-50">
+          <p>{{ item.numberdaysleft }}</p>
+        </md-table-cell>
+     
         <md-table-cell
           md-sort-by="importance"
-          md-label="Imp/100"
-          width="50px"
           v-if="getSettings('importance')"
+          class="column-30"
         >
           <input-contenteditable
             v-model="item.importance"
@@ -144,45 +149,16 @@
           />
         </md-table-cell>
 
-        <md-table-cell
-          md-label="done?"
-          class="last-column"
-          width="50px"
-          v-if="getSettings('isdone')"
-        >
-          <feather type="check" v-if="item.isdone"></feather>
-          <feather type="x" v-if="!item.isdone"></feather>
-        </md-table-cell>
-
-        <md-table-cell md-fixed-header class="more-column" width="50px">
-          <md-menu
-            md-size="medium"
-            :md-offset-x="-175"
-            :md-offset-y="-120"
-            v-on:click.stop
-          >
-            <md-button md-menu-trigger>
-              <md-icon>more_vert</md-icon>
-            </md-button>
-            <md-menu-content>
-              <md-menu-item @click="editTodo(item.key)">
-                <feather type="edit" class="md-icon"></feather>
-                <span>Edit task</span>
-              </md-menu-item>
-              <md-menu-item @click="deleteTodo(item.key, item.order)">
-                <feather type="delete" class="md-icon"></feather>
-                <span>Delete task</span>
-              </md-menu-item>
-              <md-menu-item @click="setTodoDone(item)" v-show="!item.isdone">
-                <feather type="check" class="md-icon"></feather>
-                <span>Mark task as done</span>
-              </md-menu-item>
-              <md-menu-item @click="setTodoDone(item)" v-show="item.isdone">
-                <feather type="arrow-up-left" class="md-icon"></feather>
-                <span>Mark task as not done</span>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
+        <md-table-cell class="column-20">
+          <div class="hover-click flex">
+            <md-checkbox v-model="item.isdone" @click.stop="setTodoDone(item)">
+              <feather
+                size="25px"
+                @click.stop.prevent="activeDeleteTodo(item.key, item.order)"
+                type="delete"
+              ></feather
+            > </md-checkbox>
+          </div>
         </md-table-cell>
       </md-table-row>
     </md-table>
@@ -207,18 +183,41 @@
         ></display-task-modal>
       </md-dialog>
 
+      <!-- DATE PICKER -->
       <md-dialog
         :md-active.sync="showDialogDate"
         :show="showDialogDate"
         @show="showDialogDate = $event"
       >
-        <md-button class="md-icon-button simple" @click="closeDialogDate()">
-          <md-icon>close</md-icon>
-        </md-button>
-        <v-date-picker v-model="date" width="290" class="mt-4"></v-date-picker>
-        <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
-        <md-button class="md-tertiary" @click="editDateTask"> Save </md-button>
+        <div class="padding">
+          <md-button class="md-icon-button simple" @click="closeDialogDate">
+            <md-icon>close</md-icon>
+          </md-button>
+          <v-date-picker v-model="date"></v-date-picker>
+        </div>
+        <div class="padding">
+          <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
+          <md-button class="md-tertiary" @click="editDateTask"> Save </md-button>
+        </div>
       </md-dialog>
+
+      <!-- CONFIRM DELET DIALOG -->
+      <div>
+        <md-dialog :md-active.sync="deleteDialog">
+          <md-dialog-title>Delete task?</md-dialog-title>
+
+          <md-dialog-content>
+            You cannot go back if you press 'Yes'
+          </md-dialog-content>
+
+          <md-dialog-actions>
+            <md-button class="md-tertiary" @click="onCancelDialogDelete"
+              >Cancel</md-button
+            >
+            <md-button class="md-tertiary" @click="onConfirmDialogDelete">Yes</md-button>
+          </md-dialog-actions>
+        </md-dialog>
+      </div>
     </div>
   </div>
 </template>
@@ -262,8 +261,27 @@ export default {
         this.noDeadLine = false;
       }
     },
+    deleteDialog: function () {
+      if (this.deleteDialog === false) {
+        this.onCancelDialogDelete();
+      }
+    },
   },
   methods: {
+    activeDeleteTodo(key: string, order: number) {
+      this.deleteDialog = true;
+      this.currentKey = key;
+      this.currentOrder = order;
+    },
+    onCancelDialogDelete() {
+      this.currentKey = "";
+      this.currentOrder = null;
+      this.deleteDialog = false;
+    },
+    onConfirmDialogDelete() {
+      this.deleteTodo(this.currentKey, this.currentOrder);
+      this.deleteDialog = false;
+    },
     editDateTask() {
       let value = this.date;
       if (this.noDeadLine) {
@@ -516,7 +534,7 @@ export default {
         isdone: false,
         creationDate: new Date().toISOString().substr(0, 10),
         order: higher_order,
-        subtasks: []
+        subtasks: [],
       };
 
       this.$store
@@ -586,8 +604,10 @@ export default {
       showDialogDate: false,
       noDeadLine: false,
       currentKey: "",
+      currentOrder: null,
       selectedDate: null,
-      getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask
+      getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask,
+      deleteDialog: false,
     };
   },
 };
@@ -597,18 +617,11 @@ export default {
 .hover-click {
   cursor: pointer;
 }
-.p-padding {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
 .flex {
   display: flex;
 }
 .block {
   display: block !important ;
-}
-.flex-align {
-  display: flex;
 }
 .bullet {
   margin-right: 10px;
@@ -625,15 +638,19 @@ p {
   margin: auto;
   padding-bottom: 5px;
 }
+.plus-minus {
+  padding-top: 2px;
+}
 .row-order {
   display: flex;
 }
-.block-order {
-  justify-content: center;
-  width: 30px;
-  margin: auto;
-}
 .subtable {
-  margin-left: 5px;
+  margin-left: 60px;
+}
+.done {
+  text-decoration: line-through;
+}
+.padding {
+  padding: 10px;
 }
 </style>

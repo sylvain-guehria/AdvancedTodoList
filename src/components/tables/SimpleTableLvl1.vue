@@ -1,26 +1,19 @@
 <template>
   <div>
     <md-table class="table-custom no-border">
-      <md-table-row v-if="item.subtasks && item.subtasks.length">
-        <md-table-head width="40px"></md-table-head>
-        <md-table-head width="350px" v-if="getSettings('label')">Label</md-table-head>
-        <md-table-head width="250px" v-if="getSettings('details')">Details</md-table-head>
-        <md-table-head width="50px" v-if="getSettings('deadline')"
-          >Deadline</md-table-head
-        >
-        <md-table-head width="50px" v-if="getSettings('importance')">Imp</md-table-head>
-        <md-table-head width="50px" v-if="getSettings('order')">Order</md-table-head>
-        <md-table-head width="50px" v-if="getSettings('isdone')">Done</md-table-head>
-        <md-table-head width="50px" v-if="getSettings('actions')"
-          >Delete/Edit</md-table-head
-        >
-      </md-table-row>
       <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
-        <md-table-cell width="40px"></md-table-cell>
-        <md-table-cell width="350px" v-if="getSettings('label')">
-          <div>
+        <md-table-cell v-if="getSettings('label')">
+          <div class="flex">
+            <div class="checkme">
+              <input
+                type="checkbox"
+                v-model="subtask.isdone"
+                @click="setSubTaskState(subtask.key, item.key, !subtask.isdone)"
+              />
+            </div>
             <input-contenteditable
               v-model="subtask.label"
+              :class="subtask.isdone ? 'done' : ''"
               _is="p"
               :maxlength="250"
               type="text"
@@ -28,18 +21,19 @@
               @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'label')"
               @keydown.enter="onPressEnterOrBlur"
               @blur="onPressEnterOrBlur"
-            /></div
-        ></md-table-cell>
+            />
+          </div>
 
-        <md-table-cell width="250px" v-if="getSettings('details')">
-          <simple-table-lvl2
-            :subtask="subtask"
-            :motherKey="item.key"
-            :key="getNumberDetailInSubtask(item.key, subtask.key)"
-          />
+          <div class="details">
+            <simple-table-lvl2
+              :subtask="subtask"
+              :motherKey="item.key"
+              :key="getNumberDetailInSubtask(item.key, subtask.key)"
+            />
+          </div>
         </md-table-cell>
 
-        <md-table-head width="50px" v-if="getSettings('deadline')" class="hover-click">
+        <md-table-cell v-if="getSettings('deadline')" class="hover-click">
           <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
             {{
               dateOfSubTask(item.key, subtask.key)
@@ -48,13 +42,13 @@
             }}
           </p>
           <feather
-            size="20px"
+            size="15px"
             v-if="!subtask.deadline"
             type="calendar"
             @click="showDatepickerDialog(subtask.key)"
           ></feather>
-        </md-table-head>
-        <md-table-head width="50px" v-if="getSettings('importance')">
+        </md-table-cell>
+        <md-table-cell v-if="getSettings('importance')">
           <input-contenteditable
             v-model="subtask.importance"
             _is="p"
@@ -65,8 +59,8 @@
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
           />
-        </md-table-head>
-        <md-table-head width="50px" v-if="getSettings('order')">
+        </md-table-cell>
+        <md-table-cell v-if="getSettings('order')" class="column-20">
           <input-contenteditable
             v-model="subtask.order"
             _is="p"
@@ -76,38 +70,26 @@
             @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'order')"
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
-        /></md-table-head>
-
-        <md-table-head width="50px" v-if="getSettings('isdone')"
-          ><input
-            type="checkbox"
-            v-model="subtask.isdone"
-            @click="setSubTaskState(subtask.key, item.key, !subtask.isdone)"
           />
-        </md-table-head>
+        </md-table-cell>
 
-        <md-table-head width="50px" v-if="getSettings('actions')">
-          <feather
-            type="edit"
-            class="md-icon hover-click"
-            @click="editSubtask(subtask, item.key)"
-          ></feather>
-
+        <md-table-cell v-if="getSettings('actions')">
           <feather
             type="delete"
-            class="md-icon hover-click"
+            size="15px"
+            class="hover-click"
             @click="deleteSubtask(subtask.key, item.key)"
           ></feather>
-        </md-table-head>
+        </md-table-cell>
       </md-table-row>
       <md-table-row>
-        <md-table-head colspan="6">
+        <md-table-cell colspan="6">
           <feather
             type="plus-circle"
             class="hover-click"
             @click="addEmptySubTask(item.key)"
           ></feather
-        ></md-table-head>
+        ></md-table-cell>
       </md-table-row>
     </md-table>
 
@@ -444,5 +426,16 @@ export default class SimpleTableLvl1 extends Vue {
 }
 .hover-click {
   cursor: pointer;
+}
+.details {
+  margin-left: 50px;
+}
+.flex {
+  display: flex;
+}
+.checkme {
+  margin-left: 10px;
+  margin-top: 2px;
+  margin-right: 10px;
 }
 </style>

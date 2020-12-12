@@ -407,7 +407,7 @@ $container-lg: $container-large-desktop !default;
 
 // Basics of a navbar
 $navbar-height: 50px !default;
-$navbar-width: 215px !default; //le triangle et les items sidebar
+$navbar-width: 200px !default; //le triangle et les items sidebar
 $navbar-mini-width: 100px !default;
 $navbar-margin-bottom: $line-height-computed !default;
 $navbar-border-radius: $border-radius-base !default;
@@ -1000,7 +1000,7 @@ $transition-ease-out: ease-out !default;
 $ultra-fast-transition-time: 60ms !default;
 $navbar-padding-a: 10px 15px;
 $padding-zero: 0px !default;
-$sidebar-width: calc(100% - 220px) !default; //rapproche content de la side bar
+$sidebar-width: calc(100% - 180px) !default; //rapproche content de la side bar
 $sidebar-mini-width-value: 100px !default;
 $sidebar-mini-width: calc(100% - 100px) !default;
 $topbar-back: topbar-back !default;
