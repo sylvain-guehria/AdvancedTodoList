@@ -14,19 +14,18 @@
         md-subtasks="Create a Task with the button above and it will show up here."
       ></md-empty-state>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell
-          md-sort-by="order"
-          md-label="Order"
-          width="50px"
-          v-if="getSettings('order')"
-        >
+      <md-table-row
+        slot="md-table-row"
+        slot-scope="{ item, index }"
+        :class="index % 2 !== 0 ? 'other-color-row' : ''"
+      >
+        <md-table-cell md-sort-by="order" md-label="Order" v-if="getSettings('order')">
           <div class="row-order">
             <div class="chevron-order">
               <feather
                 class="hover-click"
                 type="chevron-left"
-                 size="20px"
+                size="20px"
                 @click="orderDown(item)"
                 v-longclick="() => orderDown(item)"
               ></feather>
@@ -94,30 +93,26 @@
           md-sort-by="deadline"
           md-label="Deadline"
           v-if="getSettings('deadline')"
-          width="130px"
         >
           <p @click="showDatepickerDialog(item.key, item.deadline)" v-if="item.deadline">
             {{ dateOfTask(item.key) ? dateOfTask(item.key) : "" }}
           </p>
+            <div class="hover-click">
           <feather
             size="20px"
             v-if="!item.deadline"
             @click="showDatepickerDialog(item.key, null)"
             type="calendar"
           ></feather>
+            </div>
         </md-table-cell>
 
-        <md-table-cell
-          md-label="Finish Time"
-          width="100px"
-          v-if="getSettings('numberdaysleft')"
-        >
+        <md-table-cell md-label="Finish Time" v-if="getSettings('numberdaysleft')">
           <p>{{ item.numberdaysleft }}</p>
         </md-table-cell>
 
         <md-table-cell
           md-sort-by="creationDate"
-          width="100px"
           md-label="Creation date"
           v-if="getSettings('creationDate')"
         >
@@ -129,7 +124,6 @@
         <md-table-cell
           md-sort-by="importance"
           md-label="Imp/100"
-          width="50px"
           v-if="getSettings('importance')"
         >
           <input-contenteditable
@@ -144,45 +138,21 @@
           />
         </md-table-cell>
 
-        <md-table-cell
-          md-label="done?"
-          class="last-column"
-          width="50px"
-          v-if="getSettings('isdone')"
-        >
-          <feather type="check" v-if="item.isdone"></feather>
-          <feather type="x" v-if="!item.isdone"></feather>
+        <md-table-cell md-label="done?" v-if="getSettings('isdone')">
+          <div class="hover-click">
+            <feather @click="setTodoDone(item)" type="check" v-if="item.isdone"></feather>
+            <feather @click="setTodoDone(item)" type="x" v-if="!item.isdone"></feather>
+          </div>
         </md-table-cell>
 
-        <md-table-cell md-fixed-header class="more-column" width="50px">
-          <md-menu
-            md-size="medium"
-            :md-offset-x="-175"
-            :md-offset-y="-120"
-            v-on:click.stop
-          >
-            <md-button md-menu-trigger>
-              <md-icon>more_vert</md-icon>
-            </md-button>
-            <md-menu-content>
-              <md-menu-item @click="editTodo(item.key)">
-                <feather type="edit" class="md-icon"></feather>
-                <span>Edit task</span>
-              </md-menu-item>
-              <md-menu-item @click="deleteTodo(item.key, item.order)">
-                <feather type="delete" class="md-icon"></feather>
-                <span>Delete task</span>
-              </md-menu-item>
-              <md-menu-item @click="setTodoDone(item)" v-show="!item.isdone">
-                <feather type="check" class="md-icon"></feather>
-                <span>Mark task as done</span>
-              </md-menu-item>
-              <md-menu-item @click="setTodoDone(item)" v-show="item.isdone">
-                <feather type="arrow-up-left" class="md-icon"></feather>
-                <span>Mark task as not done</span>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
+        <md-table-cell md-label="actions">
+          <div class="hover-click">
+            <feather
+              size="20px"
+              @click="deleteTodo(item.key, item.order)"
+              type="delete"
+            ></feather>
+          </div>
         </md-table-cell>
       </md-table-row>
     </md-table>
@@ -516,7 +486,7 @@ export default {
         isdone: false,
         creationDate: new Date().toISOString().substr(0, 10),
         order: higher_order,
-        subtasks: []
+        subtasks: [],
       };
 
       this.$store
@@ -587,7 +557,7 @@ export default {
       noDeadLine: false,
       currentKey: "",
       selectedDate: null,
-      getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask
+      getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask,
     };
   },
 };

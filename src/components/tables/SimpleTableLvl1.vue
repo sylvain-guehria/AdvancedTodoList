@@ -2,22 +2,22 @@
   <div>
     <md-table class="table-custom no-border">
       <md-table-row v-if="item.subtasks && item.subtasks.length">
-        <md-table-head width="40px"></md-table-head>
-        <md-table-head width="350px" v-if="getSettings('label')">Label</md-table-head>
-        <md-table-head width="250px" v-if="getSettings('details')">Details</md-table-head>
-        <md-table-head width="50px" v-if="getSettings('deadline')"
+        <md-table-head ></md-table-head>
+        <md-table-head v-if="getSettings('label')">Label</md-table-head>
+        <md-table-head  v-if="getSettings('details')">Details</md-table-head>
+        <md-table-head v-if="getSettings('deadline')"
           >Deadline</md-table-head
         >
-        <md-table-head width="50px" v-if="getSettings('importance')">Imp</md-table-head>
-        <md-table-head width="50px" v-if="getSettings('order')">Order</md-table-head>
-        <md-table-head width="50px" v-if="getSettings('isdone')">Done</md-table-head>
-        <md-table-head width="50px" v-if="getSettings('actions')"
+        <md-table-head v-if="getSettings('importance')">Imp</md-table-head>
+        <md-table-head v-if="getSettings('order')">Order</md-table-head>
+        <md-table-head v-if="getSettings('isdone')">Done</md-table-head>
+        <md-table-head v-if="getSettings('actions')"
           >Delete/Edit</md-table-head
         >
       </md-table-row>
       <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
-        <md-table-cell width="40px"></md-table-cell>
-        <md-table-cell width="350px" v-if="getSettings('label')">
+        <md-table-cell ></md-table-cell>
+        <md-table-cell v-if="getSettings('label')">
           <div>
             <input-contenteditable
               v-model="subtask.label"
@@ -31,7 +31,7 @@
             /></div
         ></md-table-cell>
 
-        <md-table-cell width="250px" v-if="getSettings('details')">
+        <md-table-cell  v-if="getSettings('details')">
           <simple-table-lvl2
             :subtask="subtask"
             :motherKey="item.key"
@@ -39,7 +39,7 @@
           />
         </md-table-cell>
 
-        <md-table-head width="50px" v-if="getSettings('deadline')" class="hover-click">
+        <md-table-head v-if="getSettings('deadline')" class="hover-click">
           <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
             {{
               dateOfSubTask(item.key, subtask.key)
@@ -54,7 +54,7 @@
             @click="showDatepickerDialog(subtask.key)"
           ></feather>
         </md-table-head>
-        <md-table-head width="50px" v-if="getSettings('importance')">
+        <md-table-head v-if="getSettings('importance')">
           <input-contenteditable
             v-model="subtask.importance"
             _is="p"
@@ -66,7 +66,7 @@
             @blur="onPressEnterOrBlur"
           />
         </md-table-head>
-        <md-table-head width="50px" v-if="getSettings('order')">
+        <md-table-head v-if="getSettings('order')">
           <input-contenteditable
             v-model="subtask.order"
             _is="p"
@@ -78,7 +78,7 @@
             @blur="onPressEnterOrBlur"
         /></md-table-head>
 
-        <md-table-head width="50px" v-if="getSettings('isdone')"
+        <md-table-head v-if="getSettings('isdone')"
           ><input
             type="checkbox"
             v-model="subtask.isdone"
@@ -86,7 +86,7 @@
           />
         </md-table-head>
 
-        <md-table-head width="50px" v-if="getSettings('actions')">
+        <md-table-head v-if="getSettings('actions')">
           <feather
             type="edit"
             class="md-icon hover-click"

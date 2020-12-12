@@ -72,6 +72,20 @@ table {
 
     .md-table-row {
       background-color: $ui-second;
+      &.other-color-row{
+        background-color: $ui-main;
+        &:hover:not(.md-header-row) .md-table-cell,
+        &.active:not(.md-header-row) .md-table-cell {
+          background-color: $ui-main;
+          //$lines
+        }
+        table{
+          .md-table-row {
+            background-color: $ui-main;
+          }
+          background-color: $ui-main;
+        }
+      }
       border: none;
       td {
         border: none;
@@ -92,6 +106,7 @@ table {
       &:hover:not(.md-header-row) .md-table-cell,
       &.active:not(.md-header-row) .md-table-cell {
         background-color: white;
+        //$lines
       }
     }
   }
