@@ -178,12 +178,10 @@ export default {
 }
 
 p {
+  all: initial;
   margin-left: 10px;
-  font-size: 16px !important;
-}
-.layout {
-  display: flex;
-  margin-top: 25px;
+  font-family:  "Open Sans Regular", sans-serif;
+  color: #58616b
 }
 
 .feathers {

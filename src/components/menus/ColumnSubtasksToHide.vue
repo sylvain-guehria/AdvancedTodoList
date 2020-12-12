@@ -1,158 +1,158 @@
 <template>
-    <md-menu
-      md-size="auto"
-      md-direction="bottom-start"
-      :md-active.sync="toggleCard"
-      :mdCloseOnClick="false"
-      :mdCloseOnSelect="false"
-    >
-      <md-button class="md-tertiary" md-menu-trigger>
-        <feather type="eye-off"></feather>
-        Hide Columns Subtasks
-      </md-button>
+  <md-menu
+    md-size="auto"
+    md-direction="bottom-start"
+    :md-active.sync="toggleCard"
+    :mdCloseOnClick="false"
+    :mdCloseOnSelect="false"
+  >
+    <md-button class="md-tertiary" md-menu-trigger>
+      <feather type="eye-off"></feather>
+      Hide Columns Subtasks
+    </md-button>
 
-      <md-menu-content>
-        <div>
-          <div class="legend">
-            <div class="legend-2">
-              <p>Order</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn ? hiddenColumn.order : false"
-                  @click="setSettings('order')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn ? !hiddenColumn.order : false"
-                  @click="setSettings('order')"
-                ></feather>
-              </div>
+    <md-menu-content>
+      <div>
+        <div class="legend">
+          <div class="legend-2">
+            <p>Order</p>
+            <div class="feathers">
+              <feather
+                type="check"
+                v-if="hiddenColumn ? hiddenColumn.order : false"
+                @click="setSettings('order')"
+              ></feather>
+              <feather
+                type="x"
+                v-if="hiddenColumn ? !hiddenColumn.order : false"
+                @click="setSettings('order')"
+              ></feather>
             </div>
-            <div class="legend-2">
-              <p>Label</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn ? hiddenColumn.label : false"
-                  @click="setSettings('label')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn ? !hiddenColumn.label : false"
-                  @click="setSettings('label')"
-                ></feather>
-              </div>
+          </div>
+          <div class="legend-2">
+            <p>Label</p>
+            <div class="feathers">
+              <feather
+                type="check"
+                v-if="hiddenColumn ? hiddenColumn.label : false"
+                @click="setSettings('label')"
+              ></feather>
+              <feather
+                type="x"
+                v-if="hiddenColumn ? !hiddenColumn.label : false"
+                @click="setSettings('label')"
+              ></feather>
             </div>
-            <div class="legend-2">
-              <p>details</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn ? hiddenColumn.details : false"
-                  @click="setSettings('details')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn ? !hiddenColumn.details : false"
-                  @click="setSettings('details')"
-                ></feather>
-              </div>
+          </div>
+          <div class="legend-2">
+            <p>details</p>
+            <div class="feathers">
+              <feather
+                type="check"
+                v-if="hiddenColumn ? hiddenColumn.details : false"
+                @click="setSettings('details')"
+              ></feather>
+              <feather
+                type="x"
+                v-if="hiddenColumn ? !hiddenColumn.details : false"
+                @click="setSettings('details')"
+              ></feather>
             </div>
-            <div class="legend-2">
-              <p>Deadline</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn ? hiddenColumn.deadline : false"
-                  @click="setSettings('deadline')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn ? !hiddenColumn.deadline : false"
-                  @click="setSettings('deadline')"
-                ></feather>
-              </div>
+          </div>
+          <div class="legend-2">
+            <p>Deadline</p>
+            <div class="feathers">
+              <feather
+                type="check"
+                v-if="hiddenColumn ? hiddenColumn.deadline : false"
+                @click="setSettings('deadline')"
+              ></feather>
+              <feather
+                type="x"
+                v-if="hiddenColumn ? !hiddenColumn.deadline : false"
+                @click="setSettings('deadline')"
+              ></feather>
             </div>
-            <div class="legend-2">
-              <p>Creation Date</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn ? hiddenColumn.creationDate : false"
-                  @click="setSettings('creationDate')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn ? !hiddenColumn.creationDate : false"
-                  @click="setSettings('creationDate')"
-                ></feather>
-              </div>
+          </div>
+          <div class="legend-2">
+            <p>Creation Date</p>
+            <div class="feathers">
+              <feather
+                type="check"
+                v-if="hiddenColumn ? hiddenColumn.creationDate : false"
+                @click="setSettings('creationDate')"
+              ></feather>
+              <feather
+                type="x"
+                v-if="hiddenColumn ? !hiddenColumn.creationDate : false"
+                @click="setSettings('creationDate')"
+              ></feather>
             </div>
-            <div class="legend-2">
-              <p>Finish Time</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn ? hiddenColumn.numberdaysleft : false"
-                  @click="setSettings('numberdaysleft')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn ? !hiddenColumn.numberdaysleft : false"
-                  @click="setSettings('numberdaysleft')"
-                ></feather>
-              </div>
+          </div>
+          <div class="legend-2">
+            <p>Finish Time</p>
+            <div class="feathers">
+              <feather
+                type="check"
+                v-if="hiddenColumn ? hiddenColumn.numberdaysleft : false"
+                @click="setSettings('numberdaysleft')"
+              ></feather>
+              <feather
+                type="x"
+                v-if="hiddenColumn ? !hiddenColumn.numberdaysleft : false"
+                @click="setSettings('numberdaysleft')"
+              ></feather>
             </div>
-            <div class="legend-2">
-              <p>Importance</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn ? hiddenColumn.importance : false"
-                  @click="setSettings('importance')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn ? !hiddenColumn.importance : false"
-                  @click="setSettings('importance')"
-                ></feather>
-              </div>
+          </div>
+          <div class="legend-2">
+            <p>Importance</p>
+            <div class="feathers">
+              <feather
+                type="check"
+                v-if="hiddenColumn ? hiddenColumn.importance : false"
+                @click="setSettings('importance')"
+              ></feather>
+              <feather
+                type="x"
+                v-if="hiddenColumn ? !hiddenColumn.importance : false"
+                @click="setSettings('importance')"
+              ></feather>
             </div>
-            <div class="legend-2">
-              <p>Done/Not Done</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn ? hiddenColumn.isdone : false"
-                  @click="setSettings('isdone')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn ? !hiddenColumn.isdone : false"
-                  @click="setSettings('isdone')"
-                ></feather>
-              </div>
+          </div>
+          <div class="legend-2">
+            <p>Done/Not Done</p>
+            <div class="feathers">
+              <feather
+                type="check"
+                v-if="hiddenColumn ? hiddenColumn.isdone : false"
+                @click="setSettings('isdone')"
+              ></feather>
+              <feather
+                type="x"
+                v-if="hiddenColumn ? !hiddenColumn.isdone : false"
+                @click="setSettings('isdone')"
+              ></feather>
             </div>
-            <div class="legend-2">
-              <p>Actions</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn ? hiddenColumn.actions : false"
-                  @click="setSettings('actions')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn ? !hiddenColumn.actions : false"
-                  @click="setSettings('actions')"
-                ></feather>
-              </div>
+          </div>
+          <div class="legend-2">
+            <p>Actions</p>
+            <div class="feathers">
+              <feather
+                type="check"
+                v-if="hiddenColumn ? hiddenColumn.actions : false"
+                @click="setSettings('actions')"
+              ></feather>
+              <feather
+                type="x"
+                v-if="hiddenColumn ? !hiddenColumn.actions : false"
+                @click="setSettings('actions')"
+              ></feather>
             </div>
           </div>
         </div>
-      </md-menu-content>
-    </md-menu>
+      </div>
+    </md-menu-content>
+  </md-menu>
 </template>
 
 <script>
@@ -182,8 +182,7 @@ export default {
     },
     setSettings(setting) {
       this.$store.commit(settingsMutationType.HIDECOLUMNSUBTASKS, setting);
-      let columns_subtasks = this.$store.getters.getSettings
-        .hidden_column_subtasks;
+      let columns_subtasks = this.$store.getters.getSettings.hidden_column_subtasks;
 
       let payload = {
         label: "hidden_column_subtasks",
@@ -209,12 +208,10 @@ export default {
 }
 
 p {
+  all: initial;
   margin-left: 10px;
-  font-size: 16px !important;
-}
-.layout {
-  display: flex;
-  margin-top: 25px;
+  font-family: "Open Sans Regular", sans-serif;
+  color: #58616b;
 }
 
 .feathers {

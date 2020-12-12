@@ -21,11 +21,12 @@
           width="50px"
           v-if="getSettings('order')"
         >
-          <div class="row">
+          <div class="row-order">
             <div class="chevron-order">
               <feather
                 class="hover-click"
                 type="chevron-left"
+                 size="20px"
                 @click="orderDown(item)"
                 v-longclick="() => orderDown(item)"
               ></feather>
@@ -38,6 +39,7 @@
             <div class="chevron-order">
               <feather
                 class="hover-click"
+                size="20px"
                 v-longclick="() => orderUp(item)"
                 type="chevron-right"
                 @click="orderUp(item)"
@@ -610,28 +612,21 @@ export default {
 }
 .bullet {
   margin-right: 10px;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 p {
-  font-size: 19px !important;
   font-family: initial;
   margin-left: 10px;
   margin-right: 10px;
 }
 .chevron-order {
-  width: 20px;
+  width: 15px;
   margin: auto;
+  padding-bottom: 5px;
 }
-.row {
+.row-order {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  position: absolute;
-  margin: auto;
-  top: 0;
-  left: 25px;
-  bottom: 0;
 }
 .block-order {
   justify-content: center;

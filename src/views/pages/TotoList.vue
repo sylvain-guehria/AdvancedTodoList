@@ -2,9 +2,10 @@
   <div class="content">
     <div class="md-layout">
       <div class="md-layout-item md-size-100" style="margin-top: 20px">
-        <div class="flex">
 
+        <div class="flex">
         <div class="action-button">
+        <div class="add_and_filter">
           <md-button class="md-tertiary" @click="addEmptyTask">
             <feather type="plus"></feather>Add a task
           </md-button>
@@ -12,7 +13,7 @@
             <feather type="filter"></feather>Filter
           </md-button>
         </div>
-        <div class="action-button">
+
           <legend-bullet :planning="true"></legend-bullet>
           <colum-to-hide></colum-to-hide>
           <colum-subtasks-to-hide></colum-subtasks-to-hide>
@@ -183,6 +184,10 @@ export default {
 };
 </script>
 <style scoped>
+.add_and_filter{
+  text-align: left;   
+
+}
 .legend-list {
   display: inline-block;
   position: absolute;
@@ -196,9 +201,8 @@ export default {
   left: 250px;
 }
 .action-button {
-  margin: auto 0;
-  margin-left: 500px;
   width: 100%;
+  text-align: right;   
 }
 .column-subtask {
   display: inline-block;
