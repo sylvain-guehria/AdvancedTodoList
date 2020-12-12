@@ -87,7 +87,7 @@ $font-size-large: ceil(($font-size-base * 1.25)) !default; // ~18px
 $font-size-h4: 1.125rem !default;
 $font-size-h5: 1.0625rem !default;
 $font-size-h6: 0.75rem !default;
-$font-paragraph: 14px !default;
+$font-paragraph: 13px !default;
 $font-size-navbar: 16px !default;
 $font-size-small: 12px !default;
 $font-size-mini: 10px !default;
@@ -407,7 +407,7 @@ $container-lg: $container-large-desktop !default;
 
 // Basics of a navbar
 $navbar-height: 50px !default;
-$navbar-width: 240px !default;
+$navbar-width: 215px !default; //le triangle et les items sidebar
 $navbar-mini-width: 100px !default;
 $navbar-margin-bottom: $line-height-computed !default;
 $navbar-border-radius: $border-radius-base !default;
@@ -1000,7 +1000,7 @@ $transition-ease-out: ease-out !default;
 $ultra-fast-transition-time: 60ms !default;
 $navbar-padding-a: 10px 15px;
 $padding-zero: 0px !default;
-$sidebar-width: calc(100% - 240px) !default;
+$sidebar-width: calc(100% - 220px) !default; //rapproche content de la side bar
 $sidebar-mini-width-value: 100px !default;
 $sidebar-mini-width: calc(100% - 100px) !default;
 $topbar-back: topbar-back !default;

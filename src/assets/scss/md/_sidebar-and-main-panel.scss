@@ -95,6 +95,7 @@
       min-height: auto;
       p {
         display: block;
+        font-size: $font-paragraph;
       }
     }
 
@@ -111,13 +112,15 @@
     background-color: rgba(200, 200, 200, 0.4) !important;
   }
 
+  max-width: $navbar-width;
+  transition: width 1s;
   .sidebar-wrapper {
     position: relative;
     height: calc(100vh - 75px);
     overflow: auto;
     width: $navbar-width;
+    transition: width 1s;
     z-index: 4;
-    //transition: width 2s;
     @extend .animation-transition-general;
 
     .dropdown .dropdown-backdrop {
@@ -290,7 +293,6 @@
       .logo-img {
         width: 40px;
         display: inline-block;
-        height: 40px;
         background: $white-color;
         border-radius: 50%;
         text-align: center;
@@ -412,9 +414,11 @@
   }
 
   .sidebar {
+    width: 100px !important;
+
     .sidebar-wrapper {
       width: $sidebar-mini-width-value;
-
+      
       .md-list-item-content p {
         display: none;
       }

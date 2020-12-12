@@ -133,9 +133,6 @@ export default class PCalendarEvent extends Vue {
   word-break: break-word;
   margin-top: 50px;
 }
-.event-info {
-  font-size: 15px !important;
-}
 
 h1 {
   display: flex;

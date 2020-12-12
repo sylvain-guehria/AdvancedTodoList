@@ -2,7 +2,7 @@
   <div class="sidebar">
     <div class="logo">
       <a href="#" class="logo-big">
-        <div class="logo-img">
+        <div class="logo-img-side">
           <img :src="'../yourtodoslogo.svg'" alt />
         </div>
         <div class="smalllogo" >
@@ -70,7 +70,10 @@ export default {
     display: none;
   }
   .smalllogo{
-    width: 50px;
+    width: 40px;
+  }
+  .logo-img-side{
+    max-width: 150px
   }
 }
 </style>

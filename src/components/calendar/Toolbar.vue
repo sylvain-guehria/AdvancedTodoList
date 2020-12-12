@@ -50,6 +50,6 @@ export default class Toolbar extends Vue {
 }
 .menu{
   font-family:  Times, 'Times New Roman', serif;
-  font-size: 30px ;
+  font-size: 25px ;
 }
 </style>
