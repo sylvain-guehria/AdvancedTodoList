@@ -50,11 +50,9 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')"
-          >
-          <div class="flex">
-            <div class="bullet" :class="bulletClass(item)" v-if="bulletClass(item)"></div>
-              <div>({{ getNumberSubTaskActive(item) }})</div>
+        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')">
+          <div class="flex padding-bottom">
+            <div>({{ getNumberSubTaskActive(item) }})</div>
             <div class="plus-minus">
               <feather
                 size="15px"
@@ -80,17 +78,18 @@
               placeholder="Type a title"
               @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
               @keyup.enter="onPressEnterOrBlur"
-              @blur="onPressEnterOrBlur" />
+              @blur="onPressEnterOrBlur"
+            />
           </div>
 
-          <!-- start subtable -->
+          <!-- start table subtask and details -->
           <div v-if="includeKey(item.key)" class="subtable">
             <simple-table-lvl1
               :item="item"
               :key="getNumberSubtaskInTask(item.key)"
             ></simple-table-lvl1>
           </div>
-          <!-- end subtable -->
+          <!-- end -->
         </md-table-cell>
 
         <md-table-cell
@@ -110,6 +109,7 @@
               type="calendar"
             ></feather>
           </div>
+
         </md-table-cell>
 
         <md-table-cell
@@ -132,16 +132,19 @@
           v-if="getSettings('importance')"
           class="column-30"
         >
-          <input-contenteditable
-            v-model="item.importance"
-            _is="p"
-            :maxlength="100"
-            type="number"
-            placeholder="none"
-            @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoImpEnum)"
-            @keydown.enter="onPressEnterOrBlur"
-            @blur="onPressEnterOrBlur"
-          />
+          <div class="flex">
+            <div class="bullet" :class="bulletClass(item)" v-if="bulletClass(item)"></div>
+            <input-contenteditable
+              v-model="item.importance"
+              _is="p"
+              :maxlength="100"
+              type="number"
+              placeholder="none"
+              @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoImpEnum)"
+              @keydown.enter="onPressEnterOrBlur"
+              @blur="onPressEnterOrBlur"
+            />
+          </div>
         </md-table-cell>
 
         <md-table-cell class="column-20">
@@ -237,6 +240,7 @@ export default {
     "table-pagination": TablePaginationVue,
     "display-task-modal": DisplayTaskModal,
     "simple-table-lvl1": SimpleTableLvl1,
+    // "simple-table-one-attribute": SimpleTableOneAttribute,
     "input-contenteditable": InputContenteditable,
   },
   props: ["todolist", "mainList"],
@@ -314,10 +318,6 @@ export default {
     setCurrentTodoEdited_key_attribue(key, attribute) {
       this.currentTodoKeyEdited = key;
       this.currentAttributeEdited = attribute;
-    },
-    onChangeInput(text) {
-      // eslint-disable-next-line no-console
-      console.log("le text ", text);
     },
     onPressEnterOrBlur(e) {
       if (e.keyCode == 13) {
@@ -617,8 +617,6 @@ export default {
   display: block !important ;
 }
 .bullet {
-  margin-right: 5px;
-  margin-left: 5px;
   margin-top: 5px;
 }
 
@@ -644,5 +642,7 @@ p {
 .padding {
   padding: 10px;
 }
-
+.padding-bottom {
+  padding-bottom: 10px;
+}
 </style>

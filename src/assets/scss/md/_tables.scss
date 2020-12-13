@@ -38,7 +38,6 @@ table {
     font-size : 24px;
     .md-table-cell {
       padding-top: 10px ;
-    
     }
 
     table{
@@ -86,7 +85,7 @@ table {
         background-color: $ui-main;
         &:hover:not(.md-header-row) .md-table-cell,
         &.active:not(.md-header-row) .md-table-cell {
-          background-color: $ui-main;
+          background-color: transparent;
 
         }
         table{
@@ -133,7 +132,7 @@ table {
       }
       &:hover:not(.md-header-row) .md-table-cell,
       &.active:not(.md-header-row) .md-table-cell {
-        background-color: white;
+        background-color: transparent;
         //$lines
       }
     }

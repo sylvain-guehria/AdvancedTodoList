@@ -144,7 +144,7 @@ export default class SimpleTableLvl2 extends Vue {
     this.$store.dispatch(subtasksActionsType.EDITSUBTASK, subtask);
   }
 
-  setSubTaskDetailState(index, isdone) {
+  setSubTaskDetailState(index: number, isdone: boolean) {
     let subtaskKey = this.subtask.key;
     let motherKey = this.motherKey;
     this.$store.dispatch(subtasksActionsType.SETSUBTASKDETAILSTATE, {
