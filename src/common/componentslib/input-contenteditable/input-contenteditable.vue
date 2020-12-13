@@ -1,4 +1,5 @@
 <template>
+
   <component
     :is="_is"
     contenteditable
@@ -9,8 +10,9 @@
     @keydown.enter="$emit('keyup', $event)"
     @keypress="$emit('keypress', $event)"
     @blur="blur($event)"
-    @click="$emit('click')"
-  />
+    @click="$emit('click')" >
+  </component>
+
 </template>
 
 <script>

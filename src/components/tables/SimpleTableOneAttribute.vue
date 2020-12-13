@@ -1,43 +1,9 @@
 <template>
   <div>
-    <md-table>
+    <md-table >
       <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
-        <md-table-cell v-if="getSettings('label')">
-          <div class="flex">
-            <div class="checkme">
-              <input
-                type="checkbox"
-                v-model="subtask.isdone"
-                @click="setSubTaskState(subtask.key, item.key, !subtask.isdone)"
-              />
-            </div>
-            <input-contenteditable
-              v-model="subtask.label"
-              :class="subtask.isdone ? 'done' : ''"
-              class="break-word"
-              _is="p"
-              :maxlength="250"
-              type="text"
-              placeholder="label"
-              @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'label')"
-              @keydown.enter="onPressEnterOrBlur"
-              @blur="onPressEnterOrBlur"
-            />
-          </div>
 
-          <div class="details">
-            <simple-table-lvl2
-              :subtask="subtask"
-              :motherKey="item.key"
-              :key="getNumberDetailInSubtask(item.key, subtask.key)"
-            />
-          </div>
-        </md-table-cell>
-
-        <md-table-cell
-          v-if="getSettings('deadline')"
-          class="hover-click column-90 center-icon"
-        >
+        <md-table-cell v-if="getSettings('deadline')" class="hover-click ">
           <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
             {{
               dateOfSubTask(item.key, subtask.key)
@@ -52,13 +18,13 @@
             @click="showDatepickerDialog(subtask.key)"
           ></feather>
         </md-table-cell>
-        <md-table-cell v-if="getSettings('importance')" class="column-30">
+        <md-table-cell v-if="getSettings('importance')">
           <input-contenteditable
             v-model="subtask.importance"
             _is="p"
             :maxlength="100"
             type="number"
-            placeholder="imp"
+            placeholder="..."
             @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'importance')"
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
@@ -70,14 +36,14 @@
             _is="p"
             :maxlength="1000"
             type="number"
-            placeholder="order"
+            placeholder="..."
             @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'order')"
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
           />
         </md-table-cell>
 
-        <md-table-cell v-if="getSettings('actions')" class="column-30">
+        <md-table-cell v-if="displayActions">
           <feather
             type="delete"
             size="15px"
@@ -86,24 +52,7 @@
           ></feather>
         </md-table-cell>
       </md-table-row>
-      <md-table-row>
-        <md-table-cell colspan="6">
-          <feather
-            type="plus-circle"
-            class="hover-click"
-            @click="addEmptySubTask(item.key)"
-          ></feather
-        ></md-table-cell>
-      </md-table-row>
     </md-table>
-
-    <md-dialog :md-active.sync="showDialogAddSubtask">
-      <add-subtask-modal
-        @closeAddSubtaskModal="closeAddSubtaskModal"
-        :motherKey="getMotherKey()"
-        :subtask="getSubtaskToEdit()"
-      ></add-subtask-modal>
-    </md-dialog>
 
     <md-dialog
       :md-active.sync="showdatepickerDialog"
@@ -149,6 +98,11 @@ import InputContenteditable from "@/common/componentslib/input-contenteditable/i
 })
 export default class SimpleTableLvl1 extends Vue {
   @Prop() item: Todo;
+  @Prop() displayActions: {
+      type: boolean,
+      default: false
+    }
+
   showDialogAddSubtask: boolean = false;
   numberInput: number = 0;
   noDeadLine: boolean = false;
@@ -207,23 +161,14 @@ export default class SimpleTableLvl1 extends Vue {
   addEmptySubTask(key) {
     let higher_order: number;
     let subtask_with_max_order: Todo;
-    let temp_higher_order;
 
     subtask_with_max_order = lodash.maxBy(this.item.subtasks, "order");
 
-    // eslint-disable-next-line no-console
-    console.log("subtask_with_max_order", subtask_with_max_order);
-
     if (subtask_with_max_order) {
-      temp_higher_order = subtask_with_max_order.order;
-      temp_higher_order = parseInt(temp_higher_order, 10);
-      higher_order = temp_higher_order + 1;
+      higher_order = subtask_with_max_order.order + 1;
     } else {
       higher_order = 1;
     }
-
-    // eslint-disable-next-line no-console
-    console.log("higher_order", higher_order);
 
     let emptySubTask: SubTask = {
       label: `SubtaskTask N°${higher_order}`,
@@ -356,14 +301,6 @@ export default class SimpleTableLvl1 extends Vue {
 
   motherKey: string = "";
 
-  setSubTaskState(subtaskKey, motherKey, isDone) {
-    this.$store.dispatch(subtasksActionsType.SETSUBTASKSTATE, {
-      subtaskKey,
-      motherKey,
-      isDone,
-    });
-  }
-
   getSubtaskToEdit() {
     return this.subtaskToEdit;
   }
@@ -451,30 +388,4 @@ export default class SimpleTableLvl1 extends Vue {
   margin-top: 2px;
   margin-right: 10px;
 }
-.break-word {
-  word-break: break-all;
-  // // hyphens: auto; to try
-}
-
-// ul.leaders {
-//     max-width: 40em;
-//     padding: 0;
-//     overflow-x: hidden;
-//     list-style: none}
-// ul.leaders li:before {
-//     float: left;
-//     width: 0;
-//     white-space: nowrap;
-//     content:
-//  ". . . . . . . . . . . . . . . . . . . . "
-//  ". . . . . . . . . . . . . . . . . . . . "
-//  ". . . . . . . . . . . . . . . . . . . . "
-//  ". . . . . . . . . . . . . . . . . . . . "}
-// ul.leaders span:first-child {
-//     padding-right: 0.33em;
-//     background: white}
-// ul.leaders span + span {
-//     float: right;
-//     padding-left: 0.33em;
-//     background: white}
 </style>

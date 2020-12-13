@@ -27,7 +27,7 @@
           v-if="getSettings('order')"
           width="100px"
         >
-          <div class="row-order">
+          <div class="flex">
             <div class="chevron-order">
               <feather
                 class="hover-click"
@@ -50,12 +50,9 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell
-          md-sort-by="task"
-          md-label="Task Title"
-          v-if="getSettings('task')"
-          ><div class="flex">
-            <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
+        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')">
+          <div class="flex padding-bottom">
+            <div>({{ getNumberSubTaskActive(item) }})</div>
             <div class="plus-minus">
               <feather
                 size="15px"
@@ -72,36 +69,33 @@
                 v-if="includeKey(item.key)"
               ></feather>
             </div>
-              <input-contenteditable
-                v-model="item.task"
-                :class="item.isdone ? 'done' : ''"
-                _is="p"
-                class="task"
-                :maxlength="250"
-                placeholder="Type a title"
-                @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
-                @keyup.enter="onPressEnterOrBlur"
-                @blur="onPressEnterOrBlur"
-              />
-               <div class="bullet" :class="bulletClass(item)"></div>
-           ({{ getNumberSubTaskActive(item) }})
-           
+            <input-contenteditable
+              v-model="item.task"
+              :class="item.isdone ? 'done' : ''"
+              _is="p"
+              class="task"
+              :maxlength="250"
+              placeholder="Type a title"
+              @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
+              @keyup.enter="onPressEnterOrBlur"
+              @blur="onPressEnterOrBlur"
+            />
           </div>
 
-          <!-- start subtable -->
+          <!-- start table subtask and details -->
           <div v-if="includeKey(item.key)" class="subtable">
             <simple-table-lvl1
               :item="item"
               :key="getNumberSubtaskInTask(item.key)"
             ></simple-table-lvl1>
           </div>
-          <!-- end subtable -->
+          <!-- end -->
         </md-table-cell>
 
         <md-table-cell
           md-sort-by="deadline"
           v-if="getSettings('deadline')"
-          class="column-90"
+          class="column-90 center-icon"
           md-label="Deadline"
         >
           <p @click="showDatepickerDialog(item.key, item.deadline)" v-if="item.deadline">
@@ -115,9 +109,10 @@
               type="calendar"
             ></feather>
           </div>
+
         </md-table-cell>
 
-           <md-table-cell
+        <md-table-cell
           md-sort-by="creationDate"
           v-if="getSettings('creationDate')"
           class="column-90"
@@ -131,33 +126,36 @@
         <md-table-cell v-if="getSettings('numberdaysleft')" class="column-50">
           <p>{{ item.numberdaysleft }}</p>
         </md-table-cell>
-     
+
         <md-table-cell
           md-sort-by="importance"
           v-if="getSettings('importance')"
           class="column-30"
         >
-          <input-contenteditable
-            v-model="item.importance"
-            _is="p"
-            :maxlength="100"
-            type="number"
-            placeholder="none"
-            @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoImpEnum)"
-            @keydown.enter="onPressEnterOrBlur"
-            @blur="onPressEnterOrBlur"
-          />
+          <div class="flex">
+            <div class="bullet" :class="bulletClass(item)" v-if="bulletClass(item)"></div>
+            <input-contenteditable
+              v-model="item.importance"
+              _is="p"
+              :maxlength="100"
+              type="number"
+              placeholder="none"
+              @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoImpEnum)"
+              @keydown.enter="onPressEnterOrBlur"
+              @blur="onPressEnterOrBlur"
+            />
+          </div>
         </md-table-cell>
 
         <md-table-cell class="column-20">
           <div class="hover-click flex">
-            <md-checkbox v-model="item.isdone" @click.stop="setTodoDone(item)">
-              <feather
+            <md-checkbox v-model="item.isdone" @click="setTodoDone()">
+               <feather
                 size="25px"
                 @click.stop.prevent="activeDeleteTodo(item.key, item.order)"
                 type="delete"
-              ></feather
-            > </md-checkbox>
+              ></feather> 
+            </md-checkbox>
           </div>
         </md-table-cell>
       </md-table-row>
@@ -206,9 +204,7 @@
         <md-dialog :md-active.sync="deleteDialog">
           <md-dialog-title>Delete task?</md-dialog-title>
 
-          <md-dialog-content>
-            You cannot go back if you press 'Yes'
-          </md-dialog-content>
+          <md-dialog-content> You cannot go back if you press 'Yes' </md-dialog-content>
 
           <md-dialog-actions>
             <md-button class="md-tertiary" @click="onCancelDialogDelete"
@@ -244,6 +240,7 @@ export default {
     "table-pagination": TablePaginationVue,
     "display-task-modal": DisplayTaskModal,
     "simple-table-lvl1": SimpleTableLvl1,
+    // "simple-table-one-attribute": SimpleTableOneAttribute,
     "input-contenteditable": InputContenteditable,
   },
   props: ["todolist", "mainList"],
@@ -321,10 +318,6 @@ export default {
     setCurrentTodoEdited_key_attribue(key, attribute) {
       this.currentTodoKeyEdited = key;
       this.currentAttributeEdited = attribute;
-    },
-    onChangeInput(text) {
-      // eslint-disable-next-line no-console
-      console.log("le text ", text);
     },
     onPressEnterOrBlur(e) {
       if (e.keyCode == 13) {
@@ -491,7 +484,9 @@ export default {
       this.showDialog = true;
     },
     setTodoDone(item: Todo): void {
-      this.$store.dispatch("setTodoDone", item);
+         // eslint-disable-next-line no-console
+      console.log(item);
+      this.$store.dispatch(tasksActionsType.SETTODODONE, item);
     },
     onPagination(data) {
       this.paginatedTodos = data;
@@ -624,8 +619,7 @@ export default {
   display: block !important ;
 }
 .bullet {
-  margin-right: 10px;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
 p {
@@ -641,9 +635,6 @@ p {
 .plus-minus {
   padding-top: 2px;
 }
-.row-order {
-  display: flex;
-}
 .subtable {
   margin-left: 60px;
 }
@@ -652,5 +643,8 @@ p {
 }
 .padding {
   padding: 10px;
+}
+.padding-bottom {
+  padding-bottom: 10px;
 }
 </style>
