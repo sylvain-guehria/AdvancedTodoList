@@ -33,7 +33,7 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell v-if="getSettings('deadline')" class="hover-click">
+        <md-table-cell v-if="getSettings('deadline')" class="hover-click ">
           <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
             {{
               dateOfSubTask(item.key, subtask.key)

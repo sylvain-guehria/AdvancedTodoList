@@ -127,6 +127,9 @@ table {
         &.column-100 {
           width: 100px;
         }
+        &.center-icon{
+    text-align: center;
+        }
       }
       &:hover:not(.md-header-row) .md-table-cell,
       &.active:not(.md-header-row) .md-table-cell {

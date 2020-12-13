@@ -27,7 +27,7 @@
           v-if="getSettings('order')"
           width="100px"
         >
-          <div class="row-order">
+          <div class="flex">
             <div class="chevron-order">
               <feather
                 class="hover-click"
@@ -50,12 +50,11 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell
-          md-sort-by="task"
-          md-label="Task Title"
-          v-if="getSettings('task')"
-          ><div class="flex">
-            <!--in the div above =>  @click.self="DisplayModalTask(item)" -->
+        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')"
+          >
+          <div class="flex">
+            <div class="bullet" :class="bulletClass(item)" v-if="bulletClass(item)"></div>
+              <div>({{ getNumberSubTaskActive(item) }})</div>
             <div class="plus-minus">
               <feather
                 size="15px"
@@ -72,20 +71,16 @@
                 v-if="includeKey(item.key)"
               ></feather>
             </div>
-              <input-contenteditable
-                v-model="item.task"
-                :class="item.isdone ? 'done' : ''"
-                _is="p"
-                class="task"
-                :maxlength="250"
-                placeholder="Type a title"
-                @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
-                @keyup.enter="onPressEnterOrBlur"
-                @blur="onPressEnterOrBlur"
-              />
-               <div class="bullet" :class="bulletClass(item)"></div>
-           ({{ getNumberSubTaskActive(item) }})
-           
+            <input-contenteditable
+              v-model="item.task"
+              :class="item.isdone ? 'done' : ''"
+              _is="p"
+              class="task"
+              :maxlength="250"
+              placeholder="Type a title"
+              @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
+              @keyup.enter="onPressEnterOrBlur"
+              @blur="onPressEnterOrBlur" />
           </div>
 
           <!-- start subtable -->
@@ -101,7 +96,7 @@
         <md-table-cell
           md-sort-by="deadline"
           v-if="getSettings('deadline')"
-          class="column-90"
+          class="column-90 center-icon"
           md-label="Deadline"
         >
           <p @click="showDatepickerDialog(item.key, item.deadline)" v-if="item.deadline">
@@ -117,7 +112,7 @@
           </div>
         </md-table-cell>
 
-           <md-table-cell
+        <md-table-cell
           md-sort-by="creationDate"
           v-if="getSettings('creationDate')"
           class="column-90"
@@ -131,7 +126,7 @@
         <md-table-cell v-if="getSettings('numberdaysleft')" class="column-50">
           <p>{{ item.numberdaysleft }}</p>
         </md-table-cell>
-     
+
         <md-table-cell
           md-sort-by="importance"
           v-if="getSettings('importance')"
@@ -156,8 +151,8 @@
                 size="25px"
                 @click.stop.prevent="activeDeleteTodo(item.key, item.order)"
                 type="delete"
-              ></feather
-            > </md-checkbox>
+              ></feather>
+            </md-checkbox>
           </div>
         </md-table-cell>
       </md-table-row>
@@ -206,9 +201,7 @@
         <md-dialog :md-active.sync="deleteDialog">
           <md-dialog-title>Delete task?</md-dialog-title>
 
-          <md-dialog-content>
-            You cannot go back if you press 'Yes'
-          </md-dialog-content>
+          <md-dialog-content> You cannot go back if you press 'Yes' </md-dialog-content>
 
           <md-dialog-actions>
             <md-button class="md-tertiary" @click="onCancelDialogDelete"
@@ -624,8 +617,9 @@ export default {
   display: block !important ;
 }
 .bullet {
-  margin-right: 10px;
-  margin-top: 4px;
+  margin-right: 5px;
+  margin-left: 5px;
+  margin-top: 5px;
 }
 
 p {
@@ -641,9 +635,6 @@ p {
 .plus-minus {
   padding-top: 2px;
 }
-.row-order {
-  display: flex;
-}
 .subtable {
   margin-left: 60px;
 }
@@ -653,4 +644,5 @@ p {
 .padding {
   padding: 10px;
 }
+
 </style>
