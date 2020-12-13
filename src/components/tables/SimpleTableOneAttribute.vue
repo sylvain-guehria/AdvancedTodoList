@@ -115,11 +115,7 @@ export default class SimpleTableLvl1 extends Vue {
   getNumberDetailInSubtask = myFunctions.getNumberDetailInSubtask;
 
   getSubtaskItem() {
- // eslint-disable-next-line no-console
-      console.log("pré test ");
     if (this.item && this.item.subtasks) {
-          // eslint-disable-next-line no-console
-      console.log("this.item.subtasks list one att ", this.item.subtasks);
       return this.item.subtasks;
     }
   }

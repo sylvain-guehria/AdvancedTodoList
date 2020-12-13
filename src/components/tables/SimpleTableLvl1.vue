@@ -2,7 +2,7 @@
   <div>
     <md-table class="table-custom no-border">
       <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
-        <md-table-cell v-if="getSettings('label')">
+        <md-table-cell v-if="getSettings('label')" >
           <div class="flex">
             <div class="checkme">
               <input
@@ -33,7 +33,7 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell v-if="getSettings('deadline')" class="hover-click ">
+        <md-table-cell v-if="getSettings('deadline')" class="hover-click column-90 center-icon">
           <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
             {{
               dateOfSubTask(item.key, subtask.key)
@@ -48,13 +48,14 @@
             @click="showDatepickerDialog(subtask.key)"
           ></feather>
         </md-table-cell>
-        <md-table-cell v-if="getSettings('importance')">
+        <md-table-cell v-if="getSettings('importance')"
+          class="column-30">
           <input-contenteditable
             v-model="subtask.importance"
             _is="p"
             :maxlength="100"
             type="number"
-            placeholder="..."
+            placeholder="imp"
             @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'importance')"
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
@@ -66,14 +67,15 @@
             _is="p"
             :maxlength="1000"
             type="number"
-            placeholder="..."
+            placeholder="order"
             @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'order')"
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
           />
         </md-table-cell>
 
-        <md-table-cell v-if="getSettings('actions')">
+        <md-table-cell v-if="getSettings('actions')"
+          class="column-30">
           <feather
             type="delete"
             size="15px"
@@ -203,14 +205,23 @@ export default class SimpleTableLvl1 extends Vue {
   addEmptySubTask(key) {
     let higher_order: number;
     let subtask_with_max_order: Todo;
+    let temp_higher_order;
 
     subtask_with_max_order = lodash.maxBy(this.item.subtasks, "order");
 
+// eslint-disable-next-line no-console
+      console.log('subtask_with_max_order',subtask_with_max_order);
+
     if (subtask_with_max_order) {
-      higher_order = subtask_with_max_order.order + 1;
+      temp_higher_order = subtask_with_max_order.order;
+      temp_higher_order = parseInt(temp_higher_order, 10);
+      higher_order = temp_higher_order + 1;
     } else {
       higher_order = 1;
     }
+
+    // eslint-disable-next-line no-console
+      console.log('higher_order',higher_order);
 
     let emptySubTask: SubTask = {
       label: `SubtaskTask N°${higher_order}`,
@@ -437,5 +448,7 @@ export default class SimpleTableLvl1 extends Vue {
   margin-left: 10px;
   margin-top: 2px;
   margin-right: 10px;
+}
+.colum-label{
 }
 </style>
