@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-table class="table-custom no-border">
+    <md-table >
       <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
 
         <md-table-cell v-if="getSettings('deadline')" class="hover-click ">

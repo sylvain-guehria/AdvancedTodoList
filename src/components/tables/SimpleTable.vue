@@ -149,12 +149,12 @@
 
         <md-table-cell class="column-20">
           <div class="hover-click flex">
-            <md-checkbox v-model="item.isdone" @click.stop="setTodoDone(item)">
-              <feather
+            <md-checkbox v-model="item.isdone" @click="setTodoDone()">
+               <feather
                 size="25px"
                 @click.stop.prevent="activeDeleteTodo(item.key, item.order)"
                 type="delete"
-              ></feather>
+              ></feather> 
             </md-checkbox>
           </div>
         </md-table-cell>
@@ -484,7 +484,9 @@ export default {
       this.showDialog = true;
     },
     setTodoDone(item: Todo): void {
-      this.$store.dispatch("setTodoDone", item);
+         // eslint-disable-next-line no-console
+      console.log(item);
+      this.$store.dispatch(tasksActionsType.SETTODODONE, item);
     },
     onPagination(data) {
       this.paginatedTodos = data;

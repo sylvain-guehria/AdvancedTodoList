@@ -1,8 +1,8 @@
 <template>
   <div>
-    <md-table class="table-custom no-border">
+    <md-table>
       <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
-        <md-table-cell v-if="getSettings('label')" >
+        <md-table-cell v-if="getSettings('label')">
           <div class="flex">
             <div class="checkme">
               <input
@@ -14,6 +14,7 @@
             <input-contenteditable
               v-model="subtask.label"
               :class="subtask.isdone ? 'done' : ''"
+              class="break-word"
               _is="p"
               :maxlength="250"
               type="text"
@@ -33,7 +34,10 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell v-if="getSettings('deadline')" class="hover-click column-90 center-icon">
+        <md-table-cell
+          v-if="getSettings('deadline')"
+          class="hover-click column-90 center-icon"
+        >
           <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
             {{
               dateOfSubTask(item.key, subtask.key)
@@ -48,8 +52,7 @@
             @click="showDatepickerDialog(subtask.key)"
           ></feather>
         </md-table-cell>
-        <md-table-cell v-if="getSettings('importance')"
-          class="column-30">
+        <md-table-cell v-if="getSettings('importance')" class="column-30">
           <input-contenteditable
             v-model="subtask.importance"
             _is="p"
@@ -74,8 +77,7 @@
           />
         </md-table-cell>
 
-        <md-table-cell v-if="getSettings('actions')"
-          class="column-30">
+        <md-table-cell v-if="getSettings('actions')" class="column-30">
           <feather
             type="delete"
             size="15px"
@@ -209,8 +211,8 @@ export default class SimpleTableLvl1 extends Vue {
 
     subtask_with_max_order = lodash.maxBy(this.item.subtasks, "order");
 
-// eslint-disable-next-line no-console
-      console.log('subtask_with_max_order',subtask_with_max_order);
+    // eslint-disable-next-line no-console
+    console.log("subtask_with_max_order", subtask_with_max_order);
 
     if (subtask_with_max_order) {
       temp_higher_order = subtask_with_max_order.order;
@@ -221,7 +223,7 @@ export default class SimpleTableLvl1 extends Vue {
     }
 
     // eslint-disable-next-line no-console
-      console.log('higher_order',higher_order);
+    console.log("higher_order", higher_order);
 
     let emptySubTask: SubTask = {
       label: `SubtaskTask N°${higher_order}`,
@@ -449,6 +451,30 @@ export default class SimpleTableLvl1 extends Vue {
   margin-top: 2px;
   margin-right: 10px;
 }
-.colum-label{
+.break-word {
+  word-break: break-all;
+  // // hyphens: auto; to try
 }
+
+// ul.leaders {
+//     max-width: 40em;
+//     padding: 0;
+//     overflow-x: hidden;
+//     list-style: none}
+// ul.leaders li:before {
+//     float: left;
+//     width: 0;
+//     white-space: nowrap;
+//     content:
+//  ". . . . . . . . . . . . . . . . . . . . "
+//  ". . . . . . . . . . . . . . . . . . . . "
+//  ". . . . . . . . . . . . . . . . . . . . "
+//  ". . . . . . . . . . . . . . . . . . . . "}
+// ul.leaders span:first-child {
+//     padding-right: 0.33em;
+//     background: white}
+// ul.leaders span + span {
+//     float: right;
+//     padding-left: 0.33em;
+//     background: white}
 </style>

@@ -13,6 +13,7 @@
           <input-contenteditable
             :class="detail.isdone ? 'done' : ''"
             v-model="detail.label"
+            class="break-word"
             _is="p"
             :maxlength="250"
             type="text"
@@ -198,5 +199,8 @@ export default class SimpleTableLvl2 extends Vue {
   margin-left: 10px;
   margin-right: 10px;
   margin-top: 2px;
+}
+.break-word{
+  word-break: break-all;
 }
 </style>
