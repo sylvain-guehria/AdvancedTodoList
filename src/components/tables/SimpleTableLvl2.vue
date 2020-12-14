@@ -10,7 +10,7 @@
               @click="onChangeCheckBox(index, !detail.isdone)"
             />
           </div>
-          <div class="dots link">
+          <div :style="imgStyle()" class="link" >
           <input-contenteditable
             :class="detail.isdone ? 'done' : ''"
             v-model="detail.label"
@@ -184,6 +184,9 @@ export default class SimpleTableLvl2 extends Vue {
         });
       });
   }
+   imgStyle(){
+        return "background : url('" + require('@/assets/images/smallDot.png') + "') repeat-x; ";
+    }
 }
 </script>
 
@@ -206,9 +209,10 @@ export default class SimpleTableLvl2 extends Vue {
   word-break: break-all;
 }
 
-.dots { 
-  background: url(https://i.stack.imgur.com/otJN0.png) repeat-x bottom; 
-}
+// .dots { 
+//   background: url(https://i.stack.imgur.com/otJN0.png) repeat-x bottom; 
+//  // background-repeat: repeat-x; 
+//   }
 .link {
   width: 100%;
   display: inline-flex;
