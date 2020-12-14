@@ -198,20 +198,13 @@
       </md-dialog>
 
       <!-- CONFIRM DELET DIALOG -->
-      <div>
-        <md-dialog :md-active.sync="deleteDialog">
-          <md-dialog-title>Delete task?</md-dialog-title>
-
-          <md-dialog-content> You cannot go back if you press 'Yes' </md-dialog-content>
-
-          <md-dialog-actions>
-            <md-button class="md-tertiary" @click="onCancelDialogDelete"
-              >Cancel</md-button
-            >
-            <md-button class="md-tertiary" @click="onConfirmDialogDelete">Yes</md-button>
-          </md-dialog-actions>
-        </md-dialog>
-      </div>
+        <confirm-dialog
+        :confirmDialog="deleteDialog"
+        title="Delete task?"
+        content="You cannot go back if you press 'Yes'"
+        @closeConfirmDialog="onCancelDialogDelete"
+        @confirmDialog="onConfirmDialogDelete"
+        />
     </div>
   </div>
 </template>
@@ -226,6 +219,7 @@ import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
 import { bus } from "@/main";
 import { BusEventEnum } from "@/common/models/enums/enum";
 import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
+import ConfirmDialogCustom from '@/common/componentslib/ConfimDialogCustom.vue'
 
 //task
 import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
@@ -238,7 +232,7 @@ export default {
     "table-pagination": TablePaginationVue,
     "display-task-modal": DisplayTaskModal,
     "simple-table-lvl1": SimpleTableLvl1,
-    // "simple-table-one-attribute": SimpleTableOneAttribute,
+    "confirm-dialog": ConfirmDialogCustom,
     "input-contenteditable": InputContenteditable,
   },
   props: ["todolist", "mainList"],
@@ -473,9 +467,6 @@ export default {
     },
     editTodo(key: string): void {
       this.$emit("editTaskEvent", { key: key });
-    },
-    DisplayTask(key: string): void {
-      this.$emit("showReadOnlyTaskDrawer", { key: key });
     },
     DisplayModalTask(item: Todo): void {
       this.item = item;

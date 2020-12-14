@@ -82,7 +82,7 @@
             type="delete"
             size="15px"
             class="hover-click"
-            @click="deleteSubtask(subtask.key, item.key)"
+            @click="activeDeleteSubtask(subtask.key, item.key)"
           ></feather>
         </md-table-cell>
       </md-table-row>
@@ -117,6 +117,15 @@
       <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
       <md-button class="md-tertiary" @click="editDateSubtask"> Save </md-button>
     </md-dialog>
+
+    <!-- CONFIRM DELET DIALOG -->
+    <confirm-dialog
+      :confirmDialog="deleteDialog"
+      title="Delete task?"
+      content="You cannot go back if you press 'Yes'"
+      @closeConfirmDialog="onCancelDialogDelete"
+      @confirmDialog="onConfirmDialogDelete"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -130,6 +139,7 @@ import {
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
+import ConfirmDialogCustom from "@/common/componentslib/ConfimDialogCustom.vue";
 
 // Subtasks
 import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
@@ -145,6 +155,7 @@ import InputContenteditable from "@/common/componentslib/input-contenteditable/i
     "add-subtask-modal": AddSubtaskModal,
     "simple-table-lvl2": SimpleTableLvl2,
     "input-contenteditable": InputContenteditable,
+    "confirm-dialog": ConfirmDialogCustom,
   },
 })
 export default class SimpleTableLvl1 extends Vue {
@@ -154,11 +165,37 @@ export default class SimpleTableLvl1 extends Vue {
   noDeadLine: boolean = false;
   currentKey: string = "";
   dateOfSubTask = myFunctions.dateOfSubTask;
-  date = "";
-  currentSubtaskKeyEdited: "";
-  currentAttributeEdited: "";
+  date: string = "";
+  currentSubtaskKeyEdited: string = "";
+  currentAttributeEdited: string = "";
+  deleteDialog: boolean = false;
+  currentOrder: number = null;
 
   getNumberDetailInSubtask = myFunctions.getNumberDetailInSubtask;
+
+  //DELETE DIALOG
+  @Watch("deleteDialog", { immediate: true })
+  deleteDialogWatch() {
+    if (this.deleteDialog === false) {
+      this.onCancelDialogDelete();
+    }
+  }
+
+  activeDeleteSubtask(subtaskKey: string, TodoKey: string) {
+    this.deleteDialog = true;
+    this.currentSubtaskKeyEdited = subtaskKey;
+    this.currentKey = TodoKey;
+  }
+  onCancelDialogDelete() {
+    this.currentKey = "";
+    this.currentSubtaskKeyEdited = null;
+    this.deleteDialog = false;
+  }
+  onConfirmDialogDelete() {
+    this.deleteSubtask( this.currentSubtaskKeyEdited, this.currentKey );
+    this.deleteDialog = false;
+  }
+  // END DELETE DIALOG
 
   getSubtaskItem() {
     if (this.item && this.item.subtasks) {

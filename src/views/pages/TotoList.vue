@@ -39,7 +39,6 @@
               :key="this.$store.getters.getRendAllListNumber"
               :todolist="this.$store.getters.getActiveTodoList"
               @editTaskEvent="showDrawerEditTask"
-              @showReadOnlyTaskDrawer="showReadOnlyTaskDrawer"
               :mainList="true"
             ></simple-table>
           </md-tab>
@@ -55,7 +54,6 @@
               :key="this.$store.getters.getRendAllListNumber"
               :todolist="this.$store.getters.getTodoList"
               @editTaskEvent="showDrawerEditTask"
-              @showReadOnlyTaskDrawer="showReadOnlyTaskDrawer"
             ></simple-table>
           </md-tab>
 
@@ -92,10 +90,6 @@
         @activeFilterTab="setDynamicTab"
       ></filters-drawer>
 
-      <read-only-task-viewer
-        :isActive="showReadTask"
-        @isActive="updateIsActiveReadTask"
-      ></read-only-task-viewer>
     </div>
     <div class="spinner-rotate" v-show="isLoading"></div>
   </div>
@@ -105,7 +99,6 @@
 import SimpleTable from "@/components/tables/SimpleTable.vue";
 import FiltersDrawer from "@/components/forms/FiltersDrawer.vue";
 import EditTaskDrawer from "@/components/forms/EditTaskDrawer.vue";
-import ReadOnlyTaskDrawer from "@/components/forms/ReadOnlyTaskDrawer.vue";
 import LegendBulletVue from "@/components/menus/LegendBullet.vue";
 import { bus } from "@/main";
 import ColumToHideVue from "@/components/menus/ColumToHide.vue";
@@ -117,7 +110,6 @@ export default {
     SimpleTable,
     "filters-drawer": FiltersDrawer,
     "edit-task-drawer": EditTaskDrawer,
-    "read-only-task-viewer": ReadOnlyTaskDrawer,
     "legend-bullet": LegendBulletVue,
     "colum-to-hide": ColumToHideVue,
     "colum-subtasks-to-hide": ColumnSubtasksToHideVue,
@@ -130,7 +122,6 @@ export default {
       stepClass: "step100",
       objectStep: 3,
       isLoading: false,
-      showReadTask: false,
       dynamic_tab: "tab-home",
     };
   },
@@ -155,18 +146,11 @@ export default {
         this.showAddTask = true;
       }
     },
-    showReadOnlyTaskDrawer(payload): void {
-      this.$store.commit("setCurrentTodo", payload.key);
-      this.showReadTask = true;
-    },
     updateIsActive(value) {
       this.showFilters = value;
     },
     updateIsActiveAddTask(value) {
       this.showAddTask = value;
-    },
-    updateIsActiveReadTask(value) {
-      this.showReadTask = value;
     },
     stepClick(stepNb) {
       if (this.objectStep >= stepNb) {
