@@ -10,20 +10,20 @@
               @click="onChangeCheckBox(index, !detail.isdone)"
             />
           </div>
-          <div :style="imgStyle()" class="link" >
-          <input-contenteditable
-            :class="detail.isdone ? 'done' : ''"
-            v-model="detail.label"
-            class="break-word"
-            _is="span"
-            :maxlength="250"
-            type="text"
-            placeholder="..."
-            @giveTodoKey="setCurrentIndex_And_attribue(index, 'label')"
-            @keydown.enter="onPressEnterOrBlur"
-            @blur="onPressEnterOrBlur"
-            @click="setCurrentIndex(index)"
-          />
+          <div :style="imgStyle()" class="dots">
+            <input-contenteditable
+              :class="detail.isdone ? 'done' : ''"
+              v-model="detail.label"
+              class="break-word"
+              _is="span"
+              :maxlength="250"
+              type="text"
+              placeholder="..."
+              @giveTodoKey="setCurrentIndex_And_attribue(index, 'label')"
+              @keydown.enter="onPressEnterOrBlur"
+              @blur="onPressEnterOrBlur"
+              @click="setCurrentIndex(index)"
+            />
           </div>
         </div>
       </md-table-cell>
@@ -184,9 +184,13 @@ export default class SimpleTableLvl2 extends Vue {
         });
       });
   }
-   imgStyle(){
-        return "background : url('" + require('@/assets/images/smallDot.png') + "') repeat-x; ";
-    }
+  imgStyle() {
+    return (
+      " width: 100%; display: inline-flex; background : url('" +
+      require("@/assets/images/smallDot.png") +
+      "') repeat-x;  background-position: bottom;"
+    );
+  }
 }
 </script>
 
@@ -205,16 +209,7 @@ export default class SimpleTableLvl2 extends Vue {
   margin-right: 10px;
   margin-top: 2px;
 }
-.break-word{
+.break-word {
   word-break: break-all;
-}
-
-// .dots { 
-//   background: url(https://i.stack.imgur.com/otJN0.png) repeat-x bottom; 
-//  // background-repeat: repeat-x; 
-//   }
-.link {
-  width: 100%;
-  display: inline-flex;
 }
 </style>
