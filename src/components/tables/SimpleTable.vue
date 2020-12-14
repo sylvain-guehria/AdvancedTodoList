@@ -95,20 +95,18 @@
         <md-table-cell
           md-sort-by="deadline"
           v-if="getSettings('deadline')"
-          class="column-90 center-icon"
+          class="column-90 center-icon hover-click"
           md-label="Deadline"
         >
           <p @click="showDatepickerDialog(item.key, item.deadline)" v-if="item.deadline">
             {{ dateOfTask(item.key) ? dateOfTask(item.key) : "" }}
           </p>
-          <div class="hover-click">
             <feather
               size="20px"
               v-if="!item.deadline"
               @click="showDatepickerDialog(item.key, null)"
               type="calendar"
             ></feather>
-          </div>
         </md-table-cell>
 
         <md-table-cell
@@ -146,7 +144,7 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell class="column-20">
+        <md-table-cell class="column-20 center-icon no-padding-cell">
           <div class="hover-click flex">
             <md-checkbox v-model="item.isdone" @change="setTodoDone(item)">
               <feather
@@ -179,40 +177,23 @@
         ></display-task-modal>
       </md-dialog>
 
-      <!-- DATE PICKER -->
-      <md-dialog
-        :md-active.sync="showDialogDate"
-        :show="showDialogDate"
-        @show="showDialogDate = $event"
-      >
-        <div class="padding">
-          <md-button class="md-icon-button simple" @click="closeDialogDate">
-            <md-icon>close</md-icon>
-          </md-button>
-          <v-date-picker v-model="date"></v-date-picker>
-        </div>
-        <div class="padding">
-          <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
-          <md-button class="md-tertiary" @click="editDateTask"> Save </md-button>
-        </div>
-      </md-dialog>
-
       <!-- CONFIRM DELET DIALOG -->
-      <div>
-        <md-dialog :md-active.sync="deleteDialog">
-          <md-dialog-title>Delete task?</md-dialog-title>
-
-          <md-dialog-content> You cannot go back if you press 'Yes' </md-dialog-content>
-
-          <md-dialog-actions>
-            <md-button class="md-tertiary" @click="onCancelDialogDelete"
-              >Cancel</md-button
-            >
-            <md-button class="md-tertiary" @click="onConfirmDialogDelete">Yes</md-button>
-          </md-dialog-actions>
-        </md-dialog>
-      </div>
+      <confirm-dialog
+        :confirmDialog="deleteDialog"
+        title="Delete task?"
+        content="You cannot go back if you press 'Yes'"
+        @closeConfirmDialog="onCancelDialogDelete"
+        @confirmDialog="onConfirmDialogDelete"
+      />
     </div>
+    <!-- DATE PICKER -->
+
+    <date-picker
+      :showDialogDate="showDialogDate"
+      @closeDialogDate="closeDialogDate"
+      @editDate="editDateTask"
+      :date="date"
+    />
   </div>
 </template>
 
@@ -226,6 +207,8 @@ import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
 import { bus } from "@/main";
 import { BusEventEnum } from "@/common/models/enums/enum";
 import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
+import ConfirmDialogCustom from "@/common/componentslib/ConfimDialogCustom.vue";
+import DatePickerCustom from "@/common/componentslib/DatePickerCustom.vue";
 
 //task
 import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
@@ -238,8 +221,9 @@ export default {
     "table-pagination": TablePaginationVue,
     "display-task-modal": DisplayTaskModal,
     "simple-table-lvl1": SimpleTableLvl1,
-    // "simple-table-one-attribute": SimpleTableOneAttribute,
+    "confirm-dialog": ConfirmDialogCustom,
     "input-contenteditable": InputContenteditable,
+    "date-picker": DatePickerCustom,
   },
   props: ["todolist", "mainList"],
   computed: {
@@ -252,8 +236,6 @@ export default {
       if (this.showDialogDate === false) {
         this.currentKey = "";
         this.date = "";
-        this.selectedDate = null;
-        this.noDeadLine = false;
       }
     },
     deleteDialog: function () {
@@ -277,13 +259,14 @@ export default {
       this.deleteTodo(this.currentKey, this.currentOrder);
       this.deleteDialog = false;
     },
-    editDateTask() {
-      let value = this.date;
-      if (this.noDeadLine) {
+    editDateTask({ noDeadLine, date }) {
+      let value = date;
+
+      if (noDeadLine) {
         value = "";
       }
       let todoKey = this.currentKey;
-      let attribute = "deadline";
+      let attribute = todoEnum.DEADLINE;
       this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
         todoKey,
         attribute,
@@ -474,9 +457,6 @@ export default {
     editTodo(key: string): void {
       this.$emit("editTaskEvent", { key: key });
     },
-    DisplayTask(key: string): void {
-      this.$emit("showReadOnlyTaskDrawer", { key: key });
-    },
     DisplayModalTask(item: Todo): void {
       this.item = item;
       this.showDialog = true;
@@ -580,10 +560,8 @@ export default {
       date: null,
       modal: false,
       showDialogDate: false,
-      noDeadLine: false,
       currentKey: "",
       currentOrder: null,
-      selectedDate: null,
       getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask,
       deleteDialog: false,
     };

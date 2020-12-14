@@ -51,6 +51,8 @@
             type="calendar"
             @click="showDatepickerDialog(subtask.key)"
           ></feather>
+
+          <md-tooltip md-direction="bottom">Deadline</md-tooltip>
         </md-table-cell>
         <md-table-cell v-if="getSettings('importance')" class="column-30">
           <input-contenteditable
@@ -63,6 +65,7 @@
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
           />
+          <md-tooltip md-direction="bottom">Importance</md-tooltip>
         </md-table-cell>
         <md-table-cell v-if="getSettings('order')" class="column-20">
           <input-contenteditable
@@ -75,6 +78,7 @@
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
           />
+          <md-tooltip md-direction="bottom">Order</md-tooltip>
         </md-table-cell>
 
         <md-table-cell v-if="getSettings('actions')" class="column-30">
@@ -82,8 +86,9 @@
             type="delete"
             size="15px"
             class="hover-click"
-            @click="deleteSubtask(subtask.key, item.key)"
+            @click="activeDeleteSubtask(subtask.key, item.key)"
           ></feather>
+          <md-tooltip md-direction="bottom">Delete task</md-tooltip>
         </md-table-cell>
       </md-table-row>
       <md-table-row>
@@ -105,18 +110,23 @@
       ></add-subtask-modal>
     </md-dialog>
 
-    <md-dialog
-      :md-active.sync="showdatepickerDialog"
-      :show="showdatepickerDialog"
-      @show="showdatepickerDialog = $event"
-    >
-      <md-button class="md-icon-button simple" @click="closeDialog()">
-        <md-icon>close</md-icon>
-      </md-button>
-      <v-date-picker v-model="date" width="290" class="mt-4"></v-date-picker>
-      <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
-      <md-button class="md-tertiary" @click="editDateSubtask"> Save </md-button>
-    </md-dialog>
+    <!-- DATE PICKER -->
+
+    <date-picker
+      :showDialogDate="showdatepickerDialog"
+      @closeDialogDate="closeDialog"
+      @editDate="editDateSubtask"
+      :date="date"
+    />
+
+    <!-- CONFIRM DELET DIALOG -->
+    <confirm-dialog
+      :confirmDialog="deleteDialog"
+      title="Delete task?"
+      content="You cannot go back if you press 'Yes'"
+      @closeConfirmDialog="onCancelDialogDelete"
+      @confirmDialog="onConfirmDialogDelete"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -130,6 +140,8 @@ import {
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
+import ConfirmDialogCustom from "@/common/componentslib/ConfimDialogCustom.vue";
+import DatePickerCustom from "@/common/componentslib/DatePickerCustom.vue";
 
 // Subtasks
 import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
@@ -145,6 +157,8 @@ import InputContenteditable from "@/common/componentslib/input-contenteditable/i
     "add-subtask-modal": AddSubtaskModal,
     "simple-table-lvl2": SimpleTableLvl2,
     "input-contenteditable": InputContenteditable,
+    "confirm-dialog": ConfirmDialogCustom,
+    "date-picker": DatePickerCustom,
   },
 })
 export default class SimpleTableLvl1 extends Vue {
@@ -154,11 +168,37 @@ export default class SimpleTableLvl1 extends Vue {
   noDeadLine: boolean = false;
   currentKey: string = "";
   dateOfSubTask = myFunctions.dateOfSubTask;
-  date = "";
-  currentSubtaskKeyEdited: "";
-  currentAttributeEdited: "";
+  date: string = "";
+  currentSubtaskKeyEdited: string = "";
+  currentAttributeEdited: string = "";
+  deleteDialog: boolean = false;
+  currentOrder: number = null;
 
   getNumberDetailInSubtask = myFunctions.getNumberDetailInSubtask;
+
+  //DELETE DIALOG
+  @Watch("deleteDialog", { immediate: true })
+  deleteDialogWatch() {
+    if (this.deleteDialog === false) {
+      this.onCancelDialogDelete();
+    }
+  }
+
+  activeDeleteSubtask(subtaskKey: string, TodoKey: string) {
+    this.deleteDialog = true;
+    this.currentSubtaskKeyEdited = subtaskKey;
+    this.currentKey = TodoKey;
+  }
+  onCancelDialogDelete() {
+    this.currentKey = "";
+    this.currentSubtaskKeyEdited = null;
+    this.deleteDialog = false;
+  }
+  onConfirmDialogDelete() {
+    this.deleteSubtask(this.currentSubtaskKeyEdited, this.currentKey);
+    this.deleteDialog = false;
+  }
+  // END DELETE DIALOG
 
   getSubtaskItem() {
     if (this.item && this.item.subtasks) {
@@ -245,12 +285,6 @@ export default class SimpleTableLvl1 extends Vue {
           duration: 5000,
         });
       });
-
-    if (this.item && this.item.subtasks && this.item.subtasks.length > 0) {
-      // this.item.subtasks.unshift(emptySubTask);
-    } else {
-      //this.item.subtasks = [emptySubTask];
-    }
   }
 
   getSettings(columnLabel: string) {
@@ -279,9 +313,11 @@ export default class SimpleTableLvl1 extends Vue {
     }
   }
 
-  editDateSubtask() {
-    let value = this.date;
-    if (this.noDeadLine) {
+  editDateSubtask({ noDeadLine, date }) {
+        // eslint-disable-next-line no-console
+      console.log({ noDeadLine, date });
+    let value = date;
+    if (noDeadLine) {
       value = "";
     }
     let key = this.currentKey;
@@ -322,7 +358,6 @@ export default class SimpleTableLvl1 extends Vue {
       this.currentKey = "";
       this.date = "";
       this.selectedDate = null;
-      this.noDeadLine = false;
     }
   }
 
@@ -449,26 +484,4 @@ export default class SimpleTableLvl1 extends Vue {
   word-break: break-all;
   // // hyphens: auto; to try
 }
-
-// ul.leaders {
-//     max-width: 40em;
-//     padding: 0;
-//     overflow-x: hidden;
-//     list-style: none}
-// ul.leaders li:before {
-//     float: left;
-//     width: 0;
-//     white-space: nowrap;
-//     content:
-//  ". . . . . . . . . . . . . . . . . . . . "
-//  ". . . . . . . . . . . . . . . . . . . . "
-//  ". . . . . . . . . . . . . . . . . . . . "
-//  ". . . . . . . . . . . . . . . . . . . . "}
-// ul.leaders span:first-child {
-//     padding-right: 0.33em;
-//     background: white}
-// ul.leaders span + span {
-//     float: right;
-//     padding-left: 0.33em;
-//     background: white}
 </style>

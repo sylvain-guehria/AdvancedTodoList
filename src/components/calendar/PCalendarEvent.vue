@@ -36,7 +36,6 @@ import DayBlock from "./DayBlock.vue";
 import moment from "moment";
 import Modal from "@/common/componentslib/Modal.vue";
 import SubTaskViewer from "@/components/forms/SubTaskViewer.vue";
-import ReadOnlySubTaskTable from "@/components/tables/ReadOnlySubTaskTable.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
 import { bus } from "@/main";
 import DisplayTaskModal from "@/components/modals/DisplayTaskModal.vue";
@@ -47,7 +46,6 @@ import { Todo } from "@/common/models/types/index";
   components: {
     modal: Modal,
     "sub-tasks-viewer": SubTaskViewer,
-    "sub-task-readonly": ReadOnlySubTaskTable,
     "display-task-modal": DisplayTaskModal
   },
 })
