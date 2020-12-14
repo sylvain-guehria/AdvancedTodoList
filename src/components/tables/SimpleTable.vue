@@ -120,7 +120,7 @@
           </p></md-table-cell
         >
 
-        <md-table-cell v-if="getSettings('numberdaysleft')" class="column-50">
+        <md-table-cell v-if="getSettings('numberdaysleft')" class="column-80">
           <p>{{ item.numberdaysleft }}</p>
         </md-table-cell>
 
@@ -144,7 +144,8 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell class="column-20 center-icon no-padding-cell">
+        <md-table-cell class="column-20 center-icon no-padding-cell"
+         v-if="getSettings('isdone')">
           <div class="hover-click flex">
             <md-checkbox v-model="item.isdone" @change="setTodoDone(item)">
               <feather

@@ -30,36 +30,6 @@
             </div>
           </div>
           <div class="legend-2">
-            <p>Label</p>
-            <div class="feathers">
-              <feather
-                type="check"
-                v-if="hiddenColumn ? hiddenColumn.label : false"
-                @click="setSettings('label')"
-              ></feather>
-              <feather
-                type="x"
-                v-if="hiddenColumn ? !hiddenColumn.label : false"
-                @click="setSettings('label')"
-              ></feather>
-            </div>
-          </div>
-          <div class="legend-2">
-            <p>details</p>
-            <div class="feathers">
-              <feather
-                type="check"
-                v-if="hiddenColumn ? hiddenColumn.details : false"
-                @click="setSettings('details')"
-              ></feather>
-              <feather
-                type="x"
-                v-if="hiddenColumn ? !hiddenColumn.details : false"
-                @click="setSettings('details')"
-              ></feather>
-            </div>
-          </div>
-          <div class="legend-2">
             <p>Deadline</p>
             <div class="feathers">
               <feather
@@ -71,36 +41,6 @@
                 type="x"
                 v-if="hiddenColumn ? !hiddenColumn.deadline : false"
                 @click="setSettings('deadline')"
-              ></feather>
-            </div>
-          </div>
-          <div class="legend-2">
-            <p>Creation Date</p>
-            <div class="feathers">
-              <feather
-                type="check"
-                v-if="hiddenColumn ? hiddenColumn.creationDate : false"
-                @click="setSettings('creationDate')"
-              ></feather>
-              <feather
-                type="x"
-                v-if="hiddenColumn ? !hiddenColumn.creationDate : false"
-                @click="setSettings('creationDate')"
-              ></feather>
-            </div>
-          </div>
-          <div class="legend-2">
-            <p>Finish Time</p>
-            <div class="feathers">
-              <feather
-                type="check"
-                v-if="hiddenColumn ? hiddenColumn.numberdaysleft : false"
-                @click="setSettings('numberdaysleft')"
-              ></feather>
-              <feather
-                type="x"
-                v-if="hiddenColumn ? !hiddenColumn.numberdaysleft : false"
-                @click="setSettings('numberdaysleft')"
               ></feather>
             </div>
           </div>
@@ -119,22 +59,7 @@
               ></feather>
             </div>
           </div>
-          <div class="legend-2">
-            <p>Done/Not Done</p>
-            <div class="feathers">
-              <feather
-                type="check"
-                v-if="hiddenColumn ? hiddenColumn.isdone : false"
-                @click="setSettings('isdone')"
-              ></feather>
-              <feather
-                type="x"
-                v-if="hiddenColumn ? !hiddenColumn.isdone : false"
-                @click="setSettings('isdone')"
-              ></feather>
-            </div>
-          </div>
-          <div class="legend-2">
+          <!-- <div class="legend-2">
             <p>Actions</p>
             <div class="feathers">
               <feather
@@ -148,7 +73,7 @@
                 @click="setSettings('actions')"
               ></feather>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </md-menu-content>
