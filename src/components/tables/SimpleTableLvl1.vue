@@ -110,18 +110,14 @@
       ></add-subtask-modal>
     </md-dialog>
 
-    <md-dialog
-      :md-active.sync="showdatepickerDialog"
-      :show="showdatepickerDialog"
-      @show="showdatepickerDialog = $event"
-    >
-      <md-button class="md-icon-button simple" @click="closeDialog()">
-        <md-icon>close</md-icon>
-      </md-button>
-      <v-date-picker v-model="date" width="290" class="mt-4"></v-date-picker>
-      <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
-      <md-button class="md-tertiary" @click="editDateSubtask"> Save </md-button>
-    </md-dialog>
+    <!-- DATE PICKER -->
+
+    <date-picker
+      :showDialogDate="showdatepickerDialog"
+      @closeDialogDate="closeDialog"
+      @editDate="editDateSubtask"
+      :date="date"
+    />
 
     <!-- CONFIRM DELET DIALOG -->
     <confirm-dialog
@@ -145,6 +141,7 @@ import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
 import ConfirmDialogCustom from "@/common/componentslib/ConfimDialogCustom.vue";
+import DatePickerCustom from "@/common/componentslib/DatePickerCustom.vue";
 
 // Subtasks
 import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
@@ -161,6 +158,7 @@ import InputContenteditable from "@/common/componentslib/input-contenteditable/i
     "simple-table-lvl2": SimpleTableLvl2,
     "input-contenteditable": InputContenteditable,
     "confirm-dialog": ConfirmDialogCustom,
+    "date-picker": DatePickerCustom,
   },
 })
 export default class SimpleTableLvl1 extends Vue {
@@ -315,9 +313,11 @@ export default class SimpleTableLvl1 extends Vue {
     }
   }
 
-  editDateSubtask() {
-    let value = this.date;
-    if (this.noDeadLine) {
+  editDateSubtask({ noDeadLine, date }) {
+        // eslint-disable-next-line no-console
+      console.log({ noDeadLine, date });
+    let value = date;
+    if (noDeadLine) {
       value = "";
     }
     let key = this.currentKey;
@@ -358,7 +358,6 @@ export default class SimpleTableLvl1 extends Vue {
       this.currentKey = "";
       this.date = "";
       this.selectedDate = null;
-      this.noDeadLine = false;
     }
   }
 
@@ -485,5 +484,4 @@ export default class SimpleTableLvl1 extends Vue {
   word-break: break-all;
   // // hyphens: auto; to try
 }
-
 </style>
