@@ -105,7 +105,7 @@
               </div>
             </div>
             <div class="legend-2">
-              <p>Done/Not Done</p>
+              <p>Actions</p>
               <div class="feathers">
                 <feather
                   type="check"

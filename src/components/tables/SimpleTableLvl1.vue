@@ -2,7 +2,7 @@
   <div>
     <md-table>
       <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
-        <md-table-cell v-if="getSettings('label')">
+        <md-table-cell>
           <div class="flex">
             <div class="checkme">
               <input
@@ -81,7 +81,7 @@
           <md-tooltip md-direction="bottom">Order</md-tooltip>
         </md-table-cell>
 
-        <md-table-cell v-if="getSettings('actions')" class="column-30">
+        <md-table-cell class="column-30">
           <feather
             type="delete"
             size="15px"
@@ -288,12 +288,13 @@ export default class SimpleTableLvl1 extends Vue {
   }
 
   getSettings(columnLabel: string) {
-    let colums: Settings = this.$store.getters.getSettings;
+    let settings: Settings = this.$store.getters.getSettings;
+    if (!settings || !settings.hidden_column_subtasks){return}
+    let colums = settings.hidden_column_subtasks;
     let colum: boolean = true;
-    if (colums && colums.hidden_column_subtasks) {
-      if (colums.hidden_column_subtasks[columnLabel]) {
-        colum = colums.hidden_column_subtasks[columnLabel];
-      }
+
+    if (colums) {
+        colum = colums[columnLabel];
     }
     return colum;
   }
@@ -314,8 +315,6 @@ export default class SimpleTableLvl1 extends Vue {
   }
 
   editDateSubtask({ noDeadLine, date }) {
-        // eslint-disable-next-line no-console
-      console.log({ noDeadLine, date });
     let value = date;
     if (noDeadLine) {
       value = "";
