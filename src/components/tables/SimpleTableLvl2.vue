@@ -10,11 +10,12 @@
               @click="onChangeCheckBox(index, !detail.isdone)"
             />
           </div>
+          <div class="dots link">
           <input-contenteditable
             :class="detail.isdone ? 'done' : ''"
             v-model="detail.label"
             class="break-word"
-            _is="p"
+            _is="span"
             :maxlength="250"
             type="text"
             placeholder="..."
@@ -23,6 +24,7 @@
             @blur="onPressEnterOrBlur"
             @click="setCurrentIndex(index)"
           />
+          </div>
         </div>
       </md-table-cell>
     </md-table-row>
@@ -202,5 +204,13 @@ export default class SimpleTableLvl2 extends Vue {
 }
 .break-word{
   word-break: break-all;
+}
+
+.dots { 
+  background: url(https://i.stack.imgur.com/otJN0.png) repeat-x bottom; 
+}
+.link {
+  width: 100%;
+  display: inline-flex;
 }
 </style>
