@@ -51,6 +51,8 @@
             type="calendar"
             @click="showDatepickerDialog(subtask.key)"
           ></feather>
+
+          <md-tooltip md-direction="bottom">Deadline</md-tooltip>
         </md-table-cell>
         <md-table-cell v-if="getSettings('importance')" class="column-30">
           <input-contenteditable
@@ -63,6 +65,7 @@
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
           />
+          <md-tooltip md-direction="bottom">Importance</md-tooltip>
         </md-table-cell>
         <md-table-cell v-if="getSettings('order')" class="column-20">
           <input-contenteditable
@@ -75,6 +78,7 @@
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
           />
+          <md-tooltip md-direction="bottom">Order</md-tooltip>
         </md-table-cell>
 
         <md-table-cell v-if="getSettings('actions')" class="column-30">
@@ -84,6 +88,7 @@
             class="hover-click"
             @click="activeDeleteSubtask(subtask.key, item.key)"
           ></feather>
+          <md-tooltip md-direction="bottom">Delete task</md-tooltip>
         </md-table-cell>
       </md-table-row>
       <md-table-row>
@@ -282,12 +287,6 @@ export default class SimpleTableLvl1 extends Vue {
           duration: 5000,
         });
       });
-
-    if (this.item && this.item.subtasks && this.item.subtasks.length > 0) {
-      // this.item.subtasks.unshift(emptySubTask);
-    } else {
-      //this.item.subtasks = [emptySubTask];
-    }
   }
 
   getSettings(columnLabel: string) {
@@ -487,25 +486,4 @@ export default class SimpleTableLvl1 extends Vue {
   // // hyphens: auto; to try
 }
 
-// ul.leaders {
-//     max-width: 40em;
-//     padding: 0;
-//     overflow-x: hidden;
-//     list-style: none}
-// ul.leaders li:before {
-//     float: left;
-//     width: 0;
-//     white-space: nowrap;
-//     content:
-//  ". . . . . . . . . . . . . . . . . . . . "
-//  ". . . . . . . . . . . . . . . . . . . . "
-//  ". . . . . . . . . . . . . . . . . . . . "
-//  ". . . . . . . . . . . . . . . . . . . . "}
-// ul.leaders span:first-child {
-//     padding-right: 0.33em;
-//     background: white}
-// ul.leaders span + span {
-//     float: right;
-//     padding-left: 0.33em;
-//     background: white}
 </style>
