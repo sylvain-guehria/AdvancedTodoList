@@ -127,8 +127,11 @@ table {
           width: 100px;
         }
         &.center-icon{
-    text-align: center;
+         text-align: center;
         }
+        &.no-padding-cell{
+          padding-top: 0px;
+       }
       }
       &:hover:not(.md-header-row) .md-table-cell,
       &.active:not(.md-header-row) .md-table-cell {

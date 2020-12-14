@@ -146,8 +146,8 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell class="column-20">
-          <div class="hover-click flex">
+        <md-table-cell class="column-20 center-icon no-padding-cell">
+          <div class="hover-click flex ">
             <md-checkbox v-model="item.isdone" @change="setTodoDone(item)">
               <feather
                 size="25px"

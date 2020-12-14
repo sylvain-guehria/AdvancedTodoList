@@ -192,7 +192,7 @@ export default class SimpleTableLvl1 extends Vue {
     this.deleteDialog = false;
   }
   onConfirmDialogDelete() {
-    this.deleteSubtask( this.currentSubtaskKeyEdited, this.currentKey );
+    this.deleteSubtask(this.currentSubtaskKeyEdited, this.currentKey);
     this.deleteDialog = false;
   }
   // END DELETE DIALOG
