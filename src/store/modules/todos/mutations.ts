@@ -1,25 +1,36 @@
 import { MutationTree } from "vuex";
 import { Todos, Todo } from "@/common/models/types/index";
-import store from '@/store/index'; 
+import store from '@/store/index';
 
 export enum MutationTypes {
     SET_ISLOADING = "setIsLoading",
     INCRENDALLLISTNUMBER = "incRendAllListNumber",
     SETTODOLIST = "setTodoList",
     SETFILTEREDTODOLIST = "setFilteredTodoList",
-    SETCURRENTTODO= "setCurrentTodo",
-    RESETCURRENTTODO= "resetCurrentTodo",
-    ADDNEWTODO= "addNewTodo",
-    REMOVETODO= "removeTodo",
-    REMOVETODOBYKEY= "removeTodoByKey",
-    EDITTODOBYKEY= "editTodoByKey",
-    UPORDERTODO= "upOrderTodo",
-    DOWNORDERTODO= "downOrderTodo",
-    SETORDER= "setOrder",
-    EDITATTRIBUTETASK="EDITATTRIBUTETASK"
+    SETCURRENTTODO = "setCurrentTodo",
+    RESETCURRENTTODO = "resetCurrentTodo",
+    ADDNEWTODO = "addNewTodo",
+    REMOVETODO = "removeTodo",
+    REMOVETODOBYKEY = "removeTodoByKey",
+    EDITTODOBYKEY = "editTodoByKey",
+    UPORDERTODO = "upOrderTodo",
+    DOWNORDERTODO = "downOrderTodo",
+    SETORDER = "setOrder",
+    EDITATTRIBUTETASK = "EDITATTRIBUTETASK",
+    SETTASKSTATE = "setTaskState"
 }
 
 export const mutationsTodos: MutationTree<Todos> = {
+    [MutationTypes.SETTASKSTATE](state, { key, isDone }: { key: string, isDone: boolean }) {
+        var index = store.getters.getTodoList.findIndex(function (o) {
+            return o.key === key;
+        });
+
+        if (index !== -1) {
+            store.getters.getTodoList[index].isdone = isDone;
+        }
+    },
+
     [MutationTypes.SET_ISLOADING](state, status: boolean) {
         state.isLoading = status;
     },
@@ -32,14 +43,14 @@ export const mutationsTodos: MutationTree<Todos> = {
     [MutationTypes.SETFILTEREDTODOLIST](state, newList: Todo[]) {
         state.filtered_todo_list = newList;
     },
-    [MutationTypes.EDITATTRIBUTETASK](state,{ todoKey, attribute, value}: { todoKey: string, attribute: string, value }) {
+    [MutationTypes.EDITATTRIBUTETASK](state, { todoKey, attribute, value }: { todoKey: string, attribute: string, value }) {
         var index = store.getters.getTodoList.findIndex(function (o) {
             return o.key === todoKey;
-          });
-            if (index !== -1) {
-              store.getters.getTodoList[index][attribute] = value;
-            }
-        },
+        });
+        if (index !== -1) {
+            store.getters.getTodoList[index][attribute] = value;
+        }
+    },
     [MutationTypes.SETCURRENTTODO](state, key: string) {
         const todofinded = state.todolist.find(obj => {
             return obj.key === key;

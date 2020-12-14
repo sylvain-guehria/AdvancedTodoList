@@ -9,7 +9,7 @@ export enum ActionTypes {
   FETCH_TODOS = "fetchTodos",
   CREATETODO = "createTodo",
   EDITTODO = "editTodo",
-  SETTODODONE = "setTodoDone",
+  SETTODOSTATE = "setTodoState",
   DELETETODO = "deleteTodo",
   SETORDERUPTODO = "setOrderUpTodo",
   SETORDERDOWNTODO = "setOrderDownTodo",
@@ -106,21 +106,32 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
   },
 
   //SET TODO DONE
-  async [ActionTypes.SETTODODONE](context, payload: Todo): Promise<void> {
+  // async [ActionTypes.SETTODODONE](context, payload: Todo): Promise<void> {
 
-    Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
+  //   Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
 
-    payload.isdone = !payload.isdone;
-    const { uid } = store.getters.getUser.data;
+  //   payload.isdone = !payload.isdone;
+  //   const { uid } = store.getters.getUser.data;
 
-    if (!payload.key) { return }
+  //   if (!payload.key) { return }
 
-    await database.ref(`todos/${uid}/${payload.key}`).set({
-      ...payload,
-      isdone: payload.isdone
-    });
-    context.commit(MutationTypes.EDITTODOBYKEY, payload);
-  },
+  //   await database.ref(`todos/${uid}/${payload.key}`).set({
+  //     ...payload,
+  //     isdone: payload.isdone
+  //   });
+  //   context.commit(MutationTypes.EDITTODOBYKEY, payload);
+  // },
+
+    // SET TASK STATE
+    async [ActionTypes.SETTODOSTATE](context, { key, isDone }: { key: string, isDone: boolean }) {
+      const { uid } = store.getters.getUser.data;
+      if (!key ) { return }
+  
+      await database.ref(`todos/${uid}/${key}`).update({
+        isdone: isDone
+      });
+      context.commit(MutationTypes.SETTASKSTATE, { key, isDone });
+    },
 
   //DELETE TODO
   async [ActionTypes.DELETETODO](context, key: string): Promise<void> {

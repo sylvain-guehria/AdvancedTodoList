@@ -109,7 +109,6 @@
               type="calendar"
             ></feather>
           </div>
-
         </md-table-cell>
 
         <md-table-cell
@@ -149,12 +148,12 @@
 
         <md-table-cell class="column-20">
           <div class="hover-click flex">
-            <md-checkbox v-model="item.isdone" @click="setTodoDone()">
-               <feather
+            <md-checkbox v-model="item.isdone" @change="setTodoDone(item)">
+              <feather
                 size="25px"
                 @click.stop.prevent="activeDeleteTodo(item.key, item.order)"
                 type="delete"
-              ></feather> 
+              ></feather>
             </md-checkbox>
           </div>
         </md-table-cell>
@@ -164,7 +163,6 @@
       :data="todos"
       @pagination="onPagination($event)"
       :serverSide="false"
-      @paginationEvent="doServerPagination($event)"
     ></table-pagination>
 
     <!-- modal display task -->
@@ -484,28 +482,13 @@ export default {
       this.showDialog = true;
     },
     setTodoDone(item: Todo): void {
-         // eslint-disable-next-line no-console
-      console.log(item);
-      this.$store.dispatch(tasksActionsType.SETTODODONE, item);
+      this.$store.dispatch(tasksActionsType.SETTODOSTATE, {
+        key: item.key,
+        isDone: item.isdone,
+      });
     },
     onPagination(data) {
       this.paginatedTodos = data;
-    },
-    doServerPagination(paginationEvent) {
-      // eslint-disable-next-line no-console
-      console.log(
-        "previousPageIndex: " +
-          paginationEvent.previousPageIndex +
-          "\n" +
-          "pageIndex: " +
-          paginationEvent.pageIndex +
-          "\n" +
-          "pageSize: " +
-          paginationEvent.pageSize +
-          "\n" +
-          "length: " +
-          paginationEvent.length
-      );
     },
     bulletClass(item) {
       const index = this.giveColorTodo(item);
