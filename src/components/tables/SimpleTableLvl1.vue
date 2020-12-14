@@ -211,9 +211,6 @@ export default class SimpleTableLvl1 extends Vue {
 
     subtask_with_max_order = lodash.maxBy(this.item.subtasks, "order");
 
-    // eslint-disable-next-line no-console
-    console.log("subtask_with_max_order", subtask_with_max_order);
-
     if (subtask_with_max_order) {
       temp_higher_order = subtask_with_max_order.order;
       temp_higher_order = parseInt(temp_higher_order, 10);
@@ -221,9 +218,6 @@ export default class SimpleTableLvl1 extends Vue {
     } else {
       higher_order = 1;
     }
-
-    // eslint-disable-next-line no-console
-    console.log("higher_order", higher_order);
 
     let emptySubTask: SubTask = {
       label: `SubtaskTask N°${higher_order}`,
