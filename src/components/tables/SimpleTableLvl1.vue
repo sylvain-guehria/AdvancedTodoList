@@ -279,7 +279,8 @@ export default class SimpleTableLvl1 extends Vue {
   }
 
   sortSubtasks(attribute, asc) {
-    this.localSubtasks = sortSubtasksBy(this.localSubtasks, attribute, asc);
+    let todoKey = this.item.key;
+    this.localSubtasks = sortSubtasksBy(this.localSubtasks, attribute, asc, todoKey);
     this.currentSorting = attribute;
     this.currentAsc = asc;
   }

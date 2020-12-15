@@ -86,7 +86,6 @@
           <div v-if="includeKey(item.key)" class="subtable">
             <simple-table-lvl1
               :item="item"
-              :key="getNumberSubtaskInTask(item.key)"
             ></simple-table-lvl1>
           </div>
           <!-- end -->
