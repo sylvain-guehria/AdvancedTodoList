@@ -208,6 +208,7 @@ import DatePickerCustom from "@/common/componentslib/DatePickerCustom.vue";
 import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
 import { MutationTypes as subtasksMutationType } from "@/store/modules/subtasks/mutations";
 import { sortSubtasksBy } from "@/modules/subtasks/shared/sortSubtasks";
+import { subtaskEnum } from "@/modules/subtasks/shared/enumSubtask";
 
 import SimpleTableLvl2 from "./SimpleTableLvl2.vue";
 
@@ -311,6 +312,10 @@ export default class SimpleTableLvl1 extends Vue {
 
     if (value) {
       value = value.trim();
+    }
+
+    if(attribute === subtaskEnum.IMPORTANCE || subtaskEnum.ORDER){
+      value = parseInt(value,10);
     }
 
     this.$store.dispatch(subtasksActionsType.EDITATTRIBUTESUBTASK, {
@@ -441,24 +446,6 @@ export default class SimpleTableLvl1 extends Vue {
 
   closeDialog() {
     this.showdatepickerDialog = false;
-  }
-
-  onChangeNumber(e: HTMLElementEvent<HTMLTextAreaElement>, key: string, attribute) {
-    e.preventDefault();
-    if (e && e.target && e.target.innerText) {
-      let number = parseInt(e.target.innerText, 10);
-      let motherKey = this.item.key;
-
-      if (number) {
-        let value = e.target.innerText;
-        this.$store.dispatch(subtasksActionsType.EDITATTRIBUTESUBTASK, {
-          motherKey,
-          key,
-          attribute,
-          value,
-        });
-      }
-    }
   }
 
   motherKey: string = "";

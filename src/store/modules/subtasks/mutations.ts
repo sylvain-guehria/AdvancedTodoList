@@ -10,7 +10,8 @@ export enum MutationTypes {
   removeSubtaskByKey = "removeSubtaskByKey",
   editOneAttributSubtaskTodo = "editOneAttributSubtaskTodo",
   deleteSubtaskDetail = "deleteSubtaskDetail",
-  ADDSUBTASKDETAIL = "addSubtasksDetail"
+  ADDSUBTASKDETAIL = "addSubtasksDetail",
+  EDITSUBTASKDETAIL = "editSubtasksDetail"
 }
 
 export const mutationsSubtasks: MutationTree<SubTask> = {
@@ -102,22 +103,27 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
   },
 
   //DELETE SUBTASK DETAIL
-  [MutationTypes.deleteSubtaskDetail](state, { subtaskKey, taskKey, index }: { subtaskKey: string, taskKey: string, index: number }) {
+  [MutationTypes.deleteSubtaskDetail](state, { subtaskKey, taskKey, key }: { subtaskKey: string, taskKey: string, key: string }) {
     var indexTodo = store.getters.getTodoList.findIndex(function (o) {
       return o.key === taskKey;
     });
 
-    if (index !== -1) {
-      var index_child = store.getters.getTodoList[indexTodo].subtasks.findIndex(function (o) {
+    if (indexTodo !== -1 && store.getters.getTodoList[indexTodo].subtasks) {
+      var index_Subtask = store.getters.getTodoList[indexTodo].subtasks.findIndex(function (o) {
         return o.key === subtaskKey;
       });
 
-      if (index_child !== -1
-        && store.getters.getTodoList[indexTodo].subtasks[index_child].details
+      if (index_Subtask !== -1
+        && store.getters.getTodoList[indexTodo].subtasks[index_Subtask].details
       ) {
-          // eslint-disable-next-line no-console
-      console.log(store.getters.getTodoList[indexTodo].subtasks[index_child]);
-        store.getters.getTodoList[indexTodo].subtasks[index_child].details.splice(index, 1);
+        var index_Detail = store.getters.getTodoList[indexTodo].subtasks[index_Subtask].details.findIndex(function (o) {
+          return o.key === key;
+        });
+
+        if (index_Detail !== -1) {
+          store.getters.getTodoList[indexTodo].subtasks[index_Subtask].details.splice(index_Detail, 1);
+        }
+
       }
     }
   },
@@ -137,10 +143,38 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
         && store.getters.getTodoList[indexTodo].subtasks[index_subtask].details
       ) {
         store.getters.getTodoList[indexTodo].subtasks[index_subtask].details.unshift({
-          isdone: detail.isdone,
-          label: detail.label
+          ...detail
         })
       }
     }
   },
+
+
+  //EDIT SUBTASK DETAIL
+  [MutationTypes.EDITSUBTASKDETAIL](state, { todoKey, subtaskKey, key, attribute, value }) {
+    var indexTodo = store.getters.getTodoList.findIndex(function (o) {
+      return o.key === todoKey;
+    });
+
+    if (indexTodo !== -1 && store.getters.getTodoList[indexTodo].subtasks) {
+      var index_Subtask = store.getters.getTodoList[indexTodo].subtasks.findIndex(function (o) {
+        return o.key === subtaskKey;
+      });
+
+      if (index_Subtask !== -1
+        && store.getters.getTodoList[indexTodo].subtasks[index_Subtask].details
+      ) {
+        var index_Detail = store.getters.getTodoList[indexTodo].subtasks[index_Subtask].details.findIndex(function (o) {
+          return o.key === key;
+        });
+
+        if (index_Detail !== -1
+          && store.getters.getTodoList[indexTodo].subtasks[index_Subtask].details[index_Detail][attribute]
+          ) {
+          store.getters.getTodoList[indexTodo].subtasks[index_Subtask].details[attribute] = value
+        }
+
+      }
+    }
+  }
 }

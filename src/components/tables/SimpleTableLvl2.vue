@@ -19,10 +19,10 @@
               :maxlength="250"
               type="text"
               placeholder="..."
-              @giveTodoKey="setCurrentIndex_And_attribue(index, 'label')"
+              @giveTodoKey="setCurrentKey_And_attribue(index, 'label', detail.key)"
               @keydown.enter="onPressEnterOrBlur"
               @blur="onPressEnterOrBlur"
-              @click="setCurrentIndex(index)"
+              @click="setCurrentIndexKey(index, detail.key)"
             />
           </div>
         </div>
@@ -64,17 +64,31 @@ export default class SimpleTableLvl2 extends Vue {
     label: "",
     isdone: false,
   };
+  currentDetailKey: string = "";
 
   currentIndex: number;
   currentAttributeEdited: string;
+  //localSubtasksDetails: Detail[];
 
-  setCurrentIndex_And_attribue(index, attribute) {
+  // getLocalSubtasDetails() {
+  //   return this.localSubtasksDetails;
+  // }
+
+  // mounted() {
+  //   if (this.subtask) {
+  //     this.localSubtasksDetails = this.subtask.details;
+  //   }
+  // }
+
+  setCurrentKey_And_attribue(index, attribute, detailKey) {
     this.currentIndex = index;
     this.currentAttributeEdited = attribute;
+    this.currentDetailKey = detailKey;
   }
 
-  setCurrentIndex(index) {
+  setCurrentIndexKey(index, detailKey) {
     this.currentIndex = index;
+    this.currentDetailKey = detailKey;
   }
 
   onPressEnterOrBlur(e) {
@@ -101,13 +115,13 @@ export default class SimpleTableLvl2 extends Vue {
         subtaskKey,
         attribute,
         value,
-        index,
+        key: this.currentDetailKey,
       });
     } else if (value == "" || value == undefined) {
       this.$store.dispatch(subtasksActionsType.DELETESUBTASKDETAIL, {
         taskKey,
         subtaskKey,
-        index,
+        key: this.currentDetailKey,
       });
     }
   }
@@ -117,16 +131,6 @@ export default class SimpleTableLvl2 extends Vue {
   }
 
   createSubtasksDetail() {
-    // let subtask = { ...this.subtask };
-
-    // subtask.motherKey = this.motherKey;
-
-    // if (subtask.details && subtask.details.length > 0) {
-    //   subtask.details.push({ ...this.emptyDetail });
-    // } else {
-    //   subtask.details = [{ ...this.emptyDetail }];
-    // }
-
     this.$store.dispatch(subtasksActionsType.ADDSUBTASKDETAIL, {
       todoKey: this.motherKey,
       subtaskKey: this.subtask.key,
@@ -143,33 +147,6 @@ export default class SimpleTableLvl2 extends Vue {
       index,
       isdone,
     });
-  }
-
-  // TODO DETAIL
-  deleteSubtask(subtaskKey: string, todoKey: string) {
-    let keys = {
-      subtaskKey,
-      todoKey,
-    };
-    let vm = this;
-    this.$store
-      .dispatch("deleteSubtask", keys)
-      .then(() => {
-        this.$toasted.show("Subtask deleted, it is no longer in your list", {
-          icon: "delete_outline",
-          theme: "bubble",
-          position: "bottom-right",
-          duration: 5000,
-        });
-      })
-      .catch((error: Error) => {
-        this.$toasted.show("Cannot deleted Subtask", {
-          icon: "error_outline",
-          theme: "bubble",
-          position: "bottom-right",
-          duration: 5000,
-        });
-      });
   }
   imgStyle() {
     return (

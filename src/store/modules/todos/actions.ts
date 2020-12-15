@@ -90,6 +90,8 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
               if(subtask['details']){
               let details = Object.values(subtask['details']);
               subtask['details'] = details;
+              }else{
+                subtask['details'] = [];
               }
               //end
               

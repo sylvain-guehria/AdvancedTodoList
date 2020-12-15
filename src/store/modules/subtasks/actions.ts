@@ -94,13 +94,16 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   },
 
   // DELETE SUBTASK DETAIL 
-  async [ActionTypes.DELETESUBTASKDETAIL](context, { subtaskKey, taskKey, index }: { subtaskKey: string, taskKey: string, index: number }) {
+  async [ActionTypes.DELETESUBTASKDETAIL](context, { subtaskKey, taskKey, key }: { subtaskKey: string, taskKey: string, key: string }) {
     const { uid } = store.getters.getUser.data;
 
-    if (!taskKey || !subtaskKey || (!index && index != 0)) { return }
+    // eslint-disable-next-line no-console
+    console.log('DELETESUBTASKDETAIL', { subtaskKey, taskKey, key } );
 
-    await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${index}`).remove();
-    context.commit(MutationTypes.deleteSubtaskDetail, { subtaskKey, taskKey, index });
+    if (!taskKey || !subtaskKey || !key) { return }
+
+    await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${key}`).remove();
+    context.commit(MutationTypes.deleteSubtaskDetail, { subtaskKey, taskKey, key });
   },
 
   // DELETE SUBTASK
@@ -127,16 +130,16 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   },
 
   // SET SUBTASK DETAIL STATE
-  async [ActionTypes.EDITSUBTASKDETAIL](context, { taskKey, subtaskKey, attribute, value, index }
-    : { taskKey: string, subtaskKey: string, attribute: string, value: string, index: number }) {
+  async [ActionTypes.EDITSUBTASKDETAIL](context, { taskKey, subtaskKey, attribute, value, key }
+    : { taskKey: string, subtaskKey: string, attribute: string, value: string, key: string }) {
     const { uid } = store.getters.getUser.data;
 
-    if (!taskKey || !subtaskKey || (!index && index != 0)) { return }
+    if (!taskKey || !subtaskKey || !key) { return }
 
-    await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${index}`).update({
+    await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${key}`).update({
       [attribute]: value
     });
-    context.commit(MutationTypes.setSubTaskState, { subtaskKey, taskKey, });
+    context.commit(MutationTypes.EDITSUBTASKDETAIL, { subtaskKey, taskKey, key, attribute, value });
   },
 
   // ADD SUBTASK DETAIL
@@ -146,9 +149,16 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     if (!todoKey || !subtaskKey) { return }
 
-    await database.ref(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}/details/`).push({
+    var newDetailKey = database.ref().child(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}/details`).push().key || 'key';
+
+    if (!newDetailKey) { return }
+
+    detail.key = newDetailKey;
+
+    await database.ref(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}/details/${newDetailKey}`).set({
       isdone: detail.isdone,
-      label: detail.label
+      label: detail.label,
+      key: newDetailKey
     });
     context.commit(MutationTypes.ADDSUBTASKDETAIL, { todoKey, subtaskKey, detail });
   },
