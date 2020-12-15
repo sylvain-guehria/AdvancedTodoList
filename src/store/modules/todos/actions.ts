@@ -83,8 +83,16 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
             order: childSnapshot.val().order,
           }
           if (childSnapshot.val().subtasks) {
-            let listsubtasks = Object.entries(childSnapshot.val().subtasks).reduce((acc, [key, subtask]) => {
+            let listsubtasks : SubTask[] = Object.entries(childSnapshot.val().subtasks).reduce((acc, [key, subtask]) => {
               subtask['key'] = key;
+
+              //subtask details : OBJECT to ARRAY
+              if(subtask['details']){
+              let details = Object.values(subtask['details']);
+              subtask['details'] = details;
+              }
+              //end
+              
               acc.push(subtask);
               return acc;
             }, []);
@@ -104,23 +112,6 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
       context.commit(MutationTypes.SET_ISLOADING, false);
     }
   },
-
-  //SET TODO DONE
-  // async [ActionTypes.SETTODODONE](context, payload: Todo): Promise<void> {
-
-  //   Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
-
-  //   payload.isdone = !payload.isdone;
-  //   const { uid } = store.getters.getUser.data;
-
-  //   if (!payload.key) { return }
-
-  //   await database.ref(`todos/${uid}/${payload.key}`).set({
-  //     ...payload,
-  //     isdone: payload.isdone
-  //   });
-  //   context.commit(MutationTypes.EDITTODOBYKEY, payload);
-  // },
 
     // SET TASK STATE
     async [ActionTypes.SETTODOSTATE](context, { key, isDone }: { key: string, isDone: boolean }) {

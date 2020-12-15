@@ -1,6 +1,6 @@
 import { database } from '@/apis/firebase/firebase';
 import { MutationTypes } from "./mutations";
-import { SubTasks, SubTask } from "@/common/models/types/index";
+import { SubTasks, SubTask, Detail } from "@/common/models/types/index";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index';
@@ -14,6 +14,7 @@ export enum ActionTypes {
   SETSUBTASKDETAILSTATE = "setSubTaskDetailState",
   EDITSUBTASKDETAIL = "editSubtaskDetail",
   DELETESUBTASKDETAIL = "deleteSubtaskDetail",
+  ADDSUBTASKDETAIL = "addSubtaskDetail",
 }
 
 
@@ -138,4 +139,17 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
     context.commit(MutationTypes.setSubTaskState, { subtaskKey, taskKey, });
   },
 
+  // ADD SUBTASK DETAIL
+  async [ActionTypes.ADDSUBTASKDETAIL](context, { todoKey, subtaskKey, detail }
+    : { todoKey: string, subtaskKey: string, detail: Detail }) {
+    const { uid } = store.getters.getUser.data;
+
+    if (!todoKey || !subtaskKey) { return }
+
+    await database.ref(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}/details/`).push({
+      isdone: detail.isdone,
+      label: detail.label
+    });
+    context.commit(MutationTypes.ADDSUBTASKDETAIL, { todoKey, subtaskKey, detail });
+  },
 };

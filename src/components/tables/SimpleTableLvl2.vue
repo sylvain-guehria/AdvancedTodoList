@@ -1,7 +1,7 @@
 <template>
   <md-table>
     <md-table-row v-for="(detail, index) in subtask.details" :key="index">
-      <md-table-cell>
+      <md-table-cell v-if="detail">
         <div class="flex">
           <div class="checkme">
             <input
@@ -77,25 +77,6 @@ export default class SimpleTableLvl2 extends Vue {
     this.currentIndex = index;
   }
 
-  //EDIT Details
-  onChange(e: HTMLElementEvent<HTMLTextAreaElement>, index: number, attribute: string) {
-    e.preventDefault();
-    if (e && e.target) {
-      let taskKey = this.motherKey;
-      let subtaskKey = this.subtask.key;
-
-      let value = e.target.innerText;
-
-      this.$store.dispatch(subtasksActionsType.EDITSUBTASKDETAIL, {
-        taskKey,
-        subtaskKey,
-        attribute,
-        value,
-        index,
-      });
-    }
-  }
-
   onPressEnterOrBlur(e) {
     if (e.keyCode == 13) {
       event.preventDefault();
@@ -136,15 +117,21 @@ export default class SimpleTableLvl2 extends Vue {
   }
 
   createSubtasksDetail() {
-    let subtask = { ...this.subtask };
-    subtask.motherKey = this.motherKey;
-    if (subtask.details && subtask.details.length > 0) {
-      subtask.details.push({ ...this.emptyDetail });
-    } else {
-      subtask.details = [{ ...this.emptyDetail }];
-    }
+    // let subtask = { ...this.subtask };
 
-    this.$store.dispatch(subtasksActionsType.EDITSUBTASK, subtask);
+    // subtask.motherKey = this.motherKey;
+
+    // if (subtask.details && subtask.details.length > 0) {
+    //   subtask.details.push({ ...this.emptyDetail });
+    // } else {
+    //   subtask.details = [{ ...this.emptyDetail }];
+    // }
+
+    this.$store.dispatch(subtasksActionsType.ADDSUBTASKDETAIL, {
+      todoKey: this.motherKey,
+      subtaskKey: this.subtask.key,
+      detail: { ...this.emptyDetail },
+    });
   }
 
   setSubTaskDetailState(index: number, isdone: boolean) {

@@ -1,7 +1,74 @@
 <template>
   <div>
     <md-table>
-      <md-table-row v-for="(subtask, index) in getSubtaskItem()" :key="index">
+      <md-table-row v-if="getLocalSubtasks() && getLocalSubtasks().length > 0">
+        <md-table-cell class="head"></md-table-cell>
+        <md-table-cell class="head center-icon">
+          <feather
+            size="15px"
+            type="arrow-down"
+            v-if="currentSorting === 'deadline' && currentAsc === 'desc'"
+            @click="sortSubtasks('deadline', 'asc')"
+          ></feather>
+          <feather
+            size="15px"
+            type="arrow-up"
+            v-if="currentSorting === 'deadline' && currentAsc === 'asc'"
+            @click="sortSubtasks('deadline', 'desc')"
+          ></feather>
+          <feather
+            size="15px"
+            type="arrow-right"
+            @click="sortSubtasks('deadline', 'asc')"
+            v-if="currentSorting != 'deadline'"
+          ></feather>
+          <md-tooltip md-direction="top">Sort By Deadline</md-tooltip>
+        </md-table-cell>
+        <md-table-cell class="head center-icon">
+          <feather
+            size="15px"
+            type="arrow-down"
+            v-if="currentSorting === 'importance' && currentAsc === 'desc'"
+            @click="sortSubtasks('importance', 'asc')"
+          ></feather>
+          <feather
+            size="15px"
+            type="arrow-up"
+            v-if="currentSorting === 'importance' && currentAsc === 'asc'"
+            @click="sortSubtasks('importance', 'desc')"
+          ></feather>
+          <feather
+            size="15px"
+            type="arrow-right"
+            v-if="currentSorting != 'importance'"
+            @click="sortSubtasks('importance', 'asc')"
+          ></feather>
+          <md-tooltip md-direction="top">Sort By Importance</md-tooltip>
+        </md-table-cell>
+        <md-table-cell class="head center-icon">
+          <feather
+            size="15px"
+            type="arrow-down"
+            v-if="currentSorting === 'order' && currentAsc === 'desc'"
+            @click="sortSubtasks('order', 'asc')"
+          ></feather>
+          <feather
+            size="15px"
+            type="arrow-up"
+            v-if="currentSorting === 'order' && currentAsc === 'asc'"
+            @click="sortSubtasks('order', 'desc')"
+          ></feather>
+          <feather
+            size="15px"
+            type="arrow-right"
+            v-if="currentSorting != 'order'"
+            @click="sortSubtasks('order', 'asc')"
+          ></feather>
+          <md-tooltip md-direction="top">Sort By order</md-tooltip>
+        </md-table-cell>
+        <md-table-cell class="head"></md-table-cell>
+      </md-table-row>
+      <md-table-row v-for="(subtask, index) in getLocalSubtasks()" :key="index">
         <md-table-cell>
           <div class="flex">
             <div class="checkme">
@@ -54,26 +121,26 @@
 
           <md-tooltip md-direction="bottom">Deadline</md-tooltip>
         </md-table-cell>
-        <md-table-cell v-if="getSettings('importance')" class="column-30">
+        <md-table-cell v-if="getSettings('importance')" class="column-30 center-icon">
           <input-contenteditable
             v-model="subtask.importance"
             _is="p"
             :maxlength="100"
             type="number"
-            placeholder="imp"
+            placeholder="..."
             @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'importance')"
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
           />
           <md-tooltip md-direction="bottom">Importance</md-tooltip>
         </md-table-cell>
-        <md-table-cell v-if="getSettings('order')" class="column-20">
+        <md-table-cell v-if="getSettings('order')" class="column-30 center-icon">
           <input-contenteditable
             v-model="subtask.order"
             _is="p"
             :maxlength="1000"
             type="number"
-            placeholder="order"
+            placeholder="..."
             @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'order')"
             @keydown.enter="onPressEnterOrBlur"
             @blur="onPressEnterOrBlur"
@@ -130,13 +197,7 @@
   </div>
 </template>
 <script lang="ts">
-import {
-  SubTask,
-  Todo,
-  HTMLElementEvent,
-  SubTasks,
-  Settings,
-} from "@/common/models/types/index";
+import { SubTask, Todo, HTMLElementEvent, Settings } from "@/common/models/types/index";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
@@ -146,6 +207,7 @@ import DatePickerCustom from "@/common/componentslib/DatePickerCustom.vue";
 // Subtasks
 import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
 import { MutationTypes as subtasksMutationType } from "@/store/modules/subtasks/mutations";
+import { sortSubtasksBy } from "@/modules/subtasks/shared/sortSubtasks";
 
 import SimpleTableLvl2 from "./SimpleTableLvl2.vue";
 
@@ -173,8 +235,19 @@ export default class SimpleTableLvl1 extends Vue {
   currentAttributeEdited: string = "";
   deleteDialog: boolean = false;
   currentOrder: number = null;
+  localSubtasks: SubTask[] = [];
+
+  currentSorting: string = "";
+  currentAsc: string = "desc";
 
   getNumberDetailInSubtask = myFunctions.getNumberDetailInSubtask;
+  sortSubtasksBy = sortSubtasksBy;
+
+  mounted() {
+    if (this.item) {
+      this.localSubtasks = this.item.subtasks;
+    }
+  }
 
   //DELETE DIALOG
   @Watch("deleteDialog", { immediate: true })
@@ -200,10 +273,14 @@ export default class SimpleTableLvl1 extends Vue {
   }
   // END DELETE DIALOG
 
-  getSubtaskItem() {
-    if (this.item && this.item.subtasks) {
-      return this.item.subtasks;
-    }
+  getLocalSubtasks() {
+    return this.localSubtasks;
+  }
+
+  sortSubtasks(attribute, asc) {
+    this.localSubtasks = sortSubtasksBy(this.localSubtasks, attribute, asc);
+    this.currentSorting = attribute;
+    this.currentAsc = asc;
   }
 
   subtaskToEdit: SubTask = {
@@ -289,12 +366,14 @@ export default class SimpleTableLvl1 extends Vue {
 
   getSettings(columnLabel: string) {
     let settings: Settings = this.$store.getters.getSettings;
-    if (!settings || !settings.hidden_column_subtasks){return}
+    if (!settings || !settings.hidden_column_subtasks) {
+      return;
+    }
     let colums = settings.hidden_column_subtasks;
     let colum: boolean = true;
 
     if (colums) {
-        colum = colums[columnLabel];
+      colum = colums[columnLabel];
     }
     return colum;
   }
