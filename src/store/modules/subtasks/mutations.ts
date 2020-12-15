@@ -25,7 +25,7 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
     for (var i in store.getters.getTodoList) {
       if (store.getters.getTodoList[i].key == motherKey) {
         if (store.getters.getTodoList[i].subtasks) {
-          store.getters.getTodoList[i].subtasks.unshift(subtask);
+          store.getters.getTodoList[i].subtasks.push(subtask);
         } else {
           store.getters.getTodoList[i].subtasks = [subtask];
         }
@@ -143,7 +143,7 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
       if (index_subtask !== -1
         && store.getters.getTodoList[indexTodo].subtasks[index_subtask].details
       ) {
-        store.getters.getTodoList[indexTodo].subtasks[index_subtask].details.unshift({
+        store.getters.getTodoList[indexTodo].subtasks[index_subtask].details.push({
           ...detail
         })
       }
