@@ -1,22 +1,23 @@
 <template>
-  <div class='dateDialog'>
     <md-dialog
       :md-active.sync="showDialogDate"
       :show="showDialogDate"
       @show="showDialogDate = $event"
     >
-      <div class="padding">
-        <md-button class="md-icon-button simple" @click="closeDialogDate">
-          <md-icon>close</md-icon>
-        </md-button>
+       <div class="container">
+      <md-button class="md-icon-button" @click="closeDialogDate">
+        <md-icon>close</md-icon>
+      </md-button>
+      <md-dialog-content>
         <v-date-picker v-model="localDate"></v-date-picker>
-      </div>
-      <div class="padding">
+      </md-dialog-content>
+
+      <md-dialog-actions>
         <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
         <md-button class="md-tertiary" @click="editDate"> Save </md-button>
-      </div>
+      </md-dialog-actions>
+       </div>
     </md-dialog>
-  </div>
 </template>
 
 <script lang="ts">
@@ -52,7 +53,8 @@ export default class ConfimDialogCustom extends Vue {
 }
 </script>
 <style scoped>
-.dateDialog{
-  /* padding: 50px !important; */
+
+.container{
 }
+
 </style>

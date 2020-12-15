@@ -22,7 +22,7 @@ import {
   MdRadio,
   MdEmptyState,
   MdDialogPrompt,
-  MdDialogConfirm
+  MdDialogConfirm,
 } from "vue-material/dist/components";
 
 Vue.use(MdField);

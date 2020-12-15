@@ -1,8 +1,8 @@
 <template>
   <div class="content no-padding-top planning-calendar" >
     <div class="md-layout">
+    <div class="legend"><legend-bullet :planning="true"></legend-bullet></div>
       <planning-calendar :key="this.showAddTask"/>
-       <div class="legend"><legend-bullet :planning="true"></legend-bullet></div>
     </div>
 
     <!-- drawer edti -->
@@ -55,6 +55,8 @@ export default {
 <style scoped>
 
 .legend {
-  margin-left: 20px;
+  width: 100%;
+  text-align: right;
+  margin-right: 100px;
 }
 </style>
