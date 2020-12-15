@@ -315,7 +315,7 @@ export default class SimpleTableLvl1 extends Vue {
       value = value.trim();
     }
 
-    if(attribute === subtaskEnum.IMPORTANCE || subtaskEnum.ORDER){
+    if(attribute === subtaskEnum.IMPORTANCE || attribute === subtaskEnum.ORDER){
       value = parseInt(value,10);
     }
 
