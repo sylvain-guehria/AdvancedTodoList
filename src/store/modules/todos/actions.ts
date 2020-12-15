@@ -4,6 +4,7 @@ import { Todos, Todo, SubTask } from "@/common/models/types/index";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index';
+import lodash from "lodash";
 
 export enum ActionTypes {
   FETCH_TODOS = "fetchTodos",
@@ -83,21 +84,22 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
             order: childSnapshot.val().order,
           }
           if (childSnapshot.val().subtasks) {
-            let listsubtasks : SubTask[] = Object.entries(childSnapshot.val().subtasks).reduce((acc, [key, subtask]) => {
+            let listsubtasks: SubTask[] = Object.entries(childSnapshot.val().subtasks).reduce((acc, [key, subtask]) => {
               subtask['key'] = key;
 
               //subtask details : OBJECT to ARRAY
-              if(subtask['details']){
-              let details = Object.values(subtask['details']);
-              subtask['details'] = details;
-              }else{
+              if (subtask['details']) {
+                let details = Object.values(subtask['details']);
+                subtask['details'] = details;
+              } else {
                 subtask['details'] = [];
               }
               //end
-              
+
               acc.push(subtask);
               return acc;
             }, []);
+            listsubtasks = lodash.orderBy(listsubtasks, 'order', 'asc');
             currentTodo.subtasks = listsubtasks;
           }
 
@@ -106,6 +108,8 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
           listoftodos.push(currentTodo);
         });
       }).then(() => {
+        listoftodos = lodash.orderBy(listoftodos, 'order', 'asc');
+
         context.commit(MutationTypes.SETTODOLIST, listoftodos);
         context.commit(MutationTypes.INCRENDALLLISTNUMBER);
         context.commit(MutationTypes.SET_ISLOADING, false);
@@ -115,16 +119,16 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
     }
   },
 
-    // SET TASK STATE
-    async [ActionTypes.SETTODOSTATE](context, { key, isDone }: { key: string, isDone: boolean }) {
-      const { uid } = store.getters.getUser.data;
-      if (!key ) { return }
-  
-      await database.ref(`todos/${uid}/${key}`).update({
-        isdone: isDone
-      });
-      context.commit(MutationTypes.SETTASKSTATE, { key, isDone });
-    },
+  // SET TASK STATE
+  async [ActionTypes.SETTODOSTATE](context, { key, isDone }: { key: string, isDone: boolean }) {
+    const { uid } = store.getters.getUser.data;
+    if (!key) { return }
+
+    await database.ref(`todos/${uid}/${key}`).update({
+      isdone: isDone
+    });
+    context.commit(MutationTypes.SETTASKSTATE, { key, isDone });
+  },
 
   //DELETE TODO
   async [ActionTypes.DELETETODO](context, key: string): Promise<void> {

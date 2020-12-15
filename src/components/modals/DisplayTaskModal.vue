@@ -31,7 +31,11 @@
       </div>
     </div>
     <div class="body">
-        <div class="md-layout-item md-size-100 duo-data-block no-padding">
+      <div class="md-layout-item md-size-100 duo-data-block no-padding">
+        <vue-custom-scrollbar
+          class="scroll-area"
+          :settings="settings"
+        >
           <div
             class="md-layout-item table-border"
             v-if="event.subtasks && event.subtasks.length > 0"
@@ -39,7 +43,8 @@
             <div class="light-horizontal-separator"></div>
             <simple-table-lvl1 :item="event"></simple-table-lvl1>
           </div>
-        </div>
+        </vue-custom-scrollbar>
+      </div>
     </div>
   </div>
 </template>
@@ -67,6 +72,7 @@ import Accordion from "@/common/componentslib/Accordion.vue";
     "simple-table-lvl1": SimpleTableLvl1,
     "meta-data-todo": MetaDataTodo,
     accordion: Accordion,
+    "vue-custom-scrollbar": vueCustomScrollbar,
   },
 })
 export default class PCalendarEvent extends Vue {
@@ -74,6 +80,12 @@ export default class PCalendarEvent extends Vue {
   @Prop() calendar!: Calendar<any, any>;
   @Prop() event!: any;
   isForm1Active: boolean = false;
+
+  settings = {
+    suppressScrollY: false,
+    suppressScrollX: false,
+    wheelPropagation: false,
+  };
 
   showDrawerEditTask(payload): void {
     if (payload) {
@@ -161,8 +173,8 @@ h1 {
   position: relative;
   margin: auto;
   padding-right: 50px;
-  max-width: 1200px;
-  max-height: 700px;
+  width: 1200px;
+  max-height: 550px;
 }
 .in-block {
   width: 33%;
@@ -172,8 +184,8 @@ h1 {
 .content {
   min-width: 1200px;
 }
-.accordion-margin{
-  margin-left:30px;
-
+.accordion-margin {
+  margin-left: 30px;
 }
+
 </style>
