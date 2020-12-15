@@ -5,6 +5,7 @@ export interface Drawer {
 }
 
 export interface Detail {
+  key?: string;
   label: string;
   isdone: boolean;
 }

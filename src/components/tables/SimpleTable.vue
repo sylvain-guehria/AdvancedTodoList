@@ -120,7 +120,7 @@
           </p></md-table-cell
         >
 
-        <md-table-cell v-if="getSettings('numberdaysleft')" class="column-80">
+        <md-table-cell v-if="getSettings('numberdaysleft')" class="column-80" md-label="Finish">
           <p>{{ item.numberdaysleft }}</p>
         </md-table-cell>
 
@@ -142,6 +142,7 @@
               @blur="onPressEnterOrBlur"
             />
           </div>
+           <md-tooltip md-direction="top">Importance</md-tooltip>
         </md-table-cell>
 
         <md-table-cell class="column-20 center-icon no-padding-cell"
