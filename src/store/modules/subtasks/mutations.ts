@@ -11,7 +11,8 @@ export enum MutationTypes {
   editOneAttributSubtaskTodo = "editOneAttributSubtaskTodo",
   deleteSubtaskDetail = "deleteSubtaskDetail",
   ADDSUBTASKDETAIL = "addSubtasksDetail",
-  EDITSUBTASKDETAIL = "editSubtasksDetail"
+  EDITSUBTASKDETAIL = "editSubtasksDetail",
+  SETSUBTASKS = "setSubtasks"
 }
 
 export const mutationsSubtasks: MutationTree<SubTask> = {
@@ -176,5 +177,16 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
 
       }
     }
-  }
+  },
+
+    // SET SUBTASKS TO A TODO
+    [MutationTypes.SETSUBTASKS](state,  { subtasks, todoKey } : { subtasks: SubTask[], todoKey : string } ) {
+      var indexTodo = store.getters.getTodoList.findIndex(function (o) {
+        return o.key === todoKey;
+      });
+      if (indexTodo !== -1) {
+        store.getters.getTodoList[indexTodo]['subtasks'] = subtasks;
+      }
+    },
+
 }
