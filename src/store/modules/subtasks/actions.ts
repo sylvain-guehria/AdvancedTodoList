@@ -97,9 +97,6 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   async [ActionTypes.DELETESUBTASKDETAIL](context, { subtaskKey, taskKey, key }: { subtaskKey: string, taskKey: string, key: string }) {
     const { uid } = store.getters.getUser.data;
 
-    // eslint-disable-next-line no-console
-    console.log('DELETESUBTASKDETAIL', { subtaskKey, taskKey, key } );
-
     if (!taskKey || !subtaskKey || !key) { return }
 
     await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${key}`).remove();

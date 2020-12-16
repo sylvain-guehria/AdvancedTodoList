@@ -3,13 +3,23 @@
     <md-table-row v-for="(detail, index) in subtask.details" :key="index">
       <md-table-cell v-if="detail">
         <div class="flex">
-          <div class="checkme">
+          <!-- <div class="checkme">
             <input
               type="checkbox"
               v-model="detail.isdone"
               @click="onChangeCheckBox(index, !detail.isdone)"
             />
-          </div>
+          </div> -->
+             <div class="checkbox">
+              <v-checkbox
+                dense
+                class="checkme"
+                height="100%"
+                v-model="detail.isdone"
+                @click="onChangeCheckBox(index, !detail.isdone)"
+                hide-details />
+            </div>
+            <div class="label-content">
           <div :style="imgStyle()" class="dots">
             <input-contenteditable
               :class="detail.isdone ? 'done' : ''"
@@ -25,18 +35,20 @@
               @click="setCurrentIndexKey(index, detail.key)"
             />
           </div>
+            </div>
         </div>
       </md-table-cell>
     </md-table-row>
     <md-table-row>
       <md-table-head>
+         <div class="hover-click">
         <feather
           size="15px"
           type="plus"
           class="hover-click"
           @click="createSubtasksDetail()"
         ></feather
-      ></md-table-head>
+      ></div></md-table-head>
     </md-table-row>
   </md-table>
 </template>
@@ -163,17 +175,22 @@ export default class SimpleTableLvl2 extends Vue {
   text-decoration: line-through;
 }
 .hover-click {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 .flex {
   display: flex;
 }
 .checkme {
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-top: 2px;
+margin: 0 auto;
+padding: 0;
 }
 .break-word {
   word-break: break-all;
+}
+.checkbox{
+  margin-left: 10px;
+}
+.label-content{
+   margin-top: 1px;
 }
 </style>
