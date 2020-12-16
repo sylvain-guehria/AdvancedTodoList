@@ -19,7 +19,6 @@
                 @click="onChangeCheckBox(index, !detail.isdone)"
                 hide-details />
             </div>
-            <div class="label-content">
           <div :style="imgStyle()" class="dots">
             <input-contenteditable
               :class="detail.isdone ? 'done' : ''"
@@ -34,7 +33,6 @@
               @blur="onPressEnterOrBlur"
               @click="setCurrentIndexKey(index, detail.key)"
             />
-          </div>
             </div>
         </div>
       </md-table-cell>
