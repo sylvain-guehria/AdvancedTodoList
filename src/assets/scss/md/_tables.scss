@@ -44,6 +44,7 @@ table {
       border : none;
       .md-table-cell {
         padding-top: 0px ;
+        height: 100%;
       }
       table{
       .md-table-cell {
@@ -135,6 +136,7 @@ table {
         &.no-padding-cell{
           padding-top: 0px;
        }
+       
       }
       &:hover:not(.md-header-row) .md-table-cell,
       &.active:not(.md-header-row) .md-table-cell {

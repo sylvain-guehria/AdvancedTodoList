@@ -80,7 +80,8 @@ h3,
 
 p {
   font-size: $font-paragraph;
-  margin: 0 0 10px;
+  // margin: 0 0 10px;
+  margin: 0;
   &.task{
     font-size: $font-paragraph +1
   }
