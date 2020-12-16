@@ -71,13 +71,16 @@
       <md-table-row v-for="(subtask, index) in getLocalSubtasks()" :key="index">
         <md-table-cell>
           <div class="flex">
-            <div class="checkme">
-              <input
-                type="checkbox"
+            <div class="checkbox">
+              <v-checkbox
+                dense
+                class="checkme"
+                height="100%"
                 v-model="subtask.isdone"
-                @click="setSubTaskState(subtask.key, item.key, !subtask.isdone)"
-              />
+                @click="setSubTaskState(subtask.key, item.key, subtask.isdone)"
+                hide-details />
             </div>
+            <div class="label-content">
             <input-contenteditable
               v-model="subtask.label"
               :class="subtask.isdone ? 'done' : ''"
@@ -89,7 +92,7 @@
               @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'label')"
               @keydown.enter="onPressEnterOrBlur"
               @blur="onPressEnterOrBlur"
-            />
+            /></div>
           </div>
 
           <div class="details">
@@ -149,22 +152,21 @@
         </md-table-cell>
 
         <md-table-cell class="column-30">
-          <feather
-            type="delete"
-            size="15px"
-            class="hover-click"
-            @click="activeDeleteSubtask(subtask.key, item.key)"
-          ></feather>
+          <div class="hover-click">
+            <feather
+              type="delete"
+              size="15px"
+              class="hover-click"
+              @click="activeDeleteSubtask(subtask.key, item.key)"
+            ></feather>
+          </div>
           <md-tooltip md-direction="bottom">Delete task</md-tooltip>
         </md-table-cell>
       </md-table-row>
       <md-table-row>
-        <md-table-cell colspan="6">
-          <feather
-            type="plus-circle"
-            class="hover-click"
-            @click="addEmptySubTask(item.key)"
-          ></feather
+        <md-table-cell>
+          <div class="hover-click">
+            <feather type="plus-circle" @click="addEmptySubTask(item.key)"></feather></div
         ></md-table-cell>
       </md-table-row>
     </md-table>
@@ -315,8 +317,8 @@ export default class SimpleTableLvl1 extends Vue {
       value = value.trim();
     }
 
-    if(attribute === subtaskEnum.IMPORTANCE || attribute === subtaskEnum.ORDER){
-      value = parseInt(value,10);
+    if (attribute === subtaskEnum.IMPORTANCE || attribute === subtaskEnum.ORDER) {
+      value = parseInt(value, 10);
     }
 
     this.$store.dispatch(subtasksActionsType.EDITATTRIBUTESUBTASK, {
@@ -542,12 +544,17 @@ export default class SimpleTableLvl1 extends Vue {
   display: flex;
 }
 .checkme {
-  margin-left: 10px;
-  margin-top: 2px;
-  margin-right: 10px;
+margin: 0 auto;
+padding: 0;
 }
 .break-word {
   word-break: break-all;
   // // hyphens: auto; to try
+}
+.checkbox{
+  margin-left: 10px;
+}
+.label-content{
+   margin-top: 3px;
 }
 </style>
