@@ -78,21 +78,23 @@
                 height="100%"
                 v-model="subtask.isdone"
                 @click="setSubTaskState(subtask.key, item.key, subtask.isdone)"
-                hide-details />
+                hide-details
+              />
             </div>
             <div class="label-content">
-            <input-contenteditable
-              v-model="subtask.label"
-              :class="subtask.isdone ? 'done' : ''"
-              class="break-word"
-              _is="p"
-              :maxlength="250"
-              type="text"
-              placeholder="label"
-              @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'label')"
-              @keydown.enter="onPressEnterOrBlur"
-              @blur="onPressEnterOrBlur"
-            /></div>
+              <input-contenteditable
+                v-model="subtask.label"
+                :class="subtask.isdone ? 'done' : ''"
+                class="break-word"
+                _is="p"
+                :maxlength="250"
+                type="text"
+                placeholder="label"
+                @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'label')"
+                @keydown.enter="onPressEnterOrBlur"
+                @blur="onPressEnterOrBlur"
+              />
+            </div>
           </div>
 
           <div class="details">
@@ -104,25 +106,25 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell
-          v-if="getSettings('deadline')"
-          class="hover-click column-90 center-icon"
-        >
-          <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
-            {{
-              dateOfSubTask(item.key, subtask.key)
-                ? dateOfSubTask(item.key, subtask.key)
-                : ""
-            }}
-          </p>
-          <feather
-            size="15px"
-            v-if="!subtask.deadline"
-            type="calendar"
-            @click="showDatepickerDialog(subtask.key)"
-          ></feather>
-
-          <md-tooltip md-direction="bottom">Deadline</md-tooltip>
+        <md-table-cell v-if="getSettings('deadline')" class="column-90 center-icon">
+          <div
+            class="hover-click"
+            @click="showDatepickerDialog(subtask.key, subtask.deadline)"
+          >
+            <p>
+              {{
+                dateOfSubTask(item.key, subtask.key)
+                  ? dateOfSubTask(item.key, subtask.key)
+                  : ""
+              }}
+            </p>
+            <feather
+              size="15px"
+              v-if="!subtask.deadline"
+              type="calendar"
+            ></feather>
+            <md-tooltip md-direction="bottom">Deadline</md-tooltip>
+          </div>
         </md-table-cell>
         <md-table-cell v-if="getSettings('importance')" class="column-30 center-icon">
           <input-contenteditable
@@ -544,17 +546,17 @@ export default class SimpleTableLvl1 extends Vue {
   display: flex;
 }
 .checkme {
-margin: 0 auto;
-padding: 0;
+  margin: 0 auto;
+  padding: 0;
 }
 .break-word {
   word-break: break-all;
   // // hyphens: auto; to try
 }
-.checkbox{
+.checkbox {
   margin-left: 10px;
 }
-.label-content{
-   margin-top: 3px;
+.label-content {
+  margin-top: 3px;
 }
 </style>

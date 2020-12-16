@@ -88,18 +88,22 @@
         <md-table-cell
           md-sort-by="deadline"
           v-if="getSettings('deadline')"
-          class="column-90 center-icon hover-click"
+          class="column-90 center-icon"
           md-label="Deadline"
         >
-          <p @click="showDatepickerDialog(item.key, item.deadline)" v-if="item.deadline">
+        <div
+            class="hover-click"
+             @click="showDatepickerDialog(item.key, item.deadline)" 
+          >
+          <p v-if="item.deadline">
             {{ dateOfTask(item.key) ? dateOfTask(item.key) : "" }}
           </p>
             <feather
               size="20px"
               v-if="!item.deadline"
-              @click="showDatepickerDialog(item.key, null)"
               type="calendar"
             ></feather>
+            </div>
         </md-table-cell>
 
         <md-table-cell

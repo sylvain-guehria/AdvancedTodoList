@@ -9,7 +9,7 @@ export const myFunctions = {
       return 'today'
     }
     if (!deadlineS) { return '' }
-    return moment(deadlineS).fromNow();
+    return moment(deadlineS).endOf('day').fromNow();
   },
 
   getNumberdaysleft(deadlineS: string): number {

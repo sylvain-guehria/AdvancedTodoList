@@ -1,27 +1,28 @@
 <template>
-    <md-dialog
-      :md-active.sync="showDialogDate"
-      :show="showDialogDate"
-      @show="showDialogDate = $event"
-    >
-       <div class="container">
+  <v-dialog :md-active.sync="showDialogDate" :md-click-outside-to-close="false">
+    <div class="container">
       <md-button class="md-icon-button" @click="closeDialogDate">
         <md-icon>close</md-icon>
       </md-button>
       <md-dialog-content>
-        <v-date-picker v-model="localDate"></v-date-picker>
+        <v-date-picker
+          v-model="localDate"
+          year-icon="mdi-calendar-blank"
+          prev-icon="mdi-skip-previous"
+          next-icon="mdi-skip-next"
+        ></v-date-picker>
       </md-dialog-content>
 
       <md-dialog-actions>
         <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
         <md-button class="md-tertiary" @click="editDate"> Save </md-button>
       </md-dialog-actions>
-       </div>
-    </md-dialog>
+    </div>
+  </md-dialog>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 
 @Component({
   components: {},
@@ -32,7 +33,8 @@ export default class ConfimDialogCustom extends Vue {
 
   localDate: string = null;
 
-  mounted() {
+  @Watch("showDialogDate", { immediate: false })
+  watcherShowDialogDate() {
     this.localDate = this.date;
   }
 
@@ -52,9 +54,3 @@ export default class ConfimDialogCustom extends Vue {
   }
 }
 </script>
-<style scoped>
-
-.container{
-}
-
-</style>
