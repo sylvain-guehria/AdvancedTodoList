@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :md-active.sync="showDialogDate" :md-click-outside-to-close="false">
+  <md-dialog :md-active.sync="showDialogDate" :md-click-outside-to-close="false">
     <div class="container">
       <md-button class="md-icon-button" @click="closeDialogDate">
         <md-icon>close</md-icon>
