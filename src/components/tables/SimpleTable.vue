@@ -20,27 +20,23 @@
         :class="index % 2 !== 0 ? 'other-color-row' : ''"
       >
         <md-table-cell
-          md-numeric
           md-sort-by="order"
           md-label="Order"
           class="column-50"
           v-if="getSettings('order')"
-          width="100px"
         >
           <div class="flex">
-            <div class="chevron-order">
+            <div class="hover-click">
               <feather
-                class="hover-click"
                 type="chevron-left"
                 size="20px"
                 @click="orderDown(item)"
                 v-longclick="() => orderDown(item)"
               ></feather>
             </div>
-            {{ item.order }}
-            <div class="chevron-order">
+            <div>{{ item.order }}</div>
+            <div class="hover-click">
               <feather
-                class="hover-click"
                 size="20px"
                 v-longclick="() => orderUp(item)"
                 type="chevron-right"
@@ -53,16 +49,14 @@
         <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')">
           <div class="flex padding-bottom">
             <div>({{ getNumberSubTaskActive(item) }})</div>
-            <div class="plus-minus">
+            <div class="plus-minus hover-click">
               <feather
                 size="15px"
-                class="hover-click"
                 v-if="!includeKey(item.key)"
                 type="plus"
                 @click="togleSubtasks(item.key)"
               ></feather>
               <feather
-                class="hover-click"
                 size="15px"
                 type="minus"
                 @click="unTogleSubtasks(item.key)"
@@ -583,16 +577,10 @@ export default {
 .bullet {
   margin-top: 5px;
 }
-
 p {
   font-family: initial;
   margin-left: 10px;
   margin-right: 10px;
-}
-.chevron-order {
-  width: 15px;
-  margin: auto;
-  padding-bottom: 5px;
 }
 .plus-minus {
   padding-top: 2px;
