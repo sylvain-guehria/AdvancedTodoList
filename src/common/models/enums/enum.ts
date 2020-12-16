@@ -14,3 +14,9 @@ export enum columnEnum {
   DETAILS = "details",
   TASK = "task",
 }
+
+export enum DetailEnum {
+  KEY = "key",
+  LABEL = "label",
+  ISDONE = "isdone",
+}

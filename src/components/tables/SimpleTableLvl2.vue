@@ -3,22 +3,16 @@
     <md-table-row v-for="(detail, index) in subtask.details" :key="index">
       <md-table-cell v-if="detail">
         <div class="flex">
-          <!-- <div class="checkme">
-            <input
-              type="checkbox"
+          <div class="checkbox">
+            <v-checkbox
+              dense
+              class="checkme"
+              height="100%"
               v-model="detail.isdone"
-              @click="onChangeCheckBox(index, !detail.isdone)"
+              @click="onChangeCheckBox(detail.key , detail.isdone)"
+              hide-details
             />
-          </div> -->
-             <div class="checkbox">
-              <v-checkbox
-                dense
-                class="checkme"
-                height="100%"
-                v-model="detail.isdone"
-                @click="onChangeCheckBox(index, !detail.isdone)"
-                hide-details />
-            </div>
+          </div>
           <div :style="imgStyle()" class="dots">
             <input-contenteditable
               :class="detail.isdone ? 'done' : ''"
@@ -28,25 +22,25 @@
               :maxlength="250"
               type="text"
               placeholder="..."
-              @giveTodoKey="setCurrentKey_And_attribue(index, 'label', detail.key)"
+              @giveTodoKey="setCurrentKey_And_attribue('label', detail.key)"
               @keydown.enter="onPressEnterOrBlur"
               @blur="onPressEnterOrBlur"
-              @click="setCurrentIndexKey(index, detail.key)"
+              @click="setCurrentKey(detail.key)"
             />
-            </div>
+          </div>
         </div>
       </md-table-cell>
     </md-table-row>
     <md-table-row>
       <md-table-head>
-         <div class="hover-click">
-        <feather
-          size="15px"
-          type="plus"
-          class="hover-click"
-          @click="createSubtasksDetail()"
-        ></feather
-      ></div></md-table-head>
+        <div class="hover-click">
+          <feather
+            size="15px"
+            type="plus"
+            class="hover-click"
+            @click="createSubtasksDetail()"
+          ></feather></div
+      ></md-table-head>
     </md-table-row>
   </md-table>
 </template>
@@ -61,6 +55,7 @@ import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/act
 import { MutationTypes as subtasksMutationType } from "@/store/modules/subtasks/mutations";
 
 import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
+import { DetailEnum } from "@/common/models/enums/enum";
 
 @Component({
   components: {
@@ -78,26 +73,13 @@ export default class SimpleTableLvl2 extends Vue {
 
   currentIndex: number;
   currentAttributeEdited: string;
-  //localSubtasksDetails: Detail[];
 
-  // getLocalSubtasDetails() {
-  //   return this.localSubtasksDetails;
-  // }
-
-  // mounted() {
-  //   if (this.subtask) {
-  //     this.localSubtasksDetails = this.subtask.details;
-  //   }
-  // }
-
-  setCurrentKey_And_attribue(index, attribute, detailKey) {
-    this.currentIndex = index;
+  setCurrentKey_And_attribue(attribute, detailKey) {
     this.currentAttributeEdited = attribute;
     this.currentDetailKey = detailKey;
   }
 
-  setCurrentIndexKey(index, detailKey) {
-    this.currentIndex = index;
+  setCurrentKey(detailKey) {
     this.currentDetailKey = detailKey;
   }
 
@@ -136,8 +118,9 @@ export default class SimpleTableLvl2 extends Vue {
     }
   }
 
-  onChangeCheckBox(index, isdone) {
-    this.setSubTaskDetailState(index, isdone);
+  onChangeCheckBox(key, isdone) {
+    this.currentDetailKey = key;
+    this.setSubTaskDetailState(isdone);
   }
 
   createSubtasksDetail() {
@@ -148,14 +131,17 @@ export default class SimpleTableLvl2 extends Vue {
     });
   }
 
-  setSubTaskDetailState(index: number, isdone: boolean) {
+  setSubTaskDetailState(isdone: boolean) {
     let subtaskKey = this.subtask.key;
-    let motherKey = this.motherKey;
-    this.$store.dispatch(subtasksActionsType.SETSUBTASKDETAILSTATE, {
-      motherKey,
+    let taskKey = this.motherKey;
+    let key = this.currentDetailKey;
+
+    this.$store.dispatch(subtasksActionsType.EDITSUBTASKDETAIL, {
+      taskKey,
       subtaskKey,
-      index,
-      isdone,
+      key,
+      value: isdone,
+      attribute: DetailEnum.ISDONE,
     });
   }
   imgStyle() {
@@ -179,16 +165,16 @@ export default class SimpleTableLvl2 extends Vue {
   display: flex;
 }
 .checkme {
-margin: 0 auto;
-padding: 0;
+  margin: 0 auto;
+  padding: 0;
 }
 .break-word {
   word-break: break-all;
 }
-.checkbox{
+.checkbox {
   margin-left: 10px;
 }
-.label-content{
-   margin-top: 1px;
+.label-content {
+  margin-top: 1px;
 }
 </style>

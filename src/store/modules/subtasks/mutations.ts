@@ -12,7 +12,7 @@ export enum MutationTypes {
   deleteSubtaskDetail = "deleteSubtaskDetail",
   ADDSUBTASKDETAIL = "addSubtasksDetail",
   EDITSUBTASKDETAIL = "editSubtasksDetail",
-  SETSUBTASKS = "setSubtasks"
+  SETSUBTASKS = "setSubtasks",
 }
 
 export const mutationsSubtasks: MutationTree<SubTask> = {
