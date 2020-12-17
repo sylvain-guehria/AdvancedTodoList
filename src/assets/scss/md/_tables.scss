@@ -11,6 +11,7 @@ table {
     display: flex;
   }
 }
+
 .md-table-head-container {
   height: auto;
   padding: 0;
@@ -31,6 +32,7 @@ table {
 
 .md-table,
 .md-table.md-theme-default {
+  background-color: transparent;
   color: $text-dark !important;
   table {
     border: none; //main border

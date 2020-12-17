@@ -3,7 +3,10 @@
     <md-table>
       <md-table-row v-if="getLocalSubtasks() && getLocalSubtasks().length > 0">
         <md-table-cell class="head"></md-table-cell>
-        <md-table-cell class="head center-icon">
+        <md-table-cell
+         class="head center-icon"
+         v-if="getSettings('deadline')" 
+         >
           <feather
             size="15px"
             type="arrow-down"
@@ -24,7 +27,9 @@
           ></feather>
           <md-tooltip md-direction="top">Sort By Deadline</md-tooltip>
         </md-table-cell>
-        <md-table-cell class="head center-icon">
+        <md-table-cell 
+        class="head center-icon"
+        v-if="getSettings('importance')" >
           <feather
             size="15px"
             type="arrow-down"
@@ -45,7 +50,9 @@
           ></feather>
           <md-tooltip md-direction="top">Sort By Importance</md-tooltip>
         </md-table-cell>
-        <md-table-cell class="head center-icon">
+        <md-table-cell
+         class="head center-icon"
+          v-if="getSettings('order')" >
           <feather
             size="15px"
             type="arrow-down"
@@ -154,13 +161,14 @@
               @click="activeDeleteSubtask(subtask.key, item.key)"
             ></feather>
           </div>
-          <md-tooltip md-direction="bottom">Delete task</md-tooltip>
+          <md-tooltip md-direction="bottom">Delete subtask</md-tooltip>
         </md-table-cell>
       </md-table-row>
       <md-table-row>
         <md-table-cell>
           <div class="hover-click">
-            <feather type="plus-circle" @click="addEmptySubTask(item.key)"></feather></div
+            <feather size="17px" type="plus-circle" @click="addEmptySubTask(item.key)"></feather> 
+             <md-tooltip md-direction="bottom">Add subtask</md-tooltip></div
         ></md-table-cell>
       </md-table-row>
     </md-table>
@@ -362,7 +370,7 @@ export default class SimpleTableLvl1 extends Vue {
   getSettings(columnLabel: string) {
     let settings: Settings = this.$store.getters.getSettings;
     if (!settings || !settings.hidden_column_subtasks) {
-      return;
+      return true;
     }
     let colums = settings.hidden_column_subtasks;
     let colum: boolean = true;
@@ -370,7 +378,11 @@ export default class SimpleTableLvl1 extends Vue {
     if (colums) {
       colum = colums[columnLabel];
     }
-    return colum;
+    if(colum != null) { 
+      return colum;
+    }else{
+      return true
+    }
   }
 
   //EDIT SUBTASK
