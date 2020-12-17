@@ -27,7 +27,7 @@
         :event="todo"
         :calendar="calendar"
       ></calendar-event>
-    </template>
+    </template> 
     <div
       class="more-todos"
       v-if="todoFulllistOfDay.length > 2"
@@ -38,13 +38,13 @@
     <modal :show="showMoreTodos" @show="showMoreTodos = $todo">
       <div slot="header">{{ dayOfMonth }}</div>
       <div slot="body">
-        <template v-for="todo in todoFulllistOfDay">
+         <template v-for="todo in todoFulllistOfDay">
           <calendar-event
             :key="todo.id"
             :event="todo"
             :calendar="calendar"
           ></calendar-event>
-        </template>
+        </template> 
       </div>
     </modal>
   </div>

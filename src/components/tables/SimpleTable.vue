@@ -158,20 +158,7 @@
       :serverSide="false"
     ></table-pagination>
 
-    <!-- modal display task -->
-    <div>
-      <md-dialog
-        :md-active.sync="showDialog"
-        :show="showDialog"
-        @show="showDialog = $event"
-      >
-        <display-task-modal
-          :key="item ? item.id : null"
-          :event="item ? item : null"
-          @closeDialog="showDialog = false"
-        ></display-task-modal>
-      </md-dialog>
-
+    
       <!-- CONFIRM DELET DIALOG -->
       <confirm-dialog
         :confirmDialog="deleteDialog"
@@ -181,7 +168,6 @@
         @closeConfirmDialog="onCancelDialogDelete"
         @confirmDialog="onConfirmDialogDelete"
       />
-    </div>
   </div>
 </template>
 
@@ -189,7 +175,6 @@
 import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
 import { Todo, HTMLElementEvent, Drawer, Settings } from "@/common/models/types/index";
-import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
 import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
 import { bus } from "@/main";
@@ -207,7 +192,6 @@ export default {
   name: "simple-table",
   components: {
     "table-pagination": TablePaginationVue,
-    "display-task-modal": DisplayTaskModal,
     "simple-table-lvl1": SimpleTableLvl1,
     "confirm-dialog": ConfirmDialogCustom,
     "input-contenteditable": InputContenteditable,
@@ -438,10 +422,6 @@ export default {
     editTodo(key: string): void {
       this.$emit("editTaskEvent", { key: key });
     },
-    DisplayModalTask(item: Todo): void {
-      this.item = item;
-      this.showDialog = true;
-    },
     setTodoDone(item: Todo): void {
       this.$store.dispatch(tasksActionsType.SETTODOSTATE, {
         key: item.key,
@@ -531,7 +511,6 @@ export default {
       dateOfTask: myFunctions.dateOfTask,
       giveColorTodo: myFunctions.giveColorTodo,
       item: {},
-      showDialog: false,
       drawersOpenedArray: [],
       placeholder: "type your title",
       currentTodoKeyEdited: "",

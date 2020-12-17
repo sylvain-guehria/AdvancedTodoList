@@ -58,8 +58,6 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import { Calendar, Weekday } from "dayspan";
 import DayBlock from "./DayBlock.vue";
 import moment from "moment";
-import SubTaskViewer from "@/components/forms/SubTaskViewer.vue";
-import ReadOnlySubTaskTable from "@/components/tables/ReadOnlySubTaskTable.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
 import { bus } from "@/main";
 import vueCustomScrollbar from "vue-custom-scrollbar";

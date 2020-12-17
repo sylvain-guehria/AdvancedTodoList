@@ -78,12 +78,6 @@
 
       <!-- drawers -->
 
-      <edit-task-drawer
-        :isActive="showAddTask"
-        @isActive="updateIsActiveAddTask"
-        :key="this.$store.getters.getRendAllListNumber"
-      ></edit-task-drawer>
-
       <filters-drawer
         :isActive="showFilters"
         @isActive="updateIsActive"
@@ -98,7 +92,6 @@
 <script lang="ts">
 import SimpleTable from "@/components/tables/SimpleTable.vue";
 import FiltersDrawer from "@/components/forms/FiltersDrawer.vue";
-import EditTaskDrawer from "@/components/forms/EditTaskDrawer.vue";
 import LegendBulletVue from "@/components/menus/LegendBullet.vue";
 import { bus } from "@/main";
 import ColumToHideVue from "@/components/menus/ColumToHide.vue";
@@ -109,7 +102,6 @@ export default {
   components: {
     SimpleTable,
     "filters-drawer": FiltersDrawer,
-    "edit-task-drawer": EditTaskDrawer,
     "legend-bullet": LegendBulletVue,
     "colum-to-hide": ColumToHideVue,
     "colum-subtasks-to-hide": ColumnSubtasksToHideVue,
@@ -126,9 +118,6 @@ export default {
     };
   },
   created() {},
-  mounted() {
-    bus.$on("openDrawerEdit", this.showDrawerEditTask);
-  },
   methods: {
     addEmptyTask() {
       bus.$emit("addEmptyTask");
