@@ -33,7 +33,7 @@ table {
 .md-table.md-theme-default {
   color: $text-dark !important;
   table {
-    border: $table-default-border;
+    border: none; //main border
     border-radius: 0 10px 10px 10px;
     font-size : 24px;
     .md-table-cell {

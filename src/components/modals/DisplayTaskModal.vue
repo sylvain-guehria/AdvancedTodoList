@@ -36,7 +36,7 @@
                 title="Metadata Todo"
                 class="transparent"
               >
-                <div class="md-layout-item md-size-100 data-block">
+                <div class="md-layout-item">
                   <meta-data-todo :event="event"></meta-data-todo>
                 </div>
               </accordion>
