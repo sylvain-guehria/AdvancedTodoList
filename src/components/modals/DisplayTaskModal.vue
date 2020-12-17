@@ -9,7 +9,7 @@
           </p>
         </div>
       </template>
-      <v-card>
+      <v-card >
         <v-card-title> </v-card-title>
         <v-card-text>
           <div>
@@ -177,5 +177,8 @@ h1 {
 }
 .title {
   display: inline-flex;
+}
+.title{
+  height: 16px;
 }
 </style>

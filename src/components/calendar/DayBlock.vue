@@ -194,6 +194,9 @@ export default class DayBlock extends Vue {
 <style scoped>
 .more-todos{
   cursor: pointer;
+  font-family: initial;
+  font-size: 13px;
+  margin: 10px;
 }
 </style>
 
