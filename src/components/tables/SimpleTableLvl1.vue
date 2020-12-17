@@ -69,7 +69,7 @@
         <md-table-cell class="head"></md-table-cell>
       </md-table-row>
       <md-table-row v-for="(subtask, index) in getLocalSubtasks()" :key="index">
-        <md-table-cell>
+        <md-table-cell class="colum-min-width-400">
           <div class="flex">
             <div class="checkbox">
               <v-checkbox
@@ -539,12 +539,15 @@ export default class SimpleTableLvl1 extends Vue {
 }
 .break-word {
   word-break: break-all;
-  // // hyphens: auto; to try
 }
 .checkbox {
   margin-left: 10px;
 }
 .label-content {
   margin-top: 3px;
+}
+
+.colum-min-width-400{
+  min-width: 400px
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <md-table>
     <md-table-row v-for="(detail, index) in subtask.details" :key="index">
-      <md-table-cell v-if="detail">
+      <md-table-cell v-if="detail" >
         <div class="flex">
           <div class="checkbox">
             <v-checkbox
@@ -13,7 +13,7 @@
               hide-details
             />
           </div>
-          <div :style="imgStyle()" class="dots">
+          <div :style="imgStyle()">
             <input-contenteditable
               :class="detail.isdone ? 'done' : ''"
               v-model="detail.label"
@@ -170,6 +170,7 @@ export default class SimpleTableLvl2 extends Vue {
 }
 .break-word {
   word-break: break-all;
+  text-align: left;
 }
 .checkbox {
   margin-left: 10px;
