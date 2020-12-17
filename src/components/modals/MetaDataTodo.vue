@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex">
     <div class="in-block">
       <div class="md-size-100 icon-list-item flex">
         <feather type="calendar"></feather>
@@ -29,7 +29,7 @@
         <div class="list-item-text">
           {{ event.isdone ? "finished" : "In progress" }}
         </div>
-        <div class="bullet" :class="bulletClass"></div>
+        <div class="bullet" :class="bulletClass()"></div>
       </div>
     </div>
 
@@ -37,7 +37,7 @@
       <div class="md-size-100 icon-list-item flex">
         <feather type="eye"></feather>
         <div class="list-item-text">
-          Number Days Left : {{ event.numberdaysleft }}
+          Finish : {{ numberdaysleft(event) }}
         </div>
       </div>
 
@@ -73,9 +73,10 @@ import FilterTab from "@/common/componentslib/FilterTab.vue";
 export default class MetaDataTodo extends Vue {
   @Prop() event!: any;
  giveColorTodo = myFunctions.giveColorTodo;
+ numberdaysleft = myFunctions.getdaysleft;
 
-  get bulletClass() {
-    const index = this.giveColorTodo(event);
+  bulletClass() {
+    const index = this.giveColorTodo(this.event);
     const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
     return classes[index];
   }
@@ -85,49 +86,9 @@ export default class MetaDataTodo extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.red-text {
-  color: red;
-}
-.green-text {
-  color: green;
-}
-
-.header-title {
-  word-break: break-word;
-  margin-top: 50px;
-}
-.event-info {
-  font-size: 15px !important;
-}
-
-h1 {
-  display: flex;
-}
-.go-edit {
-  position: absolute;
-  top: 7px;
-  left: 10px;
-  cursor: pointer;
-  i {
-    color: #a5a7a9;
-  }
-}
-.go-close {
-  position: absolute;
-  top: 7px;
-  right: 10px;
-  cursor: pointer;
-  i {
-    color: #a5a7a9;
-  }
-}
-.body {
-  padding: 35px;
-}
 
 .flex {
   display: flex !important;
-  margin-bottom: 15px;
   font-family: initial;
   font-size: 16px;
 }
@@ -152,20 +113,9 @@ h1 {
     margin-left: 10px;
   }
 }
-
-.scroll-area {
-  position: relative;
-  margin: auto;
-  padding-right: 50px;
-  max-width: 1200px;
-  max-height: 700px;
-}
 .in-block {
   width: 33%;
   margin: 0 auto;
   text-align: left !important;
-}
-.content {
-  min-width: 1200px;
 }
 </style>
