@@ -47,7 +47,7 @@
         </md-table-cell>
 
         <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')">
-          <div class="flex padding-bottom">
+          <div class="flex">
             <div>({{ getNumberSubTaskActive(item) }})</div>
             <div class="plus-minus hover-click">
               <feather
@@ -568,8 +568,5 @@ p {
 }
 .padding {
   padding: 10px;
-}
-.padding-bottom {
-  padding-bottom: 10px;
 }
 </style>
