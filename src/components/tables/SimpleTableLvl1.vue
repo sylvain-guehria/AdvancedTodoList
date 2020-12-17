@@ -184,7 +184,7 @@
     <!-- CONFIRM DELET DIALOG -->
     <confirm-dialog
       :confirmDialog="deleteDialog"
-      title="Delete task?"
+      title="Delete subtask?"
       content="You cannot go back if you press 'Yes'"
       @closeConfirmDialog="onCancelDialogDelete"
       @confirmDialog="onConfirmDialogDelete"

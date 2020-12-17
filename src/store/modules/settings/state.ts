@@ -7,23 +7,15 @@ export const initialState: Settings =  {
     loading: false,
     hidden_column: {
       order: true,
-      task: true,
       deadline: true,
       creationDate: true,
       numberdaysleft: true,
       importance: true,
-      isdone: true,
     },
     hidden_column_subtasks: {
       order: true,
-      label: true,
       deadline: true,
-      creationDate: true,
-      numberdaysleft: true,
       importance: true,
-      isdone: true,
-      details: true,
-      actions: true,
     }
   }
 

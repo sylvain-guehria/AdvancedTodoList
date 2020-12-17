@@ -144,7 +144,7 @@
             <md-checkbox v-model="item.isdone" @change="setTodoDone(item)">
               <feather
                 size="25px"
-                @click.stop.prevent="activeDeleteTodo(item.key, item.order)"
+                @click.stop.prevent="activeDeleteTodo(item.key, item.order, item.task)"
                 type="delete"
               ></feather>
             </md-checkbox>
@@ -176,6 +176,7 @@
       <confirm-dialog
         :confirmDialog="deleteDialog"
         title="Delete task?"
+        :subtitle="currentTitle"
         content="You cannot go back if you press 'Yes'"
         @closeConfirmDialog="onCancelDialogDelete"
         @confirmDialog="onConfirmDialogDelete"
@@ -187,7 +188,7 @@
 <script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
-import { Todo, HTMLElementEvent, Drawer } from "@/common/models/types/index";
+import { Todo, HTMLElementEvent, Drawer, Settings } from "@/common/models/types/index";
 import DisplayTaskModal from "../modals/DisplayTaskModal.vue";
 import lodash from "lodash";
 import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
@@ -226,7 +227,8 @@ export default {
     },
   },
   methods: {
-    activeDeleteTodo(key: string, order: number) {
+    activeDeleteTodo(key: string, order: number, title: string) {
+      this.currentTitle = title;
       this.deleteDialog = true;
       this.currentKey = key;
       this.currentOrder = order;
@@ -235,6 +237,7 @@ export default {
       this.currentKey = "";
       this.currentOrder = null;
       this.deleteDialog = false;
+      this.currentTitle = "";
     },
     onConfirmDialogDelete() {
       this.deleteTodo(this.currentKey, this.currentOrder);
@@ -319,14 +322,23 @@ export default {
 
       this.$store.commit("setDrawersSettings", this.drawersOpenedArray);
     },
-    getSettings(columnLabel) {
-      let colums = this.$store.getters.getSettings;
-      let colum;
-      if (colums) {
-        colum = colums.hidden_column[columnLabel];
-      }
+     getSettings(columnLabel: string) {
+    let settings: Settings = this.$store.getters.getSettings;
+    if (!settings || !settings.hidden_column) {
+      return true;
+    }
+    let colums = settings.hidden_column;
+    let colum: boolean = true;
+
+    if (colums) {
+      colum = colums[columnLabel];
+    }
+    if(colum != null) { 
       return colum;
-    },
+    }else{
+      return true
+    }
+  },
     orderUp(item: Todo): void {
       let max_order_todo: Todo = lodash.maxBy(this.paginatedTodos, "order");
 
@@ -532,6 +544,7 @@ export default {
       currentOrder: null,
       getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask,
       deleteDialog: false,
+      currentTitle: ''
     };
   },
 };
