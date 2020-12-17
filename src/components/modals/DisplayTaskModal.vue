@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" max-width="1200px">
+    <v-dialog v-model="dialog" max-width="1300px">
       <template v-slot:activator="{ on, attrs }">
         <div class="title">
           <div class="bullet" :class="bulletClass()"></div>
@@ -49,12 +49,8 @@
                   class="md-layout-item table-no-border"
                   v-if="event.subtasks && event.subtasks.length > 0"
                 >
-                  <md-table>
-                    <md-table-row>
                       <div class="light-horizontal-separator"></div>
                       <simple-table-lvl1 :item="event"></simple-table-lvl1>
-                    </md-table-row>
-                  </md-table>
                 </div>
               </vue-custom-scrollbar>
             </div>

@@ -6,23 +6,6 @@
           :key="event ? event.id : null"
           :event="event ? event : null"
         ></display-task-modal>
-
-
-
-    <!-- modal display task -->
-    <!-- <div>
-      <md-dialog
-        :md-active.sync="showDetail"
-        :show="showDetail"
-        @show="showDetail = $event"
-      >
-        <display-task-modal
-          :key="event ? event.id : null"
-          :event="event ? event : null"
-          @closeDialog="showDetail = false"
-        ></display-task-modal>
-      </md-dialog>
-    </div> -->
   </div>
 </template>
 
