@@ -1,4 +1,6 @@
 import { database } from '@/apis/firebase/firebase';
+import firebase from '@/apis/firebase/firebase';
+
 import { MutationTypes } from "./mutations";
 import { Todos, Todo, SubTask } from "@/common/models/types/index";
 import { RootState } from "../../state";
@@ -56,9 +58,13 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
     const { uid } = store.getters.getUser.data;
     if (!todoKey) { return }
 
+    if(value === null){
+      await database.ref(`todos/${uid}/${todoKey}/${attribute}`).remove();
+    }else{
     await database.ref(`todos/${uid}/${todoKey}`).update({
       [attribute]: value
     });
+  }
 
     context.commit(MutationTypes.EDITATTRIBUTETASK, { todoKey, attribute, value });
   },

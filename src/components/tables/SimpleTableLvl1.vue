@@ -78,24 +78,26 @@
                 height="100%"
                 v-model="subtask.isdone"
                 @click="setSubTaskState(subtask.key, item.key, subtask.isdone)"
-                hide-details />
+                hide-details
+              />
             </div>
             <div class="label-content">
-            <input-contenteditable
-              v-model="subtask.label"
-              :class="subtask.isdone ? 'done' : ''"
-              class="break-word"
-              _is="p"
-              :maxlength="250"
-              type="text"
-              placeholder="label"
-              @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'label')"
-              @keydown.enter="onPressEnterOrBlur"
-              @blur="onPressEnterOrBlur"
-            /></div>
+              <input-contenteditable
+                v-model="subtask.label"
+                :class="subtask.isdone ? 'done' : ''"
+                class="break-word"
+                _is="p"
+                :maxlength="250"
+                type="text"
+                placeholder="label"
+                @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'label')"
+                @keydown.enter="onPressEnterOrBlur"
+                @blur="onPressEnterOrBlur"
+              />
+            </div>
           </div>
 
-          <div class="details">
+          <div class="details" :class="maintable ? 'details-maintable': ''">
             <simple-table-lvl2
               :subtask="subtask"
               :motherKey="item.key"
@@ -104,25 +106,17 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell
-          v-if="getSettings('deadline')"
-          class="hover-click column-90 center-icon"
-        >
-          <p @click="showDatepickerDialog(subtask.key, subtask.deadline)">
-            {{
-              dateOfSubTask(item.key, subtask.key)
-                ? dateOfSubTask(item.key, subtask.key)
-                : ""
-            }}
-          </p>
-          <feather
-            size="15px"
-            v-if="!subtask.deadline"
-            type="calendar"
-            @click="showDatepickerDialog(subtask.key)"
-          ></feather>
+        <md-table-cell v-if="getSettings('deadline')" class="column-90 center-icon">
+          <div
+            class="hover-click"
+            @click="showDatepickerDialog(subtask.key, subtask.deadline)"
+          >
+            <div class="hover-click">
+              <date-picker :item="subtask" @emitDate="editDateSubtaskTask" :key="subtask.key" />
+            </div>
 
-          <md-tooltip md-direction="bottom">Deadline</md-tooltip>
+            <md-tooltip md-direction="bottom">Deadline</md-tooltip>
+          </div>
         </md-table-cell>
         <md-table-cell v-if="getSettings('importance')" class="column-30 center-icon">
           <input-contenteditable
@@ -179,15 +173,6 @@
       ></add-subtask-modal>
     </md-dialog>
 
-    <!-- DATE PICKER -->
-
-    <date-picker
-      :showDialogDate="showdatepickerDialog"
-      @closeDialogDate="closeDialog"
-      @editDate="editDateSubtask"
-      :date="date"
-    />
-
     <!-- CONFIRM DELET DIALOG -->
     <confirm-dialog
       :confirmDialog="deleteDialog"
@@ -228,6 +213,8 @@ import InputContenteditable from "@/common/componentslib/input-contenteditable/i
 })
 export default class SimpleTableLvl1 extends Vue {
   @Prop() item: Todo;
+  @Prop() maintable: boolean;
+
   showDialogAddSubtask: boolean = false;
   numberInput: number = 0;
   noDeadLine: boolean = false;
@@ -401,32 +388,32 @@ export default class SimpleTableLvl1 extends Vue {
     }
   }
 
-  editDateSubtask({ noDeadLine, date }) {
-    let value = date;
-    if (noDeadLine) {
-      value = "";
+  editDateSubtaskTask({ item, noDeadline }: { item: Todo; noDeadline: boolean }) {
+    let value = item.deadline;
+    let subtaskKey = item.key;
+
+    let todoKey = this.item.key;
+    let attribute = subtaskEnum.DEADLINE;
+
+    if (noDeadline) {
+      value = null;
     }
-    let key = this.currentKey;
-    let motherKey = this.item.key;
-    let attribute = "deadline";
 
     this.$store.dispatch(subtasksActionsType.EDITATTRIBUTESUBTASK, {
-      motherKey,
-      key,
+      motherKey: todoKey,
+      key: subtaskKey,
       attribute,
       value,
     });
-    this.updateLocalSubtasksDate(key);
-
-    this.showdatepickerDialog = false;
+    this.updateLocalSubtasksDate(subtaskKey, value);
   }
 
-  updateLocalSubtasksDate(key) {
+  updateLocalSubtasksDate(key, value) {
     if (this.item.subtasks && this.item.subtasks.length > 0) {
       var index = this.item.subtasks.findIndex(function (o) {
         return o.key === key;
       });
-      if (index !== -1) this.item.subtasks[index].deadline = this.date;
+      if (index !== -1) this.item.subtasks[index].deadline = value;
     }
   }
 
@@ -540,21 +527,24 @@ export default class SimpleTableLvl1 extends Vue {
 .details {
   margin-left: 50px;
 }
+.details-maintable {
+  margin-top: -15px;
+}
 .flex {
   display: flex;
 }
 .checkme {
-margin: 0 auto;
-padding: 0;
+  margin: 0 auto;
+  padding: 0;
 }
 .break-word {
   word-break: break-all;
   // // hyphens: auto; to try
 }
-.checkbox{
+.checkbox {
   margin-left: 10px;
 }
-.label-content{
-   margin-top: 3px;
+.label-content {
+  margin-top: 3px;
 }
 </style>

@@ -1,52 +1,64 @@
 <template>
-  <div class="content">
-    <div class="header">
-      <div class="go-edit">
-        <div @click="showDrawerEditTask(event)">
-          <feather type="edit"></feather>
+  <v-row justify="center">
+    <v-dialog v-model="dialog" max-width="1300px">
+      <template v-slot:activator="{ on, attrs }">
+        <div class="title">
+          <div class="bullet" :class="bulletClass()"></div>
+          <p v-bind="attrs" v-on="on">
+            {{ Title }} &nbsp; ({{ getNumberSubTaskActive() }})
+          </p>
         </div>
-      </div>
-      <div class="go-close">
-        <div @click="closeModal">
-          <feather type="x"></feather>
-        </div>
-      </div>
-      <div class="md-layout-item md-size-100 header-title">
-        <h1>
-          {{ event.task }}
-        </h1>
-        <div class="horizontal-separator"></div>
-      </div>
-      <div class="accordion-margin">
-        <accordion
-          :isActive="isForm1Active"
-          @isActive="isForm1Active = $event"
-          title="Metadata Todo"
-          class="transparent"
-        >
-          <div class="md-layout-item md-size-100 data-block">
-            <meta-data-todo :event="event"></meta-data-todo>
+      </template>
+      <v-card>
+        <v-card-title> </v-card-title>
+        <v-card-text>
+          <div>
+            <div class="go-edit">
+              <div @click="showDrawerEditTask(event)">
+                <feather size="15px" type="edit"></feather>
+              </div>
+            </div>
+            <div class="go-close">
+              <div @click="closeModal">
+                <feather size="16px" type="x"></feather>
+              </div>
+            </div>
+            <div class="md-layout-item md-size-100 header-title">
+              <h1>
+                {{ event.task }}
+              </h1>
+              <div class="horizontal-separator"></div>
+            </div>
+            <div class="accordion-margin">
+              <accordion
+                :isActive="isForm1Active"
+                @isActive="isForm1Active = $event"
+                title="Metadata Todo"
+                class="transparent"
+              >
+                <div class="md-layout-item md-size-100 data-block">
+                  <meta-data-todo :event="event"></meta-data-todo>
+                </div>
+              </accordion>
+            </div>
           </div>
-        </accordion>
-      </div>
-    </div>
-    <div class="body">
-      <div class="md-layout-item md-size-100 duo-data-block no-padding">
-        <vue-custom-scrollbar
-          class="scroll-area"
-          :settings="settings"
-        >
-          <div
-            class="md-layout-item table-border"
-            v-if="event.subtasks && event.subtasks.length > 0"
-          >
-            <div class="light-horizontal-separator"></div>
-            <simple-table-lvl1 :item="event"></simple-table-lvl1>
+          <div class="body">
+            <div class="md-layout-item md-size-100 duo-data-block no-padding">
+              <vue-custom-scrollbar class="scroll-area" :settings="settings">
+                <div
+                  class="md-layout-item table-no-border"
+                  v-if="event.subtasks && event.subtasks.length > 0"
+                >
+                      <div class="light-horizontal-separator"></div>
+                      <simple-table-lvl1 :item="event"></simple-table-lvl1>
+                </div>
+              </vue-custom-scrollbar>
+            </div>
           </div>
-        </vue-custom-scrollbar>
-      </div>
-    </div>
-  </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -76,16 +88,22 @@ import Accordion from "@/common/componentslib/Accordion.vue";
   },
 })
 export default class PCalendarEvent extends Vue {
-  @Prop() days!: Array<any>;
-  @Prop() calendar!: Calendar<any, any>;
   @Prop() event!: any;
   isForm1Active: boolean = false;
+  dialog: boolean = false;
+  giveColorTodo = myFunctions.giveColorTodo;
 
   settings = {
     suppressScrollY: false,
     suppressScrollX: false,
     wheelPropagation: false,
   };
+
+  getNumberSubTaskActive(): number {
+    return this.event.subtasks
+      ? this.event.subtasks.filter((subtask) => !subtask.isdone).length
+      : 0;
+  }
 
   showDrawerEditTask(payload): void {
     if (payload) {
@@ -95,25 +113,26 @@ export default class PCalendarEvent extends Vue {
   }
 
   closeModal(): void {
-    this.$emit("closeDialog");
+    this.dialog = false;
+  }
+
+  bulletClass(): string {
+    const index = this.giveColorTodo(this.event);
+
+    const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5", "bullet6"];
+    return classes[index];
+  }
+
+  get Title() {
+    return this.event.task;
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.red-text {
-  color: red;
-}
-.green-text {
-  color: green;
-}
-
 .header-title {
   word-break: break-word;
   margin-top: 50px;
-}
-.event-info {
-  font-size: 15px !important;
 }
 
 h1 {
@@ -138,35 +157,16 @@ h1 {
   }
 }
 .body {
-  padding: 35px;
+  padding: 20px;
 }
 
 .flex {
   display: flex;
-  margin-bottom: 15px;
-  font-family: initial;
-  font-size: 16px;
 }
 
-.icon-list-item {
-  display: flex;
-
-  i {
-    color: #1d72b2;
-    margin-right: 20px;
-  }
-
-  .list-item-text {
-    text-align: left;
-    &.subtasks {
-      width: 100%;
-    }
-  }
-
-  .bullet {
-    margin-top: 5px;
-    margin-left: 10px;
-  }
+.bullet {
+  margin-top: 11px;
+  margin-right: 5px;
 }
 
 .scroll-area {
@@ -176,16 +176,10 @@ h1 {
   width: 1200px;
   max-height: 550px;
 }
-.in-block {
-  width: 33%;
-  margin: 0 auto;
-  text-align: left !important;
-}
-.content {
-  min-width: 1200px;
-}
 .accordion-margin {
   margin-left: 30px;
 }
-
+.title {
+  display: inline-flex;
+}
 </style>

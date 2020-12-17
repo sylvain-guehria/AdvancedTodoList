@@ -9,7 +9,7 @@ export const myFunctions = {
       return 'today'
     }
     if (!deadlineS) { return '' }
-    return moment(deadlineS).fromNow();
+    return moment(deadlineS).endOf('day').fromNow();
   },
 
   getNumberdaysleft(deadlineS: string): number {
@@ -76,7 +76,7 @@ export const myFunctions = {
         return 0;
       }
     }
-    return;
+    return 5;
   },
   getNumberDetailInSubtask(todoKey, SubtasKey) {
     if(!store.getters.getTodoList){return}

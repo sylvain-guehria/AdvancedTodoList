@@ -47,7 +47,7 @@
         </md-table-cell>
 
         <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')">
-          <div class="flex padding-bottom">
+          <div class="flex">
             <div>({{ getNumberSubTaskActive(item) }})</div>
             <div class="plus-minus hover-click">
               <feather
@@ -78,9 +78,7 @@
 
           <!-- start table subtask and details -->
           <div v-if="includeKey(item.key)" class="subtable">
-            <simple-table-lvl1
-              :item="item"
-            ></simple-table-lvl1>
+            <simple-table-lvl1 :item="item" :maintable="true"></simple-table-lvl1>
           </div>
           <!-- end -->
         </md-table-cell>
@@ -88,18 +86,13 @@
         <md-table-cell
           md-sort-by="deadline"
           v-if="getSettings('deadline')"
-          class="column-90 center-icon hover-click"
+          class="column-90 center-icon"
           md-label="Deadline"
         >
-          <p @click="showDatepickerDialog(item.key, item.deadline)" v-if="item.deadline">
-            {{ dateOfTask(item.key) ? dateOfTask(item.key) : "" }}
-          </p>
-            <feather
-              size="20px"
-              v-if="!item.deadline"
-              @click="showDatepickerDialog(item.key, null)"
-              type="calendar"
-            ></feather>
+          <div class="hover-click">
+            <date-picker :item="item" @emitDate="editDateTask" :key="item.key" />
+          </div>
+
         </md-table-cell>
 
         <md-table-cell
@@ -113,7 +106,11 @@
           </p></md-table-cell
         >
 
-        <md-table-cell v-if="getSettings('numberdaysleft')" class="column-80" md-label="Finish">
+        <md-table-cell
+          v-if="getSettings('numberdaysleft')"
+          class="column-80"
+          md-label="Finish"
+        >
           <p>{{ item.numberdaysleft }}</p>
         </md-table-cell>
 
@@ -135,11 +132,13 @@
               @blur="onPressEnterOrBlur"
             />
           </div>
-           <md-tooltip md-direction="top">Importance</md-tooltip>
+          <md-tooltip md-direction="top">Importance</md-tooltip>
         </md-table-cell>
 
-        <md-table-cell class="column-20 center-icon no-padding-cell"
-         v-if="getSettings('isdone')">
+        <md-table-cell
+          class="column-20 center-icon no-padding-cell"
+          v-if="getSettings('isdone')"
+        >
           <div class="hover-click flex">
             <md-checkbox v-model="item.isdone" @change="setTodoDone(item)">
               <feather
@@ -181,14 +180,6 @@
         @confirmDialog="onConfirmDialogDelete"
       />
     </div>
-    <!-- DATE PICKER -->
-
-    <date-picker
-      :showDialogDate="showDialogDate"
-      @closeDialogDate="closeDialogDate"
-      @editDate="editDateTask"
-      :date="date"
-    />
   </div>
 </template>
 
@@ -227,12 +218,6 @@ export default {
     },
   },
   watch: {
-    showDialogDate: function () {
-      if (this.showDialogDate === false) {
-        this.currentKey = "";
-        this.date = "";
-      }
-    },
     deleteDialog: function () {
       if (this.deleteDialog === false) {
         this.onCancelDialogDelete();
@@ -254,21 +239,19 @@ export default {
       this.deleteTodo(this.currentKey, this.currentOrder);
       this.deleteDialog = false;
     },
-    editDateTask({ noDeadLine, date }) {
-      let value = date;
-
-      if (noDeadLine) {
-        value = "";
-      }
-      let todoKey = this.currentKey;
+    editDateTask({item, noDeadline}: {item: Todo, noDeadline: boolean}) {
+      let value = item.deadline;
+      let todoKey = item.key;
       let attribute = todoEnum.DEADLINE;
+
+      if(noDeadline){ value = null }
+
       this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
         todoKey,
         attribute,
         value,
       });
       this.updatePaginationList(todoKey, attribute, value);
-      this.showDialogDate = false;
     },
     updatePaginationList(todoKey: string, attribute: string, value: string) {
       var index = this.paginatedTodos.findIndex(function (o) {
@@ -280,16 +263,6 @@ export default {
           this.paginatedTodos[index][todoEnum.NUMBERDAYSLEFT] = this.getdaysleft(value);
         }
       }
-    },
-    showDatepickerDialog(key: string, deadline) {
-      this.currentKey = key;
-      if (deadline) {
-        this.date = deadline;
-      }
-      this.showDialogDate = true;
-    },
-    closeDialogDate() {
-      this.showDialogDate = false;
     },
     setCurrentTodoEdited_key_attribue(key, attribute) {
       this.currentTodoKeyEdited = key;
@@ -554,7 +527,6 @@ export default {
       todoImpEnum: todoEnum.IMPORTANCE,
       date: null,
       modal: false,
-      showDialogDate: false,
       currentKey: "",
       currentOrder: null,
       getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask,
@@ -594,7 +566,5 @@ p {
 .padding {
   padding: 10px;
 }
-.padding-bottom {
-  padding-bottom: 10px;
-}
+
 </style>
