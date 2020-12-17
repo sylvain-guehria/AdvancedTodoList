@@ -44,12 +44,12 @@
           </div>
           <div class="body">
             <div class="md-layout-item md-size-100 duo-data-block no-padding">
+                      <div class="light-horizontal-separator"></div>
               <vue-custom-scrollbar class="scroll-area" :settings="settings">
                 <div
                   class="md-layout-item table-no-border"
                   v-if="event.subtasks && event.subtasks.length > 0"
                 >
-                      <div class="light-horizontal-separator"></div>
                       <simple-table-lvl1 :item="event"></simple-table-lvl1>
                 </div>
               </vue-custom-scrollbar>
