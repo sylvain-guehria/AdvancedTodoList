@@ -246,9 +246,6 @@ export default {
 
       if(noDeadline){ value = null }
 
-        // eslint-disable-next-line no-console
-      console.log('to fb', todoKey, attribute, value);
-
       this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
         todoKey,
         attribute,
@@ -569,4 +566,5 @@ p {
 .padding {
   padding: 10px;
 }
+
 </style>

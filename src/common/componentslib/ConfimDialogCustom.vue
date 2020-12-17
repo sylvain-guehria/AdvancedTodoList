@@ -1,17 +1,38 @@
 <template>
+  <v-dialog
+      v-model="confirmDialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">
+          {{ title }}
+        </v-card-title>
 
-  <div>
-    <md-dialog :md-active.sync="confirmDialog">
-      <md-dialog-title>{{ title }}</md-dialog-title>
+        <v-card-text>
+          {{ content }} 
+        </v-card-text>
 
-      <md-dialog-content> {{ content }} </md-dialog-content>
+        <v-card-actions>
+          <v-spacer></v-spacer>
 
-      <md-dialog-actions>
-        <md-button class="md-tertiary" @click="onCancelDialog">Cancel</md-button>
-        <md-button class="md-tertiary" @click="onConfirmDialog">Yes</md-button>
-      </md-dialog-actions>
-    </md-dialog>
-  </div>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="onCancelDialog"
+          >
+            Cancel
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="onConfirmDialog"
+          >
+            Yes
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
 </template>
 

@@ -523,7 +523,7 @@ export default class SimpleTableLvl1 extends Vue {
   cursor: pointer;
 }
 .details {
-  margin-top: -15px;
+  // margin-top: -15px;
   margin-left: 50px;
 }
 .flex {
