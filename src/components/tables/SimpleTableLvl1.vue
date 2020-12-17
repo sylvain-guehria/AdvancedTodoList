@@ -154,13 +154,14 @@
               @click="activeDeleteSubtask(subtask.key, item.key)"
             ></feather>
           </div>
-          <md-tooltip md-direction="bottom">Delete task</md-tooltip>
+          <md-tooltip md-direction="bottom">Delete subtask</md-tooltip>
         </md-table-cell>
       </md-table-row>
       <md-table-row>
         <md-table-cell>
           <div class="hover-click">
-            <feather type="plus-circle" @click="addEmptySubTask(item.key)"></feather></div
+            <feather size="17px" type="plus-circle" @click="addEmptySubTask(item.key)"></feather> 
+             <md-tooltip md-direction="bottom">Add subtask</md-tooltip></div
         ></md-table-cell>
       </md-table-row>
     </md-table>
