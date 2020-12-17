@@ -21,7 +21,6 @@
       >
         <md-table-cell
           md-sort-by="order"
-          md-label="Order"
           class="column-50"
           v-if="getSettings('order')"
         >
@@ -34,7 +33,9 @@
                 v-longclick="() => orderDown(item)"
               ></feather>
             </div>
-            <div>{{ item.order }}</div>
+            <div>{{ item.order }}
+               <md-tooltip md-direction="top">Order</md-tooltip>
+            </div>
             <div class="hover-click">
               <feather
                 size="20px"
@@ -48,7 +49,7 @@
 
         <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')">
           <div class="flex">
-            <div>({{ getNumberSubTaskActive(item) }})</div>
+            <!-- <div>({{ getNumberSubTaskActive(item) }})</div> -->
             <div class="plus-minus hover-click">
               <feather
                 size="15px"
