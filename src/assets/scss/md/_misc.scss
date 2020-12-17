@@ -1,7 +1,7 @@
 body {
   background-color: $body-bg ; //main color background
   & .v-application--wrap{
-    background-color: $body-bg ; //main color background when vuetify is integrated
+    background-color: $body-bg ; //main color background when vuetify
   }
   letter-spacing: unset;
   color: $text-dark;

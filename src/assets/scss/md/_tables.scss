@@ -67,10 +67,11 @@ table {
   }
   thead {
     border: $table-default-border;
-    background-color: $lines;
+    background-color: $lines; //color head table
 
     .md-table-head {
-      border-bottom: $table-default-border;
+      // border-bottom: $table-default-border;
+      
       color: $text-dark !important;
     }
     .md-table-head-label {

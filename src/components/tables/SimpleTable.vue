@@ -49,7 +49,6 @@
 
         <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')">
           <div class="flex">
-            <!-- <div>({{ getNumberSubTaskActive(item) }})</div> -->
             <div class="plus-minus hover-click">
               <feather
                 size="15px"
@@ -68,13 +67,14 @@
               v-model="item.task"
               :class="item.isdone ? 'done' : ''"
               _is="p"
-              class="task"
+              class="task break-word"
               :maxlength="250"
               placeholder="Type a title"
               @giveTodoKey="setCurrentTodoEdited_key_attribue(item.key, todoTaskEnum)"
               @keyup.enter="onPressEnterOrBlur"
               @blur="onPressEnterOrBlur"
             />
+            <div>({{ getNumberSubTaskActive(item) }})</div>
           </div>
 
           <!-- start table subtask and details -->
@@ -566,6 +566,10 @@ p {
 }
 .padding {
   padding: 10px;
+}
+
+.break-word {
+  word-break: break-all;
 }
 
 </style>

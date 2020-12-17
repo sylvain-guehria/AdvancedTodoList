@@ -539,7 +539,6 @@ export default class SimpleTableLvl1 extends Vue {
 }
 .break-word {
   word-break: break-all;
-  // // hyphens: auto; to try
 }
 .checkbox {
   margin-left: 10px;
