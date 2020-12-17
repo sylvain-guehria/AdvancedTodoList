@@ -70,12 +70,19 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   async [ActionTypes.EDITATTRIBUTESUBTASK](context, { motherKey, key, attribute, value }: { motherKey: string, key: string, attribute: string, value }): Promise<void> {
 
     const { uid } = store.getters.getUser.data;
+ // eslint-disable-next-line no-console
+ console.log( 'ici',{ motherKey, key, attribute, value });
+
 
     if (!motherKey || !key) { return }
 
-    await database.ref(`todos/${uid}/${motherKey}/subtasks/${key}`).update({
-      [attribute]: value
-    });
+    if (value === null) {
+      await database.ref(`todos/${uid}/${motherKey}/subtasks/${key}/${attribute}`).remove();
+    } else {
+      await database.ref(`todos/${uid}/${motherKey}/subtasks/${key}`).update({
+        [attribute]: value
+      });
+    }
 
     context.commit(MutationTypes.editOneAttributSubtaskTodo, { motherKey, key, attribute, value });
   },

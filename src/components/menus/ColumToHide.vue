@@ -104,21 +104,6 @@
                 ></feather>
               </div>
             </div>
-            <div class="legend-2">
-              <p>Actions</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn ? hiddenColumn.isdone : false"
-                  @click="setSettings('isdone')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn ? !hiddenColumn.isdone : false"
-                  @click="setSettings('isdone')"
-                ></feather>
-              </div>
-            </div>
           </div>
         </div>
       </md-menu-content>

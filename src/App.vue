@@ -1,7 +1,9 @@
 <template>
   <div id="app">
+    <v-app>
     <router-view />
-        <notifications />
+    <notifications />
+    </v-app>
   </div>
 </template>
 

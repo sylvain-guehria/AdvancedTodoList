@@ -40,12 +40,14 @@ table {
       padding-top: 10px ;
     }
 
+    // table lvl1
     table{
       border : none;
       .md-table-cell {
         padding-top: 0px ;
         height: 100%;
       }
+      //table lvl 2 
       table{
       .md-table-cell {
         padding: 0px ;

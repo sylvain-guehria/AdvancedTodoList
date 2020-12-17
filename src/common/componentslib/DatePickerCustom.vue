@@ -1,56 +1,91 @@
 <template>
-  <md-dialog :md-active.sync="showDialogDate" :md-click-outside-to-close="false">
-    <div class="container">
-      <md-button class="md-icon-button" @click="closeDialogDate">
-        <md-icon>close</md-icon>
-      </md-button>
-      <md-dialog-content>
-        <v-date-picker
-          v-model="localDate"
-          year-icon="mdi-calendar-blank"
-          prev-icon="mdi-skip-previous"
-          next-icon="mdi-skip-next"
-        ></v-date-picker>
-      </md-dialog-content>
-
-      <md-dialog-actions>
-        <md-checkbox v-model="noDeadLine">no deadline</md-checkbox>
-        <md-button class="md-tertiary" @click="editDate"> Save </md-button>
-      </md-dialog-actions>
-    </div>
-  </md-dialog>
+  <v-row justify="center">
+    <v-dialog v-model="dialog" persistent max-width="330">
+      <template v-slot:activator="{ on, attrs }">
+        <p v-show="item.deadline" v-bind="attrs" v-on="on">
+          {{ item.deadline ? item.deadline : "" }}
+        </p>
+        <feather
+          size="20px"
+          v-show="!item.deadline"
+          type="calendar"
+          v-bind="attrs"
+          v-on="on"
+        ></feather>
+      </template>
+      <v-card>
+        <v-card-text> Choose your deadline </v-card-text>
+        <v-card-text
+          ><v-row justify="center">
+            <v-date-picker
+              color="primary lighten-1"
+              v-model="localItem.deadline"
+              year-icon="mdi-calendar-blank"
+              prev-icon="mdi-skip-previous"
+              next-icon="mdi-skip-next"
+            ></v-date-picker> </v-row
+        ></v-card-text>
+        <v-card-text>
+          <v-checkbox
+            v-model="noDeadline"
+            label="No deadline"
+            color="primary"
+            hide-details
+          ></v-checkbox>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="red" text @click="dialog = false"> Cancel </v-btn>
+          <v-btn color="primary" text @click="editDate"> Save </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
+import { Todo } from "../models/types";
+import { myFunctions } from "@/common/helpers/helperfunction";
 
 @Component({
   components: {},
 })
-export default class ConfimDialogCustom extends Vue {
-  @Prop() showDialogDate: boolean;
-  @Prop() date: string;
+export default class DatePickerCustom extends Vue {
+  @Prop() item;
+  noDeadline: boolean = false;
+  dialog: boolean = false;
+  //dateOfTask = myFunctions.dateOfTask;
 
-  localDate: string = null;
+  localItem = {
+    deadline: null,
+  };
 
-  @Watch("showDialogDate", { immediate: false })
-  watcherShowDialogDate() {
-    this.localDate = this.date;
+  emptyiItem = {
+    deadline: null,
+  };
+
+  @Watch("dialog", { immediate: false })
+  watchDialog() {
+    if (!this.dialog) {
+      this.localItem = {...this.emptyiItem} ;
+    }else{
+       this.localItem = {...this.item};
+    }
+     this.noDeadline = false;
   }
 
-  noDeadLine: boolean = false;
-
   closeDialogDate(): void {
-    this.$emit("closeDialogDate");
-    this.noDeadLine = false;
+    this.dialog = false;
   }
 
   editDate(): void {
-    this.$emit("editDate", {
-      noDeadLine: this.noDeadLine,
-      date: this.localDate,
+    this.dialog = false;
+    this.$emit("emitDate", {
+      item: this.localItem,
+      noDeadline: this.noDeadline,
     });
-    this.noDeadLine = false;
   }
 }
 </script>
+
+<style scoped></style>

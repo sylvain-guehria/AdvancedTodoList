@@ -111,18 +111,10 @@
             class="hover-click"
             @click="showDatepickerDialog(subtask.key, subtask.deadline)"
           >
-            <p>
-              {{
-                dateOfSubTask(item.key, subtask.key)
-                  ? dateOfSubTask(item.key, subtask.key)
-                  : ""
-              }}
-            </p>
-            <feather
-              size="15px"
-              v-if="!subtask.deadline"
-              type="calendar"
-            ></feather>
+            <div class="hover-click">
+              <date-picker :item="subtask" @emitDate="editDateSubtaskTask" :key="subtask.key" />
+            </div>
+
             <md-tooltip md-direction="bottom">Deadline</md-tooltip>
           </div>
         </md-table-cell>
@@ -180,15 +172,6 @@
         :subtask="getSubtaskToEdit()"
       ></add-subtask-modal>
     </md-dialog>
-
-    <!-- DATE PICKER -->
-
-    <date-picker
-      :showDialogDate="showdatepickerDialog"
-      @closeDialogDate="closeDialog"
-      @editDate="editDateSubtask"
-      :date="date"
-    />
 
     <!-- CONFIRM DELET DIALOG -->
     <confirm-dialog
@@ -403,32 +386,32 @@ export default class SimpleTableLvl1 extends Vue {
     }
   }
 
-  editDateSubtask({ noDeadLine, date }) {
-    let value = date;
-    if (noDeadLine) {
-      value = "";
+  editDateSubtaskTask({ item, noDeadline }: { item: Todo; noDeadline: boolean }) {
+    let value = item.deadline;
+    let subtaskKey = item.key;
+
+    let todoKey = this.item.key;
+    let attribute = subtaskEnum.DEADLINE;
+
+    if (noDeadline) {
+      value = null;
     }
-    let key = this.currentKey;
-    let motherKey = this.item.key;
-    let attribute = "deadline";
 
     this.$store.dispatch(subtasksActionsType.EDITATTRIBUTESUBTASK, {
-      motherKey,
-      key,
+      motherKey: todoKey,
+      key: subtaskKey,
       attribute,
       value,
     });
-    this.updateLocalSubtasksDate(key);
-
-    this.showdatepickerDialog = false;
+    this.updateLocalSubtasksDate(subtaskKey, value);
   }
 
-  updateLocalSubtasksDate(key) {
+  updateLocalSubtasksDate(key, value) {
     if (this.item.subtasks && this.item.subtasks.length > 0) {
       var index = this.item.subtasks.findIndex(function (o) {
         return o.key === key;
       });
-      if (index !== -1) this.item.subtasks[index].deadline = this.date;
+      if (index !== -1) this.item.subtasks[index].deadline = value;
     }
   }
 
@@ -540,6 +523,7 @@ export default class SimpleTableLvl1 extends Vue {
   cursor: pointer;
 }
 .details {
+  margin-top: -15px;
   margin-left: 50px;
 }
 .flex {
