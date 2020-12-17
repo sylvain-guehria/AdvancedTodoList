@@ -78,7 +78,7 @@
 
           <!-- start table subtask and details -->
           <div v-if="includeKey(item.key)" class="subtable">
-            <simple-table-lvl1 :item="item"></simple-table-lvl1>
+            <simple-table-lvl1 :item="item" :maintable="true"></simple-table-lvl1>
           </div>
           <!-- end -->
         </md-table-cell>
@@ -245,9 +245,6 @@ export default {
       let attribute = todoEnum.DEADLINE;
 
       if(noDeadline){ value = null }
-
-        // eslint-disable-next-line no-console
-      console.log('to fb', todoKey, attribute, value);
 
       this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
         todoKey,
@@ -569,4 +566,5 @@ p {
 .padding {
   padding: 10px;
 }
+
 </style>

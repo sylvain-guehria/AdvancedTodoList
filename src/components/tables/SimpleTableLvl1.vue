@@ -97,7 +97,7 @@
             </div>
           </div>
 
-          <div class="details">
+          <div class="details" :class="maintable ? 'details-maintable': ''">
             <simple-table-lvl2
               :subtask="subtask"
               :motherKey="item.key"
@@ -213,6 +213,8 @@ import InputContenteditable from "@/common/componentslib/input-contenteditable/i
 })
 export default class SimpleTableLvl1 extends Vue {
   @Prop() item: Todo;
+  @Prop() maintable: boolean;
+
   showDialogAddSubtask: boolean = false;
   numberInput: number = 0;
   noDeadLine: boolean = false;
@@ -523,8 +525,10 @@ export default class SimpleTableLvl1 extends Vue {
   cursor: pointer;
 }
 .details {
-  margin-top: -15px;
   margin-left: 50px;
+}
+.details-maintable {
+  margin-top: -15px;
 }
 .flex {
   display: flex;

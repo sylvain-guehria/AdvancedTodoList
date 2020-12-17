@@ -76,7 +76,7 @@ export const myFunctions = {
         return 0;
       }
     }
-    return;
+    return 5;
   },
   getNumberDetailInSubtask(todoKey, SubtasKey) {
     if(!store.getters.getTodoList){return}

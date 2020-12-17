@@ -72,35 +72,15 @@ import FilterTab from "@/common/componentslib/FilterTab.vue";
 })
 export default class MetaDataTodo extends Vue {
   @Prop() event!: any;
+ giveColorTodo = myFunctions.giveColorTodo;
 
   get bulletClass() {
-    const index = this.giveColorTodo();
+    const index = this.giveColorTodo(event);
     const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
     return classes[index];
   }
 
-  giveColorTodo(): number {
-    let item = this.event;
-    if (item && item.importance) {
-      // red Task : importance >= 75
-      if (item.importance >= 75) {
-        return 1;
-      }
-      // orange/jaune tasks : 50 >= importance > 75
-      if (50 <= item.importance && item.importance < 75) {
-        return 2;
-      }
-      // blue task : 25 >= importance > 50
-      if (25 <= item.importance && item.importance < 50) {
-        return 3;
-      }
-      // green  task : 0 >= importance > 25
-      if (0 <= item.importance && item.importance < 25) {
-        return 0;
-      }
-    }
-    return;
-  }
+
 }
 </script>
 
