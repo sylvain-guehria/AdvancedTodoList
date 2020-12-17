@@ -9,6 +9,10 @@
         </v-card-title>
 
         <v-card-text>
+          {{ subtitle }} 
+        </v-card-text>
+
+        <v-card-text>
           {{ content }} 
         </v-card-text>
 
@@ -46,6 +50,7 @@ export default class ConfimDialogCustom extends Vue {
   @Prop() confirmDialog: boolean;
   @Prop() title: string;
   @Prop() content: string;
+  @Prop() subtitle: string;
 
   onCancelDialog(): void {
     this.$emit("closeConfirmDialog");

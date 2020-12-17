@@ -52,7 +52,11 @@ export default class WeeksView extends Vue {
   ];
 
   generatedKey(index){
-    return this.$store.getters.getNumberTotalTask + this.$store.getters.getWithWeekEnd + index;
+      let key1 = this.$store.getters.getNumberTotalTask ? this.$store.getters.getNumberTotalTask : 1;
+      let key2 = this.$store.getters.getWithWeekEnd ? this.$store.getters.getWithWeekEnd : 1;
+      let key3 = index? index : 1;
+
+    return key1 + key2 + index;
   }
 
   get rows() {

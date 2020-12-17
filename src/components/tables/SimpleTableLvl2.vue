@@ -48,7 +48,6 @@
 <script lang="ts">
 import { SubTask, Todo, HTMLElementEvent, Detail } from "@/common/models/types/index";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
-import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 
 // Subtasks
 import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";

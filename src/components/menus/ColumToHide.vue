@@ -30,21 +30,6 @@
               </div>
             </div>
             <div class="legend-2">
-              <p>Task title</p>
-              <div class="feathers">
-                <feather
-                  type="check"
-                  v-if="hiddenColumn? hiddenColumn.task : false"
-                  @click="setSettings('task')"
-                ></feather>
-                <feather
-                  type="x"
-                  v-if="hiddenColumn? !hiddenColumn.task : false"
-                  @click="setSettings('task')"
-                ></feather>
-              </div>
-            </div>
-            <div class="legend-2">
               <p>Deadline</p>
               <div class="feathers">
                 <feather

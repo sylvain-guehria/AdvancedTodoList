@@ -184,7 +184,7 @@
     <!-- CONFIRM DELET DIALOG -->
     <confirm-dialog
       :confirmDialog="deleteDialog"
-      title="Delete task?"
+      title="Delete subtask?"
       content="You cannot go back if you press 'Yes'"
       @closeConfirmDialog="onCancelDialogDelete"
       @confirmDialog="onConfirmDialogDelete"
@@ -194,7 +194,6 @@
 <script lang="ts">
 import { SubTask, Todo, HTMLElementEvent, Settings } from "@/common/models/types/index";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
-import AddSubtaskModal from "../modals/AddSubtaskModal.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
 import ConfirmDialogCustom from "@/common/componentslib/ConfimDialogCustom.vue";
 import DatePickerCustom from "@/common/componentslib/DatePickerCustom.vue";
@@ -212,7 +211,6 @@ import InputContenteditable from "@/common/componentslib/input-contenteditable/i
 
 @Component({
   components: {
-    "add-subtask-modal": AddSubtaskModal,
     "simple-table-lvl2": SimpleTableLvl2,
     "input-contenteditable": InputContenteditable,
     "confirm-dialog": ConfirmDialogCustom,

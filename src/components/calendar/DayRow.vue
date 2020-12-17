@@ -29,13 +29,20 @@ export default class DayRow extends Vue {
   @Prop() placeholder!: CalendarEvent<any, any>;
   @Prop() placeholderForCreate!: Boolean;
 
-
   created() {
     this.removeWeekend();
   }
 
-  generatedKey(index){
-    return this.$store.getters.getNumberTotalTask + this.$store.getters.getWithWeekEnd + index;
+  generatedKey(index) {
+    let key1 = this.$store.getters.getNumberTotalTask
+      ? this.$store.getters.getNumberTotalTask
+      : 1;
+    let key2 = this.$store.getters.getWithWeekEnd
+      ? this.$store.getters.getWithWeekEnd
+      : 1;
+    let key3 = index ? index : 1;
+
+    return key1 + key2 + index;
   }
 
   monthChanged(calendar: Calendar<any, any>) {
@@ -45,11 +52,9 @@ export default class DayRow extends Vue {
   removeWeekend() {
     if (!this.$store.getters.getWithWeekEnd) {
       this.calendar.days = this.calendar.days.filter(
-        (d) =>
-          d.dayOfWeek !== Weekday.SATURDAY && d.dayOfWeek !== Weekday.SUNDAY
+        (d) => d.dayOfWeek !== Weekday.SATURDAY && d.dayOfWeek !== Weekday.SUNDAY
       );
     }
   }
 }
 </script>
-

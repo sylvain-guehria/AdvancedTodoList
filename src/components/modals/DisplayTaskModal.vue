@@ -9,7 +9,7 @@
           </p>
         </div>
       </template>
-      <v-card>
+      <v-card >
         <v-card-title> </v-card-title>
         <v-card-text>
           <div>
@@ -66,8 +66,6 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import { Calendar, Weekday } from "dayspan";
 import DayBlock from "./DayBlock.vue";
 import moment from "moment";
-import SubTaskViewer from "@/components/forms/SubTaskViewer.vue";
-import ReadOnlySubTaskTable from "@/components/tables/ReadOnlySubTaskTable.vue";
 import { myFunctions } from "@/common/helpers/helperfunction";
 import { bus } from "@/main";
 import vueCustomScrollbar from "vue-custom-scrollbar";
@@ -79,8 +77,6 @@ import Accordion from "@/common/componentslib/Accordion.vue";
 
 @Component({
   components: {
-    "sub-tasks-viewer": SubTaskViewer,
-    "sub-task-readonly": ReadOnlySubTaskTable,
     "simple-table-lvl1": SimpleTableLvl1,
     "meta-data-todo": MetaDataTodo,
     accordion: Accordion,
@@ -108,7 +104,7 @@ export default class PCalendarEvent extends Vue {
   showDrawerEditTask(payload): void {
     if (payload) {
       this.closeModal();
-      bus.$emit("openDrawerEdit", payload);
+     //TODO go edit task somewhere
     }
   }
 
@@ -181,5 +177,8 @@ h1 {
 }
 .title {
   display: inline-flex;
+}
+.title{
+  height: 16px;
 }
 </style>
