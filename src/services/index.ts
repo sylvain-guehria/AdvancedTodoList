@@ -1,7 +1,7 @@
 
-import { preActionsTodo } from "@/services/todoService";
+import { serviceTodo } from "@/services/todoService";
 
 
 export {
-    preActionsTodo,
+    serviceTodo,
 };

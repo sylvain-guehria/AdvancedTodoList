@@ -188,7 +188,7 @@ import { tasksActionsType } from "@/store/modules/todos";
 import { tasksMutationType } from "@/store/modules/todos";
 import { todoEnum } from "@/modules/todos/shared/enumTodo";
 import { helperTodo } from "@/modules/todos/shared/todoHelper";
-import { preActionsTodo } from "@/services";
+import { serviceTodo } from "@/services";
 
 //subtasks
 import { helperSubtask } from "@/modules/subtasks/shared/subtaskHelper";
@@ -241,11 +241,8 @@ export default {
         value = null;
       }
 
-      this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
-        todoKey,
-        attribute,
-        value,
-      });
+      serviceTodo.editTodo(todoKey, attribute, value);
+      
       this.updatePaginationList(todoKey, attribute, value);
     },
     updatePaginationList(todoKey: string, attribute: string, value: string) {
@@ -332,47 +329,23 @@ export default {
     },
     deleteTodo(key: string, order: number): void {
       let vm = this;
-      this.$store
-        .dispatch(tasksActionsType.DELETETODO, key)
-        .then(() => {
-          this.$toasted.show("Task deleted, it is no longer in your list", {
-            icon: "delete_outline",
-            theme: "bubble",
-            position: "bottom-right",
-            duration: 5000,
-          });
-        })
-        .catch((error: Error) => {
-          this.$toasted.show("Cannot deleted Task", {
-            icon: "error_outline",
-            theme: "bubble",
-            position: "bottom-right",
-            duration: 5000,
-          });
-        });
+      serviceTodo.deleteTodo(key);
       //down order poof todos with order > to the one deleted
       this.paginatedTodos.forEach(function (todo) {
         if (todo.order > order) {
           vm.downOrderNoCOndition(todo.key);
         }
       });
-
       var index = this.paginatedTodos.findIndex(function (o) {
         return o.key === key;
       });
       if (index !== -1) this.paginatedTodos.splice(index, 1);
     },
     downOrderNoCOndition(key: string) {
-      this.$store.dispatch("setOrderDownTodo", key);
-    },
-    editTodo(key: string): void {
-      this.$emit("editTaskEvent", { key: key });
+      serviceTodo.downOrderNoCOndition(key);
     },
     setTodoDone(item: Todo): void {
-      this.$store.dispatch(tasksActionsType.SETTODOSTATE, {
-        key: item.key,
-        isDone: item.isdone,
-      });
+      serviceTodo.setTodoDone(item);
     },
     onPagination(data) {
       this.paginatedTodos = data;
@@ -397,24 +370,7 @@ export default {
         subtasks: [],
       };
 
-      this.$store
-        .dispatch(tasksActionsType.CREATETODO, emptyTodo)
-        .then(() => {
-          this.$toasted.show("Task added, it is now in your list", {
-            icon: "create",
-            theme: "bubble",
-            position: "bottom-right",
-            duration: 5000,
-          });
-        })
-        .catch((error: Error) => {
-          this.$toasted.show("Cannot create task", {
-            icon: "error_outline",
-            theme: "bubble",
-            position: "bottom-right",
-            duration: 5000,
-          });
-        });
+      serviceTodo.addTask(emptyTodo);
 
       if (this.paginatedTodos && this.paginatedTodos.length > 0) {
         this.paginatedTodos.unshift(emptyTodo);
@@ -463,8 +419,8 @@ export default {
       dateOfTask: helperTodo.dateOfTask,
       bulletClass : helperTodo.bulletClass,
       getNumberSubtaskInTask: helperTodo.getNumberSubtaskInTask,
-      orderUp: preActionsTodo.orderUp,
-      orderDown: preActionsTodo.orderDown,
+      orderUp: serviceTodo.orderUp,
+      orderDown: serviceTodo.orderDown,
       getNumberSubTaskActive: helperSubtask.getNumberSubTaskActive,
     };
   },

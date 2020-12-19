@@ -1,11 +1,14 @@
 import lodash from "lodash";
 
 import store from '@/store/index'
+import Vue from 'vue';
+
 import { Todo } from '@/common/models/types';
+import { tasksActionsType } from "@/store/modules/todos";
 
 
-export const preActionsTodo = {
- 
+export const serviceTodo = {
+
   orderUp(item: Todo): void {
     let todolist = store.getters.getTodoList;
 
@@ -63,5 +66,61 @@ export const preActionsTodo = {
 
     this.$store.dispatch("setOrderUpTodo", keyItemToUpOrder);
     this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
+  },
+  addTask(task: Todo) {
+    store
+      .dispatch(tasksActionsType.CREATETODO, task)
+      .then(() => {
+        Vue.toasted.show("Task added, it is now in your list", {
+          icon: "create",
+          theme: "bubble",
+          position: "bottom-right",
+          duration: 5000,
+        });
+      })
+      .catch((error: Error) => {
+        Vue.toasted.show("Cannot create task", {
+          icon: "error_outline",
+          theme: "bubble",
+          position: "bottom-right",
+          duration: 5000,
+        });
+      });
+  },
+  deleteTodo(key: string): void {
+    store
+      .dispatch(tasksActionsType.DELETETODO, key)
+      .then(() => {
+        this.$toasted.show("Task deleted, it is no longer in your list", {
+          icon: "delete_outline",
+          theme: "bubble",
+          position: "bottom-right",
+          duration: 5000,
+        });
+      })
+      .catch((error: Error) => {
+        this.$toasted.show("Cannot deleted Task", {
+          icon: "error_outline",
+          theme: "bubble",
+          position: "bottom-right",
+          duration: 5000,
+        });
+      });
+  },
+  editTodo(todoKey: string, attribute: string, value) {
+    store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
+      todoKey,
+      attribute,
+      value,
+    });
+  },
+  setTodoDone(item: Todo): void {
+    store.dispatch(tasksActionsType.SETTODOSTATE, {
+      key: item.key,
+      isDone: item.isdone,
+    });
+  },
+  downOrderNoCOndition(key: string) {
+    store.dispatch("setOrderDownTodo", key);
   },
 };
