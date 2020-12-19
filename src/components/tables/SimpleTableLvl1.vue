@@ -200,8 +200,8 @@ import InputContenteditable from "@/common/componentslib/input-contenteditable/i
 import lodash from "lodash";
 
 // Subtasks
-import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
-import { MutationTypes as subtasksMutationType } from "@/store/modules/subtasks/mutations";
+import { subtasksActionsType } from "@/store/modules/subtasks";
+import { subtasksMutationType } from "@/store/modules/subtasks";
 import { sortSubtasksBy } from "@/modules/subtasks/shared/sortSubtasks";
 import { subtaskEnum } from "@/modules/subtasks/shared/enumSubtask";
 import { helperSubtask } from "@/modules/subtasks/shared/subtaskHelper";

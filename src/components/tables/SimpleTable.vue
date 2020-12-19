@@ -19,11 +19,7 @@
         slot-scope="{ item, index }"
         :class="index % 2 !== 0 ? 'other-color-row' : ''"
       >
-        <md-table-cell
-          md-sort-by="order"
-          class="column-50"
-          v-if="getSettings('order')"
-        >
+        <md-table-cell md-sort-by="order" class="column-50" v-if="getSettings('order')">
           <div class="flex">
             <div class="hover-click">
               <feather
@@ -33,8 +29,9 @@
                 v-longclick="() => orderDown(item)"
               ></feather>
             </div>
-            <div>{{ item.order }}
-               <md-tooltip md-direction="top">Order</md-tooltip>
+            <div>
+              {{ item.order }}
+              <md-tooltip md-direction="top">Order</md-tooltip>
             </div>
             <div class="hover-click">
               <feather
@@ -47,7 +44,12 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')" class="padding-left">
+        <md-table-cell
+          md-sort-by="task"
+          md-label="Task Title"
+          v-if="getSettings('task')"
+          class="padding-left"
+        >
           <div class="flex">
             <div class="plus-minus hover-click">
               <feather
@@ -93,7 +95,6 @@
           <div class="hover-click">
             <date-picker :item="item" @emitDate="editDateTask" :key="item.key" />
           </div>
-
         </md-table-cell>
 
         <md-table-cell
@@ -153,21 +154,20 @@
       </md-table-row>
     </md-table>
     <table-pagination
-      :data="todos"
+      :data="todolist"
       @pagination="onPagination($event)"
       :serverSide="false"
     ></table-pagination>
 
-    
-      <!-- CONFIRM DELET DIALOG -->
-      <confirm-dialog
-        :confirmDialog="deleteDialog"
-        title="Delete task?"
-        :subtitle="currentTitle"
-        content="You cannot go back if you press 'Yes'"
-        @closeConfirmDialog="onCancelDialogDelete"
-        @confirmDialog="onConfirmDialogDelete"
-      />
+    <!-- CONFIRM DELET DIALOG -->
+    <confirm-dialog
+      :confirmDialog="deleteDialog"
+      title="Delete task?"
+      :subtitle="currentTitle"
+      content="You cannot go back if you press 'Yes'"
+      @closeConfirmDialog="onCancelDialogDelete"
+      @confirmDialog="onConfirmDialogDelete"
+    />
   </div>
 </template>
 
@@ -181,13 +181,17 @@ import { BusEventEnum } from "@/common/models/enums/enum";
 import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
 import ConfirmDialogCustom from "@/common/componentslib/ConfimDialogCustom.vue";
 import DatePickerCustom from "@/common/componentslib/DatePickerCustom.vue";
+import { helperFunctions } from "@/common/helpers/helperfunction";
 
-//task
-import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
-import { MutationTypes as tasksMutationType } from "@/store/modules/todos/mutations";
+//tasks
+import { tasksActionsType } from "@/store/modules/todos";
+import { tasksMutationType } from "@/store/modules/todos";
 import { todoEnum } from "@/modules/todos/shared/enumTodo";
 import { helperTodo } from "@/modules/todos/shared/todoHelper";
+import { preActionsTodo } from "@/services";
 
+//subtasks
+import { helperSubtask } from "@/modules/subtasks/shared/subtaskHelper";
 
 export default {
   name: "simple-table",
@@ -228,12 +232,14 @@ export default {
       this.deleteTodo(this.currentKey, this.currentOrder);
       this.deleteDialog = false;
     },
-    editDateTask({item, noDeadline}: {item: Todo, noDeadline: boolean}) {
+    editDateTask({ item, noDeadline }: { item: Todo; noDeadline: boolean }) {
       let value = item.deadline;
       let todoKey = item.key;
       let attribute = todoEnum.DEADLINE;
 
-      if(noDeadline){ value = null }
+      if (noDeadline) {
+        value = null;
+      }
 
       this.$store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
         todoKey,
@@ -307,83 +313,22 @@ export default {
 
       this.$store.commit("setDrawersSettings", this.drawersOpenedArray);
     },
-     getSettings(columnLabel: string) {
-    let settings: Settings = this.$store.getters.getSettings;
-    if (!settings || !settings.hidden_column) {
-      return true;
-    }
-    let colums = settings.hidden_column;
-    let colum: boolean = true;
-
-    if (colums) {
-      colum = colums[columnLabel];
-    }
-    if(colum != null) { 
-      return colum;
-    }else{
-      return true
-    }
-  },
-    orderUp(item: Todo): void {
-      let max_order_todo: Todo = lodash.maxBy(this.paginatedTodos, "order");
-
-      if (max_order_todo && item && max_order_todo.order === item.order) {
-        return;
+    getSettings(columnLabel: string) {
+      let settings: Settings = this.$store.getters.getSettings;
+      if (!settings || !settings.hidden_column) {
+        return true;
       }
+      let colums = settings.hidden_column;
+      let colum: boolean = true;
 
-      let max_order = max_order_todo ? max_order_todo.order : 0;
-      let keyItemToUpOrder = item.key;
-
-      if (!item.order) {
-        //varibale name here are just to use action and mutaion with same variable name
-        max_order = max_order + 1;
-        this.$store.dispatch("setOrder", { keyItemToUpOrder, max_order });
-        return;
+      if (colums) {
+        colum = colums[columnLabel];
       }
-
-      let todo_with_order_to_down = lodash.find(this.todolist, function (o) {
-        return o.order === item.order + 1;
-      });
-
-      if (!todo_with_order_to_down) {
-        max_order = item.order + 1;
-        this.$store.dispatch("setOrder", { keyItemToUpOrder, max_order });
-        return;
+      if (colum != null) {
+        return colum;
+      } else {
+        return true;
       }
-
-      let keytodoOrderDown = todo_with_order_to_down.key;
-
-      this.$store.dispatch("setOrderUpTodo", keyItemToUpOrder);
-      this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
-    },
-    orderDown(item: Todo): void {
-      if (item.order && item.order <= 1) {
-        return;
-      }
-      let min_order_todo = lodash.minBy(this.todolist, "order");
-      let min_order = min_order_todo ? min_order_todo.order : 0;
-      let todo_with_order_to_up = lodash.find(this.todolist, function (o) {
-        return o.order === item.order - 1;
-      });
-
-      if (!todo_with_order_to_up) {
-        //varibale name here are just to use action and mutaion with same variable name
-        let max_order = item.order - 1;
-        let keyItemToUpOrder = item.key;
-        this.$store.dispatch("setOrder", { keyItemToUpOrder, max_order });
-        return;
-      }
-
-      let keytodoOrderDown = item.key;
-      let keyItemToUpOrder = todo_with_order_to_up.key;
-
-      this.$store.dispatch("setOrderUpTodo", keyItemToUpOrder);
-      this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
-    },
-    getNumberSubTaskActive(item): number {
-      return item.subtasks && item.subtasks.length > 0
-        ? item.subtasks.filter((subtask) => !subtask.isdone).length
-        : 0;
     },
     deleteTodo(key: string, order: number): void {
       let vm = this;
@@ -491,8 +436,7 @@ export default {
     },
   },
   created() {
-    this.todos = this.todolist;
-    this.paginatedTodos = [...this.todos];
+    this.paginatedTodos = [...this.todolist];
 
     this.updateFinishTime();
 
@@ -506,11 +450,9 @@ export default {
   data() {
     return {
       selected: [],
-      todos: [],
       paginatedTodos: [],
-      getdaysleft: helperTodo.getdaysleft,
-      dateOfTask: helperTodo.dateOfTask,
-      giveColorTodo: helperTodo.giveColorTodo,
+      deleteDialog: false,
+      currentTitle: "",
       item: {},
       drawersOpenedArray: [],
       placeholder: "type your title",
@@ -522,9 +464,13 @@ export default {
       modal: false,
       currentKey: "",
       currentOrder: null,
+      getdaysleft: helperTodo.getdaysleft,
+      dateOfTask: helperTodo.dateOfTask,
+      giveColorTodo: helperTodo.giveColorTodo,
       getNumberSubtaskInTask: helperTodo.getNumberSubtaskInTask,
-      deleteDialog: false,
-      currentTitle: ''
+      orderUp: preActionsTodo.orderUp,
+      orderDown: preActionsTodo.orderDown,
+      getNumberSubTaskActive: helperSubtask.getNumberSubTaskActive,
     };
   },
 };
@@ -565,8 +511,7 @@ p {
   word-break: break-all;
 }
 
-.padding-left{
+.padding-left {
   padding-left: 7px;
 }
-
 </style>

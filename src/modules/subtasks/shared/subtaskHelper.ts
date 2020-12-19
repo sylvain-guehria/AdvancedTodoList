@@ -1,4 +1,3 @@
-import moment from 'moment';
 import store from '@/store/index'
 
 export const helperSubtask = {
@@ -48,4 +47,9 @@ export const helperSubtask = {
       return 0;
     }
   },
+  getNumberSubTaskActive(item): number {
+    return item.subtasks && item.subtasks.length > 0
+      ? item.subtasks.filter((subtask) => !subtask.isdone).length
+      : 0;
+  }
 };
