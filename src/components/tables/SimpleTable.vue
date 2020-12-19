@@ -47,7 +47,7 @@
           </div>
         </md-table-cell>
 
-        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')">
+        <md-table-cell md-sort-by="task" md-label="Task Title" v-if="getSettings('task')" class="padding-left">
           <div class="flex">
             <div class="plus-minus hover-click">
               <feather
@@ -173,7 +173,6 @@
 
 <script lang="ts">
 import TablePaginationVue from "./TablePagination.vue";
-import { myFunctions } from "@/common/helpers/helperfunction";
 import { Todo, HTMLElementEvent, Drawer, Settings } from "@/common/models/types/index";
 import lodash from "lodash";
 import SimpleTableLvl1 from "./SimpleTableLvl1.vue";
@@ -187,6 +186,8 @@ import DatePickerCustom from "@/common/componentslib/DatePickerCustom.vue";
 import { ActionTypes as tasksActionsType } from "@/store/modules/todos/actions";
 import { MutationTypes as tasksMutationType } from "@/store/modules/todos/mutations";
 import { todoEnum } from "@/modules/todos/shared/enumTodo";
+import { helperTodo } from "@/modules/todos/shared/todoHelper";
+
 
 export default {
   name: "simple-table",
@@ -507,9 +508,9 @@ export default {
       selected: [],
       todos: [],
       paginatedTodos: [],
-      getdaysleft: myFunctions.getdaysleft,
-      dateOfTask: myFunctions.dateOfTask,
-      giveColorTodo: myFunctions.giveColorTodo,
+      getdaysleft: helperTodo.getdaysleft,
+      dateOfTask: helperTodo.dateOfTask,
+      giveColorTodo: helperTodo.giveColorTodo,
       item: {},
       drawersOpenedArray: [],
       placeholder: "type your title",
@@ -521,7 +522,7 @@ export default {
       modal: false,
       currentKey: "",
       currentOrder: null,
-      getNumberSubtaskInTask: myFunctions.getNumberSubtaskInTask,
+      getNumberSubtaskInTask: helperTodo.getNumberSubtaskInTask,
       deleteDialog: false,
       currentTitle: ''
     };
@@ -562,6 +563,10 @@ p {
 
 .break-word {
   word-break: break-all;
+}
+
+.padding-left{
+  padding-left: 7px;
 }
 
 </style>

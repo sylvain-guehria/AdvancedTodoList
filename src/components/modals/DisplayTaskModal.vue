@@ -66,7 +66,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import { Calendar, Weekday } from "dayspan";
 import DayBlock from "./DayBlock.vue";
 import moment from "moment";
-import { myFunctions } from "@/common/helpers/helperfunction";
+import { helperTodo } from "@/modules/todos/shared/todoHelper";
 import { bus } from "@/main";
 import vueCustomScrollbar from "vue-custom-scrollbar";
 import "vue-custom-scrollbar/dist/vueScrollbar.css";
@@ -87,7 +87,7 @@ export default class PCalendarEvent extends Vue {
   @Prop() event!: any;
   isForm1Active: boolean = false;
   dialog: boolean = false;
-  giveColorTodo = myFunctions.giveColorTodo;
+  giveColorTodo = helperTodo.giveColorTodo;
 
   settings = {
     suppressScrollY: false,

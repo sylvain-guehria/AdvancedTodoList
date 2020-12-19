@@ -194,20 +194,21 @@
 <script lang="ts">
 import { SubTask, Todo, HTMLElementEvent, Settings } from "@/common/models/types/index";
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
-import { myFunctions } from "@/common/helpers/helperfunction";
 import ConfirmDialogCustom from "@/common/componentslib/ConfimDialogCustom.vue";
 import DatePickerCustom from "@/common/componentslib/DatePickerCustom.vue";
+import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
+import lodash from "lodash";
 
 // Subtasks
 import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
 import { MutationTypes as subtasksMutationType } from "@/store/modules/subtasks/mutations";
 import { sortSubtasksBy } from "@/modules/subtasks/shared/sortSubtasks";
 import { subtaskEnum } from "@/modules/subtasks/shared/enumSubtask";
+import { helperSubtask } from "@/modules/subtasks/shared/subtaskHelper";
+
 
 import SimpleTableLvl2 from "./SimpleTableLvl2.vue";
 
-import lodash from "lodash";
-import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
 
 @Component({
   components: {
@@ -225,7 +226,7 @@ export default class SimpleTableLvl1 extends Vue {
   numberInput: number = 0;
   noDeadLine: boolean = false;
   currentKey: string = "";
-  dateOfSubTask = myFunctions.dateOfSubTask;
+  dateOfSubTask = helperSubtask.dateOfSubTask;
   date: string = "";
   currentSubtaskKeyEdited: string = "";
   currentAttributeEdited: string = "";
@@ -236,7 +237,7 @@ export default class SimpleTableLvl1 extends Vue {
   currentSorting: string = "";
   currentAsc: string = "desc";
 
-  getNumberDetailInSubtask = myFunctions.getNumberDetailInSubtask;
+  getNumberDetailInSubtask = helperSubtask.getNumberDetailInSubtask;
   sortSubtasksBy = sortSubtasksBy;
 
   mounted() {

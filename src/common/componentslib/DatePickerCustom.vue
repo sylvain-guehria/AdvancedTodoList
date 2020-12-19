@@ -45,7 +45,7 @@
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import { Todo } from "../models/types";
-import { myFunctions } from "@/common/helpers/helperfunction";
+import { helperFunctions } from "@/common/helpers/helperfunction";
 
 @Component({
   components: {},
@@ -54,7 +54,7 @@ export default class DatePickerCustom extends Vue {
   @Prop() item;
   noDeadline: boolean = false;
   dialog: boolean = false;
-  //dateOfTask = myFunctions.dateOfTask;
+  //dateOfTask = helperFunctions.dateOfTask;
 
   localItem = {
     deadline: null,

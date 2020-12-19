@@ -15,7 +15,7 @@ import { Calendar, Weekday } from "dayspan";
 import DayBlock from "./DayBlock.vue";
 import moment from "moment";
 import Modal from "@/common/componentslib/Modal.vue";
-import { myFunctions } from "@/common/helpers/helperfunction";
+import { helperFunctions } from "@/common/helpers/helperfunction";
 import { bus } from "@/main";
 import DisplayTaskModal from "@/components/modals/DisplayTaskModal.vue";
 import { Todo } from "@/common/models/types/index";
