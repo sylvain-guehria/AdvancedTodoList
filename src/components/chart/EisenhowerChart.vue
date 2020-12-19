@@ -13,7 +13,7 @@
 <script lang="ts">
 import { Todo } from "@/common/models/types/index";
 import { Component, Vue, Prop, PropSync } from "vue-property-decorator";
-import { myFunctions } from "@/common/helpers/helperfunction";
+import { helperTodo } from "@/modules/todos/shared/todoHelper";
 
 @Component({
   components: {},
@@ -26,7 +26,7 @@ export default class EisenhowerChart extends Vue {
   todoBluelist: Todo[] = [];
   todoGreenlist: Todo[] = [];
 
-  getNumberdaysleft = myFunctions.getNumberdaysleft;
+  getNumberdaysleft = helperTodo.getNumberdaysleft;
 
   created() {
     this.todolist = [...this.$store.getters.getTodoList];
@@ -52,22 +52,22 @@ export default class EisenhowerChart extends Vue {
   fillUpColoredTodoList(): void {
     this.todoRedlist = this.todolist.filter(
       (todo) =>
-        myFunctions.getNumberdaysleft(todo.deadline) < 2 && todo.importance >= 50
+        helperTodo.getNumberdaysleft(todo.deadline) < 2 && todo.importance >= 50
     );
 
     this.todoOrangelist = this.todolist.filter(
       (todo) =>
-        myFunctions.getNumberdaysleft(todo.deadline) >= 2 && todo.importance >= 50
+        helperTodo.getNumberdaysleft(todo.deadline) >= 2 && todo.importance >= 50
     );
 
     this.todoBluelist = this.todolist.filter(
       (todo) =>
-        myFunctions.getNumberdaysleft(todo.deadline) < 2 && todo.importance < 50
+        helperTodo.getNumberdaysleft(todo.deadline) < 2 && todo.importance < 50
     );
 
     this.todoGreenlist = this.todolist.filter(
       (todo) =>
-        myFunctions.getNumberdaysleft(todo.deadline) >= 2 && todo.importance < 50
+        helperTodo.getNumberdaysleft(todo.deadline) >= 2 && todo.importance < 50
     );
   }
 

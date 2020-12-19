@@ -29,7 +29,7 @@
         <div class="list-item-text">
           {{ event.isdone ? "finished" : "In progress" }}
         </div>
-        <div class="bullet" :class="bulletClass()"></div>
+        <div class="bullet" :class="bulletClass(event)"></div>
       </div>
     </div>
 
@@ -58,7 +58,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import { Calendar, Weekday } from "dayspan";
 import DayBlock from "./DayBlock.vue";
 import moment from "moment";
-import { myFunctions } from "@/common/helpers/helperfunction";
+import { helperTodo } from "@/modules/todos/shared/todoHelper";
 import { bus } from "@/main";
 import vueCustomScrollbar from "vue-custom-scrollbar";
 import "vue-custom-scrollbar/dist/vueScrollbar.css";
@@ -70,16 +70,7 @@ import FilterTab from "@/common/componentslib/FilterTab.vue";
 })
 export default class MetaDataTodo extends Vue {
   @Prop() event!: any;
- giveColorTodo = myFunctions.giveColorTodo;
- numberdaysleft = myFunctions.getdaysleft;
-
-  bulletClass() {
-    const index = this.giveColorTodo(this.event);
-    const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
-    return classes[index];
-  }
-
-
+ bulletClass = helperTodo.bulletClass;
 }
 </script>
 

@@ -50,8 +50,8 @@ import { SubTask, Todo, HTMLElementEvent, Detail } from "@/common/models/types/i
 import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 
 // Subtasks
-import { ActionTypes as subtasksActionsType } from "@/store/modules/subtasks/actions";
-import { MutationTypes as subtasksMutationType } from "@/store/modules/subtasks/mutations";
+import { subtasksActionsType } from "@/store/modules/subtasks";
+import { subtasksMutationType } from "@/store/modules/subtasks";
 
 import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
 import { DetailEnum } from "@/common/models/enums/enum";

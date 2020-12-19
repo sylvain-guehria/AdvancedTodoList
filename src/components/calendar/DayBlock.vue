@@ -56,7 +56,7 @@ import { CalendarDay, Calendar, CalendarEvent, Functions as fn } from "dayspan";
 import PCalendarEvent from "./PCalendarEvent.vue";
 import Modal from "@/common/componentslib/Modal.vue";
 import { Todo } from "@/common/models/types/index";
-import { myFunctions } from "@/common/helpers/helperfunction";
+import { helperTodo } from "@/modules/todos/shared/todoHelper";
 
 @Component({
   components: {
@@ -78,7 +78,7 @@ export default class DayBlock extends Vue {
     month: "MM",
     year: "YYYY"
   };
-  getdaysleft = myFunctions.getdaysleft;
+  getdaysleft = helperTodo.getdaysleft;
 
   created() {
     this.todolist = [...this.$store.getters.getTodoList];
