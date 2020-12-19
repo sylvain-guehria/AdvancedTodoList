@@ -377,11 +377,6 @@ export default {
     onPagination(data) {
       this.paginatedTodos = data;
     },
-    bulletClass(item) {
-      const index = this.giveColorTodo(item);
-      const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
-      return classes[index];
-    },
     addEmptyTask() {
       let higher_order: number;
       let todo_with_max_order: Todo;
@@ -466,7 +461,7 @@ export default {
       currentOrder: null,
       getdaysleft: helperTodo.getdaysleft,
       dateOfTask: helperTodo.dateOfTask,
-      giveColorTodo: helperTodo.giveColorTodo,
+      bulletClass : helperTodo.bulletClass,
       getNumberSubtaskInTask: helperTodo.getNumberSubtaskInTask,
       orderUp: preActionsTodo.orderUp,
       orderDown: preActionsTodo.orderDown,

@@ -32,26 +32,32 @@ export const helperTodo = {
       return store.getters.getTodoList[index].deadline;
     }
   },
-  giveColorTodo(item): number {
-    if (item && item.importance) {
+  giveColorTodo(todo): number {
+    if (todo && todo.importance) {
       // red Task : importance >= 75
-      if (item.importance >= 75) {
+      if (todo.importance >= 75) {
         return 1;
       }
       // orange/jaune tasks : 50 >= importance > 75
-      if (50 <= item.importance && item.importance < 75) {
+      if (50 <= todo.importance && todo.importance < 75) {
         return 2;
       }
       // blue task : 25 >= importance > 50
-      if (25 <= item.importance && item.importance < 50) {
+      if (25 <= todo.importance && todo.importance < 50) {
         return 3;
       }
       // green  task : 0 >= importance > 25
-      if (0 <= item.importance && item.importance < 25) {
+      if (0 <= todo.importance && todo.importance < 25) {
         return 0;
       }
     }
     return 5;
+  },
+  bulletClass(todo: Todo): string {
+    const index = helperTodo.giveColorTodo(todo);
+
+    const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5", "bullet6"];
+    return classes[index];
   },
   getNumberSubtaskInTask(todoKey) {
     if(!store.getters.getTodoList){return}

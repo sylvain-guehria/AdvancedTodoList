@@ -29,7 +29,7 @@
         <div class="list-item-text">
           {{ event.isdone ? "finished" : "In progress" }}
         </div>
-        <div class="bullet" :class="bulletClass()"></div>
+        <div class="bullet" :class="bulletClass(event)"></div>
       </div>
     </div>
 
@@ -70,16 +70,7 @@ import FilterTab from "@/common/componentslib/FilterTab.vue";
 })
 export default class MetaDataTodo extends Vue {
   @Prop() event!: any;
- giveColorTodo = helperTodo.giveColorTodo;
- numberdaysleft = helperTodo.getdaysleft;
-
-  bulletClass() {
-    const index = this.giveColorTodo(this.event);
-    const classes = ["bullet1", "bullet2", "bullet3", "bullet4", "bullet5"];
-    return classes[index];
-  }
-
-
+ bulletClass = helperTodo.bulletClass;
 }
 </script>
 
