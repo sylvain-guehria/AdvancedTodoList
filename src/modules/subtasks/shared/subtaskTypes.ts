@@ -3,7 +3,7 @@ import { Detail } from '@/common/models/types/index'
 export interface SubTask {
   key?: string;
   label?: string;
-  isdone: boolean;
+  isdone?: boolean;
   order?: number;
   details?: Detail[]
   deadline?: string,

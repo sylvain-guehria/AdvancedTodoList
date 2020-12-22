@@ -363,7 +363,6 @@ export default {
       }
 
       let emptyTodo: Todo = {
-        task: `your Task N°${higher_order}`,
         isdone: false,
         creationDate: new Date().toISOString().substr(0, 10),
         order: higher_order,

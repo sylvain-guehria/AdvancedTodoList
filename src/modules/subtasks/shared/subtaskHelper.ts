@@ -24,6 +24,7 @@ export const helperSubtask = {
     }
   },
   getNumberDetailInSubtask(todoKey, SubtasKey) {
+
     if(!store.getters.getTodoList){return}
     var index = store.getters.getTodoList.findIndex(function (o) {
       return o.key === todoKey;
@@ -41,7 +42,7 @@ export const helperSubtask = {
         store.getters.getTodoList[index].subtasks[index_child] &&
         store.getters.getTodoList[index].subtasks[index_child].details
       ) {
-        return store.getters.getTodoList[index].subtasks[index_child].length;
+        return store.getters.getTodoList[index].subtasks[index_child].details.length;
       }
     } else {
       return 0;

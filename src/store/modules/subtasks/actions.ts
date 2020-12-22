@@ -4,6 +4,7 @@ import { SubTasks, SubTask, Detail } from "@/common/models/types/index";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index';
+import { MutationTypes as TodoMutationTypes } from "@/store/modules/todos/mutations";
 
 export enum ActionTypes {
   CREATESUBTASK = "createSubtask",
@@ -23,23 +24,22 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   // CREATE SUBTASK
   async [ActionTypes.CREATESUBTASK](context, subtask: SubTask): Promise<void> {
 
-    let motherkey = subtask.motherKey;
+    let motherKey = subtask.motherKey;
     delete subtask.motherKey;
 
     Object.keys(subtask).forEach((key) => (subtask[key] == null) && delete subtask[key]);
 
     const { uid } = store.getters.getUser.data;
 
-    var newSubtaskKey = database.ref().child(`todos/${uid}/${motherkey}/subtasks`).push().key || 'key';
-    if (!newSubtaskKey || !motherkey) { return }
+    var newSubtaskKey = database.ref().child(`todos/${uid}/${motherKey}/subtasks`).push().key || 'key';
+    if (!newSubtaskKey || !motherKey) { return }
 
     subtask.key = newSubtaskKey;
 
-    await database.ref(`todos/${uid}/${motherkey}/subtasks/${newSubtaskKey}`).set({
+    await database.ref(`todos/${uid}/${motherKey}/subtasks/${newSubtaskKey}`).set({
       ...subtask
     }).then(result => {
-      subtask.motherKey = motherkey;
-      context.commit(MutationTypes.addNewSubtaskTodo, subtask);
+      context.commit(MutationTypes.addNewSubtaskTodo, { subtask , motherKey});
     }).catch((err) => {
       // eslint-disable-next-line no-console
       console.log(err);
@@ -143,11 +143,12 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     detail.key = newDetailKey;
 
+    Object.keys(detail).forEach((key) => (detail[key] == null) && delete detail[key]);
+
     await database.ref(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}/details/${newDetailKey}`).set({
-      isdone: detail.isdone,
-      label: detail.label,
-      key: newDetailKey
+      ...detail
     });
     context.commit(MutationTypes.ADDSUBTASKDETAIL, { todoKey, subtaskKey, detail });
+    context.commit(TodoMutationTypes.SETCURRENTDETAIL, detail );
   },
 };

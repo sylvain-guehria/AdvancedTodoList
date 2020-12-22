@@ -6,8 +6,8 @@ export interface Drawer {
 
 export interface Detail {
   key?: string;
-  label: string;
-  isdone: boolean;
+  label?: string;
+  isdone?: boolean;
 }
 
 export type HTMLElementEvent<T extends HTMLElement> = Event & {

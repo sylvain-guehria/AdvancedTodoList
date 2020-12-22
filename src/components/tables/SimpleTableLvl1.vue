@@ -88,15 +88,16 @@
                 hide-details
               />
             </div>
-            <div class="label-content">
+            <div class="label-content"> 
               <input-contenteditable
+               :focusOnCreate="true"
                 v-model="subtask.label"
                 :class="subtask.isdone ? 'done' : ''"
                 class="break-word"
                 _is="p"
                 :maxlength="250"
                 type="text"
-                placeholder="label"
+                placeholder="Subtask"
                 @giveTodoKey="setCurrentSubtaskEdited_key_attribue(subtask.key, 'label')"
                 @keydown.enter="onPressEnterOrBlur"
                 @blur="onPressEnterOrBlur"
@@ -106,9 +107,11 @@
 
           <div class="details" :class="maintable ? 'details-maintable': ''">
             <simple-table-lvl2
+              :focusOnCreate="true"
               :subtask="subtask"
               :motherKey="item.key"
-              :key="getNumberDetailInSubtask(item.key, subtask.key)"
+              :key="getCustomKey(item.key, subtask.key)"
+              @keyLvl2Incr="keyLvl2Incr"
             />
           </div>
         </md-table-cell>
@@ -236,9 +239,18 @@ export default class SimpleTableLvl1 extends Vue {
 
   currentSorting: string = "";
   currentAsc: string = "desc";
+  keyLvl2: number = 1;
 
   getNumberDetailInSubtask = helperSubtask.getNumberDetailInSubtask;
   sortSubtasksBy = sortSubtasksBy;
+
+  getCustomKey(itemKey, subtaskKey){
+    return this.getNumberDetailInSubtask(itemKey, subtaskKey) + this.keyLvl2;
+  }
+
+  keyLvl2Incr(){
+    this.keyLvl2 += 1;
+  }
 
   mounted() {
     if (this.item) {
@@ -339,7 +351,6 @@ export default class SimpleTableLvl1 extends Vue {
     }
 
     let emptySubTask: SubTask = {
-      label: `SubtaskTask N°${higher_order}`,
       isdone: false,
       creationDate: new Date().toISOString().substr(0, 10),
       order: higher_order,

@@ -91,7 +91,7 @@ export const serviceTodo = {
     store
       .dispatch(tasksActionsType.DELETETODO, key)
       .then(() => {
-        this.$toasted.show("Task deleted, it is no longer in your list", {
+        Vue.toasted.show("Task deleted, it is no longer in your list", {
           icon: "delete_outline",
           theme: "bubble",
           position: "bottom-right",
@@ -99,7 +99,7 @@ export const serviceTodo = {
         });
       })
       .catch((error: Error) => {
-        this.$toasted.show("Cannot deleted Task", {
+        Vue.toasted.show("Cannot deleted Task", {
           icon: "error_outline",
           theme: "bubble",
           position: "bottom-right",
