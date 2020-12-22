@@ -131,7 +131,7 @@ export default {
     },
     showDrawerEditTask(payload): void {
       if (payload) {
-        this.$store.commit("setCurrentTodo", payload.key);
+        this.$store.commit("setCurrentTodoKey", payload.key);
         this.showAddTask = true;
       }
     },

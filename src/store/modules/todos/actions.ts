@@ -38,6 +38,7 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
 
     payload.key = newTodoKey;
     context.commit(MutationTypes.ADDNEWTODO, payload);
+    context.commit(MutationTypes.SETCURRENTTODO, payload);
   },
   //EDIT TODO
   async [ActionTypes.EDITTODO](context, payload: Todo): Promise<void> {

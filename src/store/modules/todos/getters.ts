@@ -18,9 +18,6 @@ export const gettersTodos : GetterTree<Todos, RootState> = {
   getActiveTodoList: (state: Todos) => {
     return state.todolist.filter(todo => !todo.isdone);
   },
-  getCurrentTodo: (state: Todos) => {
-    return state.currentTodo;
-  },
   getNumberTotalTask: (state: Todos) => {
     return state.todolist.length;
   },
@@ -29,5 +26,17 @@ export const gettersTodos : GetterTree<Todos, RootState> = {
   },
   getNumberActiveTask: (state: Todos) => {
     return state.todolist.filter(todo => !todo.isdone).length;
+  },
+
+  //current TODO, SUBTASK and DETAIL
+
+  getCurrentTodo: (state: Todos) => {
+    return state.currentTodo;
+  },
+  getCurrentSubtask: (state: Todos) => {
+    return state.currentSubtask;
+  },
+  getCurrentDetail: (state: Todos) => {
+    return state.currentDetail
   },
 };

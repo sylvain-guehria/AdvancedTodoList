@@ -35,14 +35,24 @@ export default {
       type: String,
       default: "text",
     },
+    id: {
+      type: String,
+      default: ""
+    },
+    focusOnCreate: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
       lastText: this.value, //Initally set to value if exists
+      customId: ''
     };
   },
   mounted() {
     this.$refs.contenteditable.textContent = this.value;
+    if(this.focusOnCreate && !this.value ) this.focusInput();
   },
   watch: {
     value() {
@@ -54,6 +64,9 @@ export default {
     },
   },
   methods: {
+    focusInput() {
+      this.$refs.contenteditable.focus();
+    },
     blur(e) {
       this.$emit("giveTodoKey");
       this.$emit("blur",e);

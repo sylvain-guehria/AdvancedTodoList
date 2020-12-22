@@ -1,5 +1,5 @@
 import { MutationTree } from "vuex";
-import { Todos, Todo } from "@/common/models/types/index";
+import { Todos, Todo, SubTask, Detail } from "@/common/models/types/index";
 import store from '@/store/index';
 
 export enum MutationTypes {
@@ -7,7 +7,6 @@ export enum MutationTypes {
     INCRENDALLLISTNUMBER = "incRendAllListNumber",
     SETTODOLIST = "setTodoList",
     SETFILTEREDTODOLIST = "setFilteredTodoList",
-    SETCURRENTTODO = "setCurrentTodo",
     RESETCURRENTTODO = "resetCurrentTodo",
     ADDNEWTODO = "addNewTodo",
     REMOVETODO = "removeTodo",
@@ -17,7 +16,13 @@ export enum MutationTypes {
     DOWNORDERTODO = "downOrderTodo",
     SETORDER = "setOrder",
     EDITATTRIBUTETASK = "EDITATTRIBUTETASK",
-    SETTASKSTATE = "setTaskState"
+    SETTASKSTATE = "setTaskState",
+    SETCURRENTTODOKEY = "setCurrentTodoKey",
+
+
+    SETCURRENTTODO = "setCurrentTodo",
+    SETCURRENTSUBTASK = "setCurrentSubtask",
+    SETCURRENTDETAIL = "setCurrentDetail",
 }
 
 export const mutationsTodos: MutationTree<Todos> = {
@@ -51,15 +56,6 @@ export const mutationsTodos: MutationTree<Todos> = {
             store.getters.getTodoList[index][attribute] = value;
         }
     },
-    [MutationTypes.SETCURRENTTODO](state, key: string) {
-        const todofinded = state.todolist.find(obj => {
-            return obj.key === key;
-        });
-        if (todofinded) {
-            state.currentTodo = todofinded;
-        }
-    },
-
     [MutationTypes.RESETCURRENTTODO](state) {
         state.currentTodo = {
             task: '',
@@ -106,5 +102,26 @@ export const mutationsTodos: MutationTree<Todos> = {
             return o.key === keyItemToUpOrder;
         });
         if (state.todolist[index]) { state.todolist[index].order = max_order }
+    },
+
+    [MutationTypes.SETCURRENTTODOKEY](state, key: string) {
+        const todofinded = state.todolist.find(obj => {
+            return obj.key === key;
+        });
+        if (todofinded) {
+            state.currentTodo = todofinded;
+        }
+    },
+
+    [MutationTypes.SETCURRENTTODO](state, todo: Todo) {
+        state.currentTodo = todo;
+    },
+
+    [MutationTypes.SETCURRENTSUBTASK](state, subtask: SubTask) {
+        state.currentSubtask = subtask;
+    },
+
+    [MutationTypes.SETCURRENTDETAIL](state, detail: Detail) {
+        state.currentDetail = detail;
     },
 }

@@ -4,6 +4,7 @@ import { SubTasks, SubTask, Detail } from "@/common/models/types/index";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index';
+import { MutationTypes as TodoMutationTypes } from "@/store/modules/todos/mutations";
 
 export enum ActionTypes {
   CREATESUBTASK = "createSubtask",
@@ -99,9 +100,6 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   async [ActionTypes.DELETESUBTASKDETAIL](context, { subtaskKey, taskKey, key }: { subtaskKey: string, taskKey: string, key: string }) {
     const { uid } = store.getters.getUser.data;
 
-      // eslint-disable-next-line no-console
-      console.log({ subtaskKey, taskKey, key });
-
     if (!taskKey || !subtaskKey || !key) { return }
 
     await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${key}`).remove();
@@ -145,11 +143,12 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     detail.key = newDetailKey;
 
+    Object.keys(detail).forEach((key) => (detail[key] == null) && delete detail[key]);
+
     await database.ref(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}/details/${newDetailKey}`).set({
-      isdone: detail.isdone,
-      label: detail.label,
-      key: newDetailKey
+      ...detail
     });
     context.commit(MutationTypes.ADDSUBTASKDETAIL, { todoKey, subtaskKey, detail });
+    context.commit(TodoMutationTypes.SETCURRENTDETAIL, detail );
   },
 };

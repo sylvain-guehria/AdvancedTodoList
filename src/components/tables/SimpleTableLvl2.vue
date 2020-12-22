@@ -15,6 +15,7 @@
           </div>
           <div :style="imgStyle()">
             <input-contenteditable
+             :focusOnCreate="true"
               :class="detail.isdone ? 'done' : ''"
               v-model="detail.label"
               class="break-word"
@@ -66,7 +67,6 @@ export default class SimpleTableLvl2 extends Vue {
   @Prop() subtask: SubTask;
   @Prop() motherKey: string;
   emptyDetail: Detail = {
-    label: "",
     isdone: false,
   };
   currentDetailKey: string = "";
