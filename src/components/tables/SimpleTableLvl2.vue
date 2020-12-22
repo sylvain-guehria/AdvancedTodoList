@@ -1,7 +1,7 @@
 <template>
   <md-table>
     <md-table-row v-for="(detail, index) in subtask.details" :key="index">
-      <md-table-cell v-if="detail" >
+      <md-table-cell v-if="detail">
         <div class="flex">
           <div class="checkbox">
             <v-checkbox
@@ -9,7 +9,7 @@
               class="checkme"
               height="100%"
               v-model="detail.isdone"
-              @click="onChangeCheckBox(detail.key , detail.isdone)"
+              @click="onChangeCheckBox(detail.key, detail.isdone)"
               hide-details
             />
           </div>
@@ -52,6 +52,7 @@ import { Component, Vue, Prop, PropSync, Watch } from "vue-property-decorator";
 // Subtasks
 import { subtasksActionsType } from "@/store/modules/subtasks";
 import { subtasksMutationType } from "@/store/modules/subtasks";
+import { serviceSubtask } from "@/services";
 
 import InputContenteditable from "@/common/componentslib/input-contenteditable/input-contenteditable.vue";
 import { DetailEnum } from "@/common/models/enums/enum";
@@ -101,19 +102,23 @@ export default class SimpleTableLvl2 extends Vue {
     }
 
     if (value && value !== "") {
-      this.$store.dispatch(subtasksActionsType.EDITSUBTASKDETAIL, {
-        taskKey,
-        subtaskKey,
-        attribute,
-        value,
-        key: this.currentDetailKey,
-      });
+      serviceSubtask
+        .editSubtaskDetail({
+          taskKey,
+          subtaskKey,
+          attribute,
+          value,
+          key: this.currentDetailKey,
+        })
+        .then(() => this.$emit("keyLvl2Incr"));
     } else if (value == "" || value == undefined) {
-      this.$store.dispatch(subtasksActionsType.DELETESUBTASKDETAIL, {
-        taskKey,
-        subtaskKey,
-        key: this.currentDetailKey,
-      });
+      serviceSubtask
+        .deleteSubtaskDetail({
+          taskKey,
+          subtaskKey,
+          key: this.currentDetailKey,
+        })
+        .then(() => this.$emit("keyLvl2Incr"));
     }
   }
 
@@ -123,11 +128,13 @@ export default class SimpleTableLvl2 extends Vue {
   }
 
   createSubtasksDetail() {
-    this.$store.dispatch(subtasksActionsType.ADDSUBTASKDETAIL, {
-      todoKey: this.motherKey,
-      subtaskKey: this.subtask.key,
-      detail: { ...this.emptyDetail },
-    });
+    serviceSubtask
+      .addSubtasksDetail({
+        todoKey: this.motherKey,
+        subtaskKey: this.subtask.key,
+        detail: { ...this.emptyDetail },
+      })
+      .then(() => this.$emit("keyLvl2Incr"));
   }
 
   setSubTaskDetailState(isdone: boolean) {

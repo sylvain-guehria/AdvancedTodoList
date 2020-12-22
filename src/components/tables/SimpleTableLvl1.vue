@@ -108,7 +108,8 @@
             <simple-table-lvl2
               :subtask="subtask"
               :motherKey="item.key"
-              :key="getNumberDetailInSubtask(item.key, subtask.key)"
+              :key="getCustomKey(item.key, subtask.key)"
+              @keyLvl2Incr="keyLvl2Incr"
             />
           </div>
         </md-table-cell>
@@ -236,9 +237,20 @@ export default class SimpleTableLvl1 extends Vue {
 
   currentSorting: string = "";
   currentAsc: string = "desc";
+  keyLvl2: number = 1;
 
   getNumberDetailInSubtask = helperSubtask.getNumberDetailInSubtask;
   sortSubtasksBy = sortSubtasksBy;
+
+  getCustomKey(itemKey, subtaskKey){
+    return this.getNumberDetailInSubtask(itemKey, subtaskKey) + this.keyLvl2;
+  }
+
+  keyLvl2Incr(){
+    this.keyLvl2 += 1;
+      // eslint-disable-next-line no-console
+      console.log('key incr', this.keyLvl2);
+  }
 
   mounted() {
     if (this.item) {

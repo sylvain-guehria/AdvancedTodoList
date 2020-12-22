@@ -23,23 +23,22 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   // CREATE SUBTASK
   async [ActionTypes.CREATESUBTASK](context, subtask: SubTask): Promise<void> {
 
-    let motherkey = subtask.motherKey;
+    let motherKey = subtask.motherKey;
     delete subtask.motherKey;
 
     Object.keys(subtask).forEach((key) => (subtask[key] == null) && delete subtask[key]);
 
     const { uid } = store.getters.getUser.data;
 
-    var newSubtaskKey = database.ref().child(`todos/${uid}/${motherkey}/subtasks`).push().key || 'key';
-    if (!newSubtaskKey || !motherkey) { return }
+    var newSubtaskKey = database.ref().child(`todos/${uid}/${motherKey}/subtasks`).push().key || 'key';
+    if (!newSubtaskKey || !motherKey) { return }
 
     subtask.key = newSubtaskKey;
 
-    await database.ref(`todos/${uid}/${motherkey}/subtasks/${newSubtaskKey}`).set({
+    await database.ref(`todos/${uid}/${motherKey}/subtasks/${newSubtaskKey}`).set({
       ...subtask
     }).then(result => {
-      subtask.motherKey = motherkey;
-      context.commit(MutationTypes.addNewSubtaskTodo, subtask);
+      context.commit(MutationTypes.addNewSubtaskTodo, { subtask , motherKey});
     }).catch((err) => {
       // eslint-disable-next-line no-console
       console.log(err);
@@ -99,6 +98,9 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   // DELETE SUBTASK DETAIL 
   async [ActionTypes.DELETESUBTASKDETAIL](context, { subtaskKey, taskKey, key }: { subtaskKey: string, taskKey: string, key: string }) {
     const { uid } = store.getters.getUser.data;
+
+      // eslint-disable-next-line no-console
+      console.log({ subtaskKey, taskKey, key });
 
     if (!taskKey || !subtaskKey || !key) { return }
 

@@ -18,9 +18,7 @@ export enum MutationTypes {
 export const mutationsSubtasks: MutationTree<SubTask> = {
 
   // ADD SUBTASK
-  [MutationTypes.addNewSubtaskTodo](state, subtask: SubTask) {
-    let motherKey = subtask.motherKey;
-    delete subtask.motherKey;
+  [MutationTypes.addNewSubtaskTodo](state, { subtask, motherKey }: { subtask: SubTask, motherKey: string }): void {
 
     for (var i in store.getters.getTodoList) {
       if (store.getters.getTodoList[i].key == motherKey) {
@@ -141,11 +139,18 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
       });
 
       if (index_subtask !== -1
-        && store.getters.getTodoList[indexTodo].subtasks[index_subtask].details
+        && store.getters.getTodoList[indexTodo].subtasks[index_subtask]
       ) {
-        store.getters.getTodoList[indexTodo].subtasks[index_subtask].details.push({
-          ...detail
-        })
+        if (
+          store.getters.getTodoList[indexTodo].subtasks[index_subtask].details &&
+          store.getters.getTodoList[indexTodo].subtasks[index_subtask].details.length > 0) {
+          store.getters.getTodoList[indexTodo].subtasks[index_subtask].details.push({
+            ...detail
+          })
+        } else {
+          store.getters.getTodoList[indexTodo].subtasks[index_subtask].details = [{...detail}]
+        }
+
       }
     }
   },
@@ -171,7 +176,7 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
 
         if (index_Detail !== -1
           && store.getters.getTodoList[indexTodo].subtasks[index_Subtask].details[index_Detail][attribute]
-          ) {
+        ) {
           store.getters.getTodoList[indexTodo].subtasks[index_Subtask].details[attribute] = value
         }
 
@@ -179,14 +184,14 @@ export const mutationsSubtasks: MutationTree<SubTask> = {
     }
   },
 
-    // SET SUBTASKS TO A TODO
-    [MutationTypes.SETSUBTASKS](state,  { subtasks, todoKey } : { subtasks: SubTask[], todoKey : string } ) {
-      var indexTodo = store.getters.getTodoList.findIndex(function (o) {
-        return o.key === todoKey;
-      });
-      if (indexTodo !== -1) {
-        store.getters.getTodoList[indexTodo]['subtasks'] = subtasks;
-      }
-    },
+  // SET SUBTASKS TO A TODO
+  [MutationTypes.SETSUBTASKS](state, { subtasks, todoKey }: { subtasks: SubTask[], todoKey: string }) {
+    var indexTodo = store.getters.getTodoList.findIndex(function (o) {
+      return o.key === todoKey;
+    });
+    if (indexTodo !== -1) {
+      store.getters.getTodoList[indexTodo]['subtasks'] = subtasks;
+    }
+  },
 
 }
