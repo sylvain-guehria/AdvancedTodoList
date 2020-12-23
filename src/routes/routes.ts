@@ -100,7 +100,9 @@ let router = new Router({
           name: "Admin",
           component: Admin,
           meta: {
-            breadcrumb: "Admin"
+            breadcrumb: "Admin",
+            requiresAuth: true,
+            adminOnly: true
           }
         }
       ]
@@ -130,6 +132,16 @@ router.beforeEach((to, from, next) => {
       } else {
           next();
       }
+
+      if (to.matched.some(record => record.meta.adminOnly)) {
+        if (user) {
+            next({ path: '/app' });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
   });
 });
 

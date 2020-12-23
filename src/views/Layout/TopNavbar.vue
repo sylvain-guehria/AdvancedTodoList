@@ -20,11 +20,16 @@ import firebase from '@/apis/firebase/firebase';
 export default class TopNavbar extends Vue {
 
  firstName (){
+
     const user = this.$store.getters.getUser.data;
-    if (user.displayName) {
-      return user.displayName.split(' ')[0].toUpperCase();
+
+    // eslint-disable-next-line no-console
+      console.log(user);
+
+    if (user && user.pseudo) {
+      return user.pseudo
     }
-    if (user.email) {
+    if (user && user.email) {
       return user.email.split('@')[0].toUpperCase();
     }
     return null;

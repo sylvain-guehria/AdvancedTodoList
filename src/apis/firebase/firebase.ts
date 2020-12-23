@@ -12,6 +12,7 @@ import { ActionTypes as settingActionType } from "@/store/modules/settings/actio
 
 //user
 import { MutationTypes as userType } from "@/store/modules/user/mutations";
+import { ActionTypes as userAction } from "@/store/modules/user/actions";
 
 //todos
 import { ActionTypes as todosActionsType } from '@/store/modules/todos/actions';
@@ -41,7 +42,19 @@ export default {
   loginGoogle() {
     const provider = new firebase.default.auth.GoogleAuthProvider();
     firebase.default.auth().signInWithPopup(provider)
-      .then(function () {
+      .then(function (response) {
+
+        let payload = {
+          data: {
+            uid: response.user.uid,
+            pseudo:  response.user.displayName,
+            email: response.user.email,
+            role: ['user']
+          }
+        }
+
+        store.dispatch(userAction.SAVE_USER, payload);
+
         Vue.toasted.show("Logged-in with google, Hello", {
           icon: "login",
           theme: "bubble",
@@ -77,12 +90,22 @@ export default {
         });
       });
   },
-  signUpEmail(email: string, password: string): Promise<{}> {
+  signUpEmail(email: string, password: string, pseudo: string): Promise<{}> {
     return new Promise((resolve, reject) => {
       firebase
         .default.auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(() => {
+        .then((response) => {
+
+          let payload = {
+            data: {
+              uid: response.user.uid,
+              pseudo: pseudo,
+              email: response.user.email,
+              role: ['user']
+            }
+          }
+          store.dispatch(userAction.SAVE_USER, payload);
           resolve({ success: true });
         })
         .catch(error => {
@@ -122,21 +145,19 @@ export default {
 
       if (userfb) {
 
-        firebase.default.auth()
-        .currentUser.getIdTokenResult()
-        .then(tokenResult => {
-            // eslint-disable-next-line no-console
-            console.log('token: ', tokenResult.claims);
-        });
-
-        user.loggedIn = true;
-        user.data = userfb;
         const uid: string = userfb.uid;
 
-        store.commit(userType.SET_USER, user)
+        user.loggedIn = true;
 
+        user.data = {
+          displayName: userfb.displayName,
+          email: userfb.email,
+          uid: uid,
+        };
+
+        store.dispatch(userAction.FETCH_USER, uid)
         store.dispatch(todosActionsType.FETCH_TODOS, uid)
-        store.dispatch(settingActionType.FETCH_SETTINGS)
+        store.dispatch(settingActionType.FETCH_SETTINGS, uid)
 
       } else {
         user.loggedIn = false;
