@@ -23,9 +23,6 @@ export default class TopNavbar extends Vue {
 
     const user = this.$store.getters.getUser.data;
 
-    // eslint-disable-next-line no-console
-      console.log(user);
-
     if (user && user.pseudo) {
       return user.pseudo
     }

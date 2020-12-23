@@ -49,7 +49,6 @@ export default {
             uid: response.user.uid,
             pseudo:  response.user.displayName,
             email: response.user.email,
-            role: ['user']
           }
         }
 
@@ -102,7 +101,7 @@ export default {
               uid: response.user.uid,
               pseudo: pseudo,
               email: response.user.email,
-              role: ['user']
+              roles: ['user']
             }
           }
           store.dispatch(userAction.SAVE_USER, payload);
