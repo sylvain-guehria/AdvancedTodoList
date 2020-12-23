@@ -100,8 +100,6 @@ export default {
   methods: {
     isAdmin() {
       let user = this.$store.getters.getUser;
-          // eslint-disable-next-line no-console
-      console.log('user', user);
 
       if (user && user.data && user.data.roles) {
         return this.$store.getters.getUser.data.roles.includes("admin");

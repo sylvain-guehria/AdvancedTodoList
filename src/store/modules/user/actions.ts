@@ -16,7 +16,7 @@ export enum ActionTypes {
 // for API, often async
 export const actionsUser: ActionTree<User, RootState> = {
 
-  //CREATE USER
+  //CREATE USER careful: only the first time
   async [ActionTypes.SAVE_USER](context, payload: User): Promise<void> {
 
     Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
