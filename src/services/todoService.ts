@@ -120,7 +120,7 @@ export const serviceTodo = {
       isDone: item.isdone,
     });
   },
-  downOrderNoCOndition(key: string) {
-    store.dispatch("setOrderDownTodo", key);
+  downOrderNoCondition(key: string) {
+    store.dispatch(tasksActionsType.SETORDERDOWNTODO, key);
   },
 };

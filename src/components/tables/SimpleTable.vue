@@ -330,10 +330,10 @@ export default {
     deleteTodo(key: string, order: number): void {
       let vm = this;
       serviceTodo.deleteTodo(key);
-      //down order poof todos with order > to the one deleted
+      //down order todos with order > to the one deleted
       this.paginatedTodos.forEach(function (todo) {
         if (todo.order > order) {
-          vm.downOrderNoCOndition(todo.key);
+          vm.downOrderNoCondition(todo.key);
         }
       });
       var index = this.paginatedTodos.findIndex(function (o) {
@@ -341,8 +341,8 @@ export default {
       });
       if (index !== -1) this.paginatedTodos.splice(index, 1);
     },
-    downOrderNoCOndition(key: string) {
-      serviceTodo.downOrderNoCOndition(key);
+    downOrderNoCondition(key: string) {
+      serviceTodo.downOrderNoCondition(key);
     },
     setTodoDone(item: Todo): void {
       serviceTodo.setTodoDone(item);

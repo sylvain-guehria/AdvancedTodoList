@@ -17,8 +17,8 @@
           <input
             type="text"
             class="input"
-            v-model="user.data.fullName"
-            placeholder="Name"
+            v-model="user.data.pseudo"
+            placeholder="Pseudo"
           />
           <input
             type="email"
@@ -213,7 +213,7 @@ export default class LoginModal extends Vue {
       return "";
     }
 
-    firebase.signUpEmail(this.user.data.email, this.user.data.password).then(() => {
+    firebase.signUpEmail(this.user.data.email, this.user.data.password, this.user.data.pseudo).then(() => {
      this.$toasted.show("You signed up, Welcome", {
             icon: "create",
             theme: "bubble",
