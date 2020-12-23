@@ -40,9 +40,8 @@ export const actionsSettings : ActionTree<Settings, RootState> = {
       },
 
     //   FETCH SETTINGS
-      async [ActionTypes.FETCH_SETTINGS](context): Promise<void> {
+      async [ActionTypes.FETCH_SETTINGS](context, uid: string): Promise<void> {
         
-        const { uid } = store.getters.getUser.data;
         let settings: Settings;
 
         context.commit(MutationTypes.SET_LOADING, true);

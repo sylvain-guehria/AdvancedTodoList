@@ -7,6 +7,7 @@ import FullContentLayout from "@/views/Layout/FullContentLayout.vue";
 
 import TotoList from "@/views/pages/TotoList.vue";
 import Eisenhower from "@/views/pages/Eisenhower.vue"
+import Admin from "@/views/pages/Admin.vue"
 import Help from "@/views/pages/Help.vue";
 import Login from "@/views/pages/Login.vue";
 import Contactme from "@/components/forms/Contactme.vue";
@@ -93,6 +94,16 @@ let router = new Router({
           meta: {
             breadcrumb: "Help"
           }
+        },
+        {
+          path: "/app/admin",
+          name: "Admin",
+          component: Admin,
+          meta: {
+            breadcrumb: "Admin",
+            requiresAuth: true,
+            adminOnly: true
+          }
         }
       ]
     }
@@ -121,6 +132,16 @@ router.beforeEach((to, from, next) => {
       } else {
           next();
       }
+
+      if (to.matched.some(record => record.meta.adminOnly)) {
+        if (user) {
+            next({ path: '/app' });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
   });
 });
 
