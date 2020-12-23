@@ -27,7 +27,7 @@
           <p>Help</p>
         </sidebar-link>
 
-         <sidebar-link to="/app/admin">
+        <sidebar-link to="/app/admin" v-if="isAdmin()">
           <feather type="users"></feather>
           <p>Admin</p>
         </sidebar-link>
@@ -98,6 +98,13 @@ export default {
     };
   },
   methods: {
+    isAdmin() {
+      let user = this.$store.getters.getUser;
+
+      if (user && user.data && user.data.roles) {
+        return this.$store.getters.getUser.data.roles.includes("admin");
+      }
+    },
     updateIsNavMini(value) {
       this.isNavMini = value;
     },

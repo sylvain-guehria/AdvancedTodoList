@@ -43,17 +43,26 @@ export default {
     const provider = new firebase.default.auth.GoogleAuthProvider();
     firebase.default.auth().signInWithPopup(provider)
       .then(function (response) {
+        let firstResponse = response;
+        // eslint-disable-next-line no-console
+        console.log('popup');
 
-        let payload = {
-          data: {
-            uid: response.user.uid,
-            pseudo:  response.user.displayName,
-            email: response.user.email,
-            role: ['user']
+        checkIfUserExists(response.user.uid).then((response: { success: boolean }) => {
+
+          if (!response.success) {
+
+            let payload = {
+              data: {
+                uid: firstResponse.user.uid,
+                pseudo: firstResponse.user.displayName,
+                email: firstResponse.user.email,
+                roles: ['user']
+              }
+            }
+            store.dispatch(userAction.SAVE_USER, payload);
           }
-        }
 
-        store.dispatch(userAction.SAVE_USER, payload);
+        })
 
         Vue.toasted.show("Logged-in with google, Hello", {
           icon: "login",
@@ -102,7 +111,7 @@ export default {
               uid: response.user.uid,
               pseudo: pseudo,
               email: response.user.email,
-              role: ['user']
+              roles: ['user']
             }
           }
           store.dispatch(userAction.SAVE_USER, payload);
@@ -167,5 +176,20 @@ export default {
         store.commit(userType.SET_USER, {})
       }
     });
-  }
+  },
 };
+
+const checkIfUserExists = (userUid: string): Promise<{}> => {
+  let exists: boolean;
+
+  return new Promise((resolve, reject) => {
+    database.ref(`users/${userUid}`).once('value', function (snapshot) {
+      exists = (snapshot.val() !== null);
+    }).then(() => {
+      resolve({ success: exists });
+    }).catch(error => {
+      reject(error);
+    });
+  });
+
+}

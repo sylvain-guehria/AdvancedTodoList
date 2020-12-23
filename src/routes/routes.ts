@@ -14,6 +14,7 @@ import Contactme from "@/components/forms/Contactme.vue";
 import Planning from "@/views/pages/Planning.vue";
 
 import firebase from '@/apis/firebase/firebase';
+import store from '@/store';
 
 
 
@@ -111,36 +112,45 @@ let router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  firebase.auth.onAuthStateChanged(function(user) {
-      if (to.matched.some(record => record.meta.requiresAuth)) {
-          if (!user) {
-              next({ path: '/login' });
-          } else {
-              next();
-          }
-
+  firebase.auth.onAuthStateChanged(function (user) {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (!user) {
+        next({ path: '/login' });
       } else {
-          next();
-      }
-
-      if (to.matched.some(record => record.meta.hideForAuth)) {
-          if (user) {
-              next({ path: '/app' });
-          } else {
-              next();
-          }
-      } else {
-          next();
-      }
-
-      if (to.matched.some(record => record.meta.adminOnly)) {
-        if (user) {
-            next({ path: '/app' });
-        } else {
-            next();
-        }
-    } else {
         next();
+      }
+
+    } else {
+      next();
+    }
+
+    if (to.matched.some(record => record.meta.hideForAuth)) {
+      if (user) {
+        next({ path: '/app' });
+      } else {
+        next();
+      }
+    } else {
+      next();
+    }
+
+    if (to.matched.some(record => record.meta.adminOnly)) {
+
+      let user = store.getters.getUser;
+      let isadmin: boolean = false;
+
+      if (user && user.data && user.data.roles) {
+        let roles = store.getters.getUser.data.roles;
+        isadmin = roles && roles.includes('admin') ? true : false
+      }
+
+      if (!isadmin) {
+        next({ path: '/app' });
+      } else {
+        next();
+      }
+    } else {
+      next();
     }
   });
 });
