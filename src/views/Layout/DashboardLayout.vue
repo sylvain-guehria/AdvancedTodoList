@@ -15,6 +15,7 @@
         <feather type="calendar"></feather>
         <p>Planning</p>
       </sidebar-link>
+
       <!-- <sidebar-link to="/app/eisenhower">
         <feather type="pie-chart"></feather>
         <p>Eisenhower</p>
@@ -24,6 +25,11 @@
         <sidebar-link to="/app/help">
           <feather type="file-plus"></feather>
           <p>Help</p>
+        </sidebar-link>
+
+         <sidebar-link to="/app/admin">
+          <feather type="users"></feather>
+          <p>Admin</p>
         </sidebar-link>
 
         <md-menu md-direction="top-start">
@@ -73,13 +79,13 @@
   </div>
 </template>
 <style lang="scss"></style>
-<script lang='ts'>
+<script lang="ts">
 import TopNavbar from "./TopNavbar.vue";
 import DashboardContent from "./Content.vue";
 import firebase from "@/apis/firebase/firebase";
 
-import { ActionTypes as settingsActionType } from '@/store/modules/settings/actions';
-import { MutationTypes as settingsMutationType } from '@/store/modules/settings/mutations';
+import { ActionTypes as settingsActionType } from "@/store/modules/settings/actions";
+import { MutationTypes as settingsMutationType } from "@/store/modules/settings/mutations";
 
 export default {
   beforeCreate: function () {
@@ -104,7 +110,7 @@ export default {
       this.$store.commit(settingsMutationType.SET_WITH_WEEKEND, bool);
     },
     setCurrentLang(lang) {
-       let payload = {
+      let payload = {
         label: "langage",
         value: lang,
       };

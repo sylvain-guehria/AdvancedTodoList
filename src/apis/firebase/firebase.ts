@@ -17,7 +17,6 @@ import { MutationTypes as userType } from "@/store/modules/user/mutations";
 import { ActionTypes as todosActionsType } from '@/store/modules/todos/actions';
 import { MutationTypes as todosMutationType } from '@/store/modules/todos/mutations';
 
-
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: 'AIzaSyChdropJqIFhiwM5fFmKGqiArntOXkVxLk',
@@ -122,6 +121,14 @@ export default {
     firebase.default.auth().onAuthStateChanged(userfb => {
 
       if (userfb) {
+
+        firebase.default.auth()
+        .currentUser.getIdTokenResult()
+        .then(tokenResult => {
+            // eslint-disable-next-line no-console
+            console.log('token: ', tokenResult.claims);
+        });
+
         user.loggedIn = true;
         user.data = userfb;
         const uid: string = userfb.uid;

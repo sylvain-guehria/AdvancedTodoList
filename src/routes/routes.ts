@@ -7,6 +7,7 @@ import FullContentLayout from "@/views/Layout/FullContentLayout.vue";
 
 import TotoList from "@/views/pages/TotoList.vue";
 import Eisenhower from "@/views/pages/Eisenhower.vue"
+import Admin from "@/views/pages/Admin.vue"
 import Help from "@/views/pages/Help.vue";
 import Login from "@/views/pages/Login.vue";
 import Contactme from "@/components/forms/Contactme.vue";
@@ -92,6 +93,14 @@ let router = new Router({
           component: Help,
           meta: {
             breadcrumb: "Help"
+          }
+        },
+        {
+          path: "/app/admin",
+          name: "Admin",
+          component: Admin,
+          meta: {
+            breadcrumb: "Admin"
           }
         }
       ]
