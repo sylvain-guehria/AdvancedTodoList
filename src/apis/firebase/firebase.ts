@@ -44,9 +44,7 @@ export default {
     firebase.default.auth().signInWithPopup(provider)
       .then(function (response) {
         let firstResponse = response;
-        // eslint-disable-next-line no-console
-        console.log('popup');
-
+      
         checkIfUserExists(response.user.uid).then((response: { success: boolean }) => {
 
           if (!response.success) {

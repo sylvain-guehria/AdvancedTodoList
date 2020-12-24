@@ -1,4 +1,4 @@
-import { Detail, SubTask } from '@/common/models/types';
+import { Detail, SubTask, User } from '@/common/models/types';
 import { Todo } from '@/modules/todos/shared/todoType'
 
 export interface RootState {
@@ -6,6 +6,7 @@ export interface RootState {
 }
 
 export interface Todos {
+  users: User[],
   todolist: Todo[],
   filtered_todo_list: Todo[],
   currentTodo: Todo,

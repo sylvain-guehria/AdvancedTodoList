@@ -2,6 +2,7 @@ import { Todos } from "@/common/models/types/index";
 
 export const initialState: Todos =  {
   todolist: [],
+  users: [],
   filtered_todo_list: [],
   currentSubtask: {},
   currentDetail: {},

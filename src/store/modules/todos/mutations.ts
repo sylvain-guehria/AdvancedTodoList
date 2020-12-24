@@ -1,5 +1,5 @@
 import { MutationTree } from "vuex";
-import { Todos, Todo, SubTask, Detail } from "@/common/models/types/index";
+import { Todos, Todo, SubTask, Detail, User } from "@/common/models/types/index";
 import store from '@/store/index';
 
 export enum MutationTypes {
@@ -23,6 +23,8 @@ export enum MutationTypes {
     SETCURRENTTODO = "setCurrentTodo",
     SETCURRENTSUBTASK = "setCurrentSubtask",
     SETCURRENTDETAIL = "setCurrentDetail",
+
+    SET_USERS = "setUsers"
 }
 
 export const mutationsTodos: MutationTree<Todos> = {
@@ -124,4 +126,7 @@ export const mutationsTodos: MutationTree<Todos> = {
     [MutationTypes.SETCURRENTDETAIL](state, detail: Detail) {
         state.currentDetail = detail;
     },
+    [MutationTypes.SET_USERS](state, users: User[]) {
+        state.users = users;
+      },
 }

@@ -3,7 +3,7 @@ import { User } from "@/common/models/types/index";
 
 
 export enum MutationTypes {
-    SET_USER = "setUser"
+    SET_USER = "setUser",
 }
 
 export const mutationsUser: MutationTree<User> = {

@@ -39,4 +39,7 @@ export const gettersTodos : GetterTree<Todos, RootState> = {
   getCurrentDetail: (state: Todos) => {
     return state.currentDetail
   },
+  getUsers: (state: Todos) => {
+    return state.users
+  },
 };

@@ -1,6 +1,8 @@
 import { database } from '@/apis/firebase/firebase';
-import { MutationTypes } from "./mutations";
 import { MutationTypes as settingsMutation } from "@/store/modules/settings/mutations";
+import { MutationTypes as userMutationTypes } from './mutations'
+import { MutationTypes } from "@/store/modules/todos/mutations";
+
 import { User } from "@/common/models/types/index";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
@@ -10,6 +12,7 @@ import store from '@/store/index';
 export enum ActionTypes {
   FETCH_USER = "fetchUser",
   SAVE_USER = "saveUser",
+  FETCH_USERS = "fetchUsers",
 }
 
 
@@ -34,7 +37,7 @@ export const actionsUser: ActionTree<User, RootState> = {
     payload: string
   ): Promise<void> {
 
-    Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
+    if(!payload){return}
 
     const  uid = payload;
     let user: User;
@@ -45,7 +48,7 @@ export const actionsUser: ActionTree<User, RootState> = {
         user = snapshot.val();
       }).then(() => {
         if (user)  {
-          context.commit(MutationTypes.SET_USER, {user, loggedIn: true});
+          context.commit(userMutationTypes.SET_USER, {user, loggedIn: true});
         }
         context.commit(settingsMutation.SET_LOADING, false);
       });
@@ -53,6 +56,46 @@ export const actionsUser: ActionTree<User, RootState> = {
       context.commit(settingsMutation.SET_LOADING, false);
     }
     
-  }
+  },
 
+   //FETCH USERS
+   async [ActionTypes.FETCH_USERS](
+    context,
+  ): Promise<void> {
+
+    let users: User[];
+    context.commit(settingsMutation.SET_LOADING, true);
+
+    let user = store.getters.getUser
+    let userRole = [];
+    let isadmin: boolean= false;
+    let listUsers: User[]= [];
+
+    if(user && user.data && user.data.roles){
+      userRole = user.data.roles;
+      isadmin = userRole.includes('admin');
+    }
+    if(!isadmin){return}
+
+    try {
+      await database.ref(`users`).once('value', (snapshot) => {
+        users = snapshot.val();
+
+        listUsers = Object.entries(snapshot.val()).reduce((acc, [key, user]) => {
+          user['key'] = key;
+
+        acc.push(user);
+        return acc;
+      }, []);
+
+      }).then(() => {
+        if (users)  {
+          context.commit(MutationTypes.SET_USERS, listUsers);
+        }
+        context.commit(settingsMutation.SET_LOADING, false);
+      });
+    } catch (error) {
+      context.commit(settingsMutation.SET_LOADING, false);
+    }
+  }
 };
