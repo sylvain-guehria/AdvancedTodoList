@@ -9,45 +9,16 @@
           <feather type="check-circle"></feather>Read Only
         </md-button>
       </div>
-      <div class="md-layout-item md-size-100">
-        <time-ago
-          :refresh="60"
-          :datetime="new Date('2020/01/20')"
-          locale="en"
-          :long="true"
-        ></time-ago>
-        <transition-group
-          name="slide-fade-exchange"
-          tag="div"
-          v-if="getUsers().length > 0"
+      <div v-if="getUsers().length > 0"
+          class="md-layout-item md-size-100">
+        <div
+          v-for="user in getUsers()"
+          :key="user.key"
         >
-          <div v-for="user in getUsers()" :key="user.key">
-            <div class="notification" :class="{ unread: false }">
-              <span class="bullet"></span>
-              <div class="md-layout-item mmd-size-100 data-block flex-row">
-                <div class="flex-space-between icon-title">
-                  <div class="flex-vert-align-center">
-                    <feather type="file-plus"></feather>
-                    <span>{{ user.email }}</span>
-                  </div>
-                </div>
-                <div class="text-align-left event-title">
-                  {{ user.pseudo }}
-                </div>
-                <div class="sentence text-align-left">
-                  <span class="bold">{{ user.uid }}</span>
-                  <span>{{ user.email }}</span>
-                </div>
-                <div class="light-subtitle-small date">{{ user.pseudo }}</div>
-              </div>
-              <md-button class="md-icon-button md-just-icon">
-                <feather type="trash-2"></feather>
-              </md-button>
-            </div>
-          </div>
-        </transition-group>
+          <AdminRow :user="user"  />
+        </div>
       </div>
-      <div class="md-layout-item">
+      <!-- <div class="md-layout-item">
         <md-button @click="showErrorSnackbar = true">Show error snackbar</md-button>
         <md-button @click="showSuccessSnackbar = true">Show success snackbar</md-button>
 
@@ -77,7 +48,7 @@
             </div>
           </div>
         </md-snackbar>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -86,9 +57,12 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { serviceTodo, serviceUser } from "@/services";
 import store from "@/store/index";
+import AdminRow from "./AdminRow.vue";
 
 export default {
-  components: {},
+  components: {
+    AdminRow,
+  },
   data() {
     return {
       showSuccessSnackbar: false,
@@ -100,12 +74,10 @@ export default {
     };
   },
   created() {
-    this.initUsers();
+    serviceUser.fetchUsers();
   },
   methods: {
-    initUsers() {
-      serviceUser.fetchUsers();
-    },
+      
     getUsers() {
       return store.getters.getUsers;
     },

@@ -15,9 +15,7 @@
           ></input-text>
         </div>
         <div class="md-layout-item md-small-size-100 md-size-100">
-          <label class="mandatory">
-            <feather type="mail"></feather>Email
-          </label>
+          <label class="mandatory"> <feather type="mail"></feather>Email </label>
           <input-text
             initialvalue="example@mail.com"
             :model="email"
@@ -78,6 +76,8 @@
 
 <script lang="ts">
 import InputText from "@/common/componentslib/InputText.vue";
+import { serviceUser } from "@/services";
+import { Message } from "@/common/models/types";
 
 export default {
   data() {
@@ -173,22 +173,19 @@ export default {
     },
     resetForm() {
       this.hasError = false;
-      this.username = '';
-      this.disabled = '';
-      this.email = '';
-      this.phone = '';
-      this.subject = '';
-      this.message = '';
-      this.company = '';
+      this.username = "";
+      this.disabled = "";
+      this.email = "";
+      this.phone = "";
+      this.subject = "";
+      this.message = "";
+      this.company = "";
       this.errorEmail = "";
       this.errorName = "";
       this.errorMessage = "";
-
     },
     sendEmail() {
       this.checkForm();
-
-      
 
       if (this.hasError) {
         return "";
@@ -201,30 +198,24 @@ export default {
         duration: 5000,
       });
 
-      this.resetForm();
-      this.$emit('reRender');
+      let message: Message = {
+        username: this.username,
+        email: this.email,
+        phone: this.phone,
+        subject: this.subject,
+        message: this.message,
+        company: this.company,
+        date: new Date().toISOString().substr(0, 10),
+        read: false
+      };
 
-      // Firebase.sendResetPassEmail(this.email)
-      //   .then(() => {
-      //     this.$modal.hide("forgotpassmodal");
-      //     this.$toasted.show("We just sent you an email to reset your password", {
-      //       icon: "mail_outline",
-      //       theme: "bubble",
-      //       position: "bottom-right",
-      //       duration: 5000,
-      //     });
-      //   })
-      //   .catch((error: Error) => {
-      //     this.$toasted.show("Cannot send the email at the moment", {
-      //       icon: "error-outline",
-      //       theme: "bubble",
-      //       position: "bottom-right",
-      //       duration: 5000,
-      //     });
-      //   });
+      serviceUser.sendMessage(message);
+
+          this.resetForm();
+      this.$emit("reRender");
+
     },
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

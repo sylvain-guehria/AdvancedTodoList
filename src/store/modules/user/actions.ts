@@ -3,7 +3,7 @@ import { MutationTypes as settingsMutation } from "@/store/modules/settings/muta
 import { MutationTypes as userMutationTypes } from './mutations'
 import { MutationTypes } from "@/store/modules/todos/mutations";
 
-import { User } from "@/common/models/types/index";
+import { Message, User } from "@/common/models/types/index";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index';
@@ -13,6 +13,8 @@ export enum ActionTypes {
   FETCH_USER = "fetchUser",
   SAVE_USER = "saveUser",
   FETCH_USERS = "fetchUsers",
+  SEND_MSG = "sendMsg",
+  DELETE_USER = "deleteUser",
 }
 
 
@@ -97,5 +99,20 @@ export const actionsUser: ActionTree<User, RootState> = {
     } catch (error) {
       context.commit(settingsMutation.SET_LOADING, false);
     }
-  }
+  },
+
+   //SEND MSG
+   async [ActionTypes.SEND_MSG](context, payload: Message): Promise<void> {
+
+    Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
+
+    const uid = store.getters.getUser.data.uid;
+
+    if(!payload || !uid) {return}
+    
+    await database.ref(`users/${uid}/messages`).push({
+      ...payload,
+    });
+  },
+
 };
