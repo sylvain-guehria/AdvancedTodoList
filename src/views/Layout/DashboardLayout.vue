@@ -101,8 +101,8 @@ export default {
     isAdmin() {
       let user = this.$store.getters.getUser;
 
-      if (user && user.data && user.data.roles) {
-        return this.$store.getters.getUser.data.roles.includes("admin");
+      if (user && user && user.roles) {
+        return this.$store.getters.getUser.roles.includes("admin");
       }
     },
     updateIsNavMini(value) {

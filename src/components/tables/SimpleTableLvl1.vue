@@ -112,6 +112,7 @@
               :motherKey="item.key"
               :key="getCustomKey(item.key, subtask.key)"
               @keyLvl2Incr="keyLvl2Incr"
+              :index="getIndex()"
             />
           </div>
         </md-table-cell>
@@ -224,6 +225,13 @@ import SimpleTableLvl2 from "./SimpleTableLvl2.vue";
 export default class SimpleTableLvl1 extends Vue {
   @Prop() item: Todo;
   @Prop() maintable: boolean;
+  @Prop() index: number;
+
+  getIndex(){
+    // eslint-disable-next-line no-console
+      console.log('this.index', this.index);
+    return this.index;
+  }
 
   showDialogAddSubtask: boolean = false;
   numberInput: number = 0;

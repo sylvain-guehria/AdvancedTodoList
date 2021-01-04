@@ -3,9 +3,7 @@
     <div class="in-block">
       <div class="md-size-100 icon-list-item flex">
         <feather type="calendar"></feather>
-        <div class="list-item-text">
-          Creation date : {{ event.creationDate }}
-        </div>
+        <div class="list-item-text">Creation date : {{ event.creationDate }}</div>
       </div>
 
       <div class="md-size-100 icon-list-item flex">
@@ -36,18 +34,12 @@
     <div class="in-block">
       <div class="md-size-100 icon-list-item flex">
         <feather type="eye"></feather>
-        <div class="list-item-text">
-          Finish : {{ numberdaysleft(event) }}
-        </div>
+        <div class="list-item-text">Finish : {{ numberdaysleft(event.deadline) }}</div>
       </div>
 
       <div class="md-size-100 icon-list-item flex">
         <feather type="list"></feather
-        >{{
-          event.subtasks && event.subtasks.length > 0
-            ? "Subtasks"
-            : "No subtask"
-        }}
+        >{{ event.subtasks && event.subtasks.length > 0 ? "Subtasks" : "No subtask" }}
       </div>
     </div>
   </div>
@@ -70,12 +62,12 @@ import FilterTab from "@/common/componentslib/FilterTab.vue";
 })
 export default class MetaDataTodo extends Vue {
   @Prop() event!: any;
- bulletClass = helperTodo.bulletClass;
+  bulletClass = helperTodo.bulletClass;
+  numberdaysleft = helperTodo.getdaysleft;
 }
 </script>
 
 <style lang="scss" scoped>
-
 .flex {
   display: flex !important;
   font-family: initial;

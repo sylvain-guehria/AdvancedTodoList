@@ -13,3 +13,7 @@ export interface SubTask {
   tags?: string[],
   motherKey?: string
 }
+
+export interface SubTasks {
+
+}

@@ -3,7 +3,7 @@ import { Drawer, Settings } from "@/common/models/types/index";
 
 
 export enum MutationTypes {
-    SET_LOADING = "setLoading",
+    SET_ACTION_LOADING = "setActionLoading",
     SET_LANGAGE = "setLangage",
     SET_WITH_WEEKEND = "setWithWeekEnd",
     SET_DRAWERS_SETTINGS = "setDrawersSettings",
@@ -13,15 +13,16 @@ export enum MutationTypes {
 }
 
 export const mutationsSettings: MutationTree<Settings> = {
-    [MutationTypes.SET_SETTINGS](state, setting: Settings) {
-        state.hidden_column = setting.hidden_column
-        state.drawersOpened = setting.drawersOpened;
-        state.langage = setting.langage;
-        state.with_weekend = setting.with_weekend;
-        state.hidden_column_subtasks = setting.hidden_column_subtasks
-      },
-    [MutationTypes.SET_LOADING](state, status: boolean) {
-        state.loading = status;
+    [MutationTypes.SET_SETTINGS](state, settings: Settings) {
+        if (settings.hidden_column) state.hidden_column = settings.hidden_column;
+        if (settings.hidden_column_subtasks)  state.hidden_column_subtasks = settings.hidden_column_subtasks;
+        if (settings.drawersOpened)  state.drawersOpened = settings.drawersOpened;
+
+        if (settings.langage)  state.langage =settings.langage;
+        if (settings.with_weekend)  state.with_weekend = settings.with_weekend;
+    },
+    [MutationTypes.SET_ACTION_LOADING](state, status: boolean) {
+        state.actionLoading = status;
     },
     [MutationTypes.SET_LANGAGE](state, langage: string) {
         state.langage = langage;

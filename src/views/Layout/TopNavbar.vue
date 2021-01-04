@@ -21,7 +21,7 @@ export default class TopNavbar extends Vue {
 
  firstName (){
 
-    const user = this.$store.getters.getUser.data;
+    const user = this.$store.getters.getUser;
 
     if (user && user.pseudo) {
       return user.pseudo

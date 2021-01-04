@@ -1,5 +1,5 @@
 import { MutationTree } from "vuex";
-import { Todos, Todo, SubTask, Detail } from "@/common/models/types/index";
+import { Todos, Todo, SubTask, Detail, User } from "@/common/models/types/index";
 import store from '@/store/index';
 
 export enum MutationTypes {

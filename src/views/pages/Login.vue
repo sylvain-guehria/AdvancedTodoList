@@ -17,12 +17,12 @@
           <input
             type="text"
             class="input"
-            v-model="user.data.pseudo"
+            v-model="user.pseudo"
             placeholder="Pseudo"
           />
           <input
             type="email"
-            v-model="user.data.email"
+            v-model="user.email"
             class="input"
             placeholder="Email"
           />
@@ -30,7 +30,7 @@
             type="password"
             class="input"
             placeholder="Password"
-            v-model="user.data.password"
+            v-model="user.password"
           />
         </div>
         <!-- error msg  sign up-->
@@ -56,13 +56,13 @@
               type="email"
               class="input"
               placeholder="Email"
-              v-model="user.data.email"
+              v-model="user.email"
             />
             <input
               type="password"
               class="input"
               placeholder="Password"
-              v-model="user.data.password"
+              v-model="user.password"
             />
           </div>
           <!-- error msg  login-->
@@ -163,10 +163,8 @@ export default class LoginModal extends Vue {
 
   user: User = {
     loggedIn: false,
-    data: {
       email: "",
       password: ""
-    }
   };
 
   logginFirebase() {
@@ -213,7 +211,7 @@ export default class LoginModal extends Vue {
       return "";
     }
 
-    firebase.signUpEmail(this.user.data.email, this.user.data.password, this.user.data.pseudo).then(() => {
+    firebase.signUpEmail(this.user.email, this.user.password, this.user.pseudo).then(() => {
      this.$toasted.show("You signed up, Welcome", {
             icon: "create",
             theme: "bubble",
@@ -231,8 +229,8 @@ export default class LoginModal extends Vue {
   }
 
   checkLoginForm(): boolean {
-    let email: string = this.user.data.email;
-    let password: string = this.user.data.password;
+    let email: string = this.user.email;
+    let password: string = this.user.password;
     const mailformat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordformat = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
@@ -274,7 +272,7 @@ export default class LoginModal extends Vue {
     }
 
     firebase
-      .loginEmail(this.user.data.email, this.user.data.password)
+      .loginEmail(this.user.email, this.user.password)
       .then(() => {
          this.$toasted.show("We logged you in, Hello", {
             icon: "login",

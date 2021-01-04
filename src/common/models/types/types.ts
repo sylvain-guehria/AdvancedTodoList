@@ -10,6 +10,18 @@ export interface Detail {
   isdone?: boolean;
 }
 
+export interface Message {
+  key?: string;
+  username?: string;
+  email?: string;
+  phone?: string;
+  company?: string;
+  subject?: string;
+  message?: string;
+  date?: string;
+  read?: boolean;
+}
+
 export type HTMLElementEvent<T extends HTMLElement> = Event & {
   target: T;
 }

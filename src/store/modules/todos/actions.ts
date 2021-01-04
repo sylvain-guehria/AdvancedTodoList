@@ -1,5 +1,4 @@
 import { database } from '@/apis/firebase/firebase';
-import firebase from '@/apis/firebase/firebase';
 
 import { MutationTypes } from "./mutations";
 import { Todos, Todo, SubTask } from "@/common/models/types/index";
@@ -7,6 +6,8 @@ import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index';
 import lodash from "lodash";
+
+import { MutationTypes as SettingsMutationTypes } from "@/store/modules/settings/mutations";
 
 export enum ActionTypes {
   FETCH_TODOS = "fetchTodos",
@@ -29,45 +30,73 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
 
     Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     var newTodoKey = database.ref().child(`todos/${uid}`).push().key || 'key';
     if (!newTodoKey) { return }
-    await database.ref(`todos/${uid}/${newTodoKey}`).set({
-      ...payload
-    });
 
     payload.key = newTodoKey;
-    context.commit(MutationTypes.ADDNEWTODO, payload);
-    context.commit(MutationTypes.SETCURRENTTODO, payload);
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
+    await database.ref(`todos/${uid}/${newTodoKey}`).set({
+      ...payload
+    }).then(() => {
+      context.commit(MutationTypes.ADDNEWTODO, payload);
+      context.commit(MutationTypes.SETCURRENTTODO, payload);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
   //EDIT TODO
   async [ActionTypes.EDITTODO](context, payload: Todo): Promise<void> {
 
     Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!payload.key) { return }
+
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`todos/${uid}/${payload.key}`).set({
       ...payload,
-    });
-    context.commit(MutationTypes.EDITTODOBYKEY, payload);
-    context.commit(MutationTypes.INCRENDALLLISTNUMBER);
+    }).then(() => {
+      context.commit(MutationTypes.EDITTODOBYKEY, payload);
+      context.commit(MutationTypes.INCRENDALLLISTNUMBER);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
   // EDIT ONE ATTRIBUT TASK 
   async [ActionTypes.EDITATTRIBUTETASK](context, { todoKey, attribute, value }: { todoKey: string, attribute: string, value }): Promise<void> {
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!todoKey) { return }
-
-    if(value === null){
-      await database.ref(`todos/${uid}/${todoKey}/${attribute}`).remove();
-    }else{
-    await database.ref(`todos/${uid}/${todoKey}`).update({
-      [attribute]: value
-    });
-  }
-
-    context.commit(MutationTypes.EDITATTRIBUTETASK, { todoKey, attribute, value });
+    
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
+    if (value === null) {
+      await database.ref(`todos/${uid}/${todoKey}/${attribute}`).remove().then(() => {
+        context.commit(MutationTypes.EDITATTRIBUTETASK, { todoKey, attribute, value });
+        context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+      })
+    } else {
+      await database.ref(`todos/${uid}/${todoKey}`).update({
+        [attribute]: value
+      }).then(() => {
+        context.commit(MutationTypes.EDITATTRIBUTETASK, { todoKey, attribute, value });
+        context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+      })
+    }
   },
   //   FETCH TODOS
   async [ActionTypes.FETCH_TODOS](context, payload: string): Promise<void> {
@@ -128,58 +157,90 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
 
   // SET TASK STATE
   async [ActionTypes.SETTODOSTATE](context, { key, isDone }: { key: string, isDone: boolean }) {
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!key) { return }
 
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`todos/${uid}/${key}`).update({
       isdone: isDone
-    });
-    context.commit(MutationTypes.SETTASKSTATE, { key, isDone });
+    }).then(() => {
+      context.commit(MutationTypes.SETTASKSTATE, { key, isDone });
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
   //DELETE TODO
   async [ActionTypes.DELETETODO](context, key: string): Promise<void> {
-    const { uid } = store.getters.getUser.data;
-    database.ref(`todos/${uid}/${key}`).remove();
-    context.commit(MutationTypes.REMOVETODOBYKEY, key);
+    const { uid } = store.getters.getUser;
+
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
+    await database.ref(`todos/${uid}/${key}`).remove().then(() => {
+      context.commit(MutationTypes.REMOVETODOBYKEY, key);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
   //UP ORDER TODO
   async [ActionTypes.SETORDERUPTODO](context, keytodoOrderPlus: string): Promise<void> {
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!keytodoOrderPlus) { return }
 
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`todos/${uid}/${keytodoOrderPlus}/order`).transaction(function (order) {
       return (order || 0) + 1;
-    });
-
-    context.commit(MutationTypes.UPORDERTODO, keytodoOrderPlus);
-
+    }).then(() => {
+      context.commit(MutationTypes.UPORDERTODO, keytodoOrderPlus);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
   //DOWN ORDER TODO
   async [ActionTypes.SETORDERDOWNTODO](context, keytodoOrderDown: string): Promise<void> {
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!keytodoOrderDown) { return }
 
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`todos/${uid}/${keytodoOrderDown}/order`).transaction(function (order) {
       return (order || 0) - 1;
-    });
-
-    context.commit(MutationTypes.DOWNORDERTODO, keytodoOrderDown);
+    }).then(() => {
+      context.commit(MutationTypes.DOWNORDERTODO, keytodoOrderDown);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
   // SET ORDER TODO WITH VALUE
   async [ActionTypes.SETORDER](context, { keyItemToUpOrder, max_order }: { keyItemToUpOrder: string, max_order: number }): Promise<void> {
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!keyItemToUpOrder) { return }
 
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`todos/${uid}/${keyItemToUpOrder}/order`).transaction(function (order) {
       return max_order;
-    });
-
-    context.commit(MutationTypes.SETORDER, { keyItemToUpOrder, max_order });
+    }).then(() => {
+      context.commit(MutationTypes.SETORDER, { keyItemToUpOrder, max_order });
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 };
