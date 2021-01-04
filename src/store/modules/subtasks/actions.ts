@@ -29,7 +29,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     Object.keys(subtask).forEach((key) => (subtask[key] == null) && delete subtask[key]);
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
 
     var newSubtaskKey = database.ref().child(`todos/${uid}/${motherKey}/subtasks`).push().key || 'key';
     if (!newSubtaskKey || !motherKey) { return }
@@ -54,7 +54,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     Object.keys(subtask).forEach((key) => (subtask[key] == null) && delete subtask[key]);
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
 
     if (!motherkey || !subtask.key) { return }
 
@@ -69,7 +69,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   // EDIT ONE ATTRIBUT SUBTASK 
   async [ActionTypes.EDITATTRIBUTESUBTASK](context, { motherKey, key, attribute, value }: { motherKey: string, key: string, attribute: string, value }): Promise<void> {
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
 
     if (!motherKey || !key) { return }
 
@@ -87,7 +87,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
   // SET SUBTASK STATE
   async [ActionTypes.SETSUBTASKSTATE](context, { subtaskKey, motherKey, isDone }: { subtaskKey: string, motherKey: string, isDone: boolean }) {
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!motherKey || !subtaskKey) { return }
 
     await database.ref(`todos/${uid}/${motherKey}/subtasks/${subtaskKey}`).update({
@@ -98,7 +98,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
   // DELETE SUBTASK DETAIL 
   async [ActionTypes.DELETESUBTASKDETAIL](context, { subtaskKey, taskKey, key }: { subtaskKey: string, taskKey: string, key: string }) {
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
 
     if (!taskKey || !subtaskKey || !key) { return }
 
@@ -108,7 +108,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
   // DELETE SUBTASK
   async [ActionTypes.DELETESUBTASK](context, { subtaskKey, todoKey }: { subtaskKey: string, todoKey: string }) {
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
 
     if (!todoKey || !subtaskKey) { return }
 
@@ -120,7 +120,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   // SET SUBTASK DETAIL STATE
   async [ActionTypes.EDITSUBTASKDETAIL](context, { taskKey, subtaskKey, attribute, value, key }
     : { taskKey: string, subtaskKey: string, attribute: string, value: string, key: string }) {
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
 
     if (!taskKey || !subtaskKey || !key) { return }
 
@@ -133,7 +133,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
   // ADD SUBTASK DETAIL
   async [ActionTypes.ADDSUBTASKDETAIL](context, { todoKey, subtaskKey, detail }
     : { todoKey: string, subtaskKey: string, detail: Detail }) {
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
 
     if (!todoKey || !subtaskKey) { return }
 

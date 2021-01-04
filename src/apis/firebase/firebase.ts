@@ -11,12 +11,13 @@ import { MutationTypes as settingMutationType } from "@/store/modules/settings/m
 import { ActionTypes as settingActionType } from "@/store/modules/settings/actions";
 
 //user
-import { MutationTypes as userType } from "@/store/modules/user/mutations";
-import { ActionTypes as userAction } from "@/store/modules/user/actions";
+import { MutationTypes as userType } from "@/store/modules/users/mutations";
+import { ActionTypes as userAction } from "@/store/modules/users/actions";
 
 //todos
 import { ActionTypes as todosActionsType } from '@/store/modules/todos/actions';
 import { MutationTypes as todosMutationType } from '@/store/modules/todos/mutations';
+import { User } from '@/common/models/types';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -50,12 +51,10 @@ export default {
           if (!response.success) {
 
             let payload = {
-              data: {
                 uid: firstResponse.user.uid,
                 pseudo: firstResponse.user.displayName,
                 email: firstResponse.user.email,
                 roles: ['user']
-              }
             }
             store.dispatch(userAction.SAVE_USER, payload);
           }
@@ -105,12 +104,10 @@ export default {
         .then((response) => {
 
           let payload = {
-            data: {
               uid: response.user.uid,
               pseudo: pseudo,
               email: response.user.email,
               roles: ['user']
-            }
           }
           store.dispatch(userAction.SAVE_USER, payload);
           resolve({ success: true });
@@ -144,9 +141,8 @@ export default {
     });
   },
   setAuthChange() {
-    const user = {
+    let user: User = {
       loggedIn: false,
-      data: {}
     };
     firebase.default.auth().onAuthStateChanged(userfb => {
 
@@ -154,21 +150,14 @@ export default {
 
         const uid: string = userfb.uid;
 
-        user.loggedIn = true;
-
-        user.data = {
-          displayName: userfb.displayName,
-          email: userfb.email,
-          uid: uid,
-        };
-
         store.dispatch(userAction.FETCH_USER, uid)
         store.dispatch(todosActionsType.FETCH_TODOS, uid)
         store.dispatch(settingActionType.FETCH_SETTINGS, uid)
 
       } else {
-        user.loggedIn = false;
-        user.data = {};
+        user = {
+          loggedIn : false
+        };
         store.commit(todosMutationType.SETTODOLIST, []);
         store.commit(settingMutationType.SET_SETTINGS, {});
         store.commit(userType.SET_USER, {})

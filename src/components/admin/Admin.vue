@@ -13,7 +13,7 @@
           class="md-layout-item md-size-100">
         <div
           v-for="user in getUsers()"
-          :key="user.key"
+          :key="user.uid"
         >
           <AdminRow :user="user"  />
         </div>
@@ -79,6 +79,8 @@ export default {
   methods: {
       
     getUsers() {
+         // eslint-disable-next-line no-console
+    console.log('getUsers',  store.getters.getUsers);
       return store.getters.getUsers;
     },
   },

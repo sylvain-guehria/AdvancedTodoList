@@ -29,7 +29,7 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
 
     Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     var newTodoKey = database.ref().child(`todos/${uid}`).push().key || 'key';
     if (!newTodoKey) { return }
     await database.ref(`todos/${uid}/${newTodoKey}`).set({
@@ -45,7 +45,7 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
 
     Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!payload.key) { return }
     await database.ref(`todos/${uid}/${payload.key}`).set({
       ...payload,
@@ -56,7 +56,7 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
   // EDIT ONE ATTRIBUT TASK 
   async [ActionTypes.EDITATTRIBUTETASK](context, { todoKey, attribute, value }: { todoKey: string, attribute: string, value }): Promise<void> {
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!todoKey) { return }
 
     if(value === null){
@@ -128,7 +128,7 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
 
   // SET TASK STATE
   async [ActionTypes.SETTODOSTATE](context, { key, isDone }: { key: string, isDone: boolean }) {
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!key) { return }
 
     await database.ref(`todos/${uid}/${key}`).update({
@@ -139,7 +139,7 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
 
   //DELETE TODO
   async [ActionTypes.DELETETODO](context, key: string): Promise<void> {
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     database.ref(`todos/${uid}/${key}`).remove();
     context.commit(MutationTypes.REMOVETODOBYKEY, key);
   },
@@ -147,7 +147,7 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
   //UP ORDER TODO
   async [ActionTypes.SETORDERUPTODO](context, keytodoOrderPlus: string): Promise<void> {
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!keytodoOrderPlus) { return }
 
     await database.ref(`todos/${uid}/${keytodoOrderPlus}/order`).transaction(function (order) {
@@ -161,7 +161,7 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
   //DOWN ORDER TODO
   async [ActionTypes.SETORDERDOWNTODO](context, keytodoOrderDown: string): Promise<void> {
 
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!keytodoOrderDown) { return }
 
     await database.ref(`todos/${uid}/${keytodoOrderDown}/order`).transaction(function (order) {
@@ -173,7 +173,7 @@ export const actionsTodos: ActionTree<Todos, RootState> = {
 
   // SET ORDER TODO WITH VALUE
   async [ActionTypes.SETORDER](context, { keyItemToUpOrder, max_order }: { keyItemToUpOrder: string, max_order: number }): Promise<void> {
-    const { uid } = store.getters.getUser.data;
+    const { uid } = store.getters.getUser;
     if (!keyItemToUpOrder) { return }
 
     await database.ref(`todos/${uid}/${keyItemToUpOrder}/order`).transaction(function (order) {

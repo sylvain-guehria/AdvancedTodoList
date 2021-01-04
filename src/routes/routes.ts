@@ -139,8 +139,8 @@ router.beforeEach((to, from, next) => {
       let user = store.getters.getUser;
       let isadmin: boolean = false;
 
-      if (user && user.data && user.data.roles) {
-        let roles = store.getters.getUser.data.roles;
+      if (user && user.roles) {
+        let roles = store.getters.getUser.roles;
         isadmin = roles && roles.includes('admin') ? true : false
       }
 

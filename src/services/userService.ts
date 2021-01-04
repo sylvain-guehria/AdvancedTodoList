@@ -1,10 +1,9 @@
 import lodash from "lodash";
 
 import store from '@/store/index'
-import Vue from 'vue';
 
 import { Message, User } from '@/common/models/types';
-import { userActionsType } from "@/store/modules/user";
+import { userActionsType } from "@/store/modules/users";
 
 
 export const serviceUser = {
@@ -15,7 +14,6 @@ export const serviceUser = {
     store.dispatch(userActionsType.SEND_MSG, payload);
   },
   deletUser(uid: string) {
- // eslint-disable-next-line no-console
- console.log('delete', uid);
+    store.dispatch(userActionsType.DELETE_USER, uid);
   }
 };

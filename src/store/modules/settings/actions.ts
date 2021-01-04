@@ -25,7 +25,7 @@ export const actionsSettings : ActionTree<Settings, RootState> = {
 
         Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
     
-        const { uid } = store.getters.getUser.data;
+        const { uid } = store.getters.getUser;
     
 
         context.commit(MutationTypes.SET_LOADING, true);

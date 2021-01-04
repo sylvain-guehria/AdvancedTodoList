@@ -1,9 +1,8 @@
 import { database } from '@/apis/firebase/firebase';
 import { MutationTypes as settingsMutation } from "@/store/modules/settings/mutations";
 import { MutationTypes as userMutationTypes } from './mutations'
-import { MutationTypes } from "@/store/modules/todos/mutations";
 
-import { Message, User } from "@/common/models/types/index";
+import { Message, User, Users } from "@/common/models/types/index";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index';
@@ -19,17 +18,16 @@ export enum ActionTypes {
 
 
 // for API, often async
-export const actionsUser: ActionTree<User, RootState> = {
+export const actionsUsers: ActionTree<Users, RootState> = {
 
-  //CREATE USER careful: only the first time
   async [ActionTypes.SAVE_USER](context, payload: User): Promise<void> {
 
     Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
 
-    if(!payload.data.uid) {return}
+    if(!payload.uid) {return}
 
-    await database.ref(`users/${payload.data.uid}`).set({
-      ...payload.data,
+    await database.ref(`users/${payload.uid}`).set({
+      ...payload,
     });
   },
 
@@ -50,7 +48,8 @@ export const actionsUser: ActionTree<User, RootState> = {
         user = snapshot.val();
       }).then(() => {
         if (user)  {
-          context.commit(userMutationTypes.SET_USER, {user, loggedIn: true});
+          user.loggedIn = true
+          context.commit(userMutationTypes.SET_USER, user);
         }
         context.commit(settingsMutation.SET_LOADING, false);
       });
@@ -73,8 +72,8 @@ export const actionsUser: ActionTree<User, RootState> = {
     let isadmin: boolean= false;
     let listUsers: User[]= [];
 
-    if(user && user.data && user.data.roles){
-      userRole = user.data.roles;
+    if(user && user && user.roles){
+      userRole = user.roles;
       isadmin = userRole.includes('admin');
     }
     if(!isadmin){return}
@@ -84,7 +83,6 @@ export const actionsUser: ActionTree<User, RootState> = {
         users = snapshot.val();
 
         listUsers = Object.entries(snapshot.val()).reduce((acc, [key, user]) => {
-          user['key'] = key;
 
         acc.push(user);
         return acc;
@@ -92,7 +90,7 @@ export const actionsUser: ActionTree<User, RootState> = {
 
       }).then(() => {
         if (users)  {
-          context.commit(MutationTypes.SET_USERS, listUsers);
+          context.commit(userMutationTypes.SET_USERS, listUsers);
         }
         context.commit(settingsMutation.SET_LOADING, false);
       });
@@ -106,7 +104,7 @@ export const actionsUser: ActionTree<User, RootState> = {
 
     Object.keys(payload).forEach((key) => (payload[key] == null) && delete payload[key]);
 
-    const uid = store.getters.getUser.data.uid;
+    const uid = store.getters.getUser.uid;
 
     if(!payload || !uid) {return}
     
@@ -114,5 +112,16 @@ export const actionsUser: ActionTree<User, RootState> = {
       ...payload,
     });
   },
+
+  //DELET USER USER
+  async [ActionTypes.DELETE_USER](context, uid: string): Promise<void> {
+
+    if(!uid) {return}
+    
+    await database.ref(`users/${uid}`).remove();
+    context.commit(userMutationTypes.REMOVE_USER,uid);
+
+  },
+
 
 };

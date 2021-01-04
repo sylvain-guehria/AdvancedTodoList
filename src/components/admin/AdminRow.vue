@@ -7,7 +7,7 @@
       :long="true"
     ></time-ago>
     <transition-group name="slide-fade-exchange" tag="div">
-      <div :key="user.key">
+      <div :key="user.uid">
         <div class="notification" :class="{ unread: false }">
           <span class="bullet"></span>
           <div class="md-layout-item mmd-size-100 data-block flex-row">
