@@ -4,7 +4,6 @@ import { Settings } from "@/common/models/types/index";
 import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index'; 
-import { MutationTypes as todosMutationType } from '@/store/modules/todos/mutations';
 
 
 
@@ -28,14 +27,14 @@ export const actionsSettings : ActionTree<Settings, RootState> = {
         const { uid } = store.getters.getUser;
     
 
-        context.commit(MutationTypes.SET_LOADING, true);
+        context.commit(MutationTypes.SET_ACTION_LOADING, true);
         try {
           await database.ref(`settings/${uid}`).update({
             [payload.label]: payload.value
           });
-          context.commit(MutationTypes.SET_LOADING, false);
+          context.commit(MutationTypes.SET_ACTION_LOADING, false);
         } catch (error) {
-          context.commit(MutationTypes.SET_LOADING, false);
+          context.commit(MutationTypes.SET_ACTION_LOADING, false);
         }
       },
 
@@ -44,7 +43,7 @@ export const actionsSettings : ActionTree<Settings, RootState> = {
         
         let settings: Settings;
 
-        context.commit(MutationTypes.SET_LOADING, true);
+        context.commit(MutationTypes.SET_ACTION_LOADING, true);
         try {
           await database.ref(`settings/${uid}`).once('value', (snapshot) => {
             settings = snapshot.val();
@@ -52,10 +51,10 @@ export const actionsSettings : ActionTree<Settings, RootState> = {
             if (settings)  {
               context.commit(MutationTypes.SET_SETTINGS, settings);
             }
-            context.commit(MutationTypes.SET_LOADING, false);
+            context.commit(MutationTypes.SET_ACTION_LOADING, false);
           });
         } catch (error) {
-          context.commit(MutationTypes.SET_LOADING, false);
+          context.commit(MutationTypes.SET_ACTION_LOADING, false);
         }
       },
 };

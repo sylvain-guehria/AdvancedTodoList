@@ -5,6 +5,7 @@ import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index';
 import { MutationTypes as TodoMutationTypes } from "@/store/modules/todos/mutations";
+import { MutationTypes as SettingsMutationTypes } from "@/store/modules/settings/mutations";
 
 export enum ActionTypes {
   CREATESUBTASK = "createSubtask",
@@ -36,13 +37,17 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     subtask.key = newSubtaskKey;
 
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`todos/${uid}/${motherKey}/subtasks/${newSubtaskKey}`).set({
       ...subtask
     }).then(result => {
-      context.commit(MutationTypes.addNewSubtaskTodo, { subtask , motherKey});
+      context.commit(MutationTypes.addNewSubtaskTodo, { subtask, motherKey });
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
     }).catch((err) => {
       // eslint-disable-next-line no-console
       console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+
     })
   },
 
@@ -58,12 +63,20 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     if (!motherkey || !subtask.key) { return }
 
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`todos/${uid}/${motherkey}/subtasks/${subtask.key}`).set({
       ...subtask
-    });
-    subtask.motherKey = motherkey;
+    }).then(() => {
+      subtask.motherKey = motherkey;
+      context.commit(MutationTypes.editSubtaskTodoByKey, subtask);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
 
-    context.commit(MutationTypes.editSubtaskTodoByKey, subtask);
+    })
+
   },
 
   // EDIT ONE ATTRIBUT SUBTASK 
@@ -72,16 +85,29 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
     const { uid } = store.getters.getUser;
 
     if (!motherKey || !key) { return }
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
 
     if (value === null) {
-      await database.ref(`todos/${uid}/${motherKey}/subtasks/${key}/${attribute}`).remove();
+      await database.ref(`todos/${uid}/${motherKey}/subtasks/${key}/${attribute}`).remove().then(() => {
+        context.commit(MutationTypes.editOneAttributSubtaskTodo, { motherKey, key, attribute, value });
+        context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+      })
     } else {
       await database.ref(`todos/${uid}/${motherKey}/subtasks/${key}`).update({
         [attribute]: value
-      });
+      }).then(() => {
+        context.commit(MutationTypes.editOneAttributSubtaskTodo, { motherKey, key, attribute, value });
+        context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+      })
     }
-
-    context.commit(MutationTypes.editOneAttributSubtaskTodo, { motherKey, key, attribute, value });
   },
 
 
@@ -90,10 +116,17 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
     const { uid } = store.getters.getUser;
     if (!motherKey || !subtaskKey) { return }
 
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`todos/${uid}/${motherKey}/subtasks/${subtaskKey}`).update({
       isdone: isDone
-    });
-    context.commit(MutationTypes.setSubTaskState, { subtaskKey, motherKey, isDone });
+    }).then(() => {
+      context.commit(MutationTypes.setSubTaskState, { subtaskKey, motherKey, isDone });
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
   // DELETE SUBTASK DETAIL 
@@ -102,8 +135,15 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     if (!taskKey || !subtaskKey || !key) { return }
 
-    await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${key}`).remove();
-    context.commit(MutationTypes.deleteSubtaskDetail, { subtaskKey, taskKey, key });
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
+    await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${key}`).remove().then(() => {
+      context.commit(MutationTypes.deleteSubtaskDetail, { subtaskKey, taskKey, key });
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
   // DELETE SUBTASK
@@ -112,9 +152,15 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     if (!todoKey || !subtaskKey) { return }
 
-
-    await database.ref(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}`).remove();
-    context.commit(MutationTypes.removeSubtaskByKey, { subtaskKey, todoKey });
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
+    await database.ref(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}`).remove().then(() => {
+      context.commit(MutationTypes.removeSubtaskByKey, { subtaskKey, todoKey });
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
   // SET SUBTASK DETAIL STATE
@@ -124,10 +170,17 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     if (!taskKey || !subtaskKey || !key) { return }
 
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${key}`).update({
       [attribute]: value
-    });
-    context.commit(MutationTypes.EDITSUBTASKDETAIL, { subtaskKey, taskKey, key, attribute, value });
+    }).then(() => {
+      context.commit(MutationTypes.EDITSUBTASKDETAIL, { subtaskKey, taskKey, key, attribute, value });
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
   // ADD SUBTASK DETAIL
@@ -145,10 +198,17 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
 
     Object.keys(detail).forEach((key) => (detail[key] == null) && delete detail[key]);
 
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`todos/${uid}/${todoKey}/subtasks/${subtaskKey}/details/${newDetailKey}`).set({
       ...detail
-    });
-    context.commit(MutationTypes.ADDSUBTASKDETAIL, { todoKey, subtaskKey, detail });
-    context.commit(TodoMutationTypes.SETCURRENTDETAIL, detail );
+    }).then(() => {
+      context.commit(MutationTypes.ADDSUBTASKDETAIL, { todoKey, subtaskKey, detail });
+      context.commit(TodoMutationTypes.SETCURRENTDETAIL, detail);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 };

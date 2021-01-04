@@ -7,6 +7,9 @@ import { RootState } from "../../state";
 import { ActionTree } from "vuex";
 import store from '@/store/index';
 
+import { MutationTypes as SettingsMutationTypes } from "@/store/modules/settings/mutations";
+
+
 
 export enum ActionTypes {
   FETCH_USER = "fetchUser",
@@ -26,9 +29,16 @@ export const actionsUsers: ActionTree<Users, RootState> = {
 
     if(!payload.uid) {return}
 
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`users/${payload.uid}`).set({
       ...payload,
-    });
+    }).then(() => {
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
   //FETCH USER
@@ -42,7 +52,7 @@ export const actionsUsers: ActionTree<Users, RootState> = {
     const  uid = payload;
     let user: User;
 
-    context.commit(settingsMutation.SET_LOADING, true);
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     try {
       await database.ref(`users/${uid}`).once('value', (snapshot) => {
         user = snapshot.val();
@@ -51,10 +61,10 @@ export const actionsUsers: ActionTree<Users, RootState> = {
           user.loggedIn = true
           context.commit(userMutationTypes.SET_USER, user);
         }
-        context.commit(settingsMutation.SET_LOADING, false);
+        context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
       });
     } catch (error) {
-      context.commit(settingsMutation.SET_LOADING, false);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
     }
     
   },
@@ -65,7 +75,7 @@ export const actionsUsers: ActionTree<Users, RootState> = {
   ): Promise<void> {
 
     let users: User[];
-    context.commit(settingsMutation.SET_LOADING, true);
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
 
     let user = store.getters.getUser
     let userRole = [];
@@ -92,10 +102,10 @@ export const actionsUsers: ActionTree<Users, RootState> = {
         if (users)  {
           context.commit(userMutationTypes.SET_USERS, listUsers);
         }
-        context.commit(settingsMutation.SET_LOADING, false);
+        context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
       });
     } catch (error) {
-      context.commit(settingsMutation.SET_LOADING, false);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
     }
   },
 
@@ -108,9 +118,16 @@ export const actionsUsers: ActionTree<Users, RootState> = {
 
     if(!payload || !uid) {return}
     
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
     await database.ref(`users/${uid}/messages`).push({
       ...payload,
-    });
+    }).then(() => {
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
   //DELET USER USER
@@ -118,9 +135,15 @@ export const actionsUsers: ActionTree<Users, RootState> = {
 
     if(!uid) {return}
     
-    await database.ref(`users/${uid}`).remove();
-    context.commit(userMutationTypes.REMOVE_USER,uid);
-
+    context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
+    await database.ref(`users/${uid}`).remove().then(() => {
+      context.commit(userMutationTypes.REMOVE_USER,uid);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);
+    })
   },
 
 

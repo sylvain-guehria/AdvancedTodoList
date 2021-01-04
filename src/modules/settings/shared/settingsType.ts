@@ -5,7 +5,7 @@ export interface Settings {
     langage: string,
     with_weekend: boolean,
     drawersOpened: Drawer[],
-    loading: boolean,
+    actionLoading: boolean,
     hidden_column: {
       order: boolean,
       deadline: boolean,
