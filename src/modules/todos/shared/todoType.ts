@@ -1,4 +1,4 @@
-import { SubTask } from "../../subtasks/shared/subtaskTypes";
+import { Detail, SubTask, User } from '@/common/models/types';
 
 export interface Todo {
   key?: string;
@@ -12,4 +12,17 @@ export interface Todo {
   urgency?: number;
   order?: number;
   tags?: string[];
+}
+
+export interface Todos {
+  todolist: Todo[],
+  filtered_todo_list: Todo[],
+  currentTodo: Todo,
+  currentSubtask: SubTask,
+  currentDetail: Detail,
+
+  numberActiveTask: number,
+  numberTotalTask: number,
+  isLoading: boolean,
+  rendAllListNumber: number,
 }

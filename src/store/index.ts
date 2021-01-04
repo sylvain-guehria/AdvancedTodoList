@@ -3,7 +3,7 @@ import Vuex, { StoreOptions } from 'vuex';
 import { RootState } from "./state";
 import { todos } from './modules/todos/index';
 import { subtasks } from './modules/subtasks/index';
-import { user } from './modules/user/index';
+import { users } from './modules/users/index';
 import { settings } from './modules/settings/index';
 
 
@@ -16,7 +16,7 @@ const storeOptions: StoreOptions<RootState> = {
 
   modules: {
     settings,
-    user,
+    users,
     todos,
     subtasks
   }
