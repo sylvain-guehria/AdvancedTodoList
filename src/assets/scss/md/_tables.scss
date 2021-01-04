@@ -51,6 +51,15 @@ table {
       }
       //table lvl 2 
       table{
+        .color-text-pair {
+          background-color:  $ui-main;
+          padding-right: 5px;
+        }
+        .color-text-impair {
+          background-color: $ui-second;
+          padding-right: 5px;
+        }
+
       .md-table-cell {
         padding: 0px ;
         height: 10px;

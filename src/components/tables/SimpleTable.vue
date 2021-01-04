@@ -81,7 +81,10 @@
 
           <!-- start table subtask and details -->
           <div v-if="includeKey(item.key)" class="subtable">
-            <simple-table-lvl1 :item="item" :maintable="true"></simple-table-lvl1>
+            <simple-table-lvl1 
+            :index="index"
+            :item="item" 
+            :maintable="true"></simple-table-lvl1>
           </div>
           <!-- end -->
         </md-table-cell>
