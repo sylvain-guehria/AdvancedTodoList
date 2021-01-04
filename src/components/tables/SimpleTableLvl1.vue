@@ -93,7 +93,7 @@
                :focusOnCreate="true"
                 v-model="subtask.label"
                 :class="subtask.isdone ? 'done' : ''"
-                class="break-word"
+                class="break-word subtasks"
                 _is="p"
                 :maxlength="250"
                 type="text"
@@ -574,10 +574,13 @@ export default class SimpleTableLvl1 extends Vue {
   margin-left: 10px;
 }
 .label-content {
-  margin-top: 3px;
 }
 
 .colum-min-width-400{
   min-width: 400px
+}
+.subtasks{
+  margin-top:1px;
+  font-family: Verdana, Tahoma, sans-serif;
 }
 </style>
