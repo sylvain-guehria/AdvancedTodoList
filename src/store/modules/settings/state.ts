@@ -4,7 +4,7 @@ export const initialState: Settings =  {
     langage: 'en',
     drawersOpened: [],
     with_weekend: true,
-    loading: false,
+    actionLoading: false,
     hidden_column: {
       order: true,
       deadline: true,

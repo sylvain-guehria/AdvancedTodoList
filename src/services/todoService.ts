@@ -10,6 +10,7 @@ import { tasksActionsType } from "@/store/modules/todos";
 export const serviceTodo = {
 
   orderUp(item: Todo): void {
+    if(store.getters.getActionLoading){ return;}
     let todolist = store.getters.getTodoList;
 
     let max_order_todo: Todo = lodash.maxBy(todolist, "order");
@@ -43,6 +44,7 @@ export const serviceTodo = {
     this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
   },
   orderDown(item: Todo): void {
+    if(store.getters.getActionLoading){ return;}
     let todolist = store.getters.getTodoList;
 
     if (item.order && item.order <= 1) {
@@ -68,6 +70,7 @@ export const serviceTodo = {
     this.$store.dispatch("setOrderDownTodo", keytodoOrderDown);
   },
   addTask(task: Todo) {
+    if(store.getters.getActionLoading){ return;}
     store
       .dispatch(tasksActionsType.CREATETODO, task)
       .then(() => {
@@ -88,6 +91,7 @@ export const serviceTodo = {
       });
   },
   deleteTodo(key: string): void {
+    if(store.getters.getActionLoading){ return;}
     store
       .dispatch(tasksActionsType.DELETETODO, key)
       .then(() => {
@@ -108,6 +112,7 @@ export const serviceTodo = {
       });
   },
   editTodo(todoKey: string, attribute: string, value) {
+    if(store.getters.getActionLoading){ return;}
     store.dispatch(tasksActionsType.EDITATTRIBUTETASK, {
       todoKey,
       attribute,
@@ -115,12 +120,14 @@ export const serviceTodo = {
     });
   },
   setTodoDone(item: Todo): void {
+    if(store.getters.getActionLoading){ return;}
     store.dispatch(tasksActionsType.SETTODOSTATE, {
       key: item.key,
       isDone: item.isdone,
     });
   },
   downOrderNoCondition(key: string) {
+    if(store.getters.getActionLoading){ return;}
     store.dispatch(tasksActionsType.SETORDERDOWNTODO, key);
   },
 };

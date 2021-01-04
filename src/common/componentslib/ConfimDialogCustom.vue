@@ -2,6 +2,7 @@
   <v-dialog
       v-model="confirmDialog"
       max-width="290"
+      persistent
     >
       <v-card>
         <v-card-title class="headline">
@@ -41,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 
 @Component({
   components: {},
@@ -59,5 +60,6 @@ export default class ConfimDialogCustom extends Vue {
   onConfirmDialog(): void {
     this.$emit("confirmDialog");
   }
+
 }
 </script>

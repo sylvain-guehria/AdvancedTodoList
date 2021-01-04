@@ -16,6 +16,7 @@ export const serviceSubtask = {
     value,
     key
   }): Promise<{}> {
+    if(store.getters.getActionLoading){ return;}
     return new Promise((resolve, reject) => {
       store.dispatch(subtasksActionsType.EDITSUBTASKDETAIL, {
         taskKey,
@@ -36,6 +37,7 @@ export const serviceSubtask = {
     subtaskKey,
     key
   }): Promise<{}> {
+    if(store.getters.getActionLoading){ return;}
     return new Promise((resolve, reject) => {
       store.dispatch(subtasksActionsType.DELETESUBTASKDETAIL, {
         taskKey,
@@ -54,6 +56,7 @@ export const serviceSubtask = {
     subtaskKey,
     detail,
   }): Promise<{}> {
+    if(store.getters.getActionLoading){ return;}
     return new Promise((resolve, reject) => {
       store.dispatch(subtasksActionsType.ADDSUBTASKDETAIL, {
         todoKey,
