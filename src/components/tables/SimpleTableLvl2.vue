@@ -13,24 +13,20 @@
               hide-details
             />
           </div>
-          <div class="wrapper_dot">
-            <div :style="imgStyle()">
-              <input-contenteditable
-                :focusOnCreate="true"
-                :class="giveClassInput(detail.isdone)"
-                v-model="detail.label"
-                class="break-word"
-                _is="span"
-                :maxlength="250"
-                type="text"
-                placeholder="..."
-                @giveTodoKey="setCurrentKey_And_attribue('label', detail.key)"
-                @keydown.enter="onPressEnterOrBlur"
-                @blur="onPressEnterOrBlur"
-                @click="setCurrentKey(detail.key)"
-              />
-            </div>
-          </div>
+            <input-contenteditable
+             :focusOnCreate="true"
+              :class="detail.isdone ? 'done' : ''"
+              v-model="detail.label"
+              class="break-word details"
+              _is="span"
+              :maxlength="250"
+              type="text"
+              placeholder="..."
+              @giveTodoKey="setCurrentKey_And_attribue('label', detail.key)"
+              @keydown.enter="onPressEnterOrBlur"
+              @blur="onPressEnterOrBlur"
+              @click="setCurrentKey(detail.key)"
+            />
         </div>
       </md-table-cell>
     </md-table-row>
@@ -68,8 +64,6 @@ import { DetailEnum } from "@/common/models/enums/enum";
 export default class SimpleTableLvl2 extends Vue {
   @Prop() subtask: SubTask;
   @Prop() motherKey: string;
-  @Prop() index: number;
-
   emptyDetail: Detail = {
     isdone: false,
   };
@@ -77,22 +71,6 @@ export default class SimpleTableLvl2 extends Vue {
 
   currentIndex: number;
   currentAttributeEdited: string;
-
-  giveClassInput(isdone) {
-    if (isdone) {
-      if (this.index % 2 !== 0) {
-        return "done color-text-pair";
-      } else {
-        return "done color-text-impair";
-      }
-    } else {
-      if (this.index % 2 !== 0) {
-        return "color-text-pair";
-      } else {
-        return "color-text-impair";
-      }
-    }
-  }
 
   setCurrentKey_And_attribue(attribute, detailKey) {
     this.currentAttributeEdited = attribute;
@@ -170,13 +148,6 @@ export default class SimpleTableLvl2 extends Vue {
       attribute: DetailEnum.ISDONE,
     });
   }
-  imgStyle() {
-    return (
-      " width: 100%; display: inline-flex; background : url('" +
-      require("@/assets/images/smallDot.png") +
-      "') repeat-x;  background-position: bottom 5px right;"
-    );
-  }
 }
 </script>
 
@@ -197,7 +168,6 @@ export default class SimpleTableLvl2 extends Vue {
 .break-word {
   word-break: break-all;
   text-align: left;
-  margin-top: 2px;
 }
 .checkbox {
   margin-left: 10px;
@@ -205,7 +175,7 @@ export default class SimpleTableLvl2 extends Vue {
 .label-content {
   margin-top: 1px;
 }
-.wrapper_dot {
-  width: 100%;
+.details{
+  margin-top:2px;
 }
 </style>
