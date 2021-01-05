@@ -79,8 +79,6 @@ export default {
   methods: {
       
     getUsers() {
-         // eslint-disable-next-line no-console
-    console.log('getUsers',  store.getters.getUsers);
       return store.getters.getUsers;
     },
   },
