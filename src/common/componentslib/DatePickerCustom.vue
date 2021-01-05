@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="330">
       <template v-slot:activator="{ on, attrs }">
-        <p v-show="item.deadline" v-bind="attrs" v-on="on">
+        <p v-show="item.deadline" v-bind="attrs" v-on="on" :style="customstyle" :class="customclass? 'fontstyle' : '' ">
           {{ item.deadline ? item.deadline : "" }}
         </p>
         <feather
@@ -52,6 +52,9 @@ import { helperFunctions } from "@/common/helpers/helperfunction";
 })
 export default class DatePickerCustom extends Vue {
   @Prop() item;
+  @Prop() customstyle;
+  @Prop() customclass;
+
   noDeadline: boolean = false;
   dialog: boolean = false;
   //dateOfTask = helperFunctions.dateOfTask;
@@ -88,4 +91,10 @@ export default class DatePickerCustom extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+
+.fontstyle{
+ font-family: initial;
+  font-size: 16px;
+}
+</style>

@@ -13,11 +13,11 @@
         <v-card-title> </v-card-title>
         <v-card-text>
           <div>
-            <div class="go-edit">
+            <!-- <div class="go-edit">
               <div @click="showDrawerEditTask(event)">
                 <feather size="15px" type="edit"></feather>
               </div>
-            </div>
+            </div> -->
             <div class="go-close">
               <div @click="closeModal">
                 <feather size="16px" type="x"></feather>
@@ -85,7 +85,7 @@ import Accordion from "@/common/componentslib/Accordion.vue";
 })
 export default class PCalendarEvent extends Vue {
   @Prop() event!: any;
-  isForm1Active: boolean = false;
+  isForm1Active: boolean = true;
   dialog: boolean = false;
   bulletClass = helperTodo.bulletClass;
 
