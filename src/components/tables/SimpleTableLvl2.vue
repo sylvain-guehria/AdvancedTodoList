@@ -82,6 +82,7 @@ export default class SimpleTableLvl2 extends Vue {
   }
 
   onPressEnterOrBlur(e) {
+
     if (e.keyCode == 13) {
       event.preventDefault();
     }
@@ -100,6 +101,8 @@ export default class SimpleTableLvl2 extends Vue {
     }
 
     if (value && value !== "") {
+
+      if(this.$store.getters.getActionLoading){ return;}
       serviceSubtask
         .editSubtaskDetail({
           taskKey,
@@ -110,6 +113,7 @@ export default class SimpleTableLvl2 extends Vue {
         })
         .then(() => this.$emit("keyLvl2Incr"));
     } else if (value == "" || value == undefined) {
+      if(this.$store.getters.getActionLoading){ return;}
       serviceSubtask
         .deleteSubtaskDetail({
           taskKey,
@@ -126,6 +130,7 @@ export default class SimpleTableLvl2 extends Vue {
   }
 
   createSubtasksDetail() {
+    if(this.$store.getters.getActionLoading){ return;}
     serviceSubtask
       .addSubtasksDetail({
         todoKey: this.motherKey,

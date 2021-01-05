@@ -163,7 +163,7 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
     })
   },
 
-  // SET SUBTASK DETAIL STATE
+  // EDIT SUBTASK DETAIL
   async [ActionTypes.EDITSUBTASKDETAIL](context, { taskKey, subtaskKey, attribute, value, key }
     : { taskKey: string, subtaskKey: string, attribute: string, value: string, key: string }) {
     const { uid } = store.getters.getUser;
@@ -171,8 +171,10 @@ export const actionsSubtasks: ActionTree<SubTasks, RootState> = {
     if (!taskKey || !subtaskKey || !key) { return }
 
     context.commit(SettingsMutationTypes.SET_ACTION_LOADING, true);
+
     await database.ref(`todos/${uid}/${taskKey}/subtasks/${subtaskKey}/details/${key}`).update({
-      [attribute]: value
+      [attribute]: value,
+      key: key
     }).then(() => {
       context.commit(MutationTypes.EDITSUBTASKDETAIL, { subtaskKey, taskKey, key, attribute, value });
       context.commit(SettingsMutationTypes.SET_ACTION_LOADING, false);

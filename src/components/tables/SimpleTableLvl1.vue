@@ -228,8 +228,6 @@ export default class SimpleTableLvl1 extends Vue {
   @Prop() index: number;
 
   getIndex(){
-    // eslint-disable-next-line no-console
-      console.log('this.index', this.index);
     return this.index;
   }
 
