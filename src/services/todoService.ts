@@ -90,8 +90,9 @@ export const serviceTodo = {
         });
       });
   },
-  deleteTodo(key: string): void {
+  deleteTodo(key: string): Promise<{}>  {
     if(store.getters.getActionLoading){ return;}
+    return new Promise((resolve, reject) => {
     store
       .dispatch(tasksActionsType.DELETETODO, key)
       .then(() => {
@@ -101,6 +102,7 @@ export const serviceTodo = {
           position: "bottom-right",
           duration: 5000,
         });
+        resolve({ success: true });
       })
       .catch((error: Error) => {
         Vue.toasted.show("Cannot deleted Task", {
@@ -109,7 +111,9 @@ export const serviceTodo = {
           position: "bottom-right",
           duration: 5000,
         });
+        reject(error);
       });
+    });
   },
   editTodo(todoKey: string, attribute: string, value) {
     if(store.getters.getActionLoading){ return;}
@@ -127,7 +131,6 @@ export const serviceTodo = {
     });
   },
   downOrderNoCondition(key: string) {
-    if(store.getters.getActionLoading){ return;}
     store.dispatch(tasksActionsType.SETORDERDOWNTODO, key);
   },
 };

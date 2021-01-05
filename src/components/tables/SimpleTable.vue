@@ -81,10 +81,11 @@
 
           <!-- start table subtask and details -->
           <div v-if="includeKey(item.key)" class="subtable">
-            <simple-table-lvl1 
-            :index="index"
-            :item="item" 
-            :maintable="true"></simple-table-lvl1>
+            <simple-table-lvl1
+              :index="index"
+              :item="item"
+              :maintable="true"
+            ></simple-table-lvl1>
           </div>
           <!-- end -->
         </md-table-cell>
@@ -245,7 +246,7 @@ export default {
       }
 
       serviceTodo.editTodo(todoKey, attribute, value);
-      
+
       this.updatePaginationList(todoKey, attribute, value);
     },
     updatePaginationList(todoKey: string, attribute: string, value: string) {
@@ -332,21 +333,23 @@ export default {
     },
     deleteTodo(key: string, order: number): void {
       let vm = this;
-      serviceTodo.deleteTodo(key);
-      //down order todos with order > to the one deleted
-      this.paginatedTodos.forEach(function (todo) {
-        if (todo.order > order) {
-          vm.downOrderNoCondition(todo.key);
-        }
+      serviceTodo.deleteTodo(key).then(() => {
+        this.paginatedTodos.forEach(function (todo) {
+          if (todo.order > order) {
+            vm.downOrderNoCondition(todo.key);
+          }
+        });
+        var index = this.paginatedTodos.findIndex(function (o) {
+          return o.key === key;
+        });
+        if (index !== -1) this.paginatedTodos.splice(index, 1);
       });
-      var index = this.paginatedTodos.findIndex(function (o) {
-        return o.key === key;
-      });
-      if (index !== -1) this.paginatedTodos.splice(index, 1);
     },
+
     downOrderNoCondition(key: string) {
       serviceTodo.downOrderNoCondition(key);
     },
+
     setTodoDone(item: Todo): void {
       serviceTodo.setTodoDone(item);
     },
@@ -419,7 +422,7 @@ export default {
       currentOrder: null,
       getdaysleft: helperTodo.getdaysleft,
       dateOfTask: helperTodo.dateOfTask,
-      bulletClass : helperTodo.bulletClass,
+      bulletClass: helperTodo.bulletClass,
       getNumberSubtaskInTask: helperTodo.getNumberSubtaskInTask,
       orderUp: serviceTodo.orderUp,
       orderDown: serviceTodo.orderDown,
