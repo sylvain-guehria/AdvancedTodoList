@@ -23,6 +23,7 @@ import Toolbar from "@/components/calendar/Toolbar.vue";
 })
 export default class PlanningCalendar extends Vue {
   calendar = Calendar.months();
+  initialCalendar = Calendar.months();
 
   created() {
     this.removeWeekend();
@@ -46,7 +47,7 @@ export default class PlanningCalendar extends Vue {
       d => d.dayOfWeek !== Weekday.SATURDAY && d.dayOfWeek !== Weekday.SUNDAY
     );
     }else{
-      this.calendar.days = Calendar.months().days
+      this.calendar.days = this.initialCalendar.days
     }
   }
 }
