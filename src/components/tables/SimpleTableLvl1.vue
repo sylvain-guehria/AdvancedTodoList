@@ -107,6 +107,8 @@
 
           <div class="details" :class="maintable ? 'details-maintable': ''">
             <simple-table-lvl2
+              :maintable="maintable"
+              :mainList="mainList"
               :focusOnCreate="true"
               :subtask="subtask"
               :motherKey="item.key"
@@ -209,6 +211,7 @@ import { subtasksMutationType } from "@/store/modules/subtasks";
 import { sortSubtasksBy } from "@/modules/subtasks/shared/sortSubtasks";
 import { subtaskEnum } from "@/modules/subtasks/shared/enumSubtask";
 import { helperSubtask } from "@/modules/subtasks/shared/subtaskHelper";
+import { filterSubTaskActive } from "@/modules/subtasks/shared/filterSubtasks";
 
 
 import SimpleTableLvl2 from "./SimpleTableLvl2.vue";
@@ -225,6 +228,7 @@ import SimpleTableLvl2 from "./SimpleTableLvl2.vue";
 export default class SimpleTableLvl1 extends Vue {
   @Prop() item: Todo;
   @Prop() maintable: boolean;
+  @Prop() mainList: boolean;
   @Prop() index: number;
 
   getIndex(){
@@ -289,6 +293,11 @@ export default class SimpleTableLvl1 extends Vue {
   // END DELETE DIALOG
 
   getLocalSubtasks() {
+    // eslint-disable-next-line no-console
+    console.log('bim')
+    if(this.mainList){
+      this.localSubtasks = [...filterSubTaskActive(this.localSubtasks)]
+    }
     return this.localSubtasks;
   }
 
