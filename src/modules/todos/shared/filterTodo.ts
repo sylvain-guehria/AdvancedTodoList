@@ -1,6 +1,6 @@
 import { Todo } from "../shared/todoType";
 import { todoEnum } from "../shared/enumTodo"
-import { filterSubtasksKeepOneAttribute } from "@/modules/subtasks/shared/filterSubtasks"
+import { filterSubtasksKeepOneAttribute, filterSubTaskActive, filterSubTaskAndDetailsActive } from "@/modules/subtasks/shared/filterSubtasks"
 
 export const filterTodoKeepSubtasksOnly = function (todo: Todo): Todo {
     
@@ -22,3 +22,24 @@ export const filterTodoKeepSubtasksWithOneAttribute = function (todo: Todo): Tod
     return todoFiltered;
 };
 
+export const filterTodoOnlySubTaskActive = (todos: Todo[]): Todo[] =>  {
+    var listTodos: Todo[] = [];
+    let currentTodo: Todo = {isdone : false};
+    todos.forEach(function (todo) {
+        currentTodo = {...todo}
+        currentTodo.subtasks = filterSubTaskActive(currentTodo.subtasks);
+        listTodos.push(currentTodo)
+      });
+      return listTodos;
+  }
+
+export const filterTodoOnlySubTaskAndDetailActive = (todos: Todo[]): Todo[] =>  {
+    var listTodos: Todo[] = [];
+    let currentTodo: Todo = {isdone : false};
+    todos.forEach(function (todo) {
+        currentTodo = {...todo}
+        if (currentTodo.subtasks && currentTodo.subtasks.length > 0)currentTodo.subtasks = filterSubTaskAndDetailsActive(currentTodo.subtasks);
+        listTodos.push(currentTodo)
+      });
+      return listTodos;
+  }

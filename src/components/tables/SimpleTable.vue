@@ -85,6 +85,7 @@
               :index="index"
               :item="item"
               :maintable="true"
+              :mainList="mainList"
             ></simple-table-lvl1>
           </div>
           <!-- end -->
@@ -393,7 +394,6 @@ export default {
   },
   created() {
     this.paginatedTodos = [...this.todolist];
-
     this.updateFinishTime();
 
     if (this.mainList) {

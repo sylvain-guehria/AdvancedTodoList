@@ -54,6 +54,7 @@
               :key="this.$store.getters.getRendAllListNumber"
               :todolist="this.$store.getters.getTodoList"
               @editTaskEvent="showDrawerEditTask"
+               :mainList="false"
             ></simple-table>
           </md-tab>
 

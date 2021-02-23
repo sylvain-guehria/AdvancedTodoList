@@ -3,10 +3,7 @@
     <md-table>
       <md-table-row v-if="getLocalSubtasks() && getLocalSubtasks().length > 0">
         <md-table-cell class="head"></md-table-cell>
-        <md-table-cell
-         class="head center-icon"
-         v-if="getSettings('deadline')" 
-         >
+        <md-table-cell class="head center-icon" v-if="getSettings('deadline')">
           <feather
             size="15px"
             type="arrow-down"
@@ -27,9 +24,7 @@
           ></feather>
           <md-tooltip md-direction="top">Sort By Deadline</md-tooltip>
         </md-table-cell>
-        <md-table-cell 
-        class="head center-icon"
-        v-if="getSettings('importance')" >
+        <md-table-cell class="head center-icon" v-if="getSettings('importance')">
           <feather
             size="15px"
             type="arrow-down"
@@ -50,9 +45,7 @@
           ></feather>
           <md-tooltip md-direction="top">Sort By Importance</md-tooltip>
         </md-table-cell>
-        <md-table-cell
-         class="head center-icon"
-          v-if="getSettings('order')" >
+        <md-table-cell class="head center-icon" v-if="getSettings('order')">
           <feather
             size="15px"
             type="arrow-down"
@@ -88,9 +81,9 @@
                 hide-details
               />
             </div>
-            <div class="label-content"> 
+            <div class="label-content">
               <input-contenteditable
-               :focusOnCreate="true"
+                :focusOnCreate="true"
                 v-model="subtask.label"
                 :class="subtask.isdone ? 'done' : ''"
                 class="break-word subtasks"
@@ -105,8 +98,10 @@
             </div>
           </div>
 
-          <div class="details" :class="maintable ? 'details-maintable': ''">
+          <div class="details" :class="maintable ? 'details-maintable' : ''">
             <simple-table-lvl2
+              :maintable="maintable"
+              :mainList="mainList"
               :focusOnCreate="true"
               :subtask="subtask"
               :motherKey="item.key"
@@ -123,7 +118,11 @@
             @click="showDatepickerDialog(subtask.key, subtask.deadline)"
           >
             <div class="hover-click">
-              <date-picker :item="subtask" @emitDate="editDateSubtaskTask" :key="subtask.key" />
+              <date-picker
+                :item="subtask"
+                @emitDate="editDateSubtaskTask"
+                :key="subtask.key"
+              />
             </div>
 
             <md-tooltip md-direction="bottom">Deadline</md-tooltip>
@@ -171,9 +170,14 @@
       <md-table-row>
         <md-table-cell>
           <div class="hover-click">
-            <feather size="17px" type="plus-circle" @click="addEmptySubTask(item.key)"></feather> 
-             <md-tooltip md-direction="bottom">Add subtask</md-tooltip></div
-        ></md-table-cell>
+            <feather
+              size="17px"
+              type="plus-circle"
+              @click="addEmptySubTask(item.key)"
+            ></feather>
+            <md-tooltip md-direction="bottom">Add subtask</md-tooltip>
+          </div></md-table-cell
+        >
       </md-table-row>
     </md-table>
 
@@ -209,10 +213,9 @@ import { subtasksMutationType } from "@/store/modules/subtasks";
 import { sortSubtasksBy } from "@/modules/subtasks/shared/sortSubtasks";
 import { subtaskEnum } from "@/modules/subtasks/shared/enumSubtask";
 import { helperSubtask } from "@/modules/subtasks/shared/subtaskHelper";
-
+import { filterSubTaskActive } from "@/modules/subtasks/shared/filterSubtasks";
 
 import SimpleTableLvl2 from "./SimpleTableLvl2.vue";
-
 
 @Component({
   components: {
@@ -225,9 +228,10 @@ import SimpleTableLvl2 from "./SimpleTableLvl2.vue";
 export default class SimpleTableLvl1 extends Vue {
   @Prop() item: Todo;
   @Prop() maintable: boolean;
+  @Prop() mainList: boolean;
   @Prop() index: number;
 
-  getIndex(){
+  getIndex() {
     return this.index;
   }
 
@@ -250,11 +254,11 @@ export default class SimpleTableLvl1 extends Vue {
   getNumberDetailInSubtask = helperSubtask.getNumberDetailInSubtask;
   sortSubtasksBy = sortSubtasksBy;
 
-  getCustomKey(itemKey, subtaskKey){
+  getCustomKey(itemKey, subtaskKey) {
     return this.getNumberDetailInSubtask(itemKey, subtaskKey) + this.keyLvl2;
   }
 
-  keyLvl2Incr(){
+  keyLvl2Incr() {
     this.keyLvl2 += 1;
   }
 
@@ -289,6 +293,9 @@ export default class SimpleTableLvl1 extends Vue {
   // END DELETE DIALOG
 
   getLocalSubtasks() {
+    if (this.mainList) {
+      return this.localSubtasks.filter((subtask) => !subtask.isdone);
+    }
     return this.localSubtasks;
   }
 
@@ -394,10 +401,10 @@ export default class SimpleTableLvl1 extends Vue {
     if (colums) {
       colum = colums[columnLabel];
     }
-    if(colum != null) { 
+    if (colum != null) {
       return colum;
-    }else{
-      return true
+    } else {
+      return true;
     }
   }
 
@@ -574,11 +581,11 @@ export default class SimpleTableLvl1 extends Vue {
 .label-content {
 }
 
-.colum-min-width-400{
-  min-width: 400px
+.colum-min-width-400 {
+  min-width: 400px;
 }
-.subtasks{
-  margin-top:1px;
+.subtasks {
+  margin-top: 1px;
   font-family: Verdana, Tahoma, sans-serif;
 }
 </style>
