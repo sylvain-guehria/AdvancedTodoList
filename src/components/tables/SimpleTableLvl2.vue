@@ -1,6 +1,6 @@
 <template>
   <md-table>
-    <md-table-row v-for="(detail, index) in subtask.details" :key="index">
+    <md-table-row v-for="(detail, index) in getDetails()" :key="index">
       <md-table-cell v-if="detail">
         <div class="flex">
           <div class="checkbox">
@@ -64,6 +64,8 @@ import { DetailEnum } from "@/common/models/enums/enum";
 export default class SimpleTableLvl2 extends Vue {
   @Prop() subtask: SubTask;
   @Prop() motherKey: string;
+  @Prop() mainList: boolean;
+
   emptyDetail: Detail = {
     isdone: false,
   };
@@ -123,6 +125,14 @@ export default class SimpleTableLvl2 extends Vue {
         .then(() => this.$emit("keyLvl2Incr"));
     }
   }
+
+  getDetails(){
+    if (this.mainList) {
+      return this.subtask.details.filter((detail) => !detail.isdone);
+    }
+    return this.subtask.details;
+  }
+
 
   onChangeCheckBox(key, isdone) {
     this.currentDetailKey = key;
