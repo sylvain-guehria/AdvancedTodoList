@@ -13,20 +13,20 @@
               hide-details
             />
           </div>
-            <input-contenteditable
-             :focusOnCreate="true"
-              :class="detail.isdone ? 'done' : ''"
-              v-model="detail.label"
-              class="break-word details"
-              _is="span"
-              :maxlength="250"
-              type="text"
-              placeholder="..."
-              @giveTodoKey="setCurrentKey_And_attribue('label', detail.key)"
-              @keydown.enter="onPressEnterOrBlur"
-              @blur="onPressEnterOrBlur"
-              @click="setCurrentKey(detail.key)"
-            />
+          <input-contenteditable
+            :focusOnCreate="true"
+            :class="detail.isdone ? 'done' : ''"
+            v-model="detail.label"
+            class="break-word details"
+            _is="span"
+            :maxlength="250"
+            type="text"
+            placeholder="..."
+            @giveTodoKey="setCurrentKey_And_attribue('label', detail.key)"
+            @keydown.enter="onPressEnterOrBlur"
+            @blur="onPressEnterOrBlur"
+            @click="setCurrentKey(detail.key)"
+          />
         </div>
       </md-table-cell>
     </md-table-row>
@@ -66,6 +66,9 @@ export default class SimpleTableLvl2 extends Vue {
   @Prop() motherKey: string;
   @Prop() mainList: boolean;
 
+  localSubtaskActive: SubTask = {};
+  localSubtask: SubTask = {};
+
   emptyDetail: Detail = {
     isdone: false,
   };
@@ -73,6 +76,13 @@ export default class SimpleTableLvl2 extends Vue {
 
   currentIndex: number;
   currentAttributeEdited: string;
+
+  created() {
+    this.localSubtaskActive.details = this.subtask.details.filter(
+      (detail) => !detail.isdone
+    );
+    this.localSubtask.details = this.subtask.details;
+  }
 
   setCurrentKey_And_attribue(attribute, detailKey) {
     this.currentAttributeEdited = attribute;
@@ -84,7 +94,6 @@ export default class SimpleTableLvl2 extends Vue {
   }
 
   onPressEnterOrBlur(e) {
-
     if (e.keyCode == 13) {
       event.preventDefault();
     }
@@ -103,8 +112,9 @@ export default class SimpleTableLvl2 extends Vue {
     }
 
     if (value && value !== "") {
-
-      if(this.$store.getters.getActionLoading){ return;}
+      if (this.$store.getters.getActionLoading) {
+        return;
+      }
       serviceSubtask
         .editSubtaskDetail({
           taskKey,
@@ -115,7 +125,9 @@ export default class SimpleTableLvl2 extends Vue {
         })
         .then(() => this.$emit("keyLvl2Incr"));
     } else if (value == "" || value == undefined) {
-      if(this.$store.getters.getActionLoading){ return;}
+      if (this.$store.getters.getActionLoading) {
+        return;
+      }
       serviceSubtask
         .deleteSubtaskDetail({
           taskKey,
@@ -126,13 +138,12 @@ export default class SimpleTableLvl2 extends Vue {
     }
   }
 
-  getDetails(){
+  getDetails() {
     if (this.mainList) {
-      return this.subtask.details.filter((detail) => !detail.isdone);
+      return this.localSubtaskActive.details;
     }
-    return this.subtask.details;
+    return this.localSubtask.details;
   }
-
 
   onChangeCheckBox(key, isdone) {
     this.currentDetailKey = key;
@@ -140,7 +151,9 @@ export default class SimpleTableLvl2 extends Vue {
   }
 
   createSubtasksDetail() {
-    if(this.$store.getters.getActionLoading){ return;}
+    if (this.$store.getters.getActionLoading) {
+      return;
+    }
     serviceSubtask
       .addSubtasksDetail({
         todoKey: this.motherKey,
@@ -190,7 +203,7 @@ export default class SimpleTableLvl2 extends Vue {
 .label-content {
   margin-top: 1px;
 }
-.details{
-  margin-top:2px;
+.details {
+  margin-top: 2px;
 }
 </style>
