@@ -266,6 +266,9 @@ export default class SimpleTableLvl1 extends Vue {
     if (this.item) {
       this.localSubtasks = this.item.subtasks;
     }
+     if (this.mainList) {
+      this.localSubtasks = this.localSubtasks.filter((subtask) => !subtask.isdone);
+    }
   }
 
   //DELETE DIALOG
@@ -293,9 +296,6 @@ export default class SimpleTableLvl1 extends Vue {
   // END DELETE DIALOG
 
   getLocalSubtasks() {
-    if (this.mainList) {
-      return this.localSubtasks.filter((subtask) => !subtask.isdone);
-    }
     return this.localSubtasks;
   }
 
