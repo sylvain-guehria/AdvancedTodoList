@@ -1,8 +1,8 @@
-import { Todos } from "@/common/models/types/index";
+import { SubTask, Todo, Todos } from "@/common/models/types/index";
 import { GetterTree } from "vuex";
 import { RootState } from "../../state";
 
-export const gettersTodos : GetterTree<Todos, RootState> = {
+export const gettersTodos: GetterTree<Todos, RootState> = {
   getRendAllListNumber: (state) => {
     return state.rendAllListNumber;
   },
@@ -11,6 +11,12 @@ export const gettersTodos : GetterTree<Todos, RootState> = {
   },
   getTodoList: (state: Todos) => {
     return state.todolist;
+  },
+  getTodoAndSubtaskList: (state: Todos) => {
+    const todos: Todo[] = state.todolist;
+    let arrayOfArraySubtasks = state.todolist.map(({ subtasks }) => subtasks);
+    const subtasks: SubTask[] = arrayOfArraySubtasks.flat(1);
+    return [...todos, ...subtasks];
   },
   getFilteredTodoList: (state: Todos) => {
     return state.filtered_todo_list;
