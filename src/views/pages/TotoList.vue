@@ -2,22 +2,21 @@
   <div class="content">
     <div class="md-layout">
       <div class="md-layout-item md-size-100" style="margin-top: 20px">
-
         <div class="flex">
-        <div class="action-button">
-        <div class="add_and_filter">
-          <md-button class="md-tertiary" @click="addEmptyTask">
-            <feather type="plus"></feather>Add a task
-          </md-button>
-          <md-button class="md-tertiary" @click="showFilters = true">
-            <feather type="filter"></feather>Filter
-          </md-button>
-        </div>
+          <div class="action-button">
+            <div class="add_and_filter">
+              <md-button class="md-tertiary" @click="addEmptyTask">
+                <feather type="plus"></feather>Add a task
+              </md-button>
+              <md-button class="md-tertiary" @click="showFilters = true">
+                <feather type="filter"></feather>Filter
+              </md-button>
+            </div>
 
-          <colum-to-hide></colum-to-hide>
-          <colum-subtasks-to-hide></colum-subtasks-to-hide>
-          <legend-bullet :planning="true"></legend-bullet>
-        </div>
+            <colum-to-hide></colum-to-hide>
+            <colum-subtasks-to-hide></colum-subtasks-to-hide>
+            <legend-bullet :planning="true"></legend-bullet>
+          </div>
         </div>
 
         <md-tabs :md-active-tab="dynamic_tab">
@@ -54,8 +53,15 @@
               :key="this.$store.getters.getRendAllListNumber"
               :todolist="this.$store.getters.getTodoList"
               @editTaskEvent="showDrawerEditTask"
-               :mainList="false"
+              :mainList="false"
             ></simple-table>
+          </md-tab>
+
+          <md-tab id="tab-tasks" md-label="Priority tasks" md-icon="info">
+            <priority-table
+              :key="this.$store.getters.getRendAllListNumber"
+              :list="this.$store.getters.getTodoAndSubtaskList"
+            ></priority-table>
           </md-tab>
 
           <!-- only when using filter -->
@@ -84,7 +90,6 @@
         @isActive="updateIsActive"
         @activeFilterTab="setDynamicTab"
       ></filters-drawer>
-
     </div>
     <div class="spinner-rotate" v-show="isLoading"></div>
   </div>
@@ -92,6 +97,7 @@
 
 <script lang="ts">
 import SimpleTable from "@/components/tables/SimpleTable.vue";
+import PriorityTable from "@/components/tables/PriorityTable.vue";
 import FiltersDrawer from "@/components/forms/FiltersDrawer.vue";
 import LegendBulletVue from "@/components/menus/LegendBullet.vue";
 import { bus } from "@/main";
@@ -102,6 +108,7 @@ export default {
   name: "TotoList",
   components: {
     SimpleTable,
+    PriorityTable,
     "filters-drawer": FiltersDrawer,
     "legend-bullet": LegendBulletVue,
     "colum-to-hide": ColumToHideVue,
@@ -158,9 +165,8 @@ export default {
 };
 </script>
 <style scoped>
-.add_and_filter{
-  text-align: left;   
-
+.add_and_filter {
+  text-align: left;
 }
 .legend-list {
   display: inline-block;
@@ -176,7 +182,7 @@ export default {
 }
 .action-button {
   width: 100%;
-  text-align: right;   
+  text-align: right;
 }
 .column-subtask {
   display: inline-block;
